@@ -79,7 +79,7 @@ write_model <- function(spec, writeDir = tempdir()) {
   # Select best template
   baseR <- if (spec$observation$R == 1) { "univariate" } else {"multivariate"}
   baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
-  base  <- file.path("src", "stan", sprintf("%s-%s.stan", baseR, baseA))
+  base  <- file.path("inst", "stan", sprintf("%s-%s.stan", baseR, baseA))
 
   # Create folder
   writeDir <- file.path(writeDir, makeNames(spec$name))
