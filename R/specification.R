@@ -35,6 +35,181 @@ Specification <- function(l) {
   structure(l, class = "Specification")
 }
 
+hmm <- function(K, R, observation = NULL, initial = NULL, transition = NULL) {
+  # Observation model: 1, K x 1, K x R
+  #   1 or K elements
+  #     1 or R elements
+
+  obsList <- list()
+  if (is.Density(observation)) {
+    # Case 1: only one density given.
+    # Action: repeat the density for each one of the R dimensions in each one of the K states
+    for (k in 1:K) {
+      kList <- list()
+      kName <- paste0("k", k)
+      for (r in 1:R) {
+        # Check if the density is multivariate -- if it is, don't repeat
+        rList <- observation
+        rName <- paste0(kName, "r", r)
+        kList[[rName]] <- rList
+      }
+      obsList[[kName]] <- kList
+    }
+  } else {
+    # Case 2: K densities given.
+    for (k in 1:K) {
+      if (length(observation) != K) {
+        stop(
+          sprintf("I received %s densities. Expected 1 or K = %s.", length(observation), K)
+        )
+      }
+      kList <- list() # observation[[k]]
+      kName <- paste0("k", k)
+
+      # Case 2a: K univariate densities given.
+      # Action : Repeat Density for each R dimension.
+      if (is.Density(observation[[k]])) { # R = 1
+        for (r in 1:R) {
+          rList <- observation[[k]]
+          rName <- paste0(kName, "r", r)
+          kList[[rName]] <- rList
+        }
+      } else {
+      # Case 2b: K univariate densities with R densities in each.
+      # Action : Direct assignment.
+        for (r in 1:R) {
+          stop("TO BE IMPLEMENTED")
+          rList <- observation[[k]][[r]]
+          rName <- paste0(kName, "r", r)
+          kList[[rName]] <- rList
+        }
+      }
+
+      obsList[[kName]] <- kList
+    }
+  }
+
+  initList <- list()
+  if (is.Density(initial)) {
+    # Case 1: One multivariate density.
+    # Action: Repeat the univariate density for each state K.
+    if (is.multivariate(initial)) {
+      kList <- initial # remember to change the k and r arguments accordingly
+      kName <- paste0("k")
+      initList[[kName]] <- kList
+    } else {
+    # Case 2: One univariate density.
+    # Action: Repeat the univariate density for each state K.
+      for (k in 1:K) {
+        kList <- initial # remember to change the k and r arguments accordingly
+        kName <- paste0("k", k)
+        initList[[kName]] <- kList
+      }
+    }
+  } else {
+    if (length(initial) != K) {
+      stop(
+        sprintf("I received %s densities. Expected 1 or K = %s.", length(initial), K)
+      )
+    }
+    # Case 3: K multivariate density (one per each element pi_k).
+    # Action: Direct assignment.
+    for (k in 1:K) {
+      if (is.multivariate(initial[[k]])) {
+        stop("When you set K priors for the K-sized vector of the initial distribution probabilities, the K priors must be univariate.")
+      }
+
+      kList <- initial[[k]] # remember to change the k and r arguments accordingly
+      kName <- paste0("k", k)
+      initList[[kName]] <- kList
+    }
+  }
+
+  transList <- list()
+  if (is.Density(transition)) {
+    if (is.multivariate(transition)) {
+      # Case 1: only one multivariate density given.
+      # Action: repeat the density for each row in the transition matrix
+      for (k in 1:K) {
+        kList <- list()
+        kName <- paste0("k", k)
+
+        kkList <- transition # remember to change the k and r arguments accordingly
+        kkName <- paste0(kName, "k")
+        kList[[kkName]] <- kkList
+
+        transList[[kName]] <- kList
+      }
+    } else {
+      # Case 1: only one univariate density given.
+      # Action: repeat the density for each one of the KxK elements in the transition matrix
+      for (k in 1:K) {
+        kList <- list()
+        kName <- paste0("k", k)
+        for (k in 1:K) {
+          kkList <- transition # remember to change the k and r arguments accordingly
+          kkName <- paste0(kName, "k", k)
+          kList[[kkName]] <- kkList
+        }
+        transList[[kName]] <- kList
+      }
+    }
+  } else {
+    if (length(transition) != K) {
+      stop(
+        sprintf("I received %s densities. Expected 1 or K = %s.", length(transition), K)
+      )
+    }
+
+    for (k in 1:K) {
+      if (is.multivariate(transition[[k]])) {
+        # Case 1: only one multivariate density given.
+        # Action: repeat the density for each row in the transition matrix
+        kList <- list()
+        kName <- paste0("k", k)
+
+        kkList <- transition[[k]] # remember to change the k and r arguments accordingly
+        kkName <- paste0(kName, "k")
+        kList[[kkName]] <- kkList
+
+        transList[[kName]] <- kList
+      } else {
+        # Case 1: only one univariate density given.
+        # Action: repeat the density for each one of the KxK elements in the transition matrix
+        kList <- list()
+        kName <- paste0("k", k)
+        for (kk in 1:K) {
+          kkList <- transition[[k]] # remember to change the k and r arguments accordingly
+          kkName <- paste0(kName, "k", kk)
+          kList[[kkName]] <- kkList
+        }
+        transList[[kName]] <- kList
+      }
+    }
+    print("Does it make sense to have different priors for the transition matrix in different states?")
+  }
+
+  l <- list(
+    name = "",
+    K    = K,
+    observation = list(
+      R = 1,
+      covariates = NULL,
+      density = observation
+    ),
+    init_prob   = list(
+      density = initial
+    ),
+    transition  = list(
+      covariates = NULL,
+      density = list(
+        k1 = transition
+      )
+    )
+  )
+  structure(l, class = "Specification")
+}
+
 explain.Specification <- function(spec) {
   sprintf("Here I'll explain my spec.")
 }

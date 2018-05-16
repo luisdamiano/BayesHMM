@@ -60,3 +60,10 @@ mySpec1 <- list(
 
 class(mySpec1) <- "Specification"
 write_model(mySpec1, "out")
+
+tmp <- hmm(
+  K = 3,
+  observation = Gaussian(mu = 1.1, sigma = 1 , k = 1, r = "", param = "mu"),
+  initial = Fixed(value = 0.1, k = "[3, 1]", r = "", param = "A"),
+  transition = Fixed(value = 0.1, k = "[3, 1]", r = "", param = "A")
+)
