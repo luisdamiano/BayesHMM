@@ -12,7 +12,7 @@ data {
 transformed data {
   // Constants
   int<lower=1> K = 3;               // number of hidden states
-  int<lower=1> R = 3;               // dimension of the observation vector
+  int<lower=1> R = 1;               // dimension of the observation vector
   int<lower=1> M = 3;               // dimension of the covariate vector
 }
 

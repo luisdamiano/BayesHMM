@@ -24,8 +24,11 @@ is.Density <- function(x) {
 }
 
 explain.Density <- function(x) {
-  sprintf("Fallback. Explain not implemented for %s yet", x$name)
-  ## Auto sprintf "{name} Density. Priors {autoname params from list :)}
+  sprintf(
+    "%s(%s)",
+    x[1],
+    paste(names(x[-1]), "=", x[-1], collapse = ", ")
+  )
 }
 
 Gaussian <- function(mu = NULL, sigma  = NULL, bounds = c(NULL, NULL),
@@ -46,13 +49,36 @@ prior.Gaussian <- function(x) {
 loglike.Gaussian <- function(x) {
   index <- if (x$k == x$r & x$r == "") { "" } else
            if (x$k != "" & x$r == "") { sprintf("[%s]", x$k) } else
-           { sprintf("[%s, %s]", x$k, x$r) }
+           {sprintf("[%s, %s]", x$k, x$r) }
 
   sprintf("loglike%s[t] = normal_lpdf(x[t] | mu%s%s, sigma%s%s);", index, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Gaussian <- function(x) {
   return(list(mu = eval(x$mu), sigma = eval(x$sigma)))
+}
+
+MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = c(NULL, NULL),
+                       trunc  = c(NULL, NULL), k = NULL, r = NULL, param = NULL) {
+  Density("MVGaussian", as.list(match.call())[-1])
+}
+
+is.multivariate.MVGaussian <- function(x) { TRUE }
+
+parameters.MVGaussian <- function(x) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+prior.MVGaussian <- function(x) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+loglike.MVGaussian <- function(x) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+getParameters.MVGaussian <- function(x) {
+  stop("TO BE IMPLEMENTED.")
 }
 
 Beta <- function(alpha = NULL, beta = NULL, bounds = c(NULL, NULL),
@@ -84,7 +110,7 @@ parameters.Dirichlet <- function(x) {
 }
 
 prior.Dirichlet <- function(x) {
-  sprintf("%s%s%s ~ Dirichlet(%s);", x$param, x$k, x$r, x$alpha)
+  sprintf("%s%s%s ~ Dirichlet(%s);", x$param, x$k, x$r, paste(eval(x$alpha), collapse = ", "))
 }
 
 loglike.Dirichlet <- function(x) {
