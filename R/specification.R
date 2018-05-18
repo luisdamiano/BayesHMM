@@ -56,7 +56,7 @@ parse_observation <- function(observation, K, R) {
           for (r in 1:R) {
             rList <- observation[[k]]
             rList[["k"]] <- k
-            rList[["r"]] <- r
+            rList[["r"]] <- "" ### univariate: r = 1 or no r?
             rName <- paste0(kName, "r", r)
             kList[[rName]] <- rList
           }
@@ -71,6 +71,24 @@ parse_observation <- function(observation, K, R) {
     }
   }
 
+  # Expand priors
+  for (k in 1:length(obsList)) {
+    for (kk in 1:length(obsList[[k]])) {
+      lDensity <- obsList[[k]][[kk]]
+      lParam   <- getParameters(lDensity)
+      for (p in 1:length(lParam)) {
+        txtExp <- deparse(lDensity[[names(lParam)[p]]], backtick = FALSE)
+        obsList[[k]][[kk]][[names(lParam)[p]]] <- parse(text =
+          paste0(
+            substr(txtExp, 1, nchar(txtExp) - 1),
+            sprintf(", k = %s, r = %s, param = \"%s\"", lDensity$k, if (lDensity$r == "") { "\"\"" } else { lDensity$r }, names(lParam)[p]),
+            ")"
+          )
+        )
+      }
+    }
+  }
+
   obsList
 }
 
@@ -80,14 +98,20 @@ parse_initial <- function(initial, K) {
     # Case 1: One multivariate density.
     # Action: Repeat the univariate density for each state K.
     if (is.multivariate(initial)) {
-      kList <- initial # remember to change the k and r arguments accordingly
+      kList <- initial
+      kList[["k"]] <- ""
+      kList[["r"]] <- ""
+      kList[["param"]] <- "pi"
       kName <- paste0("k")
       initList[[kName]] <- kList
     } else {
       # Case 2: One univariate density.
       # Action: Repeat the univariate density for each state K.
       for (k in 1:K) {
-        kList <- initial # remember to change the k and r arguments accordingly
+        kList <- initial
+        kList[["k"]] <- sprintf("[%s]", k)
+        kList[["r"]] <- ""
+        kList[["param"]] <- "pi"
         kName <- paste0("k", k)
         initList[[kName]] <- kList
       }
@@ -98,19 +122,21 @@ parse_initial <- function(initial, K) {
         sprintf("I received %s densities. Expected 1 or K = %s.", length(initial), K)
       )
     }
-    # Case 3: K multivariate density (one per each element pi_k).
+    # Case 3: K univariate densities (one per each element pi_k).
     # Action: Direct assignment.
     for (k in 1:K) {
       if (is.multivariate(initial[[k]])) {
         stop("When you set K priors for the K-sized vector of the initial distribution probabilities, the K priors must be univariate.")
       }
 
-      kList <- initial[[k]] # remember to change the k and r arguments accordingly
+      kList <- initial[[k]]
+      kList[["k"]] <- sprintf("[%s]", k)
+      kList[["r"]] <- ""
+      kList[["param"]] <- "pi"
       kName <- paste0("k", k)
       initList[[kName]] <- kList
     }
   }
-
   initList
 }
 
@@ -125,6 +151,9 @@ parse_transition <- function(transition, K) {
         kName <- paste0("k", k)
 
         kkList <- transition # remember to change the k and r arguments accordingly
+        kkList[["k"]] <- sprintf("[%s, ]", k)
+        kkList[["r"]] <- ""
+        kkList[["param"]] <- "A"
         kkName <- paste0(kName, "k")
         kList[[kkName]] <- kkList
 
@@ -136,9 +165,12 @@ parse_transition <- function(transition, K) {
       for (k in 1:K) {
         kList <- list()
         kName <- paste0("k", k)
-        for (k in 1:K) {
+        for (kk in 1:K) {
           kkList <- transition # remember to change the k and r arguments accordingly
-          kkName <- paste0(kName, "k", k)
+          kkName <- paste0(kName, "k", k, "k", kk)
+          kkList[["k"]] <- sprintf("[%s, %s]", k, kk)
+          kkList[["r"]] <- ""
+          kkList[["param"]] <- "A"
           kList[[kkName]] <- kkList
         }
         transList[[kName]] <- kList
@@ -159,6 +191,9 @@ parse_transition <- function(transition, K) {
         kName <- paste0("k", k)
 
         kkList <- transition[[k]] # remember to change the k and r arguments accordingly
+        kkList[["k"]] <- sprintf("[%s, ]", k)
+        kkList[["r"]] <- ""
+        kkList[["param"]] <- "A"
         kkName <- paste0(kName, "k")
         kList[[kkName]] <- kkList
 
@@ -170,6 +205,9 @@ parse_transition <- function(transition, K) {
         kName <- paste0("k", k)
         for (kk in 1:K) {
           kkList <- transition[[k]] # remember to change the k and r arguments accordingly
+          kkList[["k"]] <- sprintf("[%s, %s]", k, kk)
+          kkList[["r"]] <- ""
+          kkList[["param"]] <- "A"
           kkName <- paste0(kName, "k", kk)
           kList[[kkName]] <- kkList
         }

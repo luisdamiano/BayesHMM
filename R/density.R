@@ -110,7 +110,8 @@ parameters.Dirichlet <- function(x) {
 }
 
 prior.Dirichlet <- function(x) {
-  sprintf("%s%s%s ~ Dirichlet(%s);", x$param, x$k, x$r, paste(eval(x$alpha), collapse = ", "))
+  sprintf("%s%s%s ~ dirichlet(%s);", x$param, x$k, x$r,
+          sprintf("[%s]'", paste(eval(x$alpha), collapse = ", ")))
 }
 
 loglike.Dirichlet <- function(x) {
