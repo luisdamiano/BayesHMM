@@ -12,6 +12,9 @@ Density <- function(name, ...) {
   structure(out, class = c(name, "Density"))
 }
 
+#' Title
+#'
+#' @export
 `+.Density` <- function(x, y) {
   if (is.Density(x))
     return(list(x, y))
