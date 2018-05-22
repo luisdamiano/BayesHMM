@@ -15,6 +15,32 @@ myModel1 <- hmm(
 
 write_model(myModel1, "out")
 
+myModel1b <- hmm(
+  K = 3, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(mu = 0, sigma = 10, bounds = list(0, 5)),
+    sigma = Gaussian(0, 10, bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  transition  = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  name = "Model with bounds ##!..."
+)
+
+write_model(myModel1b, "out")
+
+myModel1c <- hmm(
+  K = 3, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(mu = 0, sigma = 10, bounds = list(0, 5), trunc = list(-5, 5)),
+    sigma = Gaussian(0, 10, bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  transition  = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  name = "Model with bounds and truncs ##!..."
+)
+
+write_model(myModel1c, "out")
+
 myModel2 <- hmm(
   K = 3, R = 1,
   observation = # Different priors per state

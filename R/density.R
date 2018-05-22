@@ -6,15 +6,60 @@ generated       <- function(x, ...) { UseMethod("generated", x) }
 getParameters   <- function(x, ...) { UseMethod("getParameters", x) }
 is.multivariate <- function(x, ...) { UseMethod("is.multivariate", x) }
 
+make_bounds <- function(x, name) {
+  nameBound <- paste0(name, "Bounds")
+  s <- ""
+  if (!is.null(x[[nameBound]][[1]]) & !is.null(x[[nameBound]][[2]])) {
+    s <- sprintf(
+      "<lower = %s, upper = %s>",
+      x[[nameBound]][[1]],
+      x[[nameBound]][[2]]
+    )
+  } else {
+    if (!is.null(x[[nameBound]][[1]])) {
+      s <- sprintf("<lower = %s>", x[[nameBound]][[1]])
+    }
+
+    if (!is.null(x[[nameBound]][[2]])) {
+      s <- sprintf("<upper = %s>", x[[nameBound]][[2]])
+    }
+  }
+  return(s)
+}
+
+make_trunc <- function(x, name) {
+  nameTrunc <- paste0(name, "trunc")
+  s <- ""
+  if (!is.null(x[[nameTrunc]][[1]]) & !is.null(x[[nameTrunc]][[2]])) {
+    s <- sprintf(
+      "T[%s, %s]",
+      x[[nameTrunc]][[1]],
+      x[[nameTrunc]][[2]]
+    )
+  } else {
+    if (!is.null(x[[nameTrunc]][[1]])) {
+      s <- sprintf("T[%s, ]", x[[nameTrunc]][[1]])
+    }
+
+    if (!is.null(x[[nameTrunc]][[2]])) {
+      s <- sprintf("T[, %s]", x[[nameTrunc]][[2]])
+    }
+  }
+  return(s)
+}
+
 Density <- function(name, ...) {
   dots <- list(...)[[1]]
+  for (i in seq_along(dots)) {
+    if (is.language(dots[[i]])) {
+      dots[[i]] <- eval(dots[[i]])
+    }
+  }
+
   out  <- c(list(name = name), dots)
   structure(out, class = c(name, "Density"))
 }
 
-#' Title
-#'
-#' @export
 `+.Density` <- function(x, y) {
   if (is.Density(x))
     return(list(x, y))
@@ -34,19 +79,32 @@ explain.Density <- function(x) {
   )
 }
 
-Gaussian <- function(mu = NULL, sigma  = NULL, bounds = c(NULL, NULL),
-  trunc  = c(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Gaussian", as.list(match.call())[-1])
+Gaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
+  muBounds = list(NULL, NULL), sigmaBounds = list(0, NULL),
+  trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
+  # Density("Gaussian", as.list(match.call())[-1])
+  Density(
+    "Gaussian",
+    mget(names(formals()), sys.frame(sys.nframe()))
+  )
 }
 
 is.multivariate.Gaussian <- function(x) { FALSE }
 
 parameters.Gaussian <- function(x) {
-  sprintf("real mu%s%s;\nreal<lower = 0> sigma%s%s;", x$k, x$r, x$k, x$r)
+  muBoundsStr    <- make_bounds(x, "mu")
+  sigmaBoundsStr <- make_bounds(x, "sigma")
+
+  sprintf(
+    "real%s mu%s%s;\nreal%s sigma%s%s;",
+    muBoundsStr, x$k, x$r,
+    sigmaBoundsStr, x$k, x$r
+    )
 }
 
 prior.Gaussian <- function(x) {
-  sprintf("%s%s%s ~ normal(%s, %s);", x$param, x$k, x$r, x$mu, x$sigma)
+  truncStr    <- make_trunc(x, "")
+  sprintf("%s%s%s ~ normal(%s, %s) %s;", x$param, x$k, x$r, x$mu, x$sigma, truncStr)
 }
 
 loglike.Gaussian <- function(x) {

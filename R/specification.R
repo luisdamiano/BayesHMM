@@ -72,23 +72,25 @@ parse_observation <- function(observation, K, R) {
   }
 
   # Expand priors
+  # k state index; r output dimension index; p parameter index
   for (k in 1:length(obsList)) {
-    for (kk in 1:length(obsList[[k]])) {
-      lDensity <- obsList[[k]][[kk]]
+    for (r in 1:length(obsList[[k]])) {
+      lDensity <- obsList[[k]][[r]]
       lParam   <- getParameters(lDensity)
       for (p in 1:length(lParam)) {
-        txtExp <- deparse(lDensity[[names(lParam)[p]]], backtick = FALSE)
-        obsList[[k]][[kk]][[names(lParam)[p]]] <- parse(text =
-          paste0(
-            substr(txtExp, 1, nchar(txtExp) - 1),
-            sprintf(", k = %s, r = %s, param = \"%s\"", lDensity$k, if (lDensity$r == "") { "\"\"" } else { lDensity$r }, names(lParam)[p]),
-            ")"
-          )
-        )
+        # Move down elements from parent to child
+        nameParam <- names(lParam)[p]
+        obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
+        obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r # if (lDensity$r == "") { "" } else { lDensity$r }
+        obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
+
+        # Move up elements from child to parent
+        if (!is.null(obsList[[k]][[r]][[nameParam]][["bounds"]])) {
+          obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[r]][[nameParam]][["bounds"]]
+        }
       }
     }
   }
-
   obsList
 }
 
@@ -244,10 +246,6 @@ hmm <- function(K, R, observation = NULL, initial = NULL, transition = NULL, nam
   structure(l, class = "Specification")
 }
 
-# explain.Specification <- function(spec) {
-#   sprintf("Here I'll explain my spec.")
-# }
-
 check.Specification <- function(spec) {
   stop("Checks not implemented yet.")
 }
@@ -289,6 +287,7 @@ write_model <- function(spec, writeDir = tempdir()) {
   baseR <- if (spec$observation$R == 1) { "univariate" } else {"multivariate"}
   baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
   base  <- file.path("inst", "stan", sprintf("%s-%s.stan", baseR, baseA))
+  # base  <- system.file("stan", sprintf("%s-%s.stan", baseR, baseA), package = "BayesHMM")
 
   # Create folder
   writeDir <- file.path(writeDir, makeNames(spec$name))
@@ -307,6 +306,10 @@ write_model <- function(spec, writeDir = tempdir()) {
   )
 }
 
+# explain.Specification <- function(spec) {
+#   sprintf("Here I'll explain my spec.")
+# }
+#
 # explain_initial <- function(initial, K) {
 #   tab <- lapply(1:K, function(k) {
 #     data.frame(k, explain(initial[[k]]), stringsAsFactors = FALSE)
