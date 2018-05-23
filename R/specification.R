@@ -1,4 +1,5 @@
 check         <- function(x, ...) { UseMethod("check", x) }
+fit           <- function(x, ...) { UseMethod("fit", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
 
@@ -247,7 +248,27 @@ hmm <- function(K, R, observation = NULL, initial = NULL, transition = NULL, nam
 }
 
 check.Specification <- function(spec) {
-  stop("Checks not implemented yet.")
+  stop("TO BE IMPLEMENTED.")
+}
+
+explain.Specification <- function(spec) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+fit.Specification <- function(spec, data, control = NULL, ...) {
+  f    <- write_model(spec)
+
+  dots <- c(
+    list(...),
+    list(
+      file       = f,
+      model_name = spec$name,
+      data       = data
+      ),
+    control
+  )
+
+  do.call(rstan::stan, dots)
 }
 
 write_chunks.Specification <- function(spec, writeDir = tempdir()) {
@@ -282,95 +303,27 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
   )
 }
 
-write_model <- function(spec, writeDir = tempdir()) {
+write_model.Specification <- function(spec, writeDir = tempdir()) {
   # Select best template
   baseR <- if (spec$observation$R == 1) { "univariate" } else {"multivariate"}
   baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
-  base  <- file.path("inst", "stan", sprintf("%s-%s.stan", baseR, baseA))
-  # base  <- system.file("stan", sprintf("%s-%s.stan", baseR, baseA), package = "BayesHMM")
+  base  <- system.file(file.path("stan", sprintf("%s-%s.stan", baseR, baseA)), package = "BayesHMM")
 
   # Create folder
-  writeDir <- file.path(writeDir, makeNames(spec$name))
+  writeDir <- file.path(writeDir, make_names(spec$name))
   if (!dir.exists(writeDir)) { dir.create(writeDir, recursive = TRUE) }
 
   # Write chuncks & models
   write_chunks(spec, writeDir)
   build <- rstan::stanc_builder(
     file = base,
-    isystem = c(dirname(base), getwd(), writeDir)
+    isystem = c(dirname(base), writeDir)
   )
 
   write(
     build$model_code,
     file = file.path(writeDir, "model.stan")
   )
-}
 
-# explain.Specification <- function(spec) {
-#   sprintf("Here I'll explain my spec.")
-# }
-#
-# explain_initial <- function(initial, K) {
-#   tab <- lapply(1:K, function(k) {
-#     data.frame(k, explain(initial[[k]]), stringsAsFactors = FALSE)
-#   })
-#   tab <- do.call(rbind, tab)
-#   colnames(tab) <- c("K", "Density")
-#   print(tab)
-# }
-#
-# explain_transition <- function(transition, K) {
-#   tab <- lapply(1:K, function(k) {
-#     lapply(1:K, function(kk) {
-#       data.frame(k, kk, explain(transition[[k]][[kk]]), stringsAsFactors = FALSE)
-#     })
-#   })
-#   tab <- do.call(rbind, unlist(tab, recursive = FALSE))
-#   colnames(tab) <- c("K (from)", "K (to)", "Density")
-#   print(tab)
-# }
-#
-# explain_observation <- function(observation) {
-#   tab <-
-#     lapply(observation, function(obsK) {
-#       lapply(obsK, function(obsKR) {
-#         data.frame(k, r, explain(obsKR), stringsAsFactors = FALSE)
-#       })
-#     }, K = length(observation))
-#   tab <- do.call(rbind, unlist(tab, recursive = FALSE))
-#   colnames(tab) <- c("K", "R", "Density")
-#   print(tab)
-# }
-#
-# explain.Specification <- function(x) {
-#   explainInit  <- explain_initial(x$init_prob$density, x$K)
-#   explainTrans <- explain_transition(x$transition$density, x$K)
-#   explainObs   <- explain_observation(x$observation$density)
-#
-#   hl <- paste0(rep("#", 80), collapse = "")
-#   sprintf("
-#     %s
-#     # MODEL: %s
-#     %s
-#
-#     %s
-#     # 1. Initial state distribution
-#     %s
-#     %s
-#
-#     %s
-#     # 2. Transition model
-#     %s
-#     %s
-#
-#     %s
-#     # 3. Observation model
-#     %s
-#     %s
-#     ",
-#     hl, x$name, hl,
-#     hl, explainInit, hl,
-#     hl, explainTrans, hl,
-#     hl, explainObs, hl
-#   )
-# }
+  return(file.path(writeDir, "model.stan"))
+}
