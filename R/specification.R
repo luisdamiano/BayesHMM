@@ -278,6 +278,15 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
   funTransition  <- if (length(spec$transition$density) == 1)  { simpleApply } else {doubleApply}
   funObsPriors   <- if (length(spec$observation$density) == 1) { doubleApply } else {tripleApply}
 
+  # Write constants
+  write(
+    collapse(
+      sprintf("int K = %s; // number of hidden states", spec$K),
+      sprintf("int R = %s; // dimension of the observation vector", spec$observation$R)
+      ),
+    file = file.path(writeDir, "constants.stan")
+  )
+
   # Write observation parameters
   write(
     collapse(funObservation(spec$observation$density, parameters)),

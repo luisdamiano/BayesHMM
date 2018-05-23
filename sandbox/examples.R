@@ -1,3 +1,5 @@
+library(rstan)
+
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Gaussian(
@@ -12,12 +14,14 @@ mySpec <- hmm(
 set.seed(9000)
 myData <- list(
   x = c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1)),
-  T = 200
+  T = 300
 )
 
 myFit <- fit(mySpec, myData, chains = 1, iter = 500)
 
-rstan::plot(myFit, pars = "mu1")
+rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
+
+print(summary(myFit)[[1]][1:18, ], digits = 2)
 
 # myModel1a <- hmm(
 #   K = 3, R = 1,
