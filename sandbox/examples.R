@@ -13,7 +13,7 @@ mySpec <- hmm(
 
 set.seed(9000)
 myData <- list(
-  x = c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1)),
+  y = c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1)),
   T = 300
 )
 

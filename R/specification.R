@@ -296,7 +296,7 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
   # Write observation log-likelihood
   write(
     collapse(funObservation(spec$observation$density, loglike)),
-    file = file.path(writeDir, "loglike.stan")
+    file = file.path(writeDir, "loglikelihood.stan")
   )
 
   # Write priors (observation, transition, and initial distribution)
@@ -309,6 +309,12 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
       )
     ),
     file = file.path(writeDir, "priors.stan")
+  )
+
+  # Write predictive
+  write(
+    collapse(funObservation(spec$observation$density, generated)),
+    file = file.path(writeDir, "ypredictive.stan")
   )
 }
 

@@ -7,7 +7,7 @@ Gaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
 }
 
 generated.Gaussian <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  sprintf("if(zpred[t] == %s) ypred[t] = normal_rng(mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Gaussian <- function(x) {
@@ -18,7 +18,7 @@ is.multivariate.Gaussian <- function(x) { FALSE }
 
 loglike.Gaussian <- function(x) {
   subindStr <- make_subindex(x)
-  sprintf("loglike%s[t] = normal_lpdf(x[t] | mu%s%s, sigma%s%s);", subindStr, x$k, x$r, x$k, x$r)
+  sprintf("loglike%s[t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);", subindStr, x$k, x$r, x$k, x$r)
 }
 
 parameters.Gaussian <- function(x) {

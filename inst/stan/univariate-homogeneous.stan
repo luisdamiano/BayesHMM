@@ -2,11 +2,12 @@ functions {
   #include forward.stan
   #include forwardbackwards.stan
   #include MAPpath.stan
+  #include zpredictive.stan
 }
 
 data {
   int<lower=1> T;                   // number of observations (length)
-  vector[T] x;                      // observations
+  vector[T] y;                      // observations
 }
 
 transformed data {
@@ -38,7 +39,7 @@ transformed parameters {
 
   // 3. Fill loglikelihood (always needed)
   for (t in 1:T) {
-    #include loglike.stan
+    #include loglikelihood.stan
   }
 
   // 4. Compute forward quantity
@@ -56,11 +57,18 @@ model {
 generated quantities {
   vector[T] alpha[K];
   vector[T] gamma[K];
+  vector[T] ypred;
   int<lower=1, upper=K> zstar[T];
+  int<lower=1, upper=K> zpred[T];
 
   for (t in 1:T)
     alpha[, t] = to_array_1d(softmax(to_vector(logalpha[, t])));
 
   gamma = forwardbackward(K, T, logpi, logA, loglike, alpha);
   zstar = MAPpath(K, T, logpi, logA, loglike);
+  zpred = zpredictive_rng(K, T, pi, A);
+
+  for(t in 1:T) {
+    #include ypredictive.stan
+  }
 }

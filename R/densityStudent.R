@@ -20,7 +20,7 @@ is.multivariate.Student <- function(x) { FALSE }
 loglike.Student <- function(x) {
   subindStr <- make_subindex(x)
   sprintf(
-    "loglike%s[t] =  student_t_lpdf(x[t] | nu%s%s, mu%s%s, sigma%s%s);",
+    "loglike%s[t] =  student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
     subindStr, x$k, x$r, x$k, x$r, x$k, x$r
   )
 }
