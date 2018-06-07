@@ -8,7 +8,7 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
 }
 
 generated.Student <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  sprintf("if(zpred[t] == %s) ypred[t] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Student <- function(x) {
@@ -17,7 +17,7 @@ getParameters.Student <- function(x) {
 
 is.multivariate.Student <- function(x) { FALSE }
 
-loglike.Student <- function(x) {
+logLike.Student <- function(x) {
   subindStr <- make_subindex(x)
   sprintf(
     "loglike%s[t] =  student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",

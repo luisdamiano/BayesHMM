@@ -2,9 +2,10 @@ explain         <- function(x, ...) { UseMethod("explain", x) }
 generated       <- function(x, ...) { UseMethod("generated", x) }
 getParameters   <- function(x, ...) { UseMethod("getParameters", x) }
 is.multivariate <- function(x, ...) { UseMethod("is.multivariate", x) }
-loglike         <- function(x, ...) { UseMethod("loglike", x) }
+logLike         <- function(x, ...) { UseMethod("logLike", x) }
 parameters      <- function(x, ...) { UseMethod("parameters", x) }
 prior           <- function(x, ...) { UseMethod("prior", x) }
+noLogLike       <- function(x, ...) { UseMethod("noLogLike", x) }
 
 Density <- function(name, ...) {
   # Evaluate nested expressions (Densities)
@@ -43,4 +44,9 @@ explain.Density <- function(x) {
     x[1],
     paste(names(x[-1]), "=", x[-1], collapse = ", ")
   )
+}
+
+noLogLike.Density <- function(x) {
+  subindStr <- make_subindex(x)
+  sprintf("loglike%s[t] = 1;", subindStr)
 }

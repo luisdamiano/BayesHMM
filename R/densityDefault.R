@@ -16,7 +16,7 @@ getParameters.Default <- function(x) {
 
 is.multivariate.Default <- function(x) { TRUE }
 
-loglike.Default <- function(x) {
+logLike.Default <- function(x) {
   stop("You shouldn't be calling this")
 }
 

@@ -16,7 +16,7 @@ getParameters.Gaussian <- function(x) {
 
 is.multivariate.Gaussian <- function(x) { FALSE }
 
-loglike.Gaussian <- function(x) {
+logLike.Gaussian <- function(x) {
   subindStr <- make_subindex(x)
   sprintf("loglike%s[t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);", subindStr, x$k, x$r, x$k, x$r)
 }

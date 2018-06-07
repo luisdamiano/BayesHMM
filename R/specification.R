@@ -255,28 +255,40 @@ explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
 }
 
-fit.Specification <- function(spec, data, control = NULL, ...) {
-  f    <- write_model(spec)
+# if data = NULL, then (prior predictive) generative model
+fit.Specification <- function(spec, data = NULL, control = NULL, writeDir = tempdir(), ...) {
+  stanfile <- write_model(spec, noLogLike = is.null(data), writeDir)
 
-  dots <- c(
-    list(...),
+  dots <- list(...)
+  if (is.null(data)) {
+    if ("T" %in% (names(dots))) {
+      data <- list(T = dots[["T"]])
+      dots[["T"]] <- NULL
+    } else {
+      data <- list(T = 1E3)
+    }
+  }
+
+  standots <- c(
+    dots,
     list(
-      file       = f,
+      file       = stanfile,
       model_name = spec$name,
       data       = data
       ),
     control
   )
 
-  do.call(rstan::stan, dots)
+  do.call(rstan::stan, standots)
 }
 
-write_chunks.Specification <- function(spec, writeDir = tempdir()) {
+write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   # Uses different functions depending on the depth of the nested lists
   funObservation <- if (length(spec$observation$density) == 1) { simpleApply } else {doubleApply}
   funInitProb    <- simpleApply
   funTransition  <- if (length(spec$transition$density) == 1)  { simpleApply } else {doubleApply}
   funObsPriors   <- if (length(spec$observation$density) == 1) { doubleApply } else {tripleApply}
+  funLogLike     <- match.fun(if (noLogLike) "noLogLike" else "logLike")
 
   # Write constants
   write(
@@ -287,6 +299,16 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
     file = file.path(writeDir, "constants.stan")
   )
 
+  # Write data
+  strData <- "// No observation vector"
+  if (!noLogLike) {
+    strData <- collapse(
+      sprintf("vector[T] y; // observations")
+    )
+  }
+
+  write(strData, file = file.path(writeDir, "data.stan"))
+
   # Write observation parameters
   write(
     collapse(funObservation(spec$observation$density, parameters)),
@@ -295,8 +317,8 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
 
   # Write observation log-likelihood
   write(
-    collapse(funObservation(spec$observation$density, loglike)),
-    file = file.path(writeDir, "loglikelihood.stan")
+    collapse(funObservation(spec$observation$density, funLogLike)),
+    file = file.path(writeDir, "logLikelihood.stan")
   )
 
   # Write priors (observation, transition, and initial distribution)
@@ -318,7 +340,7 @@ write_chunks.Specification <- function(spec, writeDir = tempdir()) {
   )
 }
 
-write_model.Specification <- function(spec, writeDir = tempdir()) {
+write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Select best template
   baseR <- if (spec$observation$R == 1) { "univariate" } else {"multivariate"}
   baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
@@ -329,7 +351,7 @@ write_model.Specification <- function(spec, writeDir = tempdir()) {
   if (!dir.exists(writeDir)) { dir.create(writeDir, recursive = TRUE) }
 
   # Write chuncks & models
-  write_chunks(spec, writeDir)
+  write_chunks(spec, noLogLike, writeDir)
   build <- rstan::stanc_builder(
     file = base,
     isystem = c(dirname(base), writeDir)

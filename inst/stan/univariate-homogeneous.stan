@@ -7,7 +7,7 @@ functions {
 
 data {
   int<lower=1> T;                   // number of observations (length)
-  vector[T] y;                      // observations
+  #include data.stan
 }
 
 transformed data {

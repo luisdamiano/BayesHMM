@@ -16,7 +16,7 @@ getParameters.Dirichlet <- function(x) {
 
 is.multivariate.Dirichlet <- function(x) { TRUE }
 
-loglike.Dirichlet <- function(x) {
+logLike.Dirichlet <- function(x) {
   stop("You shouldn't be calling this")
 }
 

@@ -16,7 +16,7 @@ getParameters.MVGaussian <- function(x) {
 
 is.multivariate.MVGaussian <- function(x) { TRUE }
 
-loglike.MVGaussian <- function(x) {
+logLike.MVGaussian <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 

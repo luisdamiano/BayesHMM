@@ -7,21 +7,29 @@ Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
 }
 
 generated.Beta <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  sprintf("if(zpred[t] == %s) ypred[t] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Beta <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  return(list(alpha = eval(x$alpha), beta = eval(x$beta)))
 }
 
 is.multivariate.Beta <- function(x) { FALSE }
 
-loglike.Beta <- function(x) {
-  stop("You shouldn't be calling this")
+logLike.Beta <- function(x) {
+  subindStr <- make_subindex(x)
+  sprintf("loglike%s[t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", subindStr, x$k, x$r, x$k, x$r)
 }
 
 parameters.Beta <- function(x) {
-  stop("You shouldn't be calling this")
+  alphaBoundsStr <- make_bounds(x, "alpha")
+  betaBoundsStr  <- make_bounds(x, "beta")
+
+  sprintf(
+    "real%s alpha%s%s;\nreal%s beta%s%s;",
+    alphaBoundsStr, x$k, x$r,
+    betaBoundsStr, x$k, x$r
+  )
 }
 
 prior.Beta <- function(x) {
