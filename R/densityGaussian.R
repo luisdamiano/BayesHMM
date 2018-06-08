@@ -33,5 +33,6 @@ parameters.Gaussian <- function(x) {
 
 prior.Gaussian <- function(x) {
   truncStr <- make_trunc(x, "")
-  sprintf("%s%s%s ~ normal(%s, %s) %s;", x$param, x$k, x$r, x$mu, x$sigma, truncStr)
+  rStr     <- sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+  sprintf("%s%s%s ~ normal(%s, %s) %s;", x$param, x$k, rStr, x$mu, x$sigma, truncStr)
 }
