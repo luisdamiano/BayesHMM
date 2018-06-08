@@ -47,6 +47,5 @@ explain.Density <- function(x) {
 }
 
 noLogLike.Density <- function(x) {
-  subindStr <- make_subindex(x)
-  sprintf("loglike%s[t] = 1;", subindStr)
+  sprintf("loglike[%s][t] = 1;", x$k)
 }

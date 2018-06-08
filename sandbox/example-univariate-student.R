@@ -14,16 +14,18 @@ mySpec <- hmm(
 
 set.seed(9000)
 myData <- list(
-  y = c(
-    rt(100, df = 5, ncp = 0),
-    rt(100, df = 5, ncp = 10),
-    rt(100, df = 5, ncp = -10)
+  y = as.matrix(
+    c(
+      rt(100, df = 5, ncp = 0),
+      rt(100, df = 5, ncp = 10),
+      rt(100, df = 5, ncp = -10)
+    )
   ),
   T = 300
 )
 
 myFit <- fit(mySpec, myData, chains = 1, iter = 500, writeDir = "sandbox//out")
 
-rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
+rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 
 print(summary(myFit)[[1]][1:21, ], digits = 2)

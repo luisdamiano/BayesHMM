@@ -12,11 +12,11 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myFit <- fit(mySpec, chains = 1, iter = 500, writeDir = "sandbox/out")
+myFit <- fit(mySpec, chains = 1, iter = 500)
 # Alternatively, you can set the number of generated quantities T
 # fit(mySpec, T = 200, chains = 1, iter = 500)
 
-rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
+rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 
 print(summary(myFit)[[1]][1:18, ], digits = 2)
 

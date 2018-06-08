@@ -57,7 +57,7 @@ model {
 generated quantities {
   vector[T] alpha[K];
   vector[T] gamma[K];
-  vector[T] ypred;
+  matrix[T, R] ypred;
   int<lower=1, upper=K> zstar[T];
   int<lower=1, upper=K> zpred[T];
 

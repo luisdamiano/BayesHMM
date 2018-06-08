@@ -7,7 +7,7 @@ Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
 }
 
 generated.Beta <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
+  sprintf("if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Beta <- function(x) {
@@ -17,8 +17,7 @@ getParameters.Beta <- function(x) {
 is.multivariate.Beta <- function(x) { FALSE }
 
 logLike.Beta <- function(x) {
-  subindStr <- make_subindex(x)
-  sprintf("loglike%s[t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", subindStr, x$k, x$r, x$k, x$r)
+  sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
 parameters.Beta <- function(x) {

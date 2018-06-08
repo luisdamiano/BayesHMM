@@ -13,12 +13,14 @@ mySpec <- hmm(
 
 set.seed(9000)
 myData <- list(
-  y = c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1)),
+  y = as.matrix(
+    c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1))
+  ),
   T = 300
 )
 
 myFit <- fit(mySpec, myData, chains = 1, iter = 500)
 
-rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
+rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 
 print(summary(myFit)[[1]][1:18, ], digits = 2)

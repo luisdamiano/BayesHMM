@@ -8,7 +8,7 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
 }
 
 generated.Student <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r, x$k, x$r)
+  sprintf("if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);", x$k, x$r, x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
 getParameters.Student <- function(x) {
@@ -18,11 +18,13 @@ getParameters.Student <- function(x) {
 is.multivariate.Student <- function(x) { FALSE }
 
 logLike.Student <- function(x) {
-  subindStr <- make_subindex(x)
-  sprintf(
-    "loglike%s[t] =  student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
-    subindStr, x$k, x$r, x$k, x$r, x$k, x$r
-  )
+  sprintf("loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r, x$k, x$r)
+
+  # subindStr <- make_subindex(x)
+  # sprintf(
+  #   "loglike%s[t] =  student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
+  #   subindStr, x$k, x$r, x$k, x$r, x$k, x$r
+  # )
 }
 
 parameters.Student <- function(x) {
