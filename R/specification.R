@@ -119,7 +119,7 @@ parse_observation <- function(observation, K, R) {
           obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
           obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r
           obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
-          obsList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+          obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
 
           # Move up elements from child to parent
           if (!is.null(obsList[[k]][[r]][[nameParam]][["bounds"]])) {

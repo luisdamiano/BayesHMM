@@ -3,7 +3,7 @@ library(rstan)
 mySpec <- hmm(
   K = 3, R = 2,
   observation = MVGaussianCor(
-    mu    = Gaussian(mu = 0, sigma = 100) + Student(mu = 0, sigma = 50, nu = 10),
+    mu    = Student(nu = 10, mu = 0, sigma = 100) + Student(nu = 100, mu = 0, sigma = 1000),
     L     = LKJCor(eta = 2)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

@@ -8,7 +8,13 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
 }
 
 generated.Student <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);", x$k, x$r, x$k, x$r, x$k, x$r, x$k, x$r)
+  sprintf(
+    "if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);",
+    x$k, x$r,
+    x$k, x$r,
+    x$k, x$r,
+    x$k, x$r
+  )
 }
 
 getParameters.Student <- function(x) {
@@ -18,13 +24,13 @@ getParameters.Student <- function(x) {
 is.multivariate.Student <- function(x) { FALSE }
 
 logLike.Student <- function(x) {
-  sprintf("loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r, x$k, x$r)
-
-  # subindStr <- make_subindex(x)
-  # sprintf(
-  #   "loglike%s[t] =  student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
-  #   subindStr, x$k, x$r, x$k, x$r, x$k, x$r
-  # )
+  sprintf(
+    "loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
+    x$k,
+    x$k, x$r,
+    x$k, x$r,
+    x$k, x$r
+  )
 }
 
 parameters.Student <- function(x) {
@@ -42,5 +48,13 @@ parameters.Student <- function(x) {
 
 prior.Student <- function(x) {
   truncStr    <- make_trunc(x, "")
-  sprintf("%s%s%s ~ student_t(%s, %s, %s) %s;", x$param, x$k, x$r, x$nu, x$mu, x$sigma, truncStr)
+  # rStr        <- sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+  rStr        <- make_rsubindex(x)
+  sprintf(
+    "%s%s%s ~ student_t(%s, %s, %s) %s;",
+    x$param,
+    x$k, rStr,
+    x$nu, x$mu, x$sigma,
+    truncStr
+  )
 }

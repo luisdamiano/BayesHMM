@@ -26,5 +26,10 @@ parameters.LKJCor <- function(x) {
 
 prior.LKJCor <- function(x) {
   truncStr <- make_trunc(x, "")
-  sprintf("%s%s ~ lkj_corr_cholesky(%s) %s;", x$param, x$k, x$eta, truncStr)
+  sprintf(
+    "%s%s ~ lkj_corr_cholesky(%s) %s;",
+    x$param,
+    x$k, x$eta,
+    truncStr
+  )
 }

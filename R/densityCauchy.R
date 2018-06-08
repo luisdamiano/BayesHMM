@@ -7,18 +7,33 @@ Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
 }
 
 generated.Cauchy <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t] = cauchy_rng(mu%s%s, sigma%s%s);", x$k, x$k, x$r, x$k, x$r)
+  sprintf(
+    "if(zpred[t] == %s) ypred[t] = cauchy_rng(mu%s%s, sigma%s%s);",
+    x$k,
+    x$k, x$r,
+    x$k, x$r
+  )
 }
 
 getParameters.Cauchy <- function(x) {
-  return(list(mu = eval(x$mu), sigma = eval(x$sigma)))
+  return(
+    list(
+      mu = eval(x$mu),
+      sigma = eval(x$sigma)
+    )
+  )
 }
 
 is.multivariate.Cauchy <- function(x) { FALSE }
 
 logLike.Cauchy <- function(x) {
   subindStr <- make_subindex(x)
-  sprintf("loglike%s[t] = cauchy_lpdf(y[t] | mu%s%s, sigma%s%s);", subindStr, x$k, x$r, x$k, x$r)
+  sprintf(
+    "loglike%s[t] = cauchy_lpdf(y[t] | mu%s%s, sigma%s%s);",
+    subindStr,
+    x$k, x$r,
+    x$k, x$r
+  )
 }
 
 parameters.Cauchy <- function(x) {
@@ -34,5 +49,11 @@ parameters.Cauchy <- function(x) {
 
 prior.Cauchy <- function(x) {
   truncStr <- make_trunc(x, "")
-  sprintf("%s%s%s ~ cauchy(%s, %s) %s;", x$param, x$k, x$r, x$mu, x$sigma, truncStr)
+  sprintf(
+    "%s%s%s ~ cauchy(%s, %s) %s;",
+    x$param,
+    x$k, x$r,
+    x$mu, x$sigma,
+    truncStr
+  )
 }

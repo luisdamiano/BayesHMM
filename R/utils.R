@@ -75,3 +75,7 @@ make_subindex <- function(x) {
   }
   return(s)
 }
+
+make_rsubindex <- function(x) {
+  sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+}
