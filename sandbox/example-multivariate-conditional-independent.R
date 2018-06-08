@@ -2,12 +2,12 @@ library(rstan)
 
 mySpec <- hmm(
   K = 3, R = 2,
-  observation = # Different priors per state
+  observation = # Different densities per state
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 100, bounds = list(0, NULL))
     )
-    + Gaussian(
+    + Cauchy(
       mu    = Gaussian(0.01, 10),
       sigma = Gaussian(0, 100, bounds = list(0, NULL))
     )
