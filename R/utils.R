@@ -26,6 +26,20 @@ tripleApply <- function(X, FUN, func1 = identity, func2 = identity, func3 = iden
   }, func1 = func3)
 }
 
+densityApply <- function(X, FUN, ..., simplify = TRUE) {
+  simple <- any(sapply(X, is.Density))
+
+  if (simple) {
+    sapply(X, FUN, ..., simplify = simplify)
+  } else {
+    l <- lapply(X, function(x) {
+      sapply(x, FUN, ..., simplify = simplify)
+    })
+
+    do.call(c, l)
+  }
+}
+
 check_list <- function(x, len, name) {
   if (!is.list(x) || length(x) != len)
     stop(

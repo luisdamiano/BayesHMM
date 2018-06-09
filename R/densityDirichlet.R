@@ -1,6 +1,6 @@
 Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
                       trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "Dirichlet",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -13,8 +13,6 @@ generated.Dirichlet <- function(x) {
 getParameters.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
-
-is.multivariate.Dirichlet <- function(x) { TRUE }
 
 logLike.Dirichlet <- function(x) {
   stop("You shouldn't be calling this")

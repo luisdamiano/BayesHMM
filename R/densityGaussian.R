@@ -19,8 +19,6 @@ getParameters.Gaussian <- function(x) {
   return(list(mu = eval(x$mu), sigma = eval(x$sigma)))
 }
 
-is.multivariate.Gaussian <- function(x) { FALSE }
-
 logLike.Gaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);",

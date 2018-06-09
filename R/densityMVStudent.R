@@ -1,6 +1,6 @@
 MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, NULL),
                        trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "MVStudent",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -22,8 +22,6 @@ getParameters.MVStudent <- function(x) {
     )
   )
 }
-
-is.multivariate.MVStudent <- function(x) { TRUE }
 
 logLike.MVStudent <- function(x) {
   sprintf(

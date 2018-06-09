@@ -1,6 +1,6 @@
 Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  DiscreteDensity(
     "Poisson",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -21,8 +21,6 @@ getParameters.Poisson <- function(x) {
     )
   )
 }
-
-is.multivariate.Poisson <- function(x) { FALSE }
 
 logLike.Poisson <- function(x) {
   sprintf(

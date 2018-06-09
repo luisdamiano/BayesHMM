@@ -292,6 +292,15 @@ explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
 }
 
+is.multivariate.Specification <- function(spec) {
+  spec$observation$R == 1
+  ## all(densityApply(mySpec$observation$density, is.multivariate)) ?
+}
+
+is.discrete.Specification <- function(spec) {
+  all(densityApply(mySpec$observation$density, is.discrete))
+}
+
 # if data = NULL, then (prior predictive) generative model
 fit.Specification <- function(spec, data = NULL, control = NULL, writeDir = tempdir(), ...) {
   stanfile <- write_model(spec, noLogLike = is.null(data), writeDir)
@@ -319,6 +328,7 @@ fit.Specification <- function(spec, data = NULL, control = NULL, writeDir = temp
   do.call(rstan::stan, standots)
 }
 
+# Break down into several functions write_constants, write_data, etc...
 write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   nestedR <- !is.Density(spec$observation$density[[1]])
   # Uses different functions depending on the depth of the nested lists
@@ -339,12 +349,16 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   )
 
   # Write data
-  strData <- "// No observation vector"
-  if (!noLogLike) {
-    strData <- collapse(
-      sprintf("matrix[T, %s] y; // observations", spec$observation$R)
-    )
-  }
+  strData <-
+    if (noLogLike) {
+      "// No observation vector"
+    } else {
+      if (is.discrete(mySpec)) {
+        sprintf("int y[T, %s]; // observations", spec$observation$R)
+      } else {
+        sprintf("matrix[T, %s] y; // observations", spec$observation$R)
+      }
+    }
 
   write(strData, file = file.path(writeDir, "data.stan"))
 
@@ -393,9 +407,12 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
 
 write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Select best template
-  baseR <- if (spec$observation$R == 1) { "univariate" } else {"univariate"}
+  baseR <- if (is.multivariate(spec)) { "univariate" } else {"univariate"}
   baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
-  base  <- system.file(file.path("stan", sprintf("%s-%s.stan", baseR, baseA)), package = "BayesHMM")
+  base  <- system.file(
+    file.path("stan", sprintf("%s-%s.stan", baseR, baseA)),
+    package = "BayesHMM"
+  )
 
   # Create folder
   writeDir <- file.path(writeDir, make_names(spec$name))

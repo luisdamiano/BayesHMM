@@ -24,8 +24,6 @@ getParameters.Cauchy <- function(x) {
   )
 }
 
-is.multivariate.Cauchy <- function(x) { FALSE }
-
 logLike.Cauchy <- function(x) {
   sprintf(
     "loglike[%s][t] = cauchy_lpdf(y[t] | mu%s%s, sigma%s%s);",

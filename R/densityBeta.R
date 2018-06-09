@@ -14,8 +14,6 @@ getParameters.Beta <- function(x) {
   return(list(alpha = eval(x$alpha), beta = eval(x$beta)))
 }
 
-is.multivariate.Beta <- function(x) { FALSE }
-
 logLike.Beta <- function(x) {
   sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }

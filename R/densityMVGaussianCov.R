@@ -1,6 +1,6 @@
 MVGaussianCov <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL),
                           trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "MVGaussianCov",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -21,8 +21,6 @@ getParameters.MVGaussianCov <- function(x) {
     )
   )
 }
-
-is.multivariate.MVGaussianCov <- function(x) { TRUE }
 
 logLike.MVGaussianCov <- function(x) {
   sprintf(

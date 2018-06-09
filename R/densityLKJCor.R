@@ -1,6 +1,6 @@
 LKJCor <- function(eta = NULL, bounds = list(NULL, NULL),
                    trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "LKJCor",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -13,8 +13,6 @@ generated.LKJCor <- function(x) {
 getParameters.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")
 }
-
-is.multivariate.LKJCor <- function(x) { TRUE }
 
 logLike.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")

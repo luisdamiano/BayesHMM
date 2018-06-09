@@ -1,6 +1,6 @@
 MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
                        trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "MVGaussian",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -21,8 +21,6 @@ getParameters.MVGaussian <- function(x) {
     )
   )
 }
-
-is.multivariate.MVGaussian <- function(x) { TRUE }
 
 logLike.MVGaussian <- function(x) {
   sprintf(

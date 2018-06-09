@@ -1,6 +1,6 @@
 Wishart <- function(nu = NULL, sigma = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
+  MultivariateDensity(
     "Wishart",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
@@ -13,8 +13,6 @@ generated.Wishart <- function(x) {
 getParameters.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")
 }
-
-is.multivariate.Wishart <- function(x) { TRUE }
 
 logLike.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")

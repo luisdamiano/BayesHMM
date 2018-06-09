@@ -8,7 +8,7 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "My simple model!..."
+  name = "MV Gaussian LKJ!..."
 )
 
 set.seed(9000)

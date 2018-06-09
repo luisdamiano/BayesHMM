@@ -21,8 +21,6 @@ getParameters.Student <- function(x) {
   return(list(mu = eval(x$mu), sigma = eval(x$sigma), nu = eval(x$nu)))
 }
 
-is.multivariate.Student <- function(x) { FALSE }
-
 logLike.Student <- function(x) {
   sprintf(
     "loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",

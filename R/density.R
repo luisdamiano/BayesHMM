@@ -1,6 +1,7 @@
 explain         <- function(x, ...) { UseMethod("explain", x) }
 generated       <- function(x, ...) { UseMethod("generated", x) }
 getParameters   <- function(x, ...) { UseMethod("getParameters", x) }
+is.discrete     <- function(x, ...) { UseMethod("is.discrete", x) }
 is.multivariate <- function(x, ...) { UseMethod("is.multivariate", x) }
 logLike         <- function(x, ...) { UseMethod("logLike", x) }
 parameters      <- function(x, ...) { UseMethod("parameters", x) }
@@ -26,6 +27,24 @@ Density <- function(name, ...) {
   )
 }
 
+MultivariateDensity <- function(name, ...) {
+  x <- Density(name, ...)
+  class(x) <- append(class(x), "MultivariateDensity", 1)
+  x
+}
+
+DiscreteDensity <- function(name, ...) {
+  x <- Density(name, ...)
+  class(x) <- append(class(x), "DiscreteDensity", 1)
+  x
+}
+
+MultivariateDiscreteDensity <- function(name, ...) {
+  x <- DiscreteDensity(name, ...)
+  class(x) <- append(class(x), "MultivariateDensity", 1)
+  x
+}
+
 `+.Density` <- function(x, y) {
   if (is.Density(x))
     return(list(x, y))
@@ -49,3 +68,9 @@ explain.Density <- function(x) {
 noLogLike.Density <- function(x) {
   sprintf("loglike[%s][t] = 1;", x$k)
 }
+
+is.multivariate.Density <- function(x) { FALSE }
+is.multivariate.MultivariateDensity <- function(x) { TRUE }
+
+is.discrete.Density <- function(x) { FALSE }
+is.discrete.DiscreteDensity <- function(x) { TRUE }

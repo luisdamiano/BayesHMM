@@ -14,8 +14,6 @@ getParameters.Default <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-is.multivariate.Default <- function(x) { TRUE }
-
 logLike.Default <- function(x) {
   stop("You shouldn't be calling this")
 }

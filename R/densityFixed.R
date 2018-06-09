@@ -14,8 +14,6 @@ getParameters.Fixed <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-is.multivariate.Fixed <- function(x) { TRUE }
-
 logLike.Fixed <- function(x) {
   stop("You shouldn't be calling this")
 }
