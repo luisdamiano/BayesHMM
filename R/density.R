@@ -1,4 +1,5 @@
 explain         <- function(x, ...) { UseMethod("explain", x) }
+constants       <- function(x, ...) { UseMethod("constants", x) }
 generated       <- function(x, ...) { UseMethod("generated", x) }
 getParameters   <- function(x, ...) { UseMethod("getParameters", x) }
 is.discrete     <- function(x, ...) { UseMethod("is.discrete", x) }
@@ -74,3 +75,5 @@ is.multivariate.MultivariateDensity <- function(x) { TRUE }
 
 is.discrete.Density <- function(x) { FALSE }
 is.discrete.DiscreteDensity <- function(x) { TRUE }
+
+constants.Density <- function(x) { "" }

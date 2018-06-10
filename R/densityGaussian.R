@@ -1,4 +1,4 @@
-Gaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
+Gaussian <- function(mu = NULL, sigma = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
   Density(
     "Gaussian",

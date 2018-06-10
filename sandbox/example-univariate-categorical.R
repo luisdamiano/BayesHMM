@@ -2,24 +2,25 @@ library(rstan)
 
 mySpec <- hmm(
   K = 3, R = 1,
-  observation = Bernoulli(
-    theta = Beta(alpha = 0.5, beta = 0.5, bounds = list(0, 1))
+  observation = Categorical(
+    theta = Dirichlet(alpha = c(0.5, 0.5, 0.5, 0.5)),
+    N = 4
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "My bernoulli model!..."
+  name = "My simple model!..."
 )
 
 set.seed(9000)
 myData <- list(
   y = as.matrix(
     c(
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.5) }),
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.2) }),
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.8) })
+      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.1, 0.7)),
+      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.7, 0.1)),
+      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.7, 0.1, 0.1))
     )
   ),
-  T = 3000
+  T = 300
 )
 
 myFit <- fit(mySpec, myData, chains = 1, iter = 500)

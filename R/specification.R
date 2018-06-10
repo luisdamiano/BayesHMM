@@ -343,7 +343,8 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   write(
     collapse(
       sprintf("int K = %s; // number of hidden states", spec$K),
-      sprintf("int R = %s; // dimension of the observation vector", spec$observation$R)
+      sprintf("int R = %s; // dimension of the observation vector", spec$observation$R),
+      unique(densityApply(mySpec$observation$density, constants))
       ),
     file = file.path(writeDir, "constants.stan")
   )

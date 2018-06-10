@@ -3,7 +3,7 @@ library(rstan)
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Poisson(
-    lambda = Default()
+    lambda = Default(bounds = list(0, NULL))
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
@@ -20,6 +20,6 @@ myData <- list(
 
 myFit <- fit(mySpec, myData, chains = 1, iter = 500)
 
-rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
+rstan::plot(myFit, pars = c("lambda11", "lambda21", "lambda31"))
 
 print(summary(myFit)[[1]][1:18, ], digits = 2)
