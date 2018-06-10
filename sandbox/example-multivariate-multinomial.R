@@ -1,0 +1,34 @@
+library(rstan)
+
+mySpec <- hmm(
+  K = 3, R = 4,
+  observation = Multinomial(
+    theta = Default(),
+    N = 10
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  name = "My simple model!..."
+)
+
+set.seed(9000)
+myData <- list(
+  y = as.matrix(
+    t(
+      cbind(
+        rmultinom(100, 10, c(0.1, 0.1, 0.1, 0.7)),
+        rmultinom(100, 10, c(0.1, 0.1, 0.7, 0.1)),
+        rmultinom(100, 10, c(0.1, 0.7, 0.1, 0.1))
+      )
+    )
+  ),
+  T = 300
+)
+
+myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+
+rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
+
+print(summary(myFit)[[1]][1:18, ], digits = 2)
+
+str(extract(myFit, pars = "ypred")[[1]])
