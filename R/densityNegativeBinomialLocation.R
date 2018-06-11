@@ -15,13 +15,8 @@ generated.NegativeBinomialLocation <- function(x) {
   )
 }
 
-getParameters.NegativeBinomialLocation <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      phi = eval(x$phi)
-    )
-  )
+getParameterNames.NegativeBinomialLocation <- function(x) {
+  return(c("mu", "phi"))
 }
 
 logLike.NegativeBinomialLocation <- function(x) {

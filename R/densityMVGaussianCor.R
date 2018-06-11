@@ -13,13 +13,8 @@ generated.MVGaussianCor <- function(x) {
   )
 }
 
-getParameters.MVGaussianCor <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      L = eval(x$L)
-    )
-  )
+getParameterNames.MVGaussianCor <- function(x) {
+  return(c("mu", "L"))
 }
 
 logLike.MVGaussianCor <- function(x) {

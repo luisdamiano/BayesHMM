@@ -13,14 +13,10 @@ generated.MVGaussianCov <- function(x) {
   )
 }
 
-getParameters.MVGaussianCov <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      L = eval(x$L)
-    )
-  )
+getParameterNames.MVGaussianCov <- function(x) {
+  return(c("mu", "L"))
 }
+
 
 logLike.MVGaussianCov <- function(x) {
   sprintf(

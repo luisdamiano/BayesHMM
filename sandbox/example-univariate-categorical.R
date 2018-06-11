@@ -8,22 +8,19 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "My simple model!..."
+  name = "Univariate Categorical"
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(
-      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.1, 0.7)),
-      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.7, 0.1)),
-      sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.7, 0.1, 0.1))
-    )
-  ),
-  T = 300
+y = as.matrix(
+  c(
+    sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.1, 0.7)),
+    sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.1, 0.7, 0.1)),
+    sample(1:4, size = 100, replace = TRUE, prob = c(0.1, 0.7, 0.1, 0.1))
+  )
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
 

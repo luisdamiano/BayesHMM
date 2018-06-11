@@ -7,22 +7,19 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "My bernoulli model!..."
+  name = "Bernoulli Model"
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.5) }),
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.2) }),
-      sapply(1:1000, function(x) { rbinom(1, 1, 0.8) })
-    )
-  ),
-  T = 3000
+y = as.matrix(
+  c(
+    sapply(1:1000, function(x) { rbinom(1, 1, 0.5) }),
+    sapply(1:1000, function(x) { rbinom(1, 1, 0.2) }),
+    sapply(1:1000, function(x) { rbinom(1, 1, 0.8) })
+  )
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
 

@@ -11,14 +11,11 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(rpois(100, 5), rpois(100, 10), rpois(100, 1))
-  ),
-  T = 300
+y = as.matrix(
+  c(rpois(100, 5), rpois(100, 10), rpois(100, 1))
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("lambda11", "lambda21", "lambda31"))
 

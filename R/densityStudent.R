@@ -17,8 +17,8 @@ generated.Student <- function(x) {
   )
 }
 
-getParameters.Student <- function(x) {
-  return(list(mu = eval(x$mu), sigma = eval(x$sigma), nu = eval(x$nu)))
+getParameterNames.Student <- function(x) {
+  return(c("mu", "sigma", "nu"))
 }
 
 logLike.Student <- function(x) {

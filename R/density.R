@@ -1,13 +1,14 @@
-explain         <- function(x, ...) { UseMethod("explain", x) }
-constants       <- function(x, ...) { UseMethod("constants", x) }
-generated       <- function(x, ...) { UseMethod("generated", x) }
-getParameters   <- function(x, ...) { UseMethod("getParameters", x) }
-is.discrete     <- function(x, ...) { UseMethod("is.discrete", x) }
-is.multivariate <- function(x, ...) { UseMethod("is.multivariate", x) }
-logLike         <- function(x, ...) { UseMethod("logLike", x) }
-parameters      <- function(x, ...) { UseMethod("parameters", x) }
-prior           <- function(x, ...) { UseMethod("prior", x) }
-noLogLike       <- function(x, ...) { UseMethod("noLogLike", x) }
+explain           <- function(x, ...) { UseMethod("explain", x) }
+constants         <- function(x, ...) { UseMethod("constants", x) }
+generated         <- function(x, ...) { UseMethod("generated", x) }
+getParameterNames <- function(x, ...) { UseMethod("getParameterNames", x) }
+getParameters     <- function(x, ...) { UseMethod("getParameters", x) }
+is.discrete       <- function(x, ...) { UseMethod("is.discrete", x) }
+is.multivariate   <- function(x, ...) { UseMethod("is.multivariate", x) }
+logLike           <- function(x, ...) { UseMethod("logLike", x) }
+parameters        <- function(x, ...) { UseMethod("parameters", x) }
+prior             <- function(x, ...) { UseMethod("prior", x) }
+noLogLike         <- function(x, ...) { UseMethod("noLogLike", x) }
 
 Density <- function(name, ...) {
   # Evaluate nested expressions (Densities)
@@ -64,6 +65,21 @@ explain.Density <- function(x) {
     x[1],
     paste(names(x[-1]), "=", x[-1], collapse = ", ")
   )
+}
+
+getParameters.Density <- function(x) {
+  l <-
+    sapply(
+      getParameterNames(x),
+      function(paramName) {
+        if (is.Density(x[[paramName]])) {
+          eval(x[[paramName]])
+        }
+      },
+      simplify = FALSE
+    )
+
+  l[!sapply(l, is.null)]
 }
 
 noLogLike.Density <- function(x) {

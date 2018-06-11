@@ -15,13 +15,8 @@ generated.Cauchy <- function(x) {
   )
 }
 
-getParameters.Cauchy <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      sigma = eval(x$sigma)
-    )
-  )
+getParameterNames.Cauchy <- function(x) {
+  return(c("mu", "sigma"))
 }
 
 logLike.Cauchy <- function(x) {

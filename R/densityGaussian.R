@@ -6,6 +6,10 @@ Gaussian <- function(mu = NULL, sigma = NULL, bounds = list(NULL, NULL),
   )
 }
 
+getParameterNames.Gaussian <- function(x) {
+  return(c("mu", "sigma"))
+}
+
 generated.Gaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = normal_rng(mu%s%s, sigma%s%s);",
@@ -13,10 +17,6 @@ generated.Gaussian <- function(x) {
     x$k, x$r,
     x$k, x$r
   )
-}
-
-getParameters.Gaussian <- function(x) {
-  return(list(mu = eval(x$mu), sigma = eval(x$sigma)))
 }
 
 logLike.Gaussian <- function(x) {

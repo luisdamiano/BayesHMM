@@ -13,14 +13,8 @@ generated.MVStudent <- function(x) {
   )
 }
 
-getParameters.MVStudent <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      sigma = eval(x$sigma),
-      nu = eval(x$nu)
-    )
-  )
+getParameterNames.MVStudent <- function(x) {
+  return(c("mu", "sigma", "nu"))
 }
 
 logLike.MVStudent <- function(x) {

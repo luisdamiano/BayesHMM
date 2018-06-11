@@ -19,16 +19,10 @@ generated.Multinomial <- function(x) {
     x$k,
     x$k, x$r
   )
-
-  # sprintf("ypred[t][1] = 1;ypred[t][2] = 1;ypred[t][3] = 1;ypred[t][4] = 1;")
 }
 
-getParameters.Multinomial <- function(x) {
-  return(
-    list(
-      theta = eval(x$theta)
-    )
-  )
+getParameterNames.Multinomial <- function(x) {
+  return("theta")
 }
 
 logLike.Multinomial <- function(x) {

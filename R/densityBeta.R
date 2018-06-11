@@ -10,8 +10,8 @@ generated.Beta <- function(x) {
   sprintf("if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
-getParameters.Beta <- function(x) {
-  return(list(alpha = eval(x$alpha), beta = eval(x$beta)))
+getParameterNames.Beta <- function(x) {
+  return(c("alpha", "beta"))
 }
 
 logLike.Beta <- function(x) {

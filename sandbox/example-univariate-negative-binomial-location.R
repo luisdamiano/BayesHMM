@@ -3,8 +3,6 @@ library(rstan)
 mySpec <- hmm(
   K = 3, R = 1,
   observation = NegativeBinomial(
-    # alpha = Default(bounds = list(0, NULL)),
-    # beta  = Default(bounds = list(0, NULL))
     alpha = Gaussian(mu = 0, sigma = 10, bounds = list(0, NULL)),
     beta  = Gaussian(mu = 0, sigma = 10, bounds = list(0, NULL))
   ),
@@ -14,18 +12,15 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(
-      rnbinom(1000, size = 1, mu = 1),
-      rnbinom(1000, size = 1, mu = 10),
-      rnbinom(1000, size = 1, mu = 5)
-    )
-  ),
-  T = 3000
+y = as.matrix(
+  c(
+    rnbinom(1000, size = 1, mu = 1),
+    rnbinom(1000, size = 1, mu = 10),
+    rnbinom(1000, size = 1, mu = 5)
+  )
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 print(summary(myFit)[[1]][1:18, ], digits = 2)
 

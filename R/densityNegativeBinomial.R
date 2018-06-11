@@ -15,13 +15,8 @@ generated.NegativeBinomial <- function(x) {
   )
 }
 
-getParameters.NegativeBinomial <- function(x) {
-  return(
-    list(
-      alpha = eval(x$alpha),
-      beta = eval(x$beta)
-    )
-  )
+getParameterNames.NegativeBinomial <- function(x) {
+  return(c("alpha", "beta"))
 }
 
 logLike.NegativeBinomial <- function(x) {

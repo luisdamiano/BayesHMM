@@ -12,14 +12,11 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(rbinom(100, 100, 0.5), rbinom(100, 100, 0.2), rbinom(100, 100, 0.8))
-  ),
-  T = 300
+y = as.matrix(
+  c(rbinom(100, 100, 0.5), rbinom(100, 100, 0.2), rbinom(100, 100, 0.8))
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
 

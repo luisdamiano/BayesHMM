@@ -21,12 +21,8 @@ generated.Binomial <- function(x) {
   )
 }
 
-getParameters.Binomial <- function(x) {
-  return(
-    list(
-      theta = eval(x$theta)
-    )
-  )
+getParameterNames.Binomial <- function(x) {
+  return("theta")
 }
 
 logLike.Binomial <- function(x) {

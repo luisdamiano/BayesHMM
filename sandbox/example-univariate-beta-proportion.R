@@ -8,22 +8,19 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "Univariate Beta Model"
+  name = "Univariate Beta (proportion) Model"
 )
 
 set.seed(9000)
-myData <- list(
-  y = as.matrix(
-    c(
-      rbeta(100, 0.5, 0.5),
-      rbeta(100, 0.5, 1.5),
-      rbeta(100, 1.5, 0.5)
-    )
-  ),
-  T = 300
+y = as.matrix(
+  c(
+    rbeta(100, 0.5, 0.5),
+    rbeta(100, 0.5, 1.5),
+    rbeta(100, 1.5, 0.5)
+  )
 )
 
-myFit <- fit(mySpec, myData, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("alpha11", "alpha21", "alpha31"))
 

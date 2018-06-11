@@ -14,12 +14,8 @@ generated.Bernoulli <- function(x) {
   )
 }
 
-getParameters.Bernoulli <- function(x) {
-  return(
-    list(
-      theta = eval(x$theta)
-    )
-  )
+getParameterNames.Bernoulli <- function(x) {
+  return("theta")
 }
 
 logLike.Bernoulli <- function(x) {

@@ -21,12 +21,8 @@ generated.Categorical <- function(x) {
   )
 }
 
-getParameters.Categorical <- function(x) {
-  return(
-    list(
-      theta = eval(x$theta)
-    )
-  )
+getParameterNames.Categorical <- function(x) {
+  return("theta")
 }
 
 logLike.Categorical <- function(x) {

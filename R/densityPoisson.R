@@ -14,12 +14,8 @@ generated.Poisson <- function(x) {
   )
 }
 
-getParameters.Poisson <- function(x) {
-  return(
-    list(
-      lambda = eval(x$lambda)
-    )
-  )
+getParameterNames.Poisson <- function(x) {
+  return("lambda")
 }
 
 logLike.Poisson <- function(x) {

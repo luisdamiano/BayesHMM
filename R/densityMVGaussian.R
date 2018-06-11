@@ -13,13 +13,8 @@ generated.MVGaussian <- function(x) {
   )
 }
 
-getParameters.MVGaussian <- function(x) {
-  return(
-    list(
-      mu = eval(x$mu),
-      sigma = eval(x$sigma)
-    )
-  )
+getParameterNames.MVGaussian <- function(x) {
+  return(c("mu", "sigma"))
 }
 
 logLike.MVGaussian <- function(x) {
