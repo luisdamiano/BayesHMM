@@ -2,14 +2,13 @@ library(rstan)
 
 mySpec <- hmm(
   K = 3, R = 2,
-  observation = MVStudent(
-    nu    = Gaussian(mu = 0, sigma = 10, bounds = list(0, NULL)),
+  observation = MVGaussian(
     mu    = Default(),
-    sigma = Default()
+    sigma = matrix(c(1, 0.2, 0.2, 1), 2, 2)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "Multivariate Student"
+  name = "Multivariate Gaussian"
 )
 
 set.seed(9000)

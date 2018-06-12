@@ -10,7 +10,7 @@ generated.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")
 }
 
-getParameters.LKJCor <- function(x) {
+getFreeParameters.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")
 }
 
@@ -18,7 +18,7 @@ logLike.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")
 }
 
-parameters.LKJCor <- function(x) {
+freeParameters.LKJCor <- function(x) {
   stop("LKJCor can only be used as a prior density.")
 }
 

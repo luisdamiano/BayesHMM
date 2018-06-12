@@ -20,4 +20,4 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 
-print(summary(myFit)[[1]][1:18, ], digits = 2)
+print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)

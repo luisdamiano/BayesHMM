@@ -18,7 +18,7 @@ logLike.Beta <- function(x) {
   sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
-parameters.Beta <- function(x) {
+freeParameters.Beta <- function(x) {
   alphaBoundsStr <- make_bounds(x, "alpha")
   betaBoundsStr  <- make_bounds(x, "beta")
 

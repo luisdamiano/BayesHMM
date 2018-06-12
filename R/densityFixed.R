@@ -10,7 +10,7 @@ generated.Fixed <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-getParameters.Fixed <- function(x) {
+getFreeParameters.Fixed <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
@@ -18,7 +18,7 @@ logLike.Fixed <- function(x) {
   stop("You shouldn't be calling this")
 }
 
-parameters.Fixed <- function(x) {
+freeParameters.Fixed <- function(x) {
   stop("You shouldn't be calling this")
 }
 

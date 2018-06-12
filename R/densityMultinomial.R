@@ -33,7 +33,7 @@ logLike.Multinomial <- function(x) {
   )
 }
 
-parameters.Multinomial <- function(x) {
+freeParameters.Multinomial <- function(x) {
   thetaBoundsStr    <- make_bounds(x, "theta")
 
   sprintf(

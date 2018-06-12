@@ -10,7 +10,7 @@ generated.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-getParameters.Dirichlet <- function(x) {
+getFreeParameters.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
@@ -18,7 +18,7 @@ logLike.Dirichlet <- function(x) {
   stop("You shouldn't be calling this")
 }
 
-parameters.Dirichlet <- function(x) {
+freeParameters.Dirichlet <- function(x) {
   stop("You shouldn't be calling this")
 }
 

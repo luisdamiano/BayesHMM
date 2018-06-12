@@ -26,7 +26,7 @@ logLike.Bernoulli <- function(x) {
   )
 }
 
-parameters.Bernoulli <- function(x) {
+freeParameters.Bernoulli <- function(x) {
   thetaBoundsStr    <- make_bounds(x, "theta")
 
   sprintf(

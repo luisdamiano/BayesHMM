@@ -19,4 +19,4 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("lambda11", "lambda21", "lambda31"))
 
-print(summary(myFit)[[1]][1:18, ], digits = 2)
+print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)

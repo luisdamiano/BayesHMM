@@ -28,7 +28,7 @@ logLike.NegativeBinomialLocation <- function(x) {
   )
 }
 
-parameters.NegativeBinomialLocation <- function(x) {
+freeParameters.NegativeBinomialLocation <- function(x) {
   muBoundsStr <- make_bounds(x, "mu")
   phiBoundsStr  <- make_bounds(x, "phi")
 

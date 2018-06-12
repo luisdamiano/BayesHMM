@@ -24,4 +24,4 @@ library(rstan)
 #
 # rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 #
-# print(summary(myFit)[[1]][1:18, ], digits = 2)
+# print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)

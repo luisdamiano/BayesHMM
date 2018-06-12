@@ -72,7 +72,7 @@ parse_observation <- function(observation, K, R) {
   for (k in 1:length(obsList)) {
     if (is.Density(obsList[[k]])) {
       lDensity <- obsList[[k]]
-      lParam   <- getParameters(lDensity)
+      lParam   <- getFreeParameters(lDensity)
       for (p in 1:length(lParam)) {
         # Move down elements from parent to child
         nameParam <- names(lParam)[p]
@@ -105,7 +105,7 @@ parse_observation <- function(observation, K, R) {
     } else {
       for (r in 1:length(obsList[[k]])) {
         lDensity <- obsList[[k]][[r]]
-        lParam   <- getParameters(lDensity)
+        lParam   <- getFreeParameters(lDensity)
         for (p in 1:length(lParam)) {
           # Move down elements from parent to child
           nameParam <- names(lParam)[p]

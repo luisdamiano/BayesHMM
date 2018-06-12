@@ -31,7 +31,7 @@ logLike.Student <- function(x) {
   )
 }
 
-parameters.Student <- function(x) {
+freeParameters.Student <- function(x) {
   muBoundsStr    <- make_bounds(x, "mu")
   sigmaBoundsStr <- make_bounds(x, "sigma")
   nuBoundsStr    <- make_bounds(x, "nu")

@@ -1,6 +1,6 @@
 functions {
   #include forward.stan
-  #include forwardbackwards.stan
+  #include forwardBackward.stan
   #include MAPpath.stan
   #include zpredictive.stan
 }
@@ -13,6 +13,7 @@ data {
 transformed data {
   // Constants
   #include constants.stan
+  #include fixedParameters.stan
 }
 
 parameters {
@@ -22,7 +23,7 @@ parameters {
                                     // A[i][j] = p(z_t = j | z_{t-1} = i)
 
   // Observation model
-  #include parameters.stan
+  #include freeParameters.stan
 }
 
 transformed parameters {

@@ -10,7 +10,7 @@ generated.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")
 }
 
-getParameters.Wishart <- function(x) {
+getFreeParameters.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")
 }
 
@@ -18,7 +18,7 @@ logLike.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")
 }
 
-parameters.Wishart <- function(x) {
+freeParameters.Wishart <- function(x) {
   stop("Wishart can only be used as a prior density.")
 }
 

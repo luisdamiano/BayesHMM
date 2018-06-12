@@ -25,7 +25,7 @@ logLike.MVGaussianCov <- function(x) {
   )
 }
 
-parameters.MVGaussianCov <- function(x) {
+freeParameters.MVGaussianCov <- function(x) {
   sprintf(
     "vector[R] mu%s;\ncholesky_factor_cov[R] L%s;",
     x$k, x$k

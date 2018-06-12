@@ -38,9 +38,15 @@ write_constants <- function(spec, writeDir) {
 
 write_parameters <- function(spec, writeDir) {
   write_stanfile(
-    densityApply(spec$observation$density, parameters),
+    densityApply(spec$observation$density, freeParameters),
     writeDir,
-    "parameters.stan"
+    "freeParameters.stan"
+  )
+
+  write_stanfile(
+    densityApply(spec$observation$density, fixedParameters),
+    writeDir,
+    "fixedParameters.stan"
   )
 }
 
@@ -50,7 +56,7 @@ write_priors <- function(spec, writeDir) {
   obsPriors  <- densityApply(
     spec$observation$density,
     function(x) {
-      densityApply(getParameters(x), prior)
+      densityApply(getFreeParameters(x), prior)
     }
   )
 
@@ -90,9 +96,9 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
 write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Select best template
   baseR <- if (is.multivariate(spec)) { "univariate" } else {"univariate"}
-  baseA <- if (is.null(spec$transition$covariates)) { "homogeneous" } else {"heterogeneous"}
+  baseA <- if (is.null(spec$transition$covariates)) { "Homogeneous" } else {"Heterogeneous"}
   base  <- system.file(
-    file.path("stan", sprintf("%s-%s.stan", baseR, baseA)),
+    file.path("stan", sprintf("%s%s.stan", baseR, baseA)),
     package = "BayesHMM"
   )
 

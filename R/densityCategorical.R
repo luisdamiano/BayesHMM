@@ -33,7 +33,7 @@ logLike.Categorical <- function(x) {
   )
 }
 
-parameters.Categorical <- function(x) {
+freeParameters.Categorical <- function(x) {
   thetaBoundsStr    <- make_bounds(x, "theta")
 
   sprintf(

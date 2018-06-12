@@ -33,7 +33,7 @@ logLike.Binomial <- function(x) {
   )
 }
 
-parameters.Binomial <- function(x) {
+freeParameters.Binomial <- function(x) {
   thetaBoundsStr    <- make_bounds(x, "theta")
 
   sprintf(

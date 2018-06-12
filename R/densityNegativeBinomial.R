@@ -28,7 +28,7 @@ logLike.NegativeBinomial <- function(x) {
   )
 }
 
-parameters.NegativeBinomial <- function(x) {
+freeParameters.NegativeBinomial <- function(x) {
   alphaBoundsStr <- make_bounds(x, "alpha")
   betaBoundsStr  <- make_bounds(x, "beta")
 

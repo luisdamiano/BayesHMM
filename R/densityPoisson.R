@@ -26,7 +26,7 @@ logLike.Poisson <- function(x) {
   )
 }
 
-parameters.Poisson <- function(x) {
+freeParameters.Poisson <- function(x) {
   lambdaBoundsStr    <- make_bounds(x, "lambda")
 
   sprintf(

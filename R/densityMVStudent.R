@@ -24,7 +24,7 @@ logLike.MVStudent <- function(x) {
   )
 }
 
-parameters.MVStudent <- function(x) {
+freeParameters.MVStudent <- function(x) {
   nuBoundsStr    <- make_bounds(x, "nu")
   sprintf(
     "vector[R] mu%s;\ncov_matrix[R] sigma%s;\nreal%s nu%s;",

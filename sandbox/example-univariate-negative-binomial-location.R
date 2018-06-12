@@ -22,7 +22,7 @@ y = as.matrix(
 
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
-print(summary(myFit)[[1]][1:18, ], digits = 2)
+print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
 
 pars <- sapply(extract(myFit, pars = c("alpha11", "beta11", "alpha21", "beta21", "alpha31", "beta31")), mean)
 

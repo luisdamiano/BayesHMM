@@ -1,3 +1,25 @@
+check_scalar <- function(x) {
+  is.atomic(x) & is.numeric(x) & length(x) == 1L
+}
+
+check_vector <- function(x) {
+  is.vector(x) & !is.list(x) & all(sapply(x, is.numeric)) &
+    !any(sapply(x, is.na))
+}
+
+check_matrix <- function(x) {
+  isTRUE(is.matrix(x))
+}
+
+# check_vector <- function(x, len) {
+#   is.vector(x) & !is.list(x) & all(sapply(x, is.numeric)) &
+#   !any(sapply(x, is.na)) & length(x) == len
+# }
+#
+# check_matrix <- function(x, nrow, ncol) {
+#   isTRUE(is.matrix(x) & nrow(x) == nrow & ncol(x) == ncol)
+# }
+
 check_list <- function(x, len, name) {
   if (!is.list(x) || length(x) != len)
     stop(
@@ -65,4 +87,20 @@ make_trunc <- function(x, name) {
 
 make_rsubindex <- function(x) {
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+}
+
+vector_to_stan <- function(x) {
+  sprintf("[%s]", paste(x, collapse = ", "))
+}
+
+matrix_to_stan <- function(x) {
+  colStr <- sprintf(
+    "[%s]",
+    apply(x, 1, function(x) { paste(x, collapse = ", ") })
+  )
+
+  sprintf(
+    "[%s]",
+    paste(colStr, collapse = ", ")
+  )
 }

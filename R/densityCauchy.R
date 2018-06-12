@@ -28,7 +28,7 @@ logLike.Cauchy <- function(x) {
   )
 }
 
-parameters.Cauchy <- function(x) {
+freeParameters.Cauchy <- function(x) {
   muBoundsStr    <- make_bounds(x, "mu")
   sigmaBoundsStr <- make_bounds(x, "sigma")
 

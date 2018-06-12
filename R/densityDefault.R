@@ -10,7 +10,7 @@ generated.Default <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-getParameters.Default <- function(x) {
+getFreeParameters.Default <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
@@ -18,7 +18,7 @@ logLike.Default <- function(x) {
   stop("You shouldn't be calling this")
 }
 
-parameters.Default <- function(x) {
+freeParameters.Default <- function(x) {
   stop("You shouldn't be calling this")
 }
 

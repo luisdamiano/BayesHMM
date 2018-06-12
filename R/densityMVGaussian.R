@@ -24,11 +24,60 @@ logLike.MVGaussian <- function(x) {
   )
 }
 
-parameters.MVGaussian <- function(x) {
-  sprintf(
-    "vector[R] mu%s;\ncov_matrix[R] sigma%s;",
-    x$k, x$k
-  )
+freeParameters.MVGaussian <- function(x) {
+  muStr <-
+    if (is.Density(x$mu)) {
+      sprintf(
+        "vector[R] mu%s;",
+        x$k
+      )
+    } else {
+      ""
+    }
+
+  sigmaStr <-
+    if (is.Density(x$sigma)) {
+      sprintf(
+        "cov_matrix[R] sigma%s;",
+        x$k
+      )
+    } else {
+      ""
+    }
+
+  collapse(muStr, sigmaStr)
+}
+
+fixedParameters.MVGaussian <- function(x) {
+  muStr <-
+    if (is.Density(x$mu)) {
+      ""
+    } else {
+      if (!check_vector(x$mu)) {
+        stop(sprintf("If fixed, mu must be a vector of size R"))
+      }
+
+      sprintf(
+        "vector[R] mu%s = %s';",
+        x$k, vector_to_stan(x$mu)
+      )
+    }
+
+  sigmaStr <-
+    if (is.Density(x$sigma)) {
+      ""
+    } else {
+      if (!check_matrix(x$sigma)) {
+        stop("If fixed, sigma must be a matrix of size RxR")
+      }
+
+      sprintf(
+        "matrix[R, R] sigma%s = %s;",
+        x$k, matrix_to_stan(x$sigma)
+      )
+    }
+
+  collapse(muStr, sigmaStr)
 }
 
 prior.MVGaussian <- function(x) {
