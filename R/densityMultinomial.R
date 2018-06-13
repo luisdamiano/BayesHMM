@@ -13,6 +13,37 @@ constants.Multinomial <- function(x) {
   )
 }
 
+freeParameters.Multinomial <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      sprintf(
+        "simplex[R] theta%s%s;",
+        x$k, x$r
+      )
+    } else {
+      ""
+    }
+
+  thetaStr
+}
+
+fixedParameters.Multinomial <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      ""
+    } else {
+      if (!check_simplex(x$theta)) {
+        stop("If fixed, theta must be an unit simplex")
+      }
+
+      sprintf(
+        "simplex[R theta%s%s = %s;",
+        x$k, x$r, x$theta
+      )
+    }
+
+  thetaStr
+}
 generated.Multinomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = to_row_vector(multinomial_rng(theta%s%s, N));",
@@ -30,15 +61,6 @@ logLike.Multinomial <- function(x) {
     "loglike[%s][t] = multinomial_lpmf(y[t] | theta%s%s);",
     x$k,
     x$k, x$r
-  )
-}
-
-freeParameters.Multinomial <- function(x) {
-  thetaBoundsStr    <- make_bounds(x, "theta")
-
-  sprintf(
-    "simplex[R]%s theta%s%s;",
-    thetaBoundsStr, x$k, x$r
   )
 }
 

@@ -6,24 +6,6 @@ MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
   )
 }
 
-generated.MVGaussian <- function(x) {
-  sprintf(
-    "if(zpred[t] == %s) ypred[t] = multi_normal_rng(mu%s, sigma%s)';",
-    x$k, x$k, x$k
-  )
-}
-
-getParameterNames.MVGaussian <- function(x) {
-  return(c("mu", "sigma"))
-}
-
-logLike.MVGaussian <- function(x) {
-  sprintf(
-    "loglike[%s][t] = multi_normal_lpdf(y[t] | mu%s, sigma%s);",
-    x$k, x$k, x$k
-  )
-}
-
 freeParameters.MVGaussian <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -78,6 +60,24 @@ fixedParameters.MVGaussian <- function(x) {
     }
 
   collapse(muStr, sigmaStr)
+}
+
+generated.MVGaussian <- function(x) {
+  sprintf(
+    "if(zpred[t] == %s) ypred[t] = multi_normal_rng(mu%s, sigma%s)';",
+    x$k, x$k, x$k
+  )
+}
+
+getParameterNames.MVGaussian <- function(x) {
+  return(c("mu", "sigma"))
+}
+
+logLike.MVGaussian <- function(x) {
+  sprintf(
+    "loglike[%s][t] = multi_normal_lpdf(y[t] | mu%s, sigma%s);",
+    x$k, x$k, x$k
+  )
 }
 
 prior.MVGaussian <- function(x) {

@@ -50,6 +50,18 @@ MultivariateDiscreteDensity <- function(name, ...) {
   x
 }
 
+PriorOnlyDensity <- function(name, ...) {
+  x <- Density(name, ...)
+  class(x) <- append(class(x), "PriorOnlyDensity", 1)
+  x
+}
+
+PriorOnlyMultivariateDensity <- function(name, ...) {
+  x <- MultivariateDensity(name, ...)
+  class(x) <- append(class(x), "PriorOnlyDensity", 1)
+  x
+}
+
 `+.Density` <- function(x, y) {
   if (is.Density(x))
     return(list(x, y))
@@ -111,3 +123,23 @@ is.discrete.Density <- function(x) { FALSE }
 is.discrete.DiscreteDensity <- function(x) { TRUE }
 
 constants.Density <- function(x) { "" }
+
+freeParameters.PriorOnlyDensity <- function(x) {
+  stop("This density is only meant to be used as a prior.")
+}
+
+fixedParameters.PriorOnlyDensity <- function(x) {
+  stop("This density is only meant to be used as a prior.")
+}
+
+generated.PriorOnlyDensity <- function(x) {
+  stop("This density is only meant to be used as a prior.")
+}
+
+getFreeParameters.PriorOnlyDensity <- function(x) {
+  stop("This density is only meant to be used as a prior.")
+}
+
+logLike.PriorOnlyDensity <- function(x) {
+  stop("This density is only meant to be used as a prior.")
+}

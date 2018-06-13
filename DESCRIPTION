@@ -14,6 +14,8 @@ Depends:
     Rcpp (>= 0.12.0)
 Imports:
     rstan (>= 2.16)
+Suggests:
+    RUnit
 URL: TBD, https://summerofcode.withgoogle.com/projects/#4681157036212224
 BugReports: TBD
 RoxygenNote: 6.0.1

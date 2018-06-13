@@ -7,8 +7,42 @@ check_vector <- function(x) {
     !any(sapply(x, is.na))
 }
 
+check_simplex <- function(x) {
+  check_vector(x) & sum(x) == 1 & min(x) >= 0
+}
+
 check_matrix <- function(x) {
   isTRUE(is.matrix(x))
+}
+
+check_cholesky_factor <- function(x) {
+  # Requirements for a Cholesky factor for a cov matrix:
+  # * is a matrix :P,
+  # * lower triangular,
+  # * positive diagonal
+  check_matrix(x) &
+    all(abs(upper.tri(x)) < .Machine$double.eps) &
+    all(diag(x)) > 0
+}
+
+check_cholesky_factor_cov <- function(x) {
+  isCov <-
+    if (requireNamespace("matrixcalc", quietly = TRUE)) {
+      matrixcalc::is.positive.semi.definite(x %*% t(x))
+    } else {
+      warnings(
+        "You have set a fixed Cholesky factor for a covariance matrix. Because the package matrixcalc is not installed, we could not check if the fixed Cholesky factor is valid."
+      )
+      return(TRUE)
+    }
+
+  check_cholesky_factor(x) &
+    isCov
+}
+
+check_cholesky_factor_cor <- function(x) {
+  check_cholesky_factor(x) &
+    check_simplex(diag(x))
 }
 
 # check_vector <- function(x, len) {

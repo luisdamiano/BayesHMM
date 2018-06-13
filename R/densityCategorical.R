@@ -13,6 +13,38 @@ constants.Categorical <- function(x) {
   )
 }
 
+freeParameters.Categorical <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      sprintf(
+        "simplex[N] theta%s%s;",
+        x$k, x$r
+      )
+    } else {
+      ""
+    }
+
+  thetaStr
+}
+
+fixedParameters.Categorical <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      ""
+    } else {
+      if (!check_simplex(x$theta)) {
+        stop("If fixed, theta must be an unit simplex.")
+      }
+
+      sprintf(
+        "simplex[N] theta%s%s = %s;",
+        x$k, x$r, x$theta
+      )
+    }
+
+  thetaStr
+}
+
 generated.Categorical <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = categorical_rng(theta%s%s);",
@@ -30,15 +62,6 @@ logLike.Categorical <- function(x) {
     "loglike[%s][t] = categorical_lpmf(y[t] | theta%s%s);",
     x$k,
     x$k, x$r
-  )
-}
-
-freeParameters.Categorical <- function(x) {
-  thetaBoundsStr    <- make_bounds(x, "theta")
-
-  sprintf(
-    "simplex[N]%s theta%s%s;",
-    thetaBoundsStr, x$k, x$r
   )
 }
 

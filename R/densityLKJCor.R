@@ -1,25 +1,9 @@
 LKJCor <- function(eta = NULL, bounds = list(NULL, NULL),
                    trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity(
+  PriorOnlyMultivariateDensity(
     "LKJCor",
     mget(names(formals()), sys.frame(sys.nframe()))
   )
-}
-
-generated.LKJCor <- function(x) {
-  stop("LKJCor can only be used as a prior density.")
-}
-
-getFreeParameters.LKJCor <- function(x) {
-  stop("LKJCor can only be used as a prior density.")
-}
-
-logLike.LKJCor <- function(x) {
-  stop("LKJCor can only be used as a prior density.")
-}
-
-freeParameters.LKJCor <- function(x) {
-  stop("LKJCor can only be used as a prior density.")
 }
 
 prior.LKJCor <- function(x) {

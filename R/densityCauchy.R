@@ -6,6 +6,62 @@ Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
   )
 }
 
+freeParameters.Cauchy <- function(x) {
+  muStr <- if (is.Density(x$mu)) {
+    muBoundsStr <- make_bounds(x, "mu")
+    sprintf(
+      "real%s mu%s%s;",
+      muBoundsStr, x$k, x$r
+    )
+  } else {
+    ""
+  }
+
+  sigmaStr <- if (is.Density(x$sigma)) {
+    sigmaBoundsStr <- make_bounds(x, "sigma")
+    sprintf(
+      "real%s sigma%s%s;",
+      sigmaBoundsStr, x$k, x$r
+    )
+  } else {
+    ""
+  }
+
+  collapse(muStr, sigmaStr)
+}
+
+fixedParameters.Cauchy <- function(x) {
+  muStr <-
+    if (is.Density(x$mu)) {
+      ""
+    } else {
+      if (!check_scalar(x$mu)) {
+        stop("If fixed, mu must be a scalar.")
+      }
+
+      sprintf(
+        "real mu%s%s = %s;",
+        x$k, x$r, x$mu
+      )
+    }
+
+  sigmaStr <-
+    if (is.Density(x$sigma)) {
+      ""
+    } else {
+      if (!check_scalar(x$sigma)) {
+        stop("If fixed, sigma must be a scalar.")
+      }
+
+      sprintf(
+        "real sigma%s%s = %s;",
+        x$k, x$r, x$sigma
+      )
+    }
+
+  collapse(muStr, sigmaStr)
+}
+
 generated.Cauchy <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = cauchy_rng(mu%s%s, sigma%s%s);",
@@ -25,17 +81,6 @@ logLike.Cauchy <- function(x) {
     x$k,
     x$k, x$r,
     x$k, x$r
-  )
-}
-
-freeParameters.Cauchy <- function(x) {
-  muBoundsStr    <- make_bounds(x, "mu")
-  sigmaBoundsStr <- make_bounds(x, "sigma")
-
-  sprintf(
-    "real%s mu%s%s;\nreal%s sigma%s%s;",
-    muBoundsStr, x$k, x$r,
-    sigmaBoundsStr, x$k, x$r
   )
 }
 

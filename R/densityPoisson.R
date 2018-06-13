@@ -6,6 +6,39 @@ Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
   )
 }
 
+freeParameters.Poisson <- function(x) {
+  lambdaStr <-
+    if (is.Density(x$lambda)) {
+      lambdaBoundsStr <- make_bounds(x, "lambda")
+      sprintf(
+        "real%s lambda%s%s;",
+        lambdaBoundsStr, x$k, x$r
+      )
+    } else {
+      ""
+    }
+
+  lambdaStr
+}
+
+fixedParameters.Poisson <- function(x) {
+  lambdaStr <-
+    if (is.Density(x$lambda)) {
+      ""
+    } else {
+      if (!check_scalar(x$lambda)) {
+        stop("If fixed, lambda must be a scalar.")
+      }
+
+      sprintf(
+        "real lambda%s%s = %s;",
+        x$k, x$r, x$lambda
+      )
+    }
+
+  lambdaStr
+}
+
 generated.Poisson <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = poisson_rng(lambda%s%s);",
@@ -23,15 +56,6 @@ logLike.Poisson <- function(x) {
     "loglike[%s][t] = poisson_lpmf(y[t] | lambda%s%s);",
     x$k,
     x$k, x$r
-  )
-}
-
-freeParameters.Poisson <- function(x) {
-  lambdaBoundsStr    <- make_bounds(x, "lambda")
-
-  sprintf(
-    "real%s lambda%s%s;",
-    lambdaBoundsStr, x$k, x$r
   )
 }
 

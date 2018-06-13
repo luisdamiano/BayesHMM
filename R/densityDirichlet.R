@@ -6,20 +6,24 @@ Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
   )
 }
 
+freeParameters.Dirichlet <- function(x) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+fixedParameters.Dirichlet <- function(x) {
+  stop("TO BE IMPLEMENTED.")
+}
+
 generated.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-getFreeParameters.Dirichlet <- function(x) {
+getParameterNames.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
 logLike.Dirichlet <- function(x) {
-  stop("You shouldn't be calling this")
-}
-
-freeParameters.Dirichlet <- function(x) {
-  stop("You shouldn't be calling this")
+  stop("TO BE IMPLEMENTED.")
 }
 
 prior.Dirichlet <- function(x) {

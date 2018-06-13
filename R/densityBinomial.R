@@ -13,6 +13,39 @@ constants.Binomial <- function(x) {
   )
 }
 
+freeParameters.Binomial <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      thetaBoundsStr <- make_bounds(x, "theta")
+      sprintf(
+        "real%s theta%s%s;",
+        thetaBoundsStr, x$k, x$r
+      )
+    } else {
+      ""
+    }
+
+  thetaStr
+}
+
+fixedParameters.Binomial <- function(x) {
+  thetaStr <-
+    if (is.Density(x$theta)) {
+      ""
+    } else {
+      if (!check_scalar(x$theta)) {
+        stop("If fixed, theta must be a scalar.")
+      }
+
+      sprintf(
+        "real theta%s%s = %s;",
+        x$k, x$r, x$theta
+      )
+    }
+
+  thetaStr
+}
+
 generated.Binomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, theta%s%s);",
@@ -30,15 +63,6 @@ logLike.Binomial <- function(x) {
     "loglike[%s][t] = binomial_lpmf(y[t] | N, theta%s%s);",
     x$k,
     x$k, x$r
-  )
-}
-
-freeParameters.Binomial <- function(x) {
-  thetaBoundsStr    <- make_bounds(x, "theta")
-
-  sprintf(
-    "real%s theta%s%s;",
-    thetaBoundsStr, x$k, x$r
   )
 }
 

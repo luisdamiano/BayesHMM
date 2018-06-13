@@ -6,48 +6,28 @@ Gaussian <- function(mu = NULL, sigma = NULL, bounds = list(NULL, NULL),
   )
 }
 
-getParameterNames.Gaussian <- function(x) {
-  return(c("mu", "sigma"))
-}
-
-generated.Gaussian <- function(x) {
-  sprintf(
-    "if(zpred[t] == %s) ypred[t][%s] = normal_rng(mu%s%s, sigma%s%s);",
-    x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
-  )
-}
-
-logLike.Gaussian <- function(x) {
-  sprintf(
-    "loglike[%s][t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);",
-    x$k,
-    x$k, x$r,
-    x$k, x$r
-  )
-}
-
 freeParameters.Gaussian <- function(x) {
-  muStr <- if (is.Density(x$mu)) {
-    muBoundsStr <- make_bounds(x, "mu")
-    sprintf(
-      "real%s mu%s%s;",
-      muBoundsStr, x$k, x$r
-    )
-  } else {
-    ""
-  }
+  muStr <-
+    if (is.Density(x$mu)) {
+      muBoundsStr <- make_bounds(x, "mu")
+      sprintf(
+        "real%s mu%s%s;",
+        muBoundsStr, x$k, x$r
+      )
+    } else {
+      ""
+    }
 
-  sigmaStr <- if (is.Density(x$sigma)) {
-    sigmaBoundsStr <- make_bounds(x, "sigma")
-    sprintf(
-      "real%s sigma%s%s;",
-      sigmaBoundsStr, x$k, x$r
-    )
-  } else {
-    ""
-  }
+  sigmaStr <-
+    if (is.Density(x$sigma)) {
+      sigmaBoundsStr <- make_bounds(x, "sigma")
+      sprintf(
+        "real%s sigma%s%s;",
+        sigmaBoundsStr, x$k, x$r
+      )
+    } else {
+      ""
+    }
 
   collapse(muStr, sigmaStr)
 }
@@ -82,6 +62,28 @@ fixedParameters.Gaussian <- function(x) {
     }
 
   collapse(muStr, sigmaStr)
+}
+
+generated.Gaussian <- function(x) {
+  sprintf(
+    "if(zpred[t] == %s) ypred[t][%s] = normal_rng(mu%s%s, sigma%s%s);",
+    x$k, x$r,
+    x$k, x$r,
+    x$k, x$r
+  )
+}
+
+getParameterNames.Gaussian <- function(x) {
+  return(c("mu", "sigma"))
+}
+
+logLike.Gaussian <- function(x) {
+  sprintf(
+    "loglike[%s][t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);",
+    x$k,
+    x$k, x$r,
+    x$k, x$r
+  )
 }
 
 prior.Gaussian <- function(x) {
