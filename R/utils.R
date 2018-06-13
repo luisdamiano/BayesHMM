@@ -1,3 +1,14 @@
+check_psd <- function(x) {
+  if (requireNamespace("matrixcalc", quietly = TRUE)) {
+    matrixcalc::is.positive.semi.definite(x)
+  } else {
+    warnings(
+      "You have set a fixed Cholesky factor for a covariance matrix. Because the package matrixcalc is not installed, we could not check if the fixed Cholesky factor is valid."
+    )
+    return(TRUE)
+  }
+}
+
 check_scalar <- function(x) {
   is.atomic(x) & is.numeric(x) & length(x) == 1L
 }
@@ -15,6 +26,10 @@ check_matrix <- function(x) {
   isTRUE(is.matrix(x))
 }
 
+check_cov_matrix <- function(x) {
+  check_matrix(x) & check_psd(x)
+}
+
 check_cholesky_factor <- function(x) {
   # Requirements for a Cholesky factor for a cov matrix:
   # * is a matrix :P,
@@ -26,18 +41,7 @@ check_cholesky_factor <- function(x) {
 }
 
 check_cholesky_factor_cov <- function(x) {
-  isCov <-
-    if (requireNamespace("matrixcalc", quietly = TRUE)) {
-      matrixcalc::is.positive.semi.definite(x %*% t(x))
-    } else {
-      warnings(
-        "You have set a fixed Cholesky factor for a covariance matrix. Because the package matrixcalc is not installed, we could not check if the fixed Cholesky factor is valid."
-      )
-      return(TRUE)
-    }
-
-  check_cholesky_factor(x) &
-    isCov
+  check_cholesky_factor(x) & check_psd(x %*% t(x))
 }
 
 check_cholesky_factor_cor <- function(x) {

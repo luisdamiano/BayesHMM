@@ -49,7 +49,7 @@ fixedParameters.MVGaussian <- function(x) {
     if (is.Density(x$sigma)) {
       ""
     } else {
-      if (!check_matrix(x$sigma)) {
+      if (!check_cov_matrix(x$sigma)) {
         stop("If fixed, sigma must be a matrix of size RxR")
       }
 

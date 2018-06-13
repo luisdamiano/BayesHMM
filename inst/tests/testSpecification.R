@@ -14,7 +14,13 @@ test_insufficient_spec <- function() {
 
 test_minimum_spec <- function() {
   mySpec <- hmm(
-    K = 1, R = 1, observation = Gaussian()
+    K = 1, R = 1,
+    observation = Gaussian(
+      mu = Default(),
+      sigma = Default()
+    ),
+    initial     = Dirichlet(alpha = c(1)),
+    transition  = Dirichlet(alpha = c(1))
   )
 
   checkTrue(
@@ -39,7 +45,9 @@ test_K_univariate_observation_densities <- function() {
       + Cauchy(
         mu    = Gaussian(0, 10),
         sigma = Cauchy(0, 10)
-      )
+      ),
+    initial     = Dirichlet(alpha = c(1, 1, 1)),
+    transition  = Dirichlet(alpha = c(1, 1, 1))
   )
 
   checkTrue(
@@ -61,7 +69,9 @@ test_nonK_univariate_observation_densities <- function() {
           mu    = Gaussian(0, 10),
           sigma = Default(),
           nu    = 3
-        )
+        ),
+      initial     = Dirichlet(alpha = c(1, 1, 1)),
+      transition  = Dirichlet(alpha = c(1, 1, 1))
     ),
     "Can create Stan code for an observation model with != K different univariate densities per state."
   )
@@ -79,7 +89,9 @@ test_illegal_observation_density_mixing <- function() {
         + MVGaussian(
           mu    = Default(),
           sigma = Default()
-        )
+        ),
+      initial     = Dirichlet(alpha = c(1, 1)),
+      transition  = Dirichlet(alpha = c(1, 1))
     ),
     "Fails when mixing univariate and multivariate densities in the observation model."
   )
@@ -91,7 +103,9 @@ test_fixed_parameters <- function() {
     observation = Gaussian(
       mu    = Gaussian(0, 10),
       sigma = 0
-    )
+    ),
+    initial     = Dirichlet(alpha = c(1, 1, 1)),
+    transition  = Dirichlet(alpha = c(1, 1, 1))
   )
 
   checkTrue(
@@ -106,7 +120,9 @@ test_fixed_parameters_scalar <- function() {
     observation = Gaussian(
       mu    = Gaussian(0, 10),
       sigma = 1
-    )
+    ),
+    initial     = Dirichlet(alpha = c(1)),
+    transition  = Dirichlet(alpha = c(1))
   )
 
   checkTrue(
@@ -122,7 +138,9 @@ test_illegal_fixed_parameters_scalar <- function() {
       observation = Gaussian(
         mu    = Gaussian(0, 10),
         sigma = c(1, 0)
-      )
+      ),
+      initial     = Dirichlet(alpha = c(1)),
+      transition  = Dirichlet(alpha = c(1))
     ),
     "Fails when an illegal scalar fixed parameter is given."
   )
@@ -134,7 +152,9 @@ test_fixed_parameters_vector <- function() {
     observation = MVGaussian(
       mu    = c(0, 10),
       sigma = Default()
-    )
+    ),
+    initial     = Dirichlet(alpha = c(1)),
+    transition  = Dirichlet(alpha = c(1))
   )
 
   checkTrue(
@@ -150,7 +170,9 @@ test_illegal_fixed_parameters_vector <- function() {
       observation = MVGaussian(
         mu    = matrix(1:2, ncol = 2, nrow = 1),
         sigma = Default()
-      )
+      ),
+      initial     = Dirichlet(alpha = c(1)),
+      transition  = Dirichlet(alpha = c(1))
     ),
     "Fails when an illegal vector of fixed parameters is given."
   )
@@ -162,7 +184,9 @@ test_fixed_parameters_matrix <- function() {
     observation = MVGaussian(
       mu    = Gaussian(0, 10),
       sigma = matrix(c(1, 0.2, 0.2, 1), 2, 2)
-    )
+    ),
+    initial     = Dirichlet(alpha = c(1)),
+    transition  = Dirichlet(alpha = c(1))
   )
 
   checkTrue(
@@ -175,10 +199,27 @@ test_illegal_fixed_parameters_matrix <- function() {
   checkException(
     hmm(
       K = 1, R = 1,
-      observation = MVGaussian(
+      observation = Gaussian(
         mu    = Gaussian(0, 10),
         sigma = c(1, 2, 3, 4)
-      )
+      ),
+      initial     = Dirichlet(alpha = c(1)),
+      transition  = Dirichlet(alpha = c(1))
+    ),
+    "Fails when an illegal matrix of fixed parameters is given."
+  )
+}
+
+test_illegal_fixed_parameters_cholesky_cov_matrix <- function() {
+  checkException(
+    hmm(
+      K = 1, R = 1,
+      observation = MVGaussian(
+        mu    = Gaussian(0, 10),
+        sigma = matrix(1:4, nrow = 2, ncol = 2)
+      ),
+      initial     = Dirichlet(alpha = c(1)),
+      transition  = Dirichlet(alpha = c(1))
     ),
     "Fails when an illegal matrix of fixed parameters is given."
   )

@@ -2,7 +2,7 @@
   packageStartupMessage(
     sprintf(
       "Hey! BayesHHM v%s here o/",
-      packageDescription("BayesHMM")$Version
+      utils::packageDescription("BayesHMM")$Version
     )
   )
 }

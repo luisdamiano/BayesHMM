@@ -25,11 +25,39 @@ hmm <- function(K, R, observation = NULL, initial = NULL,
       density = parse_transition(transition, K)
     )
   )
-  structure(l, class = "Specification")
+
+  spec <- structure(l, class = "Specification")
+
+  check(spec)
+
+  spec
 }
 
 check.Specification <- function(spec) {
-  stop("TO BE IMPLEMENTED.")
+  # Check if R and the observation tree are consistent
+  if (spec$observation$R == 1 & is.multivariate(spec)) {
+    stop("Inconsistent specification: although R was set to 1, a multivariate density was given.")
+  }
+
+  if (spec$observation$R != 1 & !is.multivariate(spec)) {
+    stop(
+      sprintf(
+        "Inconsistent specification: although R is set to %s, a univariate density was given.",
+        spec$observation$R
+      )
+    )
+  }
+
+  # Check if univariate and mulvariate densities are mixed
+  dens <- densityApply(spec$observation$density, is.multivariate)
+  if (length(unique(dens)) != 1) {
+    stop("Inconsistent specification: univariate and multivariate densities for the observation model cannot be mixed.")
+  }
+
+  # Check if fixed parameters are well specified
+  invisible(
+    densityApply(spec$observation$density, fixedParameters)
+  )
 }
 
 explain.Specification <- function(spec) {
@@ -37,12 +65,11 @@ explain.Specification <- function(spec) {
 }
 
 is.multivariate.Specification <- function(spec) {
-  spec$observation$R == 1
-  ## all(densityApply(mySpec$observation$density, is.multivariate)) ?
+  all(densityApply(spec$observation$density, is.multivariate))
 }
 
 is.discrete.Specification <- function(spec) {
-  all(densityApply(mySpec$observation$density, is.discrete))
+  all(densityApply(spec$observation$density, is.discrete))
 }
 
 # if data = NULL, then (prior predictive) generative model
@@ -89,6 +116,8 @@ setGeneric(
      attr(object, "BayesHMM.filename")
    }
 )
+
+setGeneric("stan_file")
 
 setMethod("stan_file", signature(object = "stanfit"), function(object) {
   attr(object, "BayesHMM.filename")

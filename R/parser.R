@@ -1,4 +1,8 @@
 parse_observation <- function(observation, K, R) {
+  if (is.null(observation)) {
+    stop("You must provide with an observation model. Please, read ?hmm.")
+  }
+
   obsList <- list()
   if (is.Density(observation)) {
     if (is.multivariate(observation)) {

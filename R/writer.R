@@ -10,7 +10,7 @@ write_data <- function(spec, noLogLike, writeDir) {
     if (noLogLike) {
       "// No observation vector"
     } else {
-      if (is.discrete(mySpec)) {
+      if (is.discrete(spec)) {
         sprintf("int y[T, %s]; // observations", spec$observation$R)
       } else {
         sprintf("matrix[T, %s] y; // observations", spec$observation$R)
@@ -29,7 +29,7 @@ write_constants <- function(spec, writeDir) {
     c(
       sprintf("int K = %s; // number of hidden states", spec$K),
       sprintf("int R = %s; // dimension of the observation vector", spec$observation$R),
-      unique(densityApply(mySpec$observation$density, constants))
+      unique(densityApply(spec$observation$density, constants))
     ),
     writeDir,
     "constants.stan"

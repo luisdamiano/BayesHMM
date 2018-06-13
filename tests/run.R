@@ -1,7 +1,18 @@
 if (require("RUnit", quietly = TRUE)) {
-  packageName <- packageDescription("BayesHMM")$Package
+  packageName <- utils::packageDescription("BayesHMM")$Package
   require(packageName, quietly = TRUE, character.only = TRUE) ||
     stop("Package '", packageName, "' not found.")
+
+  # Helper
+  error_on_write_model <- function(spec) {
+    tryCatch({
+      write_model(spec, noLogLike = FALSE, writeDir = tempdir())
+      write_model(spec, noLogLike = TRUE , writeDir = tempdir())
+      TRUE
+    }, error = function(e) {
+      FALSE
+    })
+  }
 
   # Setup
   filePattern     <- "^test.*\\.R$"
@@ -23,6 +34,12 @@ if (require("RUnit", quietly = TRUE)) {
 
   # Run tests, display and save results
   testResult <- runTestSuite(testSuite)
-  printTextProtocol(testResult)
-  printHTMLProtocol(testResult, fileName = "RUnit.html")
+
+  if (testResult[[1]]$nErr > 0 | testResult[[1]]$nFail > 0 ) {
+    tmpOut <- tempfile(fileext = ".html")
+    printHTMLProtocol(testResult, fileName = tmpOut)
+    utils::browseURL(tmpOut)
+
+    stop(printTextProtocol(testResult, showDetails = FALSE))
+  }
 }
