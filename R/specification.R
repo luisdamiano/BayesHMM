@@ -39,14 +39,14 @@ check.Specification <- function(spec) {
     stop("Inconsistent specification: although R was set to 1, a multivariate density was given.")
   }
 
-  if (spec$observation$R != 1 & !is.multivariate(spec)) {
-    stop(
-      sprintf(
-        "Inconsistent specification: although R is set to %s, a univariate density was given.",
-        spec$observation$R
-      )
-    )
-  }
+  # if (spec$observation$R != 1 & !is.multivariate(spec)) {
+  #   stop(
+  #     sprintf(
+  #       "Inconsistent specification: although R is set to %s, a univariate density was given.",
+  #       spec$observation$R
+  #     )
+  #   )
+  # }
 
   # Check if univariate and mulvariate densities are mixed
   dens <- densityApply(spec$observation$density, is.multivariate)
@@ -117,8 +117,8 @@ setGeneric(
    }
 )
 
-setGeneric("stan_file")
+methods::setGeneric("stan_file")
 
-setMethod("stan_file", signature(object = "stanfit"), function(object) {
+methods::setMethod("stan_file", signature(object = "stanfit"), function(object) {
   attr(object, "BayesHMM.filename")
 })

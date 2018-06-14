@@ -79,7 +79,7 @@ fixedParameters.MVStudent <- function(x) {
       }
 
       sprintf(
-        "real nu%s%s = %s;",
+        "real nu%s = %s;",
         x$k, x$r, x$nu
       )
     }

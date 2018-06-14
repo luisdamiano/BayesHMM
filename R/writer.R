@@ -56,7 +56,12 @@ write_priors <- function(spec, writeDir) {
   obsPriors  <- densityApply(
     spec$observation$density,
     function(x) {
-      densityApply(getFreeParameters(x), prior)
+      paramList <- getFreeParameters(x)
+      if (is.empty(paramList)) {
+        ""
+      } else {
+        densityApply(paramList, prior)
+      }
     }
   )
 

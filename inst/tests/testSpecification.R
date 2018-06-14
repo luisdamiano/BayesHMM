@@ -24,7 +24,7 @@ test_minimum_spec <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for a minimum specification."
   )
 }
@@ -51,7 +51,7 @@ test_K_univariate_observation_densities <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with K different univariate densities per state."
   )
 }
@@ -109,7 +109,7 @@ test_fixed_parameters <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with fixed parameters."
   )
 }
@@ -126,7 +126,7 @@ test_fixed_parameters_scalar <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with fixed scalar parameters."
   )
 }
@@ -158,7 +158,7 @@ test_fixed_parameters_vector <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with fixed vector parameters."
   )
 }
@@ -190,7 +190,7 @@ test_fixed_parameters_matrix <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with a matrix of fixed parameters."
   )
 }

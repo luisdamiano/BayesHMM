@@ -78,10 +78,21 @@ collapse <- function(...) {
   paste(..., sep = "\n", collapse = "\n")
 }
 
-densityApply <- function(X, FUN, ..., simplify = TRUE) {
-  simple <- any(sapply(X, is.Density))
+# densityApply <- function(X, FUN, ..., simplify = TRUE) {
+#   if (is.Density(X)) {
+#     FUN(X, ...)
+#   # } else if (any(sapply(X, is.Density))) {
+#   } else {
+#     sapply(X, function(x) {
+#       densityApply(x, FUN, ..., simplify = simplify)
+#     })
+#   }
+# }
 
-  if (simple) {
+densityApply <- function(X, FUN, ..., simplify = TRUE) {
+  if (is.Density(X)) {
+    FUN(X)
+  } else if (any(sapply(X, is.Density))) {
     sapply(X, FUN, ..., simplify = simplify)
   } else {
     l <- lapply(X, function(x) {
@@ -124,6 +135,9 @@ make_trunc <- function(x, name) {
 }
 
 make_rsubindex <- function(x) {
+  # both the parent distribution density (x$multivariate)
+  # and the prior distribution density (is.multivariate(x))
+  # sprintf(if (x$multivariate & is.multivariate(x)) { "[%s]" } else { "%s" }, x$r)
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
 }
 
@@ -142,3 +156,13 @@ matrix_to_stan <- function(x) {
     paste(colStr, collapse = ", ")
   )
 }
+
+is.empty <- function(x) {
+  is.null(x) |  length(x) == 0
+}
+
+is.freeParameter <- function(x) {
+  is.Density(x) |
+    is.list(x) & all(sapply(x, is.Density))
+}
+

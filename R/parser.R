@@ -1,3 +1,5 @@
+# parse_observation is messy. It works but it's hard to read and there' are some redundancies's redundant code.
+# We'll break it down in smaller pieces later.
 parse_observation <- function(observation, K, R) {
   if (is.null(observation)) {
     stop("You must provide with an observation model. Please, read ?hmm.")
@@ -77,53 +79,60 @@ parse_observation <- function(observation, K, R) {
     if (is.Density(obsList[[k]])) {
       lDensity <- obsList[[k]]
       lParam   <- getFreeParameters(lDensity)
-      for (p in 1:length(lParam)) {
-        # Move down elements from parent to child
-        nameParam <- names(lParam)[p]
-        obsList[[k]][[nameParam]][["K"]]     <- K
-        obsList[[k]][[nameParam]][["R"]]     <- R
-        obsList[[k]][[nameParam]][["k"]]     <- lDensity$k
-        obsList[[k]][[nameParam]][["r"]]     <- lDensity$r
-        obsList[[k]][[nameParam]][["param"]] <- nameParam
-        obsList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+      if (length(lParam) > 0) {
+        for (p in 1:length(lParam)) {
+          nameParam <- names(lParam)[p]
+          if (is.Density(obsList[[k]][[nameParam]])) {
+            # Move down elements from parent to child
+            obsList[[k]][[nameParam]][["K"]]     <- K
+            obsList[[k]][[nameParam]][["R"]]     <- R
+            obsList[[k]][[nameParam]][["k"]]     <- lDensity$k
+            obsList[[k]][[nameParam]][["r"]]     <- lDensity$r
+            obsList[[k]][[nameParam]][["param"]] <- nameParam
+            obsList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
 
-        # Move down to nested elements from parent to grandchildren ^_^
-        nestedParams <- (1:length(obsList[[k]][[nameParam]]))[sapply(obsList[[k]][[nameParam]], is.Density)]
-        if (any(nestedParams)) {
-          for (np in 1:length(nestedParams)) {
-            nameNestedParam <- nestedParams[np]
-            obsList[[k]][[nameParam]][[nameNestedParam]][["K"]]     <- K
-            obsList[[k]][[nameParam]][[nameNestedParam]][["R"]]     <- R
-            obsList[[k]][[nameParam]][[nameNestedParam]][["k"]]     <- lDensity$k
-            obsList[[k]][[nameParam]][[nameNestedParam]][["r"]]     <- np
-            obsList[[k]][[nameParam]][[nameNestedParam]][["param"]] <- nameParam
-            obsList[[k]][[nameParam]][[nameNestedParam]][["multivariate"]] <- is.multivariate(lDensity)
+            # Move down to nested elements from parent to grandchildren ^_^
+            nestedParams <- (1:length(obsList[[k]][[nameParam]]))[sapply(obsList[[k]][[nameParam]], is.Density)]
+            if (any(nestedParams)) {
+              for (np in 1:length(nestedParams)) {
+                nameNestedParam <- nestedParams[np]
+                obsList[[k]][[nameParam]][[nameNestedParam]][["K"]]     <- K
+                obsList[[k]][[nameParam]][[nameNestedParam]][["R"]]     <- R
+                obsList[[k]][[nameParam]][[nameNestedParam]][["k"]]     <- lDensity$k
+                obsList[[k]][[nameParam]][[nameNestedParam]][["r"]]     <- np
+                obsList[[k]][[nameParam]][[nameNestedParam]][["param"]] <- nameParam
+                obsList[[k]][[nameParam]][[nameNestedParam]][["multivariate"]] <- is.multivariate(lDensity)
+              }
+            }
+
+            # Move up elements from child to parent
+            if (!is.null(obsList[[k]][[nameParam]][["bounds"]])) {
+              obsList[[k]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[nameParam]][["bounds"]]
+            }
           }
-        }
-
-        # Move up elements from child to parent
-        if (!is.null(obsList[[k]][[nameParam]][["bounds"]])) {
-          obsList[[k]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[nameParam]][["bounds"]]
         }
       }
     } else {
       for (r in 1:length(obsList[[k]])) {
         lDensity <- obsList[[k]][[r]]
         lParam   <- getFreeParameters(lDensity)
-        for (p in 1:length(lParam)) {
-          # Move down elements from parent to child
-          nameParam <- names(lParam)[p]
-          obsList[[k]][[r]][[nameParam]][["K"]]     <- K
-          obsList[[k]][[r]][[nameParam]][["R"]]     <- R
-          obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
-          obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r
-          obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
-          obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+        if (length(lParam) > 0) {
+          for (p in 1:length(lParam)) {
+            nameParam <- names(lParam)[p]
 
-          # Move up elements from child to parent
-          # if (!is.null(obsList[[k]][[r]][[nameParam]][["bounds"]])) {
-          if ("bounds" %in% names(obsList[[k]][[r]][[nameParam]])) {
-            obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[r]][[nameParam]][["bounds"]]
+            # Move down elements from parent to child
+            obsList[[k]][[r]][[nameParam]][["K"]]     <- K
+            obsList[[k]][[r]][[nameParam]][["R"]]     <- R
+            obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
+            obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r
+            obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
+            obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+
+            # Move up elements from child to parent
+            # if (!is.null(obsList[[k]][[r]][[nameParam]][["bounds"]])) {
+            if ("bounds" %in% names(obsList[[k]][[r]][[nameParam]])) {
+              obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[r]][[nameParam]][["bounds"]]
+            }
           }
         }
       }

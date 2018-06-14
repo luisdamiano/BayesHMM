@@ -10,7 +10,8 @@ test_univariate_gaussian <- function() {
   )
 
   checkTrue(
-    error_on_write_model(mySpec),
+    error_in_write_model(mySpec),
     "Can create Stan code for an observation model with univariate Gaussian density."
   )
 }
+

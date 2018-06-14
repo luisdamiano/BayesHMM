@@ -9,6 +9,7 @@ MVGaussianCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL),
 freeParameters.MVGaussianCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
+    # if (is.freeParameter(x$mu)) {
       sprintf(
         "vector[R] mu%s;",
         x$k
@@ -19,6 +20,7 @@ freeParameters.MVGaussianCor <- function(x) {
 
   LStr <-
     if (is.Density(x$L)) {
+    # if (is.freeParameter(x$L)) {
       sprintf(
         "cholesky_factor_corr[R] L%s;",
         x$k
@@ -33,6 +35,7 @@ freeParameters.MVGaussianCor <- function(x) {
 fixedParameters.MVGaussianCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
+    # if (is.freeParameter(x$mu)) {
       ""
     } else {
       if (!check_vector(x$mu)) {
@@ -47,6 +50,7 @@ fixedParameters.MVGaussianCor <- function(x) {
 
   LStr <-
     if (is.Density(x$L)) {
+    # if (is.freeParameter(x$L)) {
       ""
     } else {
       if (!check_cholesky_factor_cor(x$L)) {

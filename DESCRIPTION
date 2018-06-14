@@ -12,6 +12,7 @@ LazyData: treu
 Depends:
     R (>= 3.2.0),
     rstan (>= 2.16),
+    methods,
     utils
 Imports:
 Suggests:
