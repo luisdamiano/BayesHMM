@@ -16,7 +16,7 @@ y <- as.matrix(
   c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500, writeDir = "out")
 
 rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 

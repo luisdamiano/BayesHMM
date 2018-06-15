@@ -10,15 +10,19 @@ write_data <- function(spec, noLogLike, writeDir) {
     if (noLogLike) {
       "// No observation vector"
     } else {
-      if (is.discrete(spec)) {
-        sprintf("int y[T, %s]; // observations", spec$observation$R)
-      } else {
-        sprintf("matrix[T, %s] y; // observations", spec$observation$R)
-      }
+      # if (is.discrete(spec)) {
+      #   sprintf("int y[T, %s]; // observations", spec$observation$R)
+      # } else {
+      #   sprintf("matrix[T, %s] y; // observations", spec$observation$R)
+      # }
+      densityCollect(spec$observation$density, data)
     }
 
+  strK <- "int<lower = 1> K; // number of hidden states"
+  strR <- "int<lower = 1> R; // dimension of the observation vector"
+
   write_stanfile(
-    strData,
+    c(strK, strR, strData),
     writeDir,
     "data.stan"
   )
@@ -26,11 +30,7 @@ write_data <- function(spec, noLogLike, writeDir) {
 
 write_constants <- function(spec, writeDir) {
   write_stanfile(
-    c(
-      sprintf("int K = %s; // number of hidden states", spec$K),
-      sprintf("int R = %s; // dimension of the observation vector", spec$observation$R),
-      unique(densityApply(spec$observation$density, constants))
-    ),
+    densityCollect(spec$observation$density, constants),
     writeDir,
     "constants.stan"
   )

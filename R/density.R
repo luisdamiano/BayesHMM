@@ -13,6 +13,7 @@
 # prior              <- function(x, ...) { UseMethod("prior", x) }
 # noLogLike          <- function(x, ...) { UseMethod("noLogLike", x) }
 
+data               <- function(x) { UseMethod("data", x) }
 explain            <- function(x) { UseMethod("explain", x) }
 constants          <- function(x) { UseMethod("constants", x) }
 generated          <- function(x) { UseMethod("generated", x) }
@@ -86,6 +87,10 @@ PriorOnlyMultivariateDensity <- function(name, ...) {
 
 is.Density <- function(x) {
   "Density" %in% class(x)
+}
+
+data.Density <- function(x){
+  "matrix[T, R] y;   // observations"
 }
 
 explain.Density <- function(x) {

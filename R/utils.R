@@ -103,6 +103,10 @@ densityApply <- function(X, FUN, ..., simplify = TRUE) {
   }
 }
 
+densityCollect <- function(X, FUN, ..., simplify = TRUE) {
+  collapse(unique(densityApply(X, FUN, ..., simplify = TRUE)))
+}
+
 make_names <- function(s) {
   substr(gsub('[^a-zA-Z1-9]', '', make.names(s)), 1, 48)
 }
@@ -135,10 +139,28 @@ make_trunc <- function(x, name) {
 }
 
 make_rsubindex <- function(x) {
-  # both the parent distribution density (x$multivariate)
-  # and the prior distribution density (is.multivariate(x))
-  # sprintf(if (x$multivariate & is.multivariate(x)) { "[%s]" } else { "%s" }, x$r)
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+}
+
+make_parameters <- function(density, string, stringNot = "",
+                            isDensity = TRUE, check = NULL, checkError = "") {
+  if (is.Density(density) == isDensity) {
+    if (!is.null(check)) {
+      if (!check(density)) { stop(checkError) }
+    }
+
+    string
+  } else {
+    stringNot
+  }
+}
+
+make_free_parameters <- function(density, string) {
+  make_parameters(density, string)
+}
+
+make_fixed_parameters <- function(density, string, check, checkError) {
+  make_parameters(density, string, check, checkError)
 }
 
 vector_to_stan <- function(x) {

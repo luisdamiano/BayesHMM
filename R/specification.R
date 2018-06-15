@@ -60,6 +60,35 @@ check.Specification <- function(spec) {
   )
 }
 
+make_data <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
+  stanData <- list(
+    K = spec$K,
+    R = spec$observation$R
+  )
+
+  if (!is.null(y)) {
+    stanData[["T"]] <- NROW(y)
+    stanData[["y"]] <- y
+  } else {
+    if (is.null(T)) {
+      stanData[["T"]] <- 1E3
+    } else {
+      stanData[["T"]] <- T
+    }
+  }
+
+  M <- unique(densityApply(mySpec$observation$density, "[[", "M"))
+  if (is.numeric(M) & !is.null(M)) {
+    stanData[["M"]] <- M
+  }
+
+  if (!is.null(xBeta)) {
+    stanData[["x"]] <- xBeta
+  }
+
+  stanData
+}
+
 explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
 }
@@ -72,30 +101,13 @@ is.discrete.Specification <- function(spec) {
   all(densityApply(spec$observation$density, is.discrete))
 }
 
-# if data = NULL, then (prior predictive) generative model
-fit.Specification <- function(spec, y = NULL, control = NULL,
+fit.Specification <- function(spec, data = NULL, control = NULL,
                               writeDir = tempdir(), ...) {
-  stanFile <- write_model(spec, noLogLike = is.null(y), writeDir)
-
-  dots <- list(...)
-  stanData <-
-    if (is.null(y)) {
-      if ("T" %in% (names(dots))) {
-        T <- dots[["T"]]
-        dots[["T"]] <- NULL
-        list(T = T)
-      } else {
-        list(T = 1E3)
-      }
-    } else {
-      list(
-        y = y,
-        T = NROW(y)
-      )
-    }
+  stanData <- data
+  stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
 
   stanDots <- c(
-    dots,
+    list(...),
     list(
       file       = stanFile,
       data       = stanData,
