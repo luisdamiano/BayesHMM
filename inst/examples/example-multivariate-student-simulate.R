@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 3, R = 2,
   observation = MVStudent(
     nu    = 3,
@@ -13,7 +13,7 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myFit <- fit(mySpec, chains = 1, iter = 500)
+myFit <- run(mySpec, chains = 1, iter = 500)
 
 matplot(
   apply(extract(myFit, pars = "ypred")[[1]], c(2, 3), mean),

@@ -1,18 +1,3 @@
-# explain            <- function(x, ...) { UseMethod("explain", x) }
-# constants          <- function(x, ...) { UseMethod("constants", x) }
-# generated          <- function(x, ...) { UseMethod("generated", x) }
-# getParameterNames  <- function(x, ...) { UseMethod("getParameterNames", x) }
-# getFreeParameters  <- function(x, ...) { UseMethod("getFreeParameters", x) }
-# getFixedParameters <- function(x, ...) { UseMethod("getFixedParameters", x) }
-# is.discrete        <- function(x, ...) { UseMethod("is.discrete", x) }
-# is.multivariate    <- function(x, ...) { UseMethod("is.multivariate", x) }
-# logLike            <- function(x, ...) { UseMethod("logLike", x) }
-# parameters         <- function(x, ...) { UseMethod("parameters", x) }
-# freeParameters     <- function(x, ...) { UseMethod("freeParameters", x) }
-# fixedParameters    <- function(x, ...) { UseMethod("fixedParameters", x) }
-# prior              <- function(x, ...) { UseMethod("prior", x) }
-# noLogLike          <- function(x, ...) { UseMethod("noLogLike", x) }
-
 data               <- function(x) { UseMethod("data", x) }
 explain            <- function(x) { UseMethod("explain", x) }
 constants          <- function(x) { UseMethod("constants", x) }

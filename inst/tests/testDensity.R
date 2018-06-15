@@ -1,5 +1,5 @@
 test_univariate_gaussian <- function() {
-  mySpec <- hmm(
+  mySpec <- spec(
     K = 3, R = 1,
     observation = Gaussian(
       mu    = Gaussian(0, 10),

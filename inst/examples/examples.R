@@ -1,4 +1,4 @@
-# myModel1c <- hmm(
+# myModel1c <- spec(
 #   K = 3, R = 1,
 #   observation = Gaussian(
 #     mu    = Gaussian(mu = 0, sigma = 10, bounds = list(0, 5), trunc = list(-5, 5)),
@@ -9,7 +9,7 @@
 #   name = "Model with bounds and truncs ##!..."
 # )
 #
-# myModel2 <- hmm(
+# myModel2 <- spec(
 #   K = 3, R = 1,
 #   observation = # Different priors per state
 #     Gaussian(

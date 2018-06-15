@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 3, R = 1,
   observation =
     Gaussian(
@@ -25,7 +25,7 @@ y <- as.matrix(
   c(rnorm(100, 5, 2), rnorm(100, 0, 0.5), rnorm(100, -5, 1.5))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("sigma11", "sigma21", "sigma31"))
 

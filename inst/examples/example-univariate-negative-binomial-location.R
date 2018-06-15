@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 3, R = 1,
   observation = NegativeBinomial(
     alpha = Gaussian(mu = 0, sigma = 10, bounds = list(0, NULL)),
@@ -20,7 +20,7 @@ y = as.matrix(
   )
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, y = y, chains = 1, iter = 500)
 
 print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
 

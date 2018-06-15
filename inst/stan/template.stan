@@ -1,0 +1,55 @@
+functions {
+  #include functions.stan
+}
+
+data {
+  int<lower=1> T;                   // number of observations (length)
+  #include data.stan
+}
+
+transformed data {
+  // Constants
+  #include tdata.stan
+  #include constants.stan
+  #include fixedParameters.stan
+}
+
+parameters {
+  #include parameters.stan
+
+  // Observation model
+  #include freeParameters.stan
+}
+
+transformed parameters {
+  vector[T] loglike[K];
+  #include tparameters.stan
+
+  // Compute loglikelihood
+  for (t in 1:T) {
+    #include loglikelihood.stan
+  }
+
+  // Compute target quantity
+  #include calculate-target.stan
+}
+
+model {
+  // Priors
+  #include priors.stan
+
+  // Go!
+  #include increase-target.stan
+}
+
+generated quantities {
+  matrix[T, R] ypred;
+  int<lower=1, upper=K> zpred[T];
+
+  #include generated.stan
+  #include zpredictive.stan
+
+  for(t in 1:T) {
+    #include ypredictive.stan
+  }
+}

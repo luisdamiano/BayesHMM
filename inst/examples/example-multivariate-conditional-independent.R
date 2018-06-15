@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 3, R = 2,
   observation = # Different densities per state
     Gaussian(
@@ -28,7 +28,7 @@ y = rbind(
   MASS::mvrnorm(n = 100, mu = c( 10,  30), Sigma = matrix(c(1, 0.2, 0.2, 1), 2, 2))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
 

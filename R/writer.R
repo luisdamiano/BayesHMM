@@ -5,26 +5,37 @@ write_stanfile <- function(code, dir, filename, ...) {
   )
 }
 
+write_functions <- function(spec, writeDir) {
+  write_stanfile(
+    block_functions(spec),
+    writeDir,
+    "functions.stan"
+  )
+}
+
 write_data <- function(spec, noLogLike, writeDir) {
-  strData <-
+  strK    <- "int<lower = 1> K; // number of hidden states"
+  strR    <- "int<lower = 1> R; // dimension of the observation vector"
+  strSpec <- block_data(spec)
+  strObs  <-
     if (noLogLike) {
       "// No observation vector"
     } else {
-      # if (is.discrete(spec)) {
-      #   sprintf("int y[T, %s]; // observations", spec$observation$R)
-      # } else {
-      #   sprintf("matrix[T, %s] y; // observations", spec$observation$R)
-      # }
       densityCollect(spec$observation$density, data)
     }
 
-  strK <- "int<lower = 1> K; // number of hidden states"
-  strR <- "int<lower = 1> R; // dimension of the observation vector"
-
   write_stanfile(
-    c(strK, strR, strData),
+    c(strK, strR, strSpec, strObs),
     writeDir,
     "data.stan"
+  )
+}
+
+write_tdata <- function(spec, writeDir) {
+  write_stanfile(
+    block_tdata(spec),
+    writeDir,
+    "tdata.stan"
   )
 }
 
@@ -38,15 +49,52 @@ write_constants <- function(spec, writeDir) {
 
 write_parameters <- function(spec, writeDir) {
   write_stanfile(
+    densityApply(spec$observation$density, fixedParameters),
+    writeDir,
+    "fixedParameters.stan"
+  )
+
+  write_stanfile(
     densityApply(spec$observation$density, freeParameters),
     writeDir,
     "freeParameters.stan"
   )
 
   write_stanfile(
-    densityApply(spec$observation$density, fixedParameters),
+    block_parameters(spec),
     writeDir,
-    "fixedParameters.stan"
+    "parameters.stan"
+  )
+}
+
+write_tparameters <- function(spec, writeDir) {
+  write_stanfile(
+    block_tparameters(spec),
+    writeDir,
+    "tparameters.stan"
+  )
+}
+
+write_logLikelihood <- function(spec, noLogLike, writeDir) {
+  funLogLike <- match.fun(if (noLogLike) "noLogLike" else "logLike")
+  write_stanfile(
+    densityApply(spec$observation$density, funLogLike),
+    writeDir,
+    "logLikelihood.stan"
+  )
+}
+
+write_target <- function(spec, writeDir) {
+  write_stanfile(
+    chunk_calculate_target(spec),
+    writeDir,
+    "calculate-target.stan"
+  )
+
+  write_stanfile(
+    chunk_increase_target(spec),
+    writeDir,
+    "increase-target.stan"
   )
 }
 
@@ -72,12 +120,19 @@ write_priors <- function(spec, writeDir) {
   )
 }
 
-write_logLikelihood <- function(spec, noLogLike, writeDir) {
-  funLogLike <- match.fun(if (noLogLike) "noLogLike" else "logLike")
+write_generated <- function(spec, writeDir) {
   write_stanfile(
-    densityApply(spec$observation$density, funLogLike),
+    block_generated(spec),
     writeDir,
-    "logLikelihood.stan"
+    "generated.stan"
+  )
+}
+
+write_zpredictive <- function(spec, writeDir) {
+  write_stanfile(
+    chunk_zpredictive(spec),
+    writeDir,
+    "zpredictive.stan"
   )
 }
 
@@ -90,20 +145,24 @@ write_ypredictive <- function(spec, writeDir) {
 }
 
 write_chunks.Specification <- function(spec, noLogLike, writeDir) {
+  write_functions(spec, writeDir)
   write_data(spec, noLogLike, writeDir)
+  write_tdata(spec, writeDir)
   write_constants(spec, writeDir)
   write_parameters(spec, writeDir)
-  write_priors(spec, writeDir)
+  write_tparameters(spec, writeDir)
   write_logLikelihood(spec, noLogLike, writeDir)
+  write_target(spec, writeDir)
+  write_priors(spec, writeDir)
+  write_generated(spec, writeDir)
+  write_zpredictive(spec, writeDir)
   write_ypredictive(spec, writeDir)
 }
 
 write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Select best template
-  baseR <- if (is.multivariate(spec)) { "univariate" } else {"univariate"}
-  baseA <- if (is.null(spec$transition$covariates)) { "Homogeneous" } else {"Heterogeneous"}
   base  <- system.file(
-    file.path("stan", sprintf("%s%s.stan", baseR, baseA)),
+    file.path("stan", "template.stan"),
     package = "BayesHMM"
   )
 
@@ -117,7 +176,7 @@ write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Unify all chunks into one single Stan model
   build <- rstan::stanc_builder(
     file = base,
-    isystem = c(dirname(base), writeDir)
+    isystem = c(dirname(base), file.path(dirname(base), "chunks"), writeDir)
   )
 
   # Write model

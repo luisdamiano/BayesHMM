@@ -142,6 +142,8 @@ parse_observation <- function(observation, K, R) {
 }
 
 parse_initial <- function(initial, K) {
+  if (is.null(initial)) { return(list()) }
+
   initList <- list()
   if (is.Density(initial)) {
     # Case 1: One multivariate density.
@@ -190,6 +192,8 @@ parse_initial <- function(initial, K) {
 }
 
 parse_transition <- function(transition, K) {
+  if (is.null(transition)) { return(list()) }
+
   transList <- list()
   if (is.Density(transition)) {
     if (is.multivariate(transition)) {

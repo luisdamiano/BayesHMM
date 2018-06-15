@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 3, R = 1,
   observation = Poisson(
     lambda = Default(bounds = list(0, NULL))
@@ -15,7 +15,7 @@ y = as.matrix(
   c(rpois(100, 5), rpois(100, 10), rpois(100, 1))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, y = y, chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("lambda11", "lambda21", "lambda31"))
 

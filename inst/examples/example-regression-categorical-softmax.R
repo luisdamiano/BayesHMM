@@ -10,7 +10,7 @@
 
 library(rstan)
 
-mySpec <- hmm(
+mySpec <- spec(
   K = 2, R = 1,
   observation = RegCategoricalSoftmax(
     xBeta = Default(),
@@ -61,7 +61,7 @@ myData  <- make_data(
   xBeta = x
 )
 
-myFit <- fit(mySpec, data = myData, chains = 1, iter = 500, writeDir = "out")
+myFit <- run(mySpec, data = myData, chains = 1, iter = 500, writeDir = "out")
 
 rstan::plot(myFit, pars = c("xBeta11", "xBeta21"))
 

@@ -1,14 +1,33 @@
 check         <- function(x, ...) { UseMethod("check", x) }
-fit           <- function(x, ...) { UseMethod("fit", x) }
+run           <- function(x, ...) { UseMethod("run", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
+make_data     <- function(x, ...) { UseMethod("make_data", x) }
 
-hmm <- function(K, R, observation = NULL, initial = NULL,
-                transition = NULL, name = "") {
-  # Observation model: 1, K x 1, K x R
-  #   1 or K elements
-  #     1 or R elements
+block_functions   <- function(x) { UseMethod("block_functions", x) }
+block_data        <- function(x) { UseMethod("block_data", x) }
+block_tdata       <- function(x) { UseMethod("block_tdata", x) }
+block_parameters  <- function(x) { UseMethod("block_parameters", x) }
+block_tparameters <- function(x) { UseMethod("block_tparameters", x) }
+block_generated   <- function(x) { UseMethod("block_generated", x) }
+block_target      <- function(x) { UseMethod("block_target", x) }
+chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
+chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
+chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
+block_functions.Specification   <- function(x) { "" }
+block_data.Specification        <- function(x) { "" }
+block_tdata.Specification       <- function(x) { "" }
+block_parameters.Specification  <- function(x) { "" }
+block_tparameters.Specification <- function(x) { "" }
+block_generated.Specification   <- function(x) { "" }
+block_target.Specification      <- function(x) { "" }
+chunk_calculate_target.Specification <- function(x) { "" }
+chunk_increase_target.Specification  <- function(x) { "" }
+chunk_zpredictive.Specification <- function(x) { "" }
+
+spec <- function(K, R, observation = NULL, initial = NULL,
+                 transition = NULL, name = "") {
   l <- list(
     name = name,
     K    = K,
@@ -64,7 +83,7 @@ explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
 }
 
-fit.Specification <- function(spec, data = NULL, control = NULL,
+run.Specification <- function(spec, data = NULL, control = NULL,
                               writeDir = tempdir(), ...) {
   stanData <- data
   stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
