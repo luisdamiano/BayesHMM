@@ -143,10 +143,10 @@ make_rsubindex <- function(x) {
 }
 
 make_parameters <- function(density, string, stringNot = "",
-                            isDensity = TRUE, check = NULL, checkError = "") {
+                            isDensity = TRUE, check = NULL, errorStr = "") {
   if (is.Density(density) == isDensity) {
     if (!is.null(check)) {
-      if (!check(density)) { stop(checkError) }
+      if (!check(density)) { stop(errorStr) }
     }
 
     string
@@ -156,11 +156,11 @@ make_parameters <- function(density, string, stringNot = "",
 }
 
 make_free_parameters <- function(density, string) {
-  make_parameters(density, string)
+  make_parameters(density, string, stringNot = "", isDensity = TRUE)
 }
 
-make_fixed_parameters <- function(density, string, check, checkError) {
-  make_parameters(density, string, check, checkError)
+make_fixed_parameters <- function(density, string, check = NULL, errorStr = "") {
+  make_parameters(density, string, stringNot = "", isDensity = FALSE, check, errorStr)
 }
 
 vector_to_stan <- function(x) {

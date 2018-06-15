@@ -57,16 +57,6 @@ fixedParameters.RegGaussian <- function(x) {
       )
     }
 
-  # make_fixed_parameters(
-  #   x$xBeta,
-  #   sprintf(
-  #     "vector[M] xBeta%s%s = %s;",
-  #     x$k, x$r, x$xBeta
-  #   ),
-  #   check_vector,
-  #   "If fixed, xBeta must be a vector."
-  # )
-
   sigmaStr <-
     if (is.Density(x$sigma)) {
       ""

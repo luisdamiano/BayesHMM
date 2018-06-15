@@ -90,7 +90,11 @@ is.Density <- function(x) {
 }
 
 data.Density <- function(x){
-  "matrix[T, R] y;   // observations"
+  "matrix[T, R] y;  // observations"
+}
+
+data.DiscreteDensity <- function(x){
+  "int y[T, R];     // observations"
 }
 
 explain.Density <- function(x) {

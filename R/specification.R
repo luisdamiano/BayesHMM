@@ -60,7 +60,40 @@ check.Specification <- function(spec) {
   )
 }
 
-make_data <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
+explain.Specification <- function(spec) {
+  stop("TO BE IMPLEMENTED.")
+}
+
+fit.Specification <- function(spec, data = NULL, control = NULL,
+                              writeDir = tempdir(), ...) {
+  stanData <- data
+  stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
+
+  stanDots <- c(
+    list(...),
+    list(
+      file       = stanFile,
+      data       = stanData,
+      model_name = spec$name
+    ),
+    control
+  )
+
+  fit <- do.call(rstan::stan, stanDots)
+  attr(fit, "BayesHMM.filename") <- stanFile
+
+  return(fit)
+}
+
+is.multivariate.Specification <- function(spec) {
+  all(densityApply(spec$observation$density, is.multivariate))
+}
+
+is.discrete.Specification <- function(spec) {
+  all(densityApply(spec$observation$density, is.discrete))
+}
+
+make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
   stanData <- list(
     K = spec$K,
     R = spec$observation$R
@@ -89,44 +122,11 @@ make_data <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
   stanData
 }
 
-explain.Specification <- function(spec) {
-  stop("TO BE IMPLEMENTED.")
-}
-
-is.multivariate.Specification <- function(spec) {
-  all(densityApply(spec$observation$density, is.multivariate))
-}
-
-is.discrete.Specification <- function(spec) {
-  all(densityApply(spec$observation$density, is.discrete))
-}
-
-fit.Specification <- function(spec, data = NULL, control = NULL,
-                              writeDir = tempdir(), ...) {
-  stanData <- data
-  stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
-
-  stanDots <- c(
-    list(...),
-    list(
-      file       = stanFile,
-      data       = stanData,
-      model_name = spec$name
-      ),
-    control
-  )
-
-  fit <- do.call(rstan::stan, stanDots)
-  attr(fit, "BayesHMM.filename") <- stanFile
-
-  return(fit)
-}
-
 setGeneric(
   "stan_file",
-   function(object) {
-     attr(object, "BayesHMM.filename")
-   }
+  function(object) {
+    attr(object, "BayesHMM.filename")
+  }
 )
 
 methods::setGeneric("stan_file")
