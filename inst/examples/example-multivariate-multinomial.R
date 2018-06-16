@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 4,
   observation = Multinomial(
     theta = Default(),
@@ -22,7 +22,7 @@ y = as.matrix(
   )
 )
 
-myFit <- run(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
 

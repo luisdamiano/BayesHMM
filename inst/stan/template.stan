@@ -8,7 +8,6 @@ data {
 }
 
 transformed data {
-  // Constants
   #include tdata.stan
   #include constants.stan
   #include fixedParameters.stan
@@ -16,8 +15,6 @@ transformed data {
 
 parameters {
   #include parameters.stan
-
-  // Observation model
   #include freeParameters.stan
 }
 
@@ -35,10 +32,7 @@ transformed parameters {
 }
 
 model {
-  // Priors
   #include priors.stan
-
-  // Go!
   #include increase-target.stan
 }
 
@@ -48,7 +42,6 @@ generated quantities {
 
   #include generated.stan
   #include zpredictive.stan
-
   for(t in 1:T) {
     #include ypredictive.stan
   }

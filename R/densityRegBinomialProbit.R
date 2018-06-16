@@ -13,7 +13,7 @@ constants.RegBinomialProbit <- function(x) {
   )
 }
 
-data.RegBinomialProbit <- function(x) {
+data.RegBinomialProbit <- function(x, noLogLike) {
   collapse(
     c(
       "int<lower = 1> M; // number of predictors",

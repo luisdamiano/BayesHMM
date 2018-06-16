@@ -6,7 +6,7 @@ RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, bounds = list(NULL
   )
 }
 
-data.RegGaussian <- function(x) {
+data.RegGaussian <- function(x, noLogLike) {
   collapse(
     c(
       "int<lower = 1> M; // number of predictors",

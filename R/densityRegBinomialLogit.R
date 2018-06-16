@@ -13,7 +13,7 @@ constants.RegBinomialLogit <- function(x) {
   )
 }
 
-data.RegBinomialLogit <- function(x) {
+data.RegBinomialLogit <- function(x, noLogLike) {
   collapse(
     c(
       "int<lower = 1> M; // number of predictors",
@@ -58,7 +58,7 @@ fixedParameters.RegBinomialLogit <- function(x) {
 
 generated.RegBinomialLogit <- function(x) {
   sprintf(
-    "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, logit(x[t] * xBeta%s%s));",
+    "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, inv_logit(x[t] * xBeta%s%s));",
     x$k, x$r,
     x$k, x$r
   )

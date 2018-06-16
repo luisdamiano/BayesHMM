@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 1,
   observation = Beta(
     alpha = Default(bounds = list(0, NULL)),
@@ -20,7 +20,7 @@ y = as.matrix(
   )
 )
 
-myFit <- run(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("alpha11", "alpha21", "alpha31"))
 

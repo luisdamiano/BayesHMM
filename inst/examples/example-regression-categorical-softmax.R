@@ -10,7 +10,7 @@
 
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 2, R = 1,
   observation = RegCategoricalSoftmax(
     xBeta = Default(),
@@ -56,8 +56,8 @@ y <- as.matrix(
 )
 
 myData  <- make_data(
-  spec = mySpec,
-  y = y,
+  spec  = mySpec,
+  y     = y,
   xBeta = x
 )
 

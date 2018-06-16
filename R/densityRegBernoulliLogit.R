@@ -6,13 +6,11 @@ RegBernoulliLogit <- function(xBeta = NULL, M = NULL, bounds = list(NULL, NULL),
   )
 }
 
-data.RegBernoulliLogit <- function(x) {
-  collapse(
-    c(
-      "int<lower = 1> M; // number of predictors",
-      "matrix[T, M] x;   // predictors",
-      NextMethod()
-    )
+data.RegBernoulliLogit <- function(x, noLogLike) {
+  c(
+    "int<lower = 1> M; // number of predictors",
+    "matrix[T, M] x;   // predictors",
+    if (!noLogLike) { NextMethod()}
   )
 }
 

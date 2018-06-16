@@ -13,7 +13,7 @@ constants.RegCategoricalSoftmax <- function(x) {
   )
 }
 
-data.RegCategoricalSoftmax <- function(x) {
+data.RegCategoricalSoftmax <- function(x, noLogLike) {
   collapse(
     c(
       "int<lower = 1> M; // number of predictors",

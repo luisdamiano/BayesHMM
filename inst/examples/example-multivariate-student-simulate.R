@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 2,
   observation = MVStudent(
     nu    = 3,

@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 1,
   observation = Student(
     mu    = Gaussian(0, 10),
@@ -21,7 +21,7 @@ y = as.matrix(
   )
 )
 
-myFit <- run(mySpec, y = y, chains = 1, iter = 500, writeDir = "sandbox//out")
+myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500, writeDir = "sandbox//out")
 
 rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 

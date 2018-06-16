@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 1,
   observation =
     Gaussian(mu = -5, sigma = 1)

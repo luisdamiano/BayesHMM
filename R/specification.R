@@ -2,7 +2,7 @@ check         <- function(x, ...) { UseMethod("check", x) }
 run           <- function(x, ...) { UseMethod("run", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
-make_data     <- function(x, ...) { UseMethod("make_data", x) }
+make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
 
 block_functions   <- function(x) { UseMethod("block_functions", x) }
 block_data        <- function(x) { UseMethod("block_data", x) }
@@ -129,7 +129,7 @@ make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
     }
   }
 
-  M <- unique(densityApply(mySpec$observation$density, "[[", "M"))
+  M <- unique(densityApply(spec$observation$density, "[[", "M"))
   if (is.numeric(M) & !is.null(M)) {
     stanData[["M"]] <- M
   }

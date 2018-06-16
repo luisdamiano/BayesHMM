@@ -1,4 +1,4 @@
-data               <- function(x) { UseMethod("data", x) }
+data               <- function(x, ...) { UseMethod("data", x) }
 explain            <- function(x) { UseMethod("explain", x) }
 constants          <- function(x) { UseMethod("constants", x) }
 generated          <- function(x) { UseMethod("generated", x) }
@@ -74,11 +74,11 @@ is.Density <- function(x) {
   "Density" %in% class(x)
 }
 
-data.Density <- function(x){
+data.Density <- function(x, noLogLike) {
   "matrix[T, R] y;  // observations"
 }
 
-data.DiscreteDensity <- function(x){
+data.DiscreteDensity <- function(x, noLogLike) {
   "int y[T, R];     // observations"
 }
 

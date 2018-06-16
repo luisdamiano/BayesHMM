@@ -1,19 +1,19 @@
 test_empty_spec <- function() {
   checkException(
-    spec(),
+    hmm(),
     "Fails when creating an empty specification."
   )
 }
 
 test_insufficient_spec <- function() {
   checkException(
-    spec(K = 3, R = 1),
+    hmm(K = 3, R = 1),
     "Fails when creating a specification without density."
   )
 }
 
 test_minimum_spec <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 1, R = 1,
     observation = Gaussian(
       mu = Default(),
@@ -30,7 +30,7 @@ test_minimum_spec <- function() {
 }
 
 test_K_univariate_observation_densities <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 3, R = 1,
     observation =
       Gaussian(
@@ -58,7 +58,7 @@ test_K_univariate_observation_densities <- function() {
 
 test_nonK_univariate_observation_densities <- function() {
   checkException(
-    spec(
+    hmm(
       K = 3, R = 1,
       observation =
         Gaussian(
@@ -79,7 +79,7 @@ test_nonK_univariate_observation_densities <- function() {
 
 test_illegal_observation_density_mixing <- function() {
   checkException(
-    spec(
+    hmm(
       K = 2, R = 1,
       observation =
         Gaussian(
@@ -98,7 +98,7 @@ test_illegal_observation_density_mixing <- function() {
 }
 
 test_fixed_parameters <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 3, R = 1,
     observation = Gaussian(
       mu    = Gaussian(0, 10),
@@ -115,7 +115,7 @@ test_fixed_parameters <- function() {
 }
 
 test_fixed_parameters_scalar <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 1, R = 1,
     observation = Gaussian(
       mu    = Gaussian(0, 10),
@@ -133,7 +133,7 @@ test_fixed_parameters_scalar <- function() {
 
 test_illegal_fixed_parameters_scalar <- function() {
   checkException(
-    spec(
+    hmm(
       K = 1, R = 1,
       observation = Gaussian(
         mu    = Gaussian(0, 10),
@@ -147,7 +147,7 @@ test_illegal_fixed_parameters_scalar <- function() {
 }
 
 test_fixed_parameters_vector <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 1, R = 2,
     observation = MVGaussian(
       mu    = c(0, 10),
@@ -165,7 +165,7 @@ test_fixed_parameters_vector <- function() {
 
 test_illegal_fixed_parameters_vector <- function() {
   checkException(
-    spec(
+    hmm(
       K = 1, R = 1,
       observation = MVGaussian(
         mu    = matrix(1:2, ncol = 2, nrow = 1),
@@ -179,7 +179,7 @@ test_illegal_fixed_parameters_vector <- function() {
 }
 
 test_fixed_parameters_matrix <- function() {
-  mySpec <- spec(
+  mySpec <- hmm(
     K = 1, R = 2,
     observation = MVGaussian(
       mu    = Gaussian(0, 10),
@@ -197,7 +197,7 @@ test_fixed_parameters_matrix <- function() {
 
 test_illegal_fixed_parameters_matrix <- function() {
   checkException(
-    spec(
+    hmm(
       K = 1, R = 1,
       observation = Gaussian(
         mu    = Gaussian(0, 10),
@@ -212,7 +212,7 @@ test_illegal_fixed_parameters_matrix <- function() {
 
 test_illegal_fixed_parameters_cholesky_cov_matrix <- function() {
   checkException(
-    spec(
+    hmm(
       K = 1, R = 1,
       observation = MVGaussian(
         mu    = Gaussian(0, 10),

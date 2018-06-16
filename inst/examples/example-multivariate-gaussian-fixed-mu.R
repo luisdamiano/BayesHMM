@@ -1,6 +1,6 @@
 library(rstan)
 
-mySpec <- spec(
+mySpec <- hmm(
   K = 3, R = 2,
   observation = MVGaussian(
     mu    = c(0, 0),
@@ -18,7 +18,7 @@ y = rbind(
   MASS::mvrnorm(n = 100, mu = c(  0,   0), Sigma = matrix(c(3, 0.6, 0.6, 3), 2, 2))
 )
 
-myFit <- run(mySpec, y = y, chains = 1, iter = 500)
+myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
 
 rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
 
