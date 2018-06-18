@@ -23,7 +23,8 @@ block_data.TVHMMSpecification <- function(spec) {
 block_parameters.TVHMMSpecification <- function(spec) {
   "
   simplex[K] pi;                    // initial state probabilities
-  matrix[K, S] sBeta;               // transition model regressors
+  matrix[K, S] sBeta[K];            // transition model regressors
+                                    // sBeta[to, from, s regressors]
   "
 }
 
@@ -32,17 +33,26 @@ block_tparameters.TVHMMSpecification <- function(spec) {
   vector[K] A[T, K];
   vector[T] logalpha[K];
   vector[K] logpi;
-  vector[K] logA[T, K];
+  vector[K] logA[T, K];             // transition logA[t, from, to]
 
   // 1. Fill initial distribution vector (if needed)
   logpi = log(pi);
 
   // 2. Fill transition matrix (if needed)
   for (t in 1:T) {
-    for (k in 1:K) { // k
-      A[t, k] = softmax((s[t] * sBeta')');
-      logA[t, k] = log(A[t, k]);
+    for (i in 1:K) { // i = previous (t-1)
+      A[t, i] = softmax((s[t] * sBeta[i]')');
     }
+    logA[t] = log(A[t]);
+    //for (j in 1:K) { // j = current (t)
+    //  vector[K] transitionCol = softmax((s[t] * sBeta[j]')');
+    //  for (i in 1:K) { // i = previous (t-1)
+    //    A[t][i, j] = transitionCol[i];
+    //  }
+    //  logA[t] = log(A[t]);
+    //A[t][ , j] = softmax((s[t] * sBeta[j]')');
+    //logA[t][ , j] = log(A[t, , j]);
+    //}
   }
   "
 }
