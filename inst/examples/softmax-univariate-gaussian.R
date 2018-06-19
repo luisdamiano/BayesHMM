@@ -44,16 +44,20 @@ tvhmm_sim <- function(T, K, u, w, p.init) {
   )
 }
 
-mySpec <- tvhmm(
+mySpec <- hmm(
   K = 2, R = 1,
   observation = Gaussian(
     mu    = Gaussian(0, 10),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
-  transition  = Default(),
-  name = "TVHMM Univariate Gaussian"
+  initial     = Default(),
+  transition  = Softmax(
+    sBeta = Gaussian(0, 5)
+  ),
+  name = "TVHMM Softmax Univariate Gaussian"
 )
+
+is.TVTransition(mySpec)
 
 set.seed(9000)
 s <- cbind(
@@ -84,14 +88,9 @@ myData <- list(
   R = 1
 )
 
-# myFit <- run(mySpec, data = myData, chains = 1, iter = 500, writeDir = "out")
+browseURL(write_model(mySpec, noLogLike = FALSE, "out"))
 
-myFit <- stan(
-  file = "out/TVHMMUnivariateGaussian/model2.stan",
-  data = myData,
-  chains = 1,
-  iter = 500
-)
+myFit <- run(mySpec, data = myData, chains = 1, iter = 500, writeDir = "out")
 
 rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
 

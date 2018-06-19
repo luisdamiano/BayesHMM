@@ -11,20 +11,13 @@ block_parameters  <- function(x) { UseMethod("block_parameters", x) }
 block_tparameters <- function(x) { UseMethod("block_tparameters", x) }
 block_generated   <- function(x) { UseMethod("block_generated", x) }
 block_target      <- function(x) { UseMethod("block_target", x) }
+
 chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
 chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
 chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
-block_functions.Specification   <- function(x) { "" }
-block_data.Specification        <- function(x) { "" }
-block_tdata.Specification       <- function(x) { "" }
-block_parameters.Specification  <- function(x) { "" }
-block_tparameters.Specification <- function(x) { "" }
-block_generated.Specification   <- function(x) { "" }
-block_target.Specification      <- function(x) { "" }
-chunk_calculate_target.Specification <- function(x) { "" }
-chunk_increase_target.Specification  <- function(x) { "" }
-chunk_zpredictive.Specification <- function(x) { "" }
+is.TVTransition <- function(x) { UseMethod("is.TVTransition", x) }
+is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
 
 spec <- function(K, R, observation = NULL, initial = NULL,
                  transition = NULL, name = "") {
@@ -36,7 +29,7 @@ spec <- function(K, R, observation = NULL, initial = NULL,
       covariates = NULL,
       density = parse_observation(observation, K, R)
     ),
-    init_prob   = list(
+    initial   = list(
       density = parse_initial(initial, K)
     ),
     transition  = list(
@@ -51,6 +44,17 @@ spec <- function(K, R, observation = NULL, initial = NULL,
 
   spec
 }
+
+block_functions.Specification   <- function(x) { "" }
+block_data.Specification        <- function(x) { "" }
+block_tdata.Specification       <- function(x) { "" }
+block_parameters.Specification  <- function(x) { "" }
+block_tparameters.Specification <- function(x) { "" }
+block_generated.Specification   <- function(x) { "" }
+block_target.Specification      <- function(x) { "" }
+chunk_calculate_target.Specification <- function(x) { "" }
+chunk_increase_target.Specification  <- function(x) { "" }
+chunk_zpredictive.Specification <- function(x) { "" }
 
 check.Specification <- function(spec) {
   # Check if R and the observation tree are consistent
@@ -112,11 +116,21 @@ is.discrete.Specification <- function(spec) {
   all(densityApply(spec$observation$density, is.discrete))
 }
 
+is.TVTransition.Specification <- function(spec) {
+  all(densityApply(spec$transition$density, is.link))
+}
+
+is.TVInitial.Specification <- function(spec) {
+  all(densityApply(spec$transition$density, is.link))
+}
+
 make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
   stanData <- list(
     K = spec$K,
     R = spec$observation$R
   )
+
+  # Each specification should work its own elements, then call nextMethod()
 
   if (!is.null(y)) {
     stanData[["T"]] <- NROW(y)

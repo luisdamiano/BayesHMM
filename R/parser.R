@@ -145,7 +145,14 @@ parse_initial <- function(initial, K) {
   if (is.null(initial)) { return(list()) }
 
   initList <- list()
-  if (is.Density(initial)) {
+  if (is.link(initial)) {
+    kList <- initial
+    kList[["k"]] <- ""
+    kList[["r"]] <- ""
+    kList[["param"]] <- "pi"
+    kName <- paste0("k")
+    initList[[kName]] <- kList
+  } else if (is.Density(initial)) {
     # Case 1: One multivariate density.
     # Action: Repeat the univariate density for each state K.
     if (is.multivariate(initial)) {
@@ -195,7 +202,14 @@ parse_transition <- function(transition, K) {
   if (is.null(transition)) { return(list()) }
 
   transList <- list()
-  if (is.Density(transition)) {
+  if (is.link(transition)) {
+    kList <- transition
+    kList[["k"]] <- ""
+    kList[["r"]] <- ""
+    kList[["param"]] <- "pi"
+    kName <- paste0("k")
+    transList[[kName]] <- kList
+  } else if (is.Density(transition)) {
     if (is.multivariate(transition)) {
       # Case 1: only one multivariate density given.
       # Action: repeat the density for each row in the transition matrix

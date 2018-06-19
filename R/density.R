@@ -5,10 +5,12 @@ generated          <- function(x) { UseMethod("generated", x) }
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
+is.link            <- function(x) { UseMethod("is.link", x) }
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 logLike            <- function(x) { UseMethod("logLike", x) }
 parameters         <- function(x) { UseMethod("parameters", x) }
+link               <- function(x) { UseMethod("link", x) }
 freeParameters     <- function(x) { UseMethod("freeParameters", x) }
 fixedParameters    <- function(x) { UseMethod("fixedParameters", x) }
 prior              <- function(x) { UseMethod("prior", x) }
@@ -60,6 +62,12 @@ PriorOnlyDensity <- function(name, ...) {
 PriorOnlyMultivariateDensity <- function(name, ...) {
   x <- MultivariateDensity(name, ...)
   class(x) <- append(class(x), "PriorOnlyDensity", 1)
+  x
+}
+
+LinkDensity <- function(name, ...) {
+  x <- Density(name, ...)
+  class(x) <- append(class(x), "LinkDensity", 1)
   x
 }
 
@@ -131,24 +139,32 @@ is.multivariate.MultivariateDensity <- function(x) { TRUE }
 is.discrete.Density <- function(x) { FALSE }
 is.discrete.DiscreteDensity <- function(x) { TRUE }
 
+is.link.Density <- function(x) { FALSE }
+is.link.LinkDensity <- function(x) { TRUE }
+
 constants.Density <- function(x) { "" }
 
 freeParameters.PriorOnlyDensity <- function(x) {
-  stop("This density is only meant to be used as a prior.")
+  "" # stop("This density is only meant to be used as a prior.")
 }
 
 fixedParameters.PriorOnlyDensity <- function(x) {
-  stop("This density is only meant to be used as a prior.")
+  "" # stop("This density is only meant to be used as a prior.")
 }
 
 generated.PriorOnlyDensity <- function(x) {
-  stop("This density is only meant to be used as a prior.")
+  "" # stop("This density is only meant to be used as a prior.")
 }
 
 getFreeParameters.PriorOnlyDensity <- function(x) {
-  stop("This density is only meant to be used as a prior.")
+  "" # stop("This density is only meant to be used as a prior.")
 }
 
 logLike.PriorOnlyDensity <- function(x) {
-  stop("This density is only meant to be used as a prior.")
+  "" # stop("This density is only meant to be used as a prior.")
 }
+
+link.Density <- function(x) { "" }
+
+is.TVInitial.Density <- function(x) { FALSE }
+is.TVTransition.Density <- function(x) { FALSE }

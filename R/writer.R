@@ -49,13 +49,21 @@ write_constants <- function(spec, writeDir) {
 
 write_parameters <- function(spec, writeDir) {
   write_stanfile(
-    densityApply(spec$observation$density, fixedParameters),
+    c(
+      densityApply(spec$observation$density, fixedParameters),
+      densityApply(spec$initial$density, fixedParameters),
+      densityApply(spec$transition$density, fixedParameters)
+    ),
     writeDir,
     "fixedParameters.stan"
   )
 
   write_stanfile(
-    densityApply(spec$observation$density, freeParameters),
+    c(
+      densityApply(spec$observation$density, freeParameters),
+      densityApply(spec$initial$density, freeParameters),
+      densityApply(spec$transition$density, freeParameters)
+    ),
     writeDir,
     "freeParameters.stan"
   )
@@ -84,6 +92,28 @@ write_logLikelihood <- function(spec, noLogLike, writeDir) {
   )
 }
 
+write_link <- function(spec, writeDir) {
+  write_stanfile(
+    if (all(densityApply(spec$initial$density, is.link))) {
+      densityApply(spec$initial$density, link)
+      } else {
+        ""
+      },
+    writeDir,
+    "initialLink.stan"
+  )
+
+  write_stanfile(
+    if (all(densityApply(spec$transition$density, is.link))) {
+      densityApply(spec$transition$density, link)
+    } else {
+      ""
+    },
+    writeDir,
+    "transitionLink.stan"
+  )
+}
+
 write_target <- function(spec, writeDir) {
   write_stanfile(
     chunk_calculate_target(spec),
@@ -99,8 +129,20 @@ write_target <- function(spec, writeDir) {
 }
 
 write_priors <- function(spec, writeDir) {
-  initPriors <- densityApply(spec$init_prob$density, prior)
-  tranPriors <- densityApply(spec$transition$density, prior)
+  initPriors <-
+    if (all(!densityApply(spec$initial$density, is.link))) {
+      densityApply(spec$initial$density, prior)
+    } else {
+      ""
+    }
+
+  tranPriors <-
+    if (all(!densityApply(spec$transition$density, is.link))) {
+      densityApply(spec$transition$density, prior)
+    } else {
+      ""
+    }
+    # densityApply(spec$transition$density, prior)
   obsPriors  <- densityApply(
     spec$observation$density,
     function(x) {
@@ -149,6 +191,7 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   write_data(spec, noLogLike, writeDir)
   write_tdata(spec, writeDir)
   write_constants(spec, writeDir)
+  write_link(spec, writeDir)
   write_parameters(spec, writeDir)
   write_tparameters(spec, writeDir)
   write_logLikelihood(spec, noLogLike, writeDir)
