@@ -71,16 +71,10 @@ LinkDensity <- function(name, ...) {
   x
 }
 
-`+.Density` <- function(x, y) {
-  if (is.Density(x))
-    return(list(x, y))
-
-  c(x, list(y))
-}
-
 is.Density <- function(x) {
   "Density" %in% class(x)
 }
+
 
 data.Density <- function(x, noLogLike) {
   "matrix[T, R] y;  // observations"
@@ -168,3 +162,16 @@ link.Density <- function(x) { "" }
 
 is.TVInitial.Density <- function(x) { FALSE }
 is.TVTransition.Density <- function(x) { FALSE }
+
+`+.Density` <- function(x, y) {
+  if (!is.Density(y)) {
+    stop("Error: Please use the plus sign to join two Density object")
+  }
+
+  l <- if (is.Density(x)) { list(x, y) } else { c(x, list(y)) }
+  structure(l, class = c("DensityList"))
+}
+
+is.DensityList <- function(x) {
+  all(lapply(x, is.Density))
+}

@@ -19,7 +19,7 @@ generated.Dirichlet <- function(x) {
 }
 
 getParameterNames.Dirichlet <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  return(c("alpha"))
 }
 
 logLike.Dirichlet <- function(x) {

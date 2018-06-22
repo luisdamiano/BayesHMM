@@ -1,167 +1,55 @@
-parse_observation_single_univariate <- function(observation, K, R) {
-  obsList <- list()
-  for (k in 1:K) {
-    kList <- list()
-    kName <- paste0("k", k)
-    for (r in 1:R) {
-      rList <- observation
-      rList[["k"]] <- k
-      rList[["r"]] <- r
-      rName <- paste0(kName, "r", r)
-      kList[[rName]] <- rList
-    }
-    obsList[[kName]] <- kList
-  }
-  obsList
-}
-
-parse_observation_single_multivariate <- function(observation, K, R) {
-  obsList <- list()
-  for (k in 1:K) {
-    kList <- observation
-    kList[["k"]] <- k
-    kList[["r"]] <- 1
-    kName <- paste0("k", k)
-    obsList[[kName]] <- kList
-  }
-  obsList
-}
-
-parse_observation_multiple <- function(observation, K, R) {
-  obsList <- list()
-  for (k in 1:K) {
-    kList <- list()
-    kName <- paste0("k", k)
-    # Case 2a: K univariate densities given.
-    # Action : Repeat Density for each R dimension.
-    if (is.Density(observation[[k]])) {
-      if (is.multivariate(observation[[k]])) {
-        rList <- observation[[k]]
-        rList[["k"]] <- k
-        rList[["r"]] <- 1
-        rName <- paste0(kName, "r")
-        kList[[rName]] <- rList
-      } else {
-        for (r in 1:R) {
-          rList <- observation[[k]]
-          rList[["k"]] <- k
-          rList[["r"]] <- r
-          rName <- paste0(kName, "r", r)
-          kList[[rName]] <- rList
-        }
-      }
-    } else {
-      # Case 2b: K univariate densities with R densities in each.
-      # Action : Direct assignment.
-      stop("TO BE IMPLEMENTED (check if this makes sense first).")
-    }
-
-    obsList[[kName]] <- kList
-  }
-  obsList
-}
-
-parse_observation_priors <- function(observation, K, R) {
-  obsList <- observation
-  for (k in 1:length(obsList)) {
-    if (is.Density(obsList[[k]])) {
-      lDensity <- obsList[[k]]
-      lParam   <- getFreeParameters(lDensity)
-      if (length(lParam) > 0) {
-        for (p in 1:length(lParam)) {
-          nameParam <- names(lParam)[p]
-          if (is.Density(obsList[[k]][[nameParam]])) {
-            # Move down elements from parent to child
-            obsList[[k]][[nameParam]][["K"]]     <- K
-            obsList[[k]][[nameParam]][["R"]]     <- R
-            obsList[[k]][[nameParam]][["k"]]     <- lDensity$k
-            obsList[[k]][[nameParam]][["r"]]     <- lDensity$r
-            obsList[[k]][[nameParam]][["param"]] <- nameParam
-            obsList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
-
-            # Move down to nested elements from parent to grandchildren ^_^
-            nestedParams <- (1:length(obsList[[k]][[nameParam]]))[sapply(obsList[[k]][[nameParam]], is.Density)]
-            if (any(nestedParams)) {
-              for (np in 1:length(nestedParams)) {
-                nameNestedParam <- nestedParams[np]
-                obsList[[k]][[nameParam]][[nameNestedParam]][["K"]]     <- K
-                obsList[[k]][[nameParam]][[nameNestedParam]][["R"]]     <- R
-                obsList[[k]][[nameParam]][[nameNestedParam]][["k"]]     <- lDensity$k
-                obsList[[k]][[nameParam]][[nameNestedParam]][["r"]]     <- np
-                obsList[[k]][[nameParam]][[nameNestedParam]][["param"]] <- nameParam
-                obsList[[k]][[nameParam]][[nameNestedParam]][["multivariate"]] <- is.multivariate(lDensity)
-              }
-            }
-
-            # Move up elements from child to parent
-            if (!is.null(obsList[[k]][[nameParam]][["bounds"]])) {
-              obsList[[k]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[nameParam]][["bounds"]]
-            }
-          }
-        }
-      }
-    } else {
-      for (r in 1:length(obsList[[k]])) {
-        lDensity <- obsList[[k]][[r]]
-        lParam   <- getFreeParameters(lDensity)
-        if (length(lParam) > 0) {
-          for (p in 1:length(lParam)) {
-            nameParam <- names(lParam)[p]
-
-            # Move down elements from parent to child
-            obsList[[k]][[r]][[nameParam]][["K"]]     <- K
-            obsList[[k]][[r]][[nameParam]][["R"]]     <- R
-            obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
-            obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r
-            obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
-            obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
-
-            # Move up elements from child to parent
-            # if (!is.null(obsList[[k]][[r]][[nameParam]][["bounds"]])) {
-            if ("bounds" %in% names(obsList[[k]][[r]][[nameParam]])) {
-              obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[r]][[nameParam]][["bounds"]]
-            }
-          }
-        }
-      }
-    }
-  }
-  obsList
-}
-
 parse_observation2 <- function(observation, K, R) {
   if (is.null(observation)) {
-    stop("You must provide with an observation model. Please, read ?hmm.")
+    stop("You must set an observation model. Please, read ?spec.")
   }
 
-  obsList <- list()
+  # Length  | Density             | FUN
+  # 1       | MultivariateDensity | repeat_K
+  # 1       | UnivariateDensity   | repeat_KxR
+  # K       | MultivariateDensity | repeat_none
+  # K       | UnivariateDensity   | repeat_R
+  # R       | UnivariateDensity   | repeat_K
+  # KxR     | UnivariateDensity   | repeat_none
+
+  FUN <- ""
   if (is.Density(observation)) {
-    if (is.multivariate(observation)) {
-      # Case 1.a: one multivariate density given.
-      # Action  : repeat the density for each one of the K states
-      obsList <- parse_observation_single_multivariate(observation, K, R)
-    } else {
-      # Case 1.b: one univaraite density given.
-      # Action  : repeat the density for each one of the R dimensions in each one of the K states
-      obsList <- parse_observation_single_univariate(observation, K, R)
-    }
+    if ( is.multivariate(observation)) {  FUN <- "K"   }
+    if (!is.multivariate(observation)) {  FUN <- "KxR" }
+  } else if (is.DensityList(observation)) {
+    len <- length(observation)
+    mvd <- all(lapply(observation, is.multivariate))
+
+    if (len == K     &  mvd)     { FUN <- "none"    }
+    if (len == K     & !mvd)     { FUN <- "R"       }
+    if (len == R     &  mvd)     { FUN <- "invalid" }
+    if (len == R     & !mvd)     { FUN <- "K"       }
+    if (len == K * R &  mvd)     { FUN <- "invalid" }
+    if (len == K * R & !mvd)     { FUN <- "none"    }
+  } else {
+    FUN <- "invalid"
   }
 
-  if (is.DensityList(observation)) {
-    if (length(observation) != K) {
-      stop(
-        sprintf("I received %s densities. Expected 1 or K = %s.", length(observation), K)
-      )
-    }
-
-    # Case 2: K densities given.
-    obsList <- parse_observation_multiple(observation, K, R)
-  }
-
+  obsList <- FUN(observation, K, R)
   # Expand priors
   # k state index; r output dimension index; p parameter index
-
   obsList <- parse_observation_priors(obsList, K, R)
+  obsList
+}
+
+parse_observation_build_none <- function(observation, K, R) {
+  obsList <- list()
+  for (k in 1:K) {
+    kList <- list()
+    kName <- paste0("k", k)
+    rList <- observation[[k]]
+    rList[["K"]] <- K
+    rList[["R"]] <- R
+    rList[["k"]] <- k
+    rList[["r"]] <- 1
+    rName <- paste0(kName, "r")
+    kList[[rName]] <- rList
+    obsList[[kName]] <- kList
+  }
   obsList
 }
 

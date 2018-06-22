@@ -30,11 +30,11 @@ spec <- function(K, R, observation = NULL, initial = NULL,
       density = parse_observation(observation, K, R)
     ),
     initial   = list(
-      density = parse_initial(initial, K)
+      density = parse_initial(initial, K, R)
     ),
     transition  = list(
       covariates = NULL,
-      density = parse_transition(transition, K)
+      density = parse_transition(transition, K, R)
     )
   )
 
