@@ -60,18 +60,21 @@ check_cholesky_factor_cor <- function(x) {
 
 check_list <- function(x, len, name) {
   if (!is.list(x) || length(x) != len)
-    stop(
-      sprintf("%s must be a list with %s elements.", name, len)
-    )
+    stop(sprintf("%s must be a list with %s elements.", name, len))
 }
 
 check_whole <- function(x, name) {
   if (length(x) != 1
       || !is.numeric(x)
       || !(abs(x - round(x)) < .Machine$double.eps^0.5))
-    stop(
-      sprintf("%s must be an integer.", name)
-    )
+    stop(sprintf("%s must be an integer.", name))
+}
+
+check_natural <- function(x, name) {
+  check_whole(x, name)
+  if (x < 1) {
+    stop(sprintf("%s must be a positive integer (> 0).", name))
+  }
 }
 
 collapse <- function(...) {

@@ -105,7 +105,7 @@ getFreeParameters.Density <- function(x) {
       simplify = FALSE
     )
 
-  l[!sapply(l, is.null)]
+  do.call(`+`, l[!sapply(l, is.null)])
 }
 
 getFixedParameters.Density <- function(x) {
@@ -173,5 +173,9 @@ is.TVTransition.Density <- function(x) { FALSE }
 }
 
 is.DensityList <- function(x) {
-  all(lapply(x, is.Density))
+  all(sapply(x, is.Density))
+}
+
+is.multivariate.DensityList <- function(x) {
+  all(sapply(x, is.multivariate))
 }

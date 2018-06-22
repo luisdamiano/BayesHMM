@@ -21,13 +21,16 @@ is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
 
 spec <- function(K, R, observation = NULL, initial = NULL,
                  transition = NULL, name = "") {
+  check_natural(K, "K")
+  check_natural(R, "R")
+
   l <- list(
     name = name,
     K    = K,
     observation = list(
       R = R,
       covariates = NULL,
-      density = parse_observation(observation, K, R)
+      density = parse_observation2(observation, K, R)
     ),
     initial   = list(
       density = parse_initial(initial, K, R)
@@ -40,7 +43,7 @@ spec <- function(K, R, observation = NULL, initial = NULL,
 
   spec <- structure(l, class = "Specification")
 
-  check(spec)
+  # check(spec)
 
   spec
 }

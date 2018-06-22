@@ -68,7 +68,7 @@ exCase4  <- hmm(
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
-    ) %cond%
+    ) +
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
@@ -112,7 +112,7 @@ exCase6  <- hmm(
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
-    ) %cond%
+    ) +
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
@@ -120,7 +120,7 @@ exCase6  <- hmm(
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
-    ) %cond%
+    ) +
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
@@ -128,7 +128,7 @@ exCase6  <- hmm(
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
-    ) %cond%
+    ) +
     Gaussian(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
@@ -137,3 +137,47 @@ exCase6  <- hmm(
   transition  = Default(),
   name = "Different univariate densities for every pair of state and output variable"
 )
+
+# UNIVARIATE Observation model --------------------------------------------
+K = 3
+R = 1
+# Case 7. A different univariate density for each each state
+#   Input: K univariate densities
+#   Behaviour: Nothing
+
+exCase7  <- hmm(
+  K = K, R = R,
+  observation =
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ) +
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ) +
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ),
+  initial     = Default(),
+  transition  = Default(),
+  name = "A different univariate density for each each state"
+)
+
+# Case 8. Same univariate density for every state
+#   Input: One univariate density
+#   Behaviour: Repeat input K times
+
+exCase8  <- hmm(
+  K = K, R = R,
+  observation =
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ),
+  initial     = Default(),
+  transition  = Default(),
+  name = "Same multivariate density for every state"
+)
+
