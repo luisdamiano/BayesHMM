@@ -105,7 +105,20 @@ getFreeParameters.Density <- function(x) {
       simplify = FALSE
     )
 
-  do.call(`+`, l[!sapply(l, is.null)])
+  l <- l[!sapply(l, is.null)]
+
+  if (is.empty(l)) {
+    return(NULL)
+  } else {
+    dl <-
+      if (length(l) == 1 ) {
+        `+.Density`(l)
+      } else {
+        Reduce(`+.Density`, l)
+      }
+    names(dl) <- names(l)
+    return(dl)
+  }
 }
 
 getFixedParameters.Density <- function(x) {
@@ -163,12 +176,17 @@ link.Density <- function(x) { "" }
 is.TVInitial.Density <- function(x) { FALSE }
 is.TVTransition.Density <- function(x) { FALSE }
 
-`+.Density` <- function(x, y) {
-  if (!is.Density(y)) {
+`+.Density` <- function(x, y = NULL) {
+  if (!is.null(y) & !is.Density(y)) {
     stop("Error: Please use the plus sign to join two Density object")
   }
 
-  l <- if (is.Density(x)) { list(x, y) } else { c(x, list(y)) }
+  l <-
+    if (is.null(y)) {
+      if (is.DensityList(x)) { x } else { list(x) }
+    } else {
+      if (is.DensityList(x)) { c(x, list(y)) } else { list(x, y) }
+    }
   structure(l, class = c("DensityList"))
 }
 

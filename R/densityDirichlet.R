@@ -7,11 +7,13 @@ Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
 }
 
 freeParameters.Dirichlet <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  ""
+  # stop("TO BE IMPLEMENTED.")
 }
 
 fixedParameters.Dirichlet <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  ""
+  # stop("TO BE IMPLEMENTED.")
 }
 
 generated.Dirichlet <- function(x) {

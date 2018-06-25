@@ -30,7 +30,7 @@ spec <- function(K, R, observation = NULL, initial = NULL,
     observation = list(
       R = R,
       covariates = NULL,
-      density = parse_observation2(observation, K, R)
+      density = parse_observation(observation, K, R)
     ),
     initial   = list(
       density = parse_initial(initial, K, R)
@@ -124,7 +124,7 @@ is.TVTransition.Specification <- function(spec) {
 }
 
 is.TVInitial.Specification <- function(spec) {
-  all(densityApply(spec$transition$density, is.link))
+  all(densityApply(spec$initial$density, is.link))
 }
 
 make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {

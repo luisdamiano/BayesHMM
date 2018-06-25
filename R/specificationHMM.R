@@ -23,22 +23,33 @@ block_functions.HMMSpecification <- function(spec) {
 }
 
 block_data.HMMSpecification <- function(spec) {
-  if (is.TVTransition(spec)) {
-    "
-    int<lower = 1> S; // number of transition model predictors
-    matrix[T, S] s;   // transition model predictors
-    "
-  } else {
-    ""
-  }
+  strInitial <-
+    if (is.TVInitial(spec)) {
+      "
+      int<lower = 1> S_init;    // number of initial model predictors
+      vector[S_init] s_init;    // initial model predictors
+      "
+    } else {
+      ""
+    }
+
+  strTransition <-
+    if (is.TVTransition(spec)) {
+      "
+      int<lower = 1> S; // number of transition model predictors
+      matrix[T, S] s;   // transition model predictors
+      "
+    } else {
+      ""
+    }
+
+  c(strInitial, strTransition)
 }
 
 block_parameters.HMMSpecification <- function(spec) {
   strInitial <-
     if (is.TVInitial(spec)) {
-      "
-      simplex[K] pi;                    // initial state probabilities
-      "
+      ""
     } else {
       "
       simplex[K] pi;                    // initial state probabilities
@@ -47,10 +58,7 @@ block_parameters.HMMSpecification <- function(spec) {
 
   strTransition <-
     if (is.TVTransition(spec)) {
-      # "
-      #   matrix[K, S] sBeta[K];            // transition model regressors
-      #                                     // sBeta[to, from, s regressors]
-      # "
+      ""
     } else {
       "
       simplex[K] A[K];                  // transition probabilities
@@ -58,42 +66,78 @@ block_parameters.HMMSpecification <- function(spec) {
       "
     }
 
-  c(
-    strInitial,
-    strTransition
-  )
+  c(strInitial, strTransition)
 }
 
 block_tparameters.HMMSpecification <- function(spec) {
-  if (is.TVTransition(spec)) {
-    # A[t, i] = softmax((s[t] * sBeta[i]')');
+  strAll <-
     "
-    vector[K] A[T, K];
     vector[T] logalpha[K];
     vector[K] logpi;
-    vector[K] logA[T, K];             // transition logA[t, from, to]
+    "
 
-    // 1. Fill initial distribution vector (if needed)
-    logpi = log(pi);
+  strInitial <-
+    if (is.TVInitial(spec)) {
+      strAll <- paste0(strAll, "\n", "vector[K] pi;")
 
-    // 2. Fill transition matrix (if needed)
-    for (t in 1:T) {
-      for (i in 1:K) { // i = previous (t-1)
-        #include transitionLink.stan
-      }
-      logA[t] = log(A[t]);
+      "
+      #include initialLink.stan
+      "
+    } else {
+      "logpi = log(pi);"
     }
-    "
-  } else {
-    "
-    vector[T] logalpha[K];
-    vector[K] logpi;
-    vector[K] logA[K];
 
-    logpi = log(pi);
-    logA = log(A);
-    "
-  }
+  strTransition <-
+    if (is.TVTransition(spec)) {
+      strAll <- paste0(strAll, "\n", "vector[K] A[T, K];",
+                       "\n", "    vector[K] logA[T, K];             // transition logA[t, from, to]")
+
+      "
+        for (t in 1:T) {
+          for (i in 1:K) { // i = previous (t-1)
+            #include transitionLink.stan
+          }
+          logA[t] = log(A[t]);
+        }
+      "
+    } else {
+      strAll <- paste0(strAll, "\n", "    vector[K] logA[K];             // transition logA[from, to]")
+      "
+      logA = log(A);
+      "
+    }
+
+  c(strAll, strInitial, strTransition)
+
+  # if (is.TVTransition(spec)) {
+  #   sprintf(
+  #     "
+  #     vector[K] A[T, K];
+  #     vector[T] logalpha[K];
+  #     vector[K] logpi;
+  #     vector[K] logA[T, K];             // transition logA[t, from, to]
+  #
+  #     %s
+  #
+  #     for (t in 1:T) {
+  #       for (i in 1:K) { // i = previous (t-1)
+  #         #include transitionLink.stan
+  #       }
+  #       logA[t] = log(A[t]);
+  #     }
+  #     ",
+  #     strInitial
+  #   )
+  # } else {
+  #   "
+  #   vector[T] logalpha[K];
+  #   vector[K] logpi;
+  #   vector[K] logA[K];
+  #
+  #   logpi = log(pi);
+  #   logA = log(A);
+  #   "
+  # }
 }
 
 block_generated.HMMSpecification <- function(spec) {

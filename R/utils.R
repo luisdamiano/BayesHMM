@@ -183,7 +183,7 @@ matrix_to_stan <- function(x) {
 }
 
 is.empty <- function(x) {
-  is.null(x) |  length(x) == 0
+  is.null(x) | length(x) == 0
 }
 
 is.freeParameter <- function(x) {
