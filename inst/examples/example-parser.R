@@ -3,7 +3,7 @@
 K = 3
 R = 2
 
-# Case 1. A different multivariate density for each each state
+# Case 1. A different multivariate density for each state
 #   Input: K multivariate densities
 #   Behaviour: Nothing
 
@@ -410,3 +410,36 @@ exCase18 <- hmm(
 )
 
 write_model(exCase18, noLogLike = FALSE, "out")
+
+# A FULLY COMPLEX MODEL ---------------------------------------------------
+
+# Case 19. A link in both the transition and initial distribution.
+#   Input: A link in both the transition and initial distribution.
+#   Behaviour: Nothing
+exCase19 <- hmm(
+  K = K, R = R,
+  observation =
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ) +
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ) +
+    Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Gaussian(0, 10, bounds = list(0, NULL))
+    ),
+  initial =
+    InitialSoftmax(
+      sBeta = Gaussian(mu = 0, sigma = 1)
+    ),
+  transition  =
+    TransitionSoftmax(
+      sBeta = Gaussian(mu = 0, sigma = 1)
+    ),
+  name = "Fully Complex Model"
+)
+
+write_model(exCase19, noLogLike = FALSE, "out")

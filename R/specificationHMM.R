@@ -23,6 +23,12 @@ block_functions.HMMSpecification <- function(spec) {
 }
 
 block_data.HMMSpecification <- function(spec) {
+  strAll <-
+    "
+    int<lower = 1> K; // number of hidden states
+    int<lower = 1> R; // dimension of the observation vector
+    "
+
   strInitial <-
     if (is.TVInitial(spec)) {
       "
@@ -43,7 +49,7 @@ block_data.HMMSpecification <- function(spec) {
       ""
     }
 
-  c(strInitial, strTransition)
+  c(strAll, strInitial, strTransition)
 }
 
 block_parameters.HMMSpecification <- function(spec) {
@@ -89,8 +95,13 @@ block_tparameters.HMMSpecification <- function(spec) {
 
   strTransition <-
     if (is.TVTransition(spec)) {
-      strAll <- paste0(strAll, "\n", "vector[K] A[T, K];",
-                       "\n", "    vector[K] logA[T, K];             // transition logA[t, from, to]")
+      strAll <- paste0(
+        strAll,
+        "\n",
+        "vector[K] A[T, K];",
+        "\n",
+        "\t\tvector[K] logA[T, K];\t\t\t\t\t\t // transition logA[t, from, to]"
+      )
 
       "
         for (t in 1:T) {
@@ -101,43 +112,17 @@ block_tparameters.HMMSpecification <- function(spec) {
         }
       "
     } else {
-      strAll <- paste0(strAll, "\n", "    vector[K] logA[K];             // transition logA[from, to]")
+      strAll <- paste0(
+        strAll,
+        "\n",
+        "\t\tvector[K] logA[K];\t\t\t\t\t\t // transition logA[from, to]"
+      )
       "
       logA = log(A);
       "
     }
 
   c(strAll, strInitial, strTransition)
-
-  # if (is.TVTransition(spec)) {
-  #   sprintf(
-  #     "
-  #     vector[K] A[T, K];
-  #     vector[T] logalpha[K];
-  #     vector[K] logpi;
-  #     vector[K] logA[T, K];             // transition logA[t, from, to]
-  #
-  #     %s
-  #
-  #     for (t in 1:T) {
-  #       for (i in 1:K) { // i = previous (t-1)
-  #         #include transitionLink.stan
-  #       }
-  #       logA[t] = log(A[t]);
-  #     }
-  #     ",
-  #     strInitial
-  #   )
-  # } else {
-  #   "
-  #   vector[T] logalpha[K];
-  #   vector[K] logpi;
-  #   vector[K] logA[K];
-  #
-  #   logpi = log(pi);
-  #   logA = log(A);
-  #   "
-  # }
 }
 
 block_generated.HMMSpecification <- function(spec) {

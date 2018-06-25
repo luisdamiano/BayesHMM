@@ -4,6 +4,13 @@ mixture <- function(...) {
   x
 }
 
+block_data.MixtureSpecification <- function(spec) {
+  "
+  int<lower = 1> K; // number of hidden states
+  int<lower = 1> R; // dimension of the observation vector
+  "
+}
+
 block_functions.MixtureSpecification <- function(spec) {
   ""
 }

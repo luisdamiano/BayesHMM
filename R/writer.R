@@ -14,8 +14,8 @@ write_functions <- function(spec, writeDir) {
 }
 
 write_data <- function(spec, noLogLike, writeDir) {
-  strK    <- "int<lower = 1> K; // number of hidden states"
-  strR    <- "int<lower = 1> R; // dimension of the observation vector"
+  # strK    <- "int<lower = 1> K; // number of hidden states"
+  # strR    <- "int<lower = 1> R; // dimension of the observation vector"
   strSpec <- block_data(spec)
   strObs  <- densityCollect(spec$observation$density, data, noLogLike = noLogLike)
     # if (noLogLike) {
@@ -25,7 +25,7 @@ write_data <- function(spec, noLogLike, writeDir) {
     # }
 
   write_stanfile(
-    c(strK, strR, strSpec, strObs),
+    c(strSpec, strObs),
     writeDir,
     "data.stan"
   )

@@ -1,5 +1,6 @@
 check         <- function(x, ...) { UseMethod("check", x) }
 run           <- function(x, ...) { UseMethod("run", x) }
+fit           <- function(x, ...) { UseMethod("fit", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
 make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
@@ -12,9 +13,13 @@ block_tparameters <- function(x) { UseMethod("block_tparameters", x) }
 block_generated   <- function(x) { UseMethod("block_generated", x) }
 block_target      <- function(x) { UseMethod("block_target", x) }
 
+browse_model      <- function(x) { UseMethod("browse_model", x) }
+
 chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
 chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
 chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
+
+extract_obs <- function(x) { UseMethod("extract_obs", x) }
 
 is.TVTransition <- function(x) { UseMethod("is.TVTransition", x) }
 is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
@@ -105,10 +110,15 @@ run.Specification <- function(spec, data = NULL, control = NULL,
     control
   )
 
-  fit <- do.call(rstan::stan, stanDots)
-  attr(fit, "BayesHMM.filename") <- stanFile
+  stanFit <- do.call(rstan::stan, stanDots)
+  attr(stanFit, "filename") <- stanFile
+  attr(stanFit, "spec") <- spec
 
-  return(fit)
+  return(stanFit)
+}
+
+fit.Specification <- function(spec, y, ...) {
+  run(spec, data = make_data(spec, y), ...)
 }
 
 is.multivariate.Specification <- function(spec) {
@@ -136,6 +146,9 @@ make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
   # Each specification should work its own elements, then call nextMethod()
 
   if (!is.null(y)) {
+    if (!is.matrix(y) || NCOL(y) != spec$observation$R)  {
+      y <- matrix(as.numeric(y), ncol = spec$observation$R)
+    }
     stanData[["T"]] <- NROW(y)
     stanData[["y"]] <- y
   } else {
@@ -156,6 +169,10 @@ make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
   }
 
   stanData
+}
+
+browse_model.Specification <- function(spec) {
+  browseURL(write_model(spec, noLogLike = FALSE, writeDir = tempdir()))
 }
 
 setGeneric(

@@ -1,31 +1,31 @@
-parse_initial_build_priors <- function(initial, K, R) {
-  # We're sure to get a KxR list here.
-  # i.e. initList[[k]][[r]] is always valid
-  initList <- initial
-  for (k in 1:length(initList)) { # not 1:K!
-    lDensity <- initList[[k]]
-    lParam   <- getFreeParameters(lDensity)
-    if (!is.empty(lParam)) {
-      for (p in 1:length(lParam)) {
-        nameParam <- names(lParam)[p]
-
-        # Move down elements from initial density to parameters
-        initList[[k]][[nameParam]][["K"]]     <- K
-        initList[[k]][[nameParam]][["R"]]     <- R
-        initList[[k]][[nameParam]][["k"]]     <- lDensity$k #paste0("_init", lDensity$k)
-        initList[[k]][[nameParam]][["r"]]     <- lDensity$r
-        initList[[k]][[nameParam]][["param"]] <- nameParam
-        initList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
-
-        # Move up elements from parameters to initial density
-        if ("bounds" %in% names(initList[[k]][[nameParam]])) {
-          initList[[k]][[paste0(nameParam, "Bounds")]] <- initList[[k]][[nameParam]][["bounds"]]
-        }
-      }
-    }
-  }
-  initList
-}
+# parse_initial_build_priors <- function(initial, K, R) {
+#   # We're sure to get a KxR list here.
+#   # i.e. initList[[k]][[r]] is always valid
+#   initList <- initial
+#   for (k in 1:length(initList)) { # not 1:K!
+#     lDensity <- initList[[k]]
+#     lParam   <- getFreeParameters(lDensity)
+#     if (!is.empty(lParam)) {
+#       for (p in 1:length(lParam)) {
+#         nameParam <- names(lParam)[p]
+#
+#         # Move down elements from initial density to parameters
+#         initList[[k]][[nameParam]][["K"]]     <- K
+#         initList[[k]][[nameParam]][["R"]]     <- R
+#         initList[[k]][[nameParam]][["k"]]     <- lDensity$k #paste0("_init", lDensity$k)
+#         initList[[k]][[nameParam]][["r"]]     <- lDensity$r
+#         initList[[k]][[nameParam]][["param"]] <- nameParam
+#         initList[[k]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+#
+#         # Move up elements from parameters to initial density
+#         if ("bounds" %in% names(initList[[k]][[nameParam]])) {
+#           initList[[k]][[paste0(nameParam, "Bounds")]] <- initList[[k]][[nameParam]][["bounds"]]
+#         }
+#       }
+#     }
+#   }
+#   initList
+# }
 
 # Take 1 density in and repeat K times
 parse_initial_build_K <- function(initial, K, R) {
@@ -112,6 +112,6 @@ parse_initial <- function(initial, K, R) {
 
   FUN      <- match.fun(paste0("parse_initial_build_", FUN))
   initList <- FUN(initial, K, R)
-  initList <- parse_initial_build_priors(initList, K, R)
+  # initList <- parse_initial_build_priors(initList, K, R)
   initList
 }
