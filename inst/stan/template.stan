@@ -24,7 +24,7 @@ transformed parameters {
 
   // Compute loglikelihood
   for (t in 1:T) {
-    #include loglikelihood.stan
+    #include logLikelihood.stan
   }
 
   // Compute target quantity

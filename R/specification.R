@@ -1,6 +1,7 @@
 check         <- function(x, ...) { UseMethod("check", x) }
 run           <- function(x, ...) { UseMethod("run", x) }
 fit           <- function(x, ...) { UseMethod("fit", x) }
+sim           <- function(x, ...) { UseMethod("sim", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
 make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
@@ -19,7 +20,7 @@ chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
 chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
 chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
-extract_obs <- function(x) { UseMethod("extract_obs", x) }
+# extract_obs <- function(x) { UseMethod("extract_obs", x) }
 
 is.TVTransition <- function(x) { UseMethod("is.TVTransition", x) }
 is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
@@ -119,6 +120,10 @@ run.Specification <- function(spec, data = NULL, control = NULL,
 
 fit.Specification <- function(spec, y, ...) {
   run(spec, data = make_data(spec, y), ...)
+}
+
+sim.Specification <- function(spec, T = 1000, ...) {
+  run(spec, data = make_data(spec, y = NULL, T = T), ...)
 }
 
 is.multivariate.Specification <- function(spec) {

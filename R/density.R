@@ -77,11 +77,19 @@ is.Density <- function(x) {
 
 
 data.Density <- function(x, noLogLike) {
-  "matrix[T, R] y;  // observations"
+  if (noLogLike) {
+    "// No observation vector"
+  } else {
+    "matrix[T, R] y;  // observations"
+  }
 }
 
 data.DiscreteDensity <- function(x, noLogLike) {
-  "int y[T, R];     // observations"
+  if (noLogLike) {
+    "// No observation vector"
+  } else {
+    "int y[T, R];     // observations"
+  }
 }
 
 explain.Density <- function(x) {
