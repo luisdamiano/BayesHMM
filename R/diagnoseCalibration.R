@@ -9,12 +9,14 @@ diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
   paramNames <- names(paramTrue)
   rm(mySim); gc()
 
+  myModel    <- compile(spec)
+
   # 2. Fit the model to simulated dataset
   l <- vector("list", N * 100 * length(paramNames))
   for (n in 1:N) {
     myFit      <- do.call(
-      fit,
-      c(list(spec, y, seed = seed + n, switchLabels = TRUE), dots)
+      sampling,
+      c(list(spec, stanModel = myModel, y = y, seed = seed + n, switchLabels = TRUE), dots)
     )
     paramFit   <- extract_obs(myFit, permuted = FALSE)
     summaryFit <- monitor(paramFit, print = FALSE)

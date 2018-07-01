@@ -2,6 +2,8 @@ check         <- function(x, ...) { UseMethod("check", x) }
 run           <- function(x, ...) { UseMethod("run", x) }
 fit           <- function(x, ...) { UseMethod("fit", x) }
 sim           <- function(x, ...) { UseMethod("sim", x) }
+compile       <- function(x, ...) { UseMethod("compile", x) }
+sampling      <- function(x, ...) { UseMethod("sampling", x) }
 write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
 write_model   <- function(x, ...) { UseMethod("write_model", x) }
 make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
@@ -94,6 +96,46 @@ check.Specification <- function(spec) {
 
 explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
+}
+
+compile.Specification <- function(spec, priorPredictive = FALSE, writeDir = tempdir(), ...) {
+
+  stanFile <- write_model(spec, noLogLike = priorPredictive, writeDir)
+
+  stanDots <- c(
+    list(...),
+    list(
+      file       = stanFile,
+      model_name = spec$name
+    )
+  )
+
+  stanModel <- do.call(rstan::stan_model, stanDots)
+  attr(stanModel, "filename") <- stanFile
+  attr(stanModel, "spec") <- spec
+
+  return(stanModel)
+}
+
+sampling.Specification <- function(spec, stanModel = NULL, y = NULL, control = NULL,
+                                   writeDir = tempdir(), switchLabels = FALSE, ...) {
+
+  if (is.null(stanModel)) {
+    stanModel <- compile(spec, writeDir, ...)
+  }
+
+  stanData <- make_data(spec, y)
+  stanDots <- c(list(...), list(object = stanModel, data = stanData))
+
+  stanSampling <- do.call(rstan::sampling, stanDots)
+  attr(stanSampling, "filename") <- attr(stanModel, "filename")
+  attr(stanSampling, "spec") <- spec
+
+  if (switchLabels) {
+    stanSampling <- stan_sort_chain(stanSampling, reference = 1, spec$K)
+  }
+
+  return(stanSampling)
 }
 
 run.Specification <- function(spec, data = NULL, control = NULL,
