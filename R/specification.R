@@ -97,7 +97,7 @@ explain.Specification <- function(spec) {
 }
 
 run.Specification <- function(spec, data = NULL, control = NULL,
-                              writeDir = tempdir(), ...) {
+                              writeDir = tempdir(), switchLabels = FALSE, ...) {
   stanData <- data
   stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
 
@@ -114,6 +114,10 @@ run.Specification <- function(spec, data = NULL, control = NULL,
   stanFit <- do.call(rstan::stan, stanDots)
   attr(stanFit, "filename") <- stanFile
   attr(stanFit, "spec") <- spec
+
+  if (switchLabels) {
+    stanFit <- stan_sort_chain(stanFit, reference = 1, spec$K)
+  }
 
   return(stanFit)
 }
