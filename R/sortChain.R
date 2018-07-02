@@ -19,6 +19,7 @@ order_block <- function(x, y, K) {
   P     <- permutations(K, K)
   xMed  <- apply(x, 2, median)
   block <- t(sapply(1:K, function(k) {1:epb + epb * (k - 1)}))
+  if (dim(block)[1] == 1) { block <- t(block) }
 
   sqSum <- vector("numeric", nrow(P))
   for (p in 1:nrow(P)) {
@@ -33,6 +34,8 @@ order_block <- function(x, y, K) {
 sort_block <- function(x, y, K) {
   epb    <- dim(y)[2] / K # elements per block
   block  <- t(sapply(1:K, function(k) {1:epb + epb * (k - 1)}))
+  if (dim(block)[1] == 1) { block <- t(block) }
+
   y[, block[order_block(x, y, K), ]]
 }
 

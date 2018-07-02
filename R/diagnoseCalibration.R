@@ -41,9 +41,11 @@ diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
               n      = n,
               chain  = nChain,
               param  = paramNames[nParam],
+              true   = paramTrue[nParam],
               rank   = sum(paramFit[, nChain, paramName] < paramTrue[paramName]) / nIters
             ),
-            summaryFit[paramName, c("se_mean", "sd", "n_eff", "Rhat")],
+            summaryFit[paramName, ],
+            # summaryFit[paramName, c("se_mean", "sd", "n_eff", "Rhat")],
             list(
               maxTreeDepth = sum(d[, "treedepth__"] == 10),
               divergences  = sum(d[, "divergent__"])
