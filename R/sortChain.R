@@ -33,7 +33,7 @@ order_block <- function(x, y, K) {
 
 sort_block <- function(x, y, K) {
   epb    <- dim(y)[2] / K # elements per block
-  block  <- t(sapply(1:K, function(k) {1:epb + epb * (k - 1)}))
+  block  <- t(sapply(1:K, function(k) {1:epb + epb * (k - 1)})) # row = block
   if (dim(block)[1] == 1) { block <- t(block) }
 
   y[, block[order_block(x, y, K), ]]
@@ -41,7 +41,7 @@ sort_block <- function(x, y, K) {
 
 sort_chain <- function(stanfit, reference, K) {
   x <-
-    if (is.numeric(reference) & (reference %% 1 == 0)) {
+    if (is.numeric(reference) && (reference %% 1 == 0)) {
       extract_obs(stanfit, permuted = FALSE, inc_warmup = TRUE)[, reference, ]
     } else {
       reference

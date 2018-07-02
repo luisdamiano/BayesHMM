@@ -1,23 +1,34 @@
-diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
+diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = NULL, cores = NULL, ...) {
   if (is.null(seed)) { seed <- .Random.seed[1] }
   dots <- list(...)
 
   # 1. Draw a sample from the prior predictive density
-  mySim      <- do.call(sim, c(list(spec, seed = seed, T = T, chains = 1), dots))
-  y          <- extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)[1, 1, ]
-  paramTrue  <- extract_obs(mySim, permuted = FALSE)[1, ,]
-  paramNames <- names(paramTrue)
+  mySim      <- do.call(sim, list(spec, seed = seed, x = x, T = T, iter = max(N + 1, 500), chains = 1))
+  ySim       <- extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)
+  paramSim   <- extract_obs(mySim, permuted = FALSE)
+  paramNames <- dimnames(paramSim)[3][[1]]
   rm(mySim); gc()
 
+  # 2. Fit the model to simulated dataset
   myModel    <- compile(spec)
 
-  # 2. Fit the model to simulated dataset
-  l <- vector("list", N * 100 * length(paramNames))
-  for (n in 1:N) {
+  if (is.null(cores)) { cores <- parallel::detectCores() }
+  cl <- makeCluster(cores, outfile = "")
+  registerDoParallel(cl)
+  l <- foreach(n = 1:N, .combine = c, .packages = c("BayesHMM", "rstan")) %dopar% {
+    y          <- ySim[n, 1, ]
+    paramTrue  <- paramSim[n, , ]
     myFit      <- do.call(
       sampling,
-      c(list(spec, stanModel = myModel, y = y, seed = seed + n, switchLabels = TRUE), dots)
+      c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
+
+    myFit      <- stan_sort_chain(
+      myFit,
+      do.call(rbind, lapply(1:T, function(x) { paramTrue } )),
+      spec$K
+    )
+
     paramFit   <- extract_obs(myFit, permuted = FALSE)
     summaryFit <- monitor(paramFit, print = FALSE)
     timeFit    <- lapply(myFit@sim$samples, attr, "elapsed_time")
@@ -30,11 +41,12 @@ diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
     nChains    <- dim(paramFit)[2]
     nParams    <- dim(paramFit)[3]
 
+    l <- vector("list", nChains * nParams)
     for (nChain in seq_len(nChains)) {
       for (nParam in seq_len(nParams)) {
         paramName <- paramNames[nParam]
-        ind       <- (n - 1) * nChains * nParams + (nChain - 1) * nParams + nParam
-        l[[ind]]  <-
+        ind       <- (nChain - 1) * nParams + nParam
+        l[[ind]]    <-
           c(
             list(
               model  = spec$name,
@@ -45,7 +57,6 @@ diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
               rank   = sum(paramFit[, nChain, paramName] < paramTrue[paramName]) / nIters
             ),
             summaryFit[paramName, ],
-            # summaryFit[paramName, c("se_mean", "sd", "n_eff", "Rhat")],
             list(
               maxTreeDepth = sum(d[, "treedepth__"] == 10),
               divergences  = sum(d[, "divergent__"])
@@ -54,8 +65,10 @@ diagnose_calibration <- function(spec, N, T = 1000, seed = NULL, ...) {
           )
       }
     }
+
+    return(l)
   }
+  stopCluster(cl)
 
   do.call(rbind.data.frame, c(l[!sapply(l, is.null)], stringsAsFactors = FALSE))
 }
-

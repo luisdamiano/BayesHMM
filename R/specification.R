@@ -1,11 +1,11 @@
-check         <- function(x, ...) { UseMethod("check", x) }
-run           <- function(x, ...) { UseMethod("run", x) }
-fit           <- function(x, ...) { UseMethod("fit", x) }
-sim           <- function(x, ...) { UseMethod("sim", x) }
-compile       <- function(x, ...) { UseMethod("compile", x) }
-sampling      <- function(x, ...) { UseMethod("sampling", x) }
-write_chunks  <- function(x, ...) { UseMethod("write_chunks", x) }
-write_model   <- function(x, ...) { UseMethod("write_model", x) }
+check         <- function(spec, ...) { UseMethod("check", spec) }
+run           <- function(spec, ...) { UseMethod("run", spec) }
+fit           <- function(spec, ...) { UseMethod("fit", spec) }
+sim           <- function(spec, ...) { UseMethod("sim", spec) }
+compile       <- function(spec, ...) { UseMethod("compile", spec) }
+sampling      <- function(spec, ...) { UseMethod("sampling", spec) }
+write_chunks  <- function(spec, ...) { UseMethod("write_chunks", spec) }
+write_model   <- function(spec, ...) { UseMethod("write_model", spec) }
 make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
 
 block_functions   <- function(x) { UseMethod("block_functions", x) }
@@ -117,14 +117,14 @@ compile.Specification <- function(spec, priorPredictive = FALSE, writeDir = temp
   return(stanModel)
 }
 
-sampling.Specification <- function(spec, stanModel = NULL, y = NULL, control = NULL,
+sampling.Specification <- function(spec, stanModel = NULL, y = NULL, x = NULL, control = NULL,
                                    writeDir = tempdir(), switchLabels = FALSE, ...) {
 
   if (is.null(stanModel)) {
     stanModel <- compile(spec, writeDir, ...)
   }
 
-  stanData <- make_data(spec, y)
+  stanData <- make_data(spec, y, xBeta = x)
   stanDots <- c(list(...), list(object = stanModel, data = stanData))
 
   stanSampling <- do.call(rstan::sampling, stanDots)
@@ -168,8 +168,8 @@ fit.Specification <- function(spec, y, ...) {
   run(spec, data = make_data(spec, y), ...)
 }
 
-sim.Specification <- function(spec, T = 1000, ...) {
-  run(spec, data = make_data(spec, y = NULL, T = T), ...)
+sim.Specification <- function(spec, T = 1000, x = NULL, ...) {
+  run(spec, data = make_data(spec, y = NULL, xBeta = x, T = T), ...)
 }
 
 is.multivariate.Specification <- function(spec) {

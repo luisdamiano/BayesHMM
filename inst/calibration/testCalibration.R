@@ -43,6 +43,33 @@ test_calibration_hmm_Binomial <- function() {
   diagnose_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000)
 }
 
+test_calibration_hmm_RegGaussian <- function() {
+  K <- 3
+  R <- 1
+  mySpec <- hmm(
+    K = K, R = R,
+    observation = RegGaussian(
+      xBeta = Gaussian(0, 10),
+      sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)),
+      M     = 3
+    ),
+    initial     = Dirichlet(alpha = rep(1, K)),
+    transition  = Dirichlet(alpha = rep(1, K)),
+    name = "test_calibration_hmm_RegGaussian"
+  )
+
+  set.seed(9000)
+  x <- as.matrix(
+    cbind(
+      rep(1, 500),
+      rnorm(500),
+      rnorm(500)
+    )
+  )
+
+  diagnose_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000, x)
+}
+
 test_calibration_hmm_MVGaussianCor <- function() {
   K <- 3
   R <- 2
@@ -67,12 +94,5 @@ test_calibration_all <- function() {
     "test_calibration_hmm_Gaussian", "test_calibration_hmm_Binomial"
   )
 
-  library(doParallel)
-  cl <- makeCluster(parallel::detectCores() / 4)
-
-  registerDoParallel(cl)
-  df <- foreach(t = tests) %dopar% eval(call(t))
-  stopCluster(cl)
-
-  df
+  do.call(rbind, lapply(tests, function(test) { eval(call(test)) }))
 }
