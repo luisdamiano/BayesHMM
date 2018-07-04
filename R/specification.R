@@ -154,8 +154,9 @@ run.Specification <- function(spec, data = NULL, control = NULL,
   )
 
   stanFit <- do.call(rstan::stan, stanDots)
+  attr(stanFit, "data")     <- stanData
   attr(stanFit, "filename") <- stanFile
-  attr(stanFit, "spec") <- spec
+  attr(stanFit, "spec")     <- spec
 
   if (switchLabels) {
     stanFit <- stan_sort_chain(stanFit, reference = 1, spec$K)

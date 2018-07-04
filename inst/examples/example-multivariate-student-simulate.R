@@ -13,7 +13,7 @@ mySpec <- hmm(
 )
 
 set.seed(9000)
-myFit <- run(mySpec, chains = 1, iter = 500)
+myFit <- sim(mySpec, chains = 1, iter = 500)
 
 matplot(
   apply(extract(myFit, pars = "ypred")[[1]], c(2, 3), mean),

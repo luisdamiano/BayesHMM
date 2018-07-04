@@ -4,7 +4,7 @@ mySpec <- hmm(
   K = 3, R = 2,
   observation = MVStudent(
     nu    = Default(),
-    mu    = Default(),
+    mu    = Gaussian(0, 100),
     sigma = Default()
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

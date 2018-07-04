@@ -46,7 +46,7 @@ diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = NULL, cores
       for (nParam in seq_len(nParams)) {
         paramName <- paramNames[nParam]
         ind       <- (nChain - 1) * nParams + nParam
-        l[[ind]]    <-
+        l[[ind]]  <-
           c(
             list(
               model  = spec$name,
