@@ -11,6 +11,11 @@ set_layout <- function(K) {
 }
 
 plot_params <- function() {
+
+}
+
+par_reset <- function() {
+  invisible(tryCatch({dev.off()}, error = function(e) { }))
 }
 
 add_fan <- function(tidx, upper, lower, bgCol, lineCol) {
@@ -62,11 +67,16 @@ add_colored_lines <- function(tidx, y, col, ...) {
   )
 }
 
-add_features <- function(tidx, y, z, features) {
-  zCol <- getOption("BayesHMM.colors.clusters")[z]
+add_features <- function(tidx, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL, features = NULL) {
+  kCol <- getOption("BayesHMM.colors.clusters")
+  zCol <- kCol[z]
 
   if ("stateShade" %in% features) {
     add_shade(tidx, zCol)
+  }
+
+  if ("probabilityFan" %in% features) {
+    add_fan(tidx, upper = pInt[2, ], lower = pInt[1, ], kCol[k], kCol[k])
   }
 
   if ("yColoredLine" %in% features) {
@@ -75,6 +85,14 @@ add_features <- function(tidx, y, z, features) {
 
   if ("yColoredDots" %in% features) {
     points(tidx, y, pch = 21, bg = zCol, col = zCol)
+  }
+
+  if ("probabilityColoredLine" %in% features) {
+    add_colored_lines(tidx, p, zCol)
+  }
+
+  if ("probabilityColoredDots" %in% features) {
+    points(tidx, p, pch = 21, bg = zCol, col = zCol)
   }
 
   if ("bottomColoredMarks" %in% features) {
@@ -146,6 +164,7 @@ plot_series <- function(stanfit, state = "smoothed", features = NULL,
   z    <- apply(zFun(stanfit, summary = stateSummary), 2, which.max)
   K    <- extract_K(stanfit)
 
+  par_reset()
   layout(mat = 1:2, heights = c(0.9, 0.1))
   opar <- par(no.readonly = TRUE)
   par(
@@ -184,7 +203,7 @@ plot_series <- function(stanfit, state = "smoothed", features = NULL,
 }
 
 plot_prob <- function(stanfit, state = "smoothed", features = NULL,
-                      stateSummary = "mean",
+                      stateSummary = "mean", probInterval = NULL,
                       main = NULL, xlab = "", legend = TRUE, legend.cex = 1, ...) {
 
   state <- match.arg(
@@ -196,8 +215,8 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
   features <- match.arg(
     features,
     choices = c(
-      "none", "stateShade", "stateColoredLine", "zColoredDots",
-      "bottomColoredMarks", "topColoredMarks", "stateFan"
+      "none", "stateShade", "probabilityColoredLine", "probabilityColoredDots",
+      "bottomColoredMarks", "topColoredMarks", "probabilityFan"
     ),
     several.ok	= TRUE
   )
@@ -210,11 +229,13 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
   )
   z    <- apply(zFun(stanfit, summary = stateSummary), 2, which.max)
   p    <- zFun(stanfit, summary = stateSummary)
+  pInt <- zFun(stanfit, summary = probInterval)
   tidx <- seq_len(get_dim(z)[1])
   K    <- extract_K(stanfit)
 
+  par_reset()
   opar <- par(no.readonly = TRUE)
-  layout(1:K)
+  layout(1:(K + 1), heights = c(rep(0.90 / K, K), 0.10))
   for (k in 1:K) {
     par(
       mar = par_edit(
@@ -239,13 +260,23 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
       ...
     )
 
-    add_features(tidx, y, z, features)
+    add_features(tidx, y, z, p = p[k, ], pInt = pInt[, k, ], k, features)
 
     axis(if (k %% 2) { 4 } else { 2 })
 
     if (k == K) { axis(1) }
-
-    add_features(tidx, y, z, features)
   }
   par(opar)
+
+  if (legend) {
+    add_legend(
+      x      = "center",
+      legend = sprintf("Hidden state %d", 1:K),
+      bty    = "n",
+      horiz  = TRUE,
+      fill   = getOption("BayesHMM.colors.clusters")[1:K],
+      border = getOption("BayesHMM.colors.clusters")[1:K],
+      cex    = legend.cex
+    )
+  }
 }

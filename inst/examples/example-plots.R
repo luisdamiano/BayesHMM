@@ -27,3 +27,10 @@ plot_prob(myFit, main = "Title", xlab = "Time")
 plot_prob(myFit, features = c("stateShade"), main = "Title", xlab = "Time")
 
 plot_prob(myFit, features = c("bottomColoredMarks"), main = "Title", xlab = "Time")
+
+plot_prob(myFit, features = c("probabilityColoredDots"), main = "Title", xlab = "Time")
+
+plot_prob(myFit, features = c("probabilityColoredLine"), main = "Title", xlab = "Time")
+
+plot_prob(myFit, state = "filtered", features = c("bottomColoredMarks", "probabilityFan"), probInterval = c(0.05, 0.95), main = "Title", xlab = "Time")
+
