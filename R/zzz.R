@@ -18,6 +18,7 @@
       "#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090", "#FFFFBF",
       "#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"
       ),
+    BayesHMM.colors.observations = palette(),
     BayesHMM.colors.yLine = "gray40",
     BayesHMM.colors.shadeAlpha = 0.2
   )

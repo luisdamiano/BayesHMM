@@ -35,8 +35,8 @@ extract_obs <- function(fit, ...) {
   extract(fit, pars = select_obs_parameters(fit), ...)
 }
 
-summary_obs <- function(fit, ...) {
-  summary(fit, pars = select_obs_parameters(fit), ...)
+fun_obs <- function(fit, ...) {
+  fun(fit, pars = select_obs_parameters(fit), ...)
 }
 
 plot_obs <- function(fit, ...) {
@@ -51,26 +51,26 @@ browse_model <- function(fit) {
   browseURL(attr(fit, "filename"))
 }
 
-extract_quantity <- function(stanfit, pars, summary = NULL, ...) {
+extract_quantity <- function(stanfit, pars, fun = NULL, ...) {
   x    <- extract(stanfit, pars = pars, ...)[[1]]
   dims <- length(dim(x))
 
-  if (is.null(summary)) {
+  if (is.null(fun)) {
     return(x)
   }
 
-  summaryFun <- function(x) {
-    if (length(summary) == 1 && summary == "mean") {
+  funFun <- function(x) {
+    if (length(fun) == 1 && fun == "mean") {
       mean(x)
     } else {
-      quantile(x, prob = summary)
+      quantile(x, prob = fun)
     }
   }
 
   if (dims == 1) {
-    return(summaryFun(x))
+    return(funFun(x))
   } else {
-    return(apply(x, seq.int(2, dims), summaryFun))
+    return(apply(x, seq.int(2, dims), funFun))
   }
 }
 

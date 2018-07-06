@@ -1,141 +1,7 @@
-get_cluster_colors <- function(K) {
-  cols <- getOption("BayesHMM.clusterColors")
-  if (length(cols) < K) {
-    stop("Please, use options to set a larger pallete in BayesHMM.clusterColors")
-  }
-  cols[1:K]
-}
-
-set_layout <- function(K) {
-  n2mfrow(K)
-}
-
-par_reset <- function() {
-  invisible(tryCatch({dev.off()}, error = function(e) { }))
-}
-
-add_fan <- function(tidx, upper, lower, bgCol, lineCol) {
-  polygon(
-    x   = c(rev(tidx), tidx),
-    y   = c(lower, upper),
-    col = bgCol
-  )
-
-  lines(tidx, lower, col = lineCol)
-  lines(tidx, upper, col = lineCol)
-}
-
-col2rgb_alpha <- function(bgCol, alpha = 1) {
-  if (alpha >= 0 && alpha <= 1) {
-    alpha <- alpha * 255
-  } else if (alpha < 0 || alpha > 255) {
-    stop("Not a valid entry for alpha (transparency).")
-  }
-
-  apply(
-    col2rgb(bgCol, alpha = FALSE),
-    2,
-    function(tidx) {
-      rgb(tidx[1], tidx[2], tidx[3], alpha = alpha, maxColorValue = 255)
-    }
-  )
-}
-
-add_shade <- function(tidx, bgCol) {
-  rect(
-    xleft   = head(tidx, -1),
-    ybottom = get_ybottom(),
-    xright  = tail(tidx, -1),
-    ytop    = get_ytop(),
-    col     = col2rgb_alpha(bgCol, getOption("BayesHMM.colors.shadeAlpha")),
-    border  = NA
-  )
-}
-
-add_colored_lines <- function(tidx, y, col, ...) {
-  segments(
-    x0  = head(tidx, -1), # First T-1 obs
-    y0  = head(y, -1),
-    x1  = tail(tidx, -1), # Trailing T-1 obs
-    y1  = tail(y, -1),
-    col = col,
-    ...
-  )
-}
-
-add_features <- function(tidx, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL, features = NULL) {
-  kCol <- getOption("BayesHMM.colors.clusters")
-  zCol <- kCol[z]
-
-  if ("stateShade" %in% features) {
-    add_shade(tidx, zCol)
-  }
-
-  if ("probabilityFan" %in% features) {
-    add_fan(tidx, upper = pInt[2, ], lower = pInt[1, ], kCol[k], kCol[k])
-  }
-
-  if ("yColoredLine" %in% features) {
-    add_colored_lines(tidx, y, zCol)
-  }
-
-  if ("yColoredDots" %in% features) {
-    points(tidx, y, pch = 21, bg = zCol, col = zCol)
-  }
-
-  if ("probabilityColoredLine" %in% features) {
-    add_colored_lines(tidx, p, zCol)
-  }
-
-  if ("probabilityColoredDots" %in% features) {
-    points(tidx, p, pch = 21, bg = zCol, col = zCol)
-  }
-
-  if ("bottomColoredMarks" %in% features) {
-    points(tidx, rep(par()$usr[3], length(y)), pch = "|", bg = zCol, col = zCol)
-  }
-
-  if ("topColoredMarks" %in% features) {
-    points(tidx, rep(par()$usr[4], length(y)), pch = "|", bg = zCol, col = zCol)
-  }
-}
-
-get_dim <- function(x) {
-  if (is.null(dim(x))) {
-    length(x)
-  } else {
-    dim(x)
-  }
-}
-
-get_ytop    <- function() { par()$usr[4] }
-get_ybottom <- function() { par()$usr[3] }
-
-par_edit    <- function(par, ...) {
-  dots  <- list(...)
-  for (i in seq_len(length(dots))) {
-    if (!is.null(dots[[i]])) {
-      par[i] <- dots[[i]]
-    }
-  }
-  par
-}
-
-add_legend  <- function(p, ...) {
-  opar <- par(no.readonly = TRUE)
-  par(
-    mar = c(0, 0, 0, 0),
-    mai = c(0, 0, 0, 0)
-    )
-  plot.new()
-  legend(...)
-  par(opar)
-}
-
-plot_series <- function(stanfit, state = "smoothed", features = NULL,
-                        stateSummary = "mean", main = NULL, xlab = NULL, legend = TRUE, legend.cex = 1, ...) {
-  state <- match.arg(
-    state,
+plot_series <- function(stanfit, r = NULL, stateProbability = "smoothed", features = NULL,
+                        stateFun = "mean", main = NULL, xlab = NULL, ylab = NULL, addLegend = TRUE, legend.cex = 1, ...) {
+  stateProbability <- match.arg(
+    stateProbability,
     choices = c("filtered", "smoothed", "viterbi"),
     several.ok	= FALSE
   )
@@ -143,7 +9,7 @@ plot_series <- function(stanfit, state = "smoothed", features = NULL,
   features <- match.arg(
     features,
     choices = c(
-      "none", "stateShade", "yColoredLine", "yColoredDots",
+      "stateShade", "yColoredLine", "yColoredDots",
       "bottomColoredMarks", "topColoredMarks"
     ),
     several.ok	= TRUE
@@ -152,58 +18,53 @@ plot_series <- function(stanfit, state = "smoothed", features = NULL,
   y    <- extract_y(stanfit)
   tidx <- seq_len(get_dim(y)[1])
   zFun <- switch(
-    state,
+    stateProbability,
     filtered = extract_alpha,
     smoothed = extract_gamma,
     viterbi  = extract_zstar
   )
-  z    <- apply(zFun(stanfit, summary = stateSummary), 2, which.max)
+  z    <- apply(zFun(stanfit, fun = stateFun), 2, which.max)
   K    <- extract_K(stanfit)
+  R    <- extract_R(stanfit)
+  rSeq <- if (is.null(r)) { seq_len(R) } else { r }
 
-  par_reset()
-  layout(mat = 1:2, heights = c(0.9, 0.1))
-  opar <- par(no.readonly = TRUE)
-  par(
-    mar = par_edit(
-      opar$mar,
-      if (is.null(xlab)) { 1 } else { 4 },
+  opar <- par(
+    oma   = c(2, 0, 0, 0),
+    mfrow = rev(n2mfrow(length(rSeq)))
+  )
+  on.exit(par(opar))
+
+  for (r in rSeq) {
+    plot(
       NULL,
-      if (is.null(main)) { 1 },
-      NULL
+      main = if (is.null(main)) { "" } else { main },
+      xlab = if (is.null(xlab)) { "Time" } else { xlab },
+      ylab = if (is.null(ylab)) { if (R == 1) { "Observation" } else { sprintf("Variable %d", r) } } else { ylab },
+      xlim = quantile(tidx, probs = c(0, 1)),
+      ylim = quantile(y, probs = c(0, 1))
     )
-  )
-  plot(
-    x    = tidx,
-    y    = y,
-    main = main,
-    xlab = xlab,
-    type = "l",
-    col  = getOption("BayesHMM.colors.yLine"),
-    ...
-  )
-  # par(opar)
 
-  add_features(tidx, y, z, features)
-
-  if (legend) {
-    add_legend(
-      x      = "center",
-      legend = sprintf("Hidden state %d", 1:K),
-      bty    = "n",
-      horiz  = TRUE,
-      fill   = getOption("BayesHMM.colors.clusters")[1:K],
-      border = getOption("BayesHMM.colors.clusters")[1:K],
-      cex    = legend.cex
-    )
+    lines(x = tidx, y = y[, r])
+    add_features(tidx, y[, r], z, features = features)
   }
+
+  add_legend_overlay(
+    x      = "bottom",
+    legend = sprintf("Hidden state %d", 1:K),
+    bty    = "n",
+    horiz  = TRUE,
+    fill   = getOption("BayesHMM.colors.clusters")[1:K],
+    border = getOption("BayesHMM.colors.clusters")[1:K],
+    cex    = legend.cex
+  )
 }
 
-plot_prob <- function(stanfit, state = "smoothed", features = NULL,
-                      stateSummary = "mean", probInterval = NULL,
-                      main = NULL, xlab = "", legend = TRUE, legend.cex = 1, ...) {
+plot_state_probability <- function(stanfit, stateProbability = "smoothed", features = NULL,
+                                   stateProbabilityFun = "mean", stateProbabilityInterval = NULL,
+                                   main = NULL, xlab = NULL, ylab = NULL, addLegend = TRUE, legend.cex = 1, ...) {
 
-  state <- match.arg(
-    state,
+  stateProbability <- match.arg(
+    stateProbability,
     choices = c("filtered", "smoothed", "viterbi"),
     several.ok	= FALSE
   )
@@ -211,31 +72,34 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
   features <- match.arg(
     features,
     choices = c(
-      "none", "stateShade", "probabilityColoredLine", "probabilityColoredDots",
-      "bottomColoredMarks", "topColoredMarks", "probabilityFan"
+      "probabilityColoredLine", "probabilityColoredDots", "probabilityFan",
+      "stateShade", "bottomColoredMarks", "topColoredMarks"
     ),
     several.ok	= TRUE
   )
 
   zFun <- switch(
-    state,
+    stateProbability,
     filtered = extract_alpha,
     smoothed = extract_gamma,
     viterbi  = extract_zstar
   )
-  z    <- apply(zFun(stanfit, summary = stateSummary), 2, which.max)
-  p    <- zFun(stanfit, summary = stateSummary)
-  pInt <- zFun(stanfit, summary = probInterval)
+  z    <- apply(zFun(stanfit, fun = stateProbabilityFun), 2, which.max)
+  p    <- zFun(stanfit, fun = stateProbabilityFun)
+  pInt <- zFun(stanfit, fun = stateProbabilityInterval)
   tidx <- seq_len(get_dim(z)[1])
   K    <- extract_K(stanfit)
 
-  par_reset()
-  opar <- par(no.readonly = TRUE)
-  layout(1:(K + 1), heights = c(rep(0.90 / K, K), 0.10))
+  opar <- par(
+    oma   = c(6, 0, 0, 0),
+    mfrow = c(K, 1)
+  )
+  on.exit(par(opar))
+
   for (k in 1:K) {
-    par(
+    opar <- par(
       mar = par_edit(
-        opar$mar,
+        par()$mar,
         if (k != K) { 0 },
         NULL,
         if (k != 1) { 0 },
@@ -256,7 +120,7 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
       ...
     )
 
-    add_features(tidx, y, z, p = p[k, ], pInt = pInt[, k, ], k, features)
+    add_features(tidx, y[, 1], z, p = p[k, ], pInt = pInt[, k, ], k, features)
 
     axis(if (k %% 2) { 4 } else { 2 })
 
@@ -264,9 +128,9 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
   }
   par(opar)
 
-  if (legend) {
-    add_legend(
-      x      = "center",
+  if (addLegend) {
+    add_legend_overlay(
+      x      = "bottom",
       legend = sprintf("Hidden state %d", 1:K),
       bty    = "n",
       horiz  = TRUE,
@@ -281,6 +145,251 @@ plot_params <- function() {
 
 }
 
-plot_ppcheck <- function() {
+plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL,
+                             fun = NULL, fun1 = NULL, fun2 = NULL,
+                             densityControl = NULL, cumulativeControl = NULL,
+                             funControl = NULL, fun1Control = NULL, fun2Control = NULL,
+                             boxplotControl = NULL, main = NULL) {
+  R     <- extract_R(stanfit)
+  y     <- extract_y(stanfit)
+  yPred <- extract_ypred(stanfit)
+  if (!is.null(subset)) { yPred <- yPred[subset, , , drop = FALSE] }
 
+  rSeq  <- if (is.null(r)) { seq_len(R) } else { r }
+
+  funList <- list(
+    density    = function(y, yPred) {
+      plot_ppredictive_density(y, yPred, densityControl, NULL, NULL, NULL, FALSE)
+    },
+    cumulative = function(y, yPred) {
+      plot_ppredictive_cumulative(y, yPred, cumulativeControl, NULL, NULL, NULL, FALSE)
+    },
+    hist       = function(y, yPred) {
+      plot_ppredictive_hist(y, yPred, fun, funControl, NULL, NULL, NULL, FALSE)
+    },
+    boxplot    = function(y, yPred) {
+      plot_ppredictive_boxplot(y, yPred, boxplotControl, NULL, NULL, NULL, FALSE)
+    },
+    scatter    = function(y, yPred) {
+      plot_ppredictive_scatter(y, yPred, fun1, fun2, fun1Control, fun2Control, NULL, NULL, NULL, FALSE)
+    }
+  )
+
+  funSeq <- funList[which(names(funList) %in% type)]
+
+  opar   <- par(
+    oma   = c(2, 0, 0, 0),
+    mfrow = rev(n2mfrow(length(rSeq) * length(funSeq)))
+  )
+  on.exit(par(opar))
+
+  for (r in rSeq) {
+    for (f in funSeq) {
+      f(y[, r], yPred[, , r])
+      if (R != 1) {
+        title(sprintf("Variable %d", r), adj = 1, line = 0.5, cex.main = 1)
+      }
+    }
+  }
+
+  add_title_overlay(
+    main = if (is.null(main)) { "Posterior Predictive Checks" } else { main },
+    line = -1.5
+  )
+
+  add_legend_overlay(
+    x = "bottom",
+    legend = c("Observed sample", "Posterior predictive samples"),
+    border = c("black", "gray80"),
+    fill   = c("black", "gray80"),
+    bty    = "n",
+    horiz  = TRUE
+  )
+}
+
+plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
+                                             control1 = NULL, control2 = NULL, main = NULL,
+                                             xlab = NULL, ylab = NULL, addLegend = TRUE) {
+
+  myFun <- function(x) {
+    if (is.null(control1)) { control1 <- list() }
+    if (is.null(control2)) { control2 <- list() }
+    cbind(
+      do.call(fun1, c(list(x = x), control1)),
+      do.call(fun2, c(list(x = x), control2))
+    )
+  }
+
+  yFun     <- myFun(y)
+  yPredFun <- t(apply(yPred, 1, myFun))
+  yAll         <- rbind(yFun, yPredFun)
+
+  plot(
+    NULL,
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { funinvarName(fun1) } else { xlab },
+    ylab = if (is.null(ylab)) { funinvarName(fun2) } else { ylab },
+    xlim = quantile(yAll[, 1], probs = c(0, 1)),
+    ylim = quantile(yAll[, 2], probs = c(0, 1))
+  )
+
+  points(
+    yPredFun,
+    pch = 21,
+    col = "gray80",
+    bg  = "gray80"
+  )
+
+  points(
+    yFun,
+    pch = 21,
+    bg  = "black",
+    col = "black"
+  )
+
+  if (addLegend) {
+    legend(
+      x = "topright",
+      legend = c("Observed sample", "Posterior predictive samples"),
+      pch = 21,
+      bg  = c("black", "gray80"),
+      col = c("black", "gray80"),
+      bty = "n"
+    )
+  }
+}
+
+plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
+                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+
+  myFun <- function(x) {
+    if (is.null(control)) { control <- list() }
+    do.call(fun, c(list(x = x), control))
+    # do.call(fun, list(x = x))
+  }
+
+  yFun     <- myFun(y)
+  yPredFun <- apply(yPred, 1, myFun)
+
+  hist(
+    yPredFun,
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { funinvarName(fun) } else { xlab },
+    ylab = if (is.null(ylab)) { "Frequency" } else { ylab },
+    breaks = "FD",
+    col    = "gray80",
+    border = "gray"
+  )
+
+  abline(v = yFun)
+
+  if (addLegend) {
+    legend(
+      x = "topright",
+      legend = c("Observed sample", "Posterior predictive samples"),
+      lwd = 2,
+      col = c("black", "gray80"),
+      bty = "n"
+    )
+  }
+}
+
+plot_ppredictive_boxplot <- function(y, yPred, control = NULL, main = NULL,
+                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+
+  argList <- list(
+    x    = cbind(y, t(yPred)),
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { "Sample" } else { xlab },
+    ylab = if (is.null(ylab)) { "Observation" } else { ylab },
+    border = c("black", rep("gray80", nrow(yPred))),
+    names  = c("y", seq_len(nrow(yPred)))
+  )
+
+  if (is.null(control)) { control <- list() }
+
+  do.call(boxplot, c(argList, control))
+}
+
+plot_ppredictive_cumulative <- function(y, yPred, control = NULL, main = NULL,
+                                        xlab = NULL, ylab = NULL, addLegend = TRUE) {
+  qs <- seq(from = 0, to = 1, by = 0.01)
+  myCumulative <- function(x) {
+    if (is.null(control)) { control <- list() }
+    do.call(quantile, c(list(x = x, probs = qs), control))
+  }
+
+  yCumulative     <- myCumulative(y)
+  yPredCumulative <- t(apply(yPred, 1, myCumulative))
+  xlim <- quantile(c(as.numeric(y), as.numeric(yPred)), probs = c(0, 1))
+
+  plot(
+    NULL,
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { "Cumulative Density" } else { xlab },
+    ylab = if (is.null(ylab)) { "Observation" } else { ylab },
+    xlim = xlim,
+    ylim = c(0, 1)
+  )
+
+  for (yrow in seq_len(nrow(yPredCumulative))) {
+    lines(x = yPredCumulative[yrow, ], y = qs, col = "gray80")
+  }
+
+  lines(x = yCumulative, y = qs, col = "black")
+
+  if (addLegend) {
+    legend(
+      x = "bottomright",
+      legend = c("Observed sample", "Posterior predictive samples"),
+      lwd = 2,
+      col = c("black", "gray80"),
+      bty = "n"
+    )
+  }
+}
+
+plot_ppredictive_density <- function(y, yPred, control = NULL, main = NULL,
+                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+  myDensity <- function(x) {
+    if (is.null(control)) { control <- list(bw = "SJ") }
+    do.call(density, c(list(x = x), control))
+  }
+
+  yDensity     <- myDensity(y)
+  yPredDensity <- apply(yPred, 2, myDensity)
+  yExtremes <- sapply(
+    c(list(yDensity), yPredDensity), function(l) {
+      c(
+        quantile(l$x, probs = c(0, 1)),
+        quantile(l$y, probs = c(0, 1))
+      )
+    }
+  )
+
+  plot(
+    NULL,
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { "Observation" } else { xlab },
+    ylab = if (is.null(ylab)) { "Density" } else { ylab },
+    xlim = c(min(yExtremes[1, ]), max(yExtremes[2, ])),
+    ylim = c(min(yExtremes[3, ]), max(yExtremes[4, ])),
+    col  = "black"
+  )
+
+  for (yp in yPredDensity) {
+    lines(yp, col = "gray80")
+  }
+
+  lines(yDensity, col = "black")
+
+  if (addLegend) {
+    legend(
+      x = "topright",
+      legend = c("Observed sample", "Posterior predictive samples"),
+      lwd = 2,
+      col = c("black", "gray80"),
+      bty = "n"
+    )
+  }
 }

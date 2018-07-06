@@ -191,3 +191,23 @@ is.freeParameter <- function(x) {
     is.list(x) & all(sapply(x, is.Density))
 }
 
+if_null <- function(test, yes, no = NULL ) {
+  if (is.null(text)) { yes } else { no }
+}
+
+funinvarName <- function(x) {
+  if (is.function(x)) {
+    x <- deparse(substitute(x))
+  }
+  utils:::findGeneric(x, parent.frame())
+}
+
+get_dim <- function(x) {
+  if (is.null(dim(x))) {
+    length(x)
+  } else {
+    dim(x)
+  }
+}
+
+
