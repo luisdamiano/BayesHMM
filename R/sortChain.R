@@ -36,7 +36,7 @@ sort_block <- function(x, y, K) {
   block  <- t(sapply(1:K, function(k) {1:epb + epb * (k - 1)})) # row = block
   if (dim(block)[1] == 1) { block <- t(block) }
 
-  y[, block[order_block(x, y, K), ]]
+  y[, t(block[order_block(x, y, K), ])]
 }
 
 sort_chain <- function(stanfit, reference, K) {

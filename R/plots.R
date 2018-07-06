@@ -10,10 +10,6 @@ set_layout <- function(K) {
   n2mfrow(K)
 }
 
-plot_params <- function() {
-
-}
-
 par_reset <- function() {
   invisible(tryCatch({dev.off()}, error = function(e) { }))
 }
@@ -279,4 +275,12 @@ plot_prob <- function(stanfit, state = "smoothed", features = NULL,
       cex    = legend.cex
     )
   }
+}
+
+plot_params <- function() {
+
+}
+
+plot_ppcheck <- function() {
+
 }
