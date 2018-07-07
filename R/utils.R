@@ -9,44 +9,92 @@ check_psd <- function(x) {
   }
 }
 
-check_scalar <- function(x) {
-  is.atomic(x) & is.numeric(x) & length(x) == 1L
+check_scalar <- function(x, name = deparse(substitute(x))) {
+  ok <- is.atomic(x) & is.numeric(x) & length(x) == 1L
+
+  if (!ok) {
+    stop(sprintf("%s must be a scalar (numeric element of lengh one).", name))
+  }
+
+  TRUE
 }
 
-check_vector <- function(x) {
-  is.vector(x) & !is.list(x) & all(sapply(x, is.numeric)) &
+check_vector <- function(x, name = deparse(substitute(x))) {
+  ok <- is.vector(x) & !is.list(x) & all(sapply(x, is.numeric)) &
     !any(sapply(x, is.na))
+
+  if (!ok) {
+    stop(sprintf("%s must be a vector.", name))
+  }
+
+  TRUE
 }
 
-check_simplex <- function(x) {
-  check_vector(x) & sum(x) == 1 & min(x) >= 0
+check_simplex <- function(x, name = deparse(substitute(x))) {
+  ok <- check_vector(x) & sum(x) == 1 & min(x) >= 0
+
+  if (!ok) {
+    stop(sprintf("%s must be a simplex (vector with non-negative elements summing to 1.", name))
+  }
+
+  TRUE
 }
 
-check_matrix <- function(x) {
-  isTRUE(is.matrix(x))
+check_matrix <- function(x, name = deparse(substitute(x))) {
+  ok <- isTRUE(is.matrix(x))
+
+  if (!ok) {
+    stop(sprintf("%s must be a matrix.", name))
+  }
+
+  TRUE
 }
 
-check_cov_matrix <- function(x) {
-  check_matrix(x) & check_psd(x)
+check_cov_matrix <- function(x, name = deparse(substitute(x))) {
+  ok <- check_matrix(x) & check_psd(x)
+
+  if (!ok) {
+    stop(sprintf("%s must be a positive-semidefinite matrix.", name))
+  }
+
+  TRUE
 }
 
-check_cholesky_factor <- function(x) {
+check_cholesky_factor <- function(x, name = deparse(substitute(x))) {
   # Requirements for a Cholesky factor for a cov matrix:
   # * is a matrix :P,
   # * lower triangular,
   # * positive diagonal
-  check_matrix(x) &
+  ok <- check_matrix(x) &
     all(abs(upper.tri(x)) < .Machine$double.eps) &
     all(diag(x)) > 0
+
+  if (!ok) {
+    stop(sprintf("%s must be a valid Cholesky factor (lower triangular matrix with positive elements in the diagonal).", name))
+  }
+
+  TRUE
 }
 
-check_cholesky_factor_cov <- function(x) {
-  check_cholesky_factor(x) & check_psd(x %*% t(x))
+check_cholesky_factor_cov <- function(x, name = deparse(substitute(x))) {
+  ok <- check_cholesky_factor(x) & check_psd(x %*% t(x))
+
+  if (!ok) {
+    stop(sprintf("%s must be a valid Cholesky factor for a covariance matrix (lower triangular matrix with positive elements in the diagonal that is positive-semidefinite when multiplied by its transpose.).", name))
+  }
+
+  TRUE
 }
 
-check_cholesky_factor_cor <- function(x) {
+check_cholesky_factor_cor <- function(x, name = deparse(substitute(x))) {
   check_cholesky_factor(x) &
     check_simplex(diag(x))
+
+  if (!ok) {
+    stop(sprintf("%s must be a valid Cholesky factor for a correlation matrix (lower triangular matrix with positive elements in the diagonal that has non-negative elements in the diagonals summing to one).", name))
+  }
+
+  TRUE
 }
 
 # check_vector <- function(x, len) {
@@ -58,23 +106,29 @@ check_cholesky_factor_cor <- function(x) {
 #   isTRUE(is.matrix(x) & nrow(x) == nrow & ncol(x) == ncol)
 # }
 
-check_list <- function(x, len, name) {
+check_list <- function(x, len, name = deparse(substitute(x))) {
   if (!is.list(x) || length(x) != len)
     stop(sprintf("%s must be a list with %s elements.", name, len))
+
+  TRUE
 }
 
-check_whole <- function(x, name) {
+check_whole <- function(x, name = deparse(substitute(x))) {
   if (length(x) != 1
       || !is.numeric(x)
       || !(abs(x - round(x)) < .Machine$double.eps^0.5))
     stop(sprintf("%s must be an integer.", name))
+
+  TRUE
 }
 
-check_natural <- function(x, name) {
+check_natural <- function(x, name = deparse(substitute(x))) {
   check_whole(x, name)
   if (x < 1) {
     stop(sprintf("%s must be a positive integer (> 0).", name))
   }
+
+  TRUE
 }
 
 collapse <- function(...) {
@@ -210,4 +264,9 @@ get_dim <- function(x) {
   }
 }
 
+prank <- function(x, y, ...) {
+  check_scalar(x)
+  check_vector(y)
 
+  as.numeric(rank(c(x, y), ...)[1] / (length(y) + 1))
+}

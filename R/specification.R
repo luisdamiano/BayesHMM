@@ -128,8 +128,9 @@ sampling.Specification <- function(spec, stanModel = NULL, y = NULL, x = NULL, c
   stanDots <- c(list(...), list(object = stanModel, data = stanData))
 
   stanSampling <- do.call(rstan::sampling, stanDots)
+  attr(stanSampling, "data")     <- stanData
   attr(stanSampling, "filename") <- attr(stanModel, "filename")
-  attr(stanSampling, "spec") <- spec
+  attr(stanSampling, "spec")     <- spec
 
   if (switchLabels) {
     stanSampling <- stan_sort_chain(stanSampling, reference = 1, spec$K)

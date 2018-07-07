@@ -1,6 +1,6 @@
 select_parameters <- function(fit, observation = TRUE,
                               initial = TRUE, transition = TRUE) {
-  spec <- attr(fit, "spec")
+  spec <- extract_spec(fit)
   paramNames   <- ""
 
   if (observation) {
@@ -35,10 +35,6 @@ extract_obs <- function(fit, ...) {
   extract(fit, pars = select_obs_parameters(fit), ...)
 }
 
-fun_obs <- function(fit, ...) {
-  fun(fit, pars = select_obs_parameters(fit), ...)
-}
-
 plot_obs <- function(fit, ...) {
   plot(fit, pars = select_obs_parameters(fit), ...)
 }
@@ -52,7 +48,8 @@ browse_model <- function(fit) {
 }
 
 extract_quantity <- function(stanfit, pars, fun = NULL, ...) {
-  x    <- extract(stanfit, pars = pars, ...)[[1]]
+  x    <- extract(stanfit, pars = pars, ...)
+  if (is.list(x)) { x <- x[[1]] } # Assume pars = 1
   dims <- length(dim(x))
 
   if (is.null(fun)) {
@@ -117,4 +114,12 @@ extract_K <- function(stanfit) {
 
 extract_R <- function(stanfit) {
   extract_data(stanfit)$R
+}
+
+extract_n_chains <- function(stanfit) {
+  stanfit@sim$chains
+}
+
+extract_spec <- function(stanfit) {
+  attr(stanfit, "spec")
 }

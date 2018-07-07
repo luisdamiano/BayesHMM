@@ -172,6 +172,9 @@ plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL,
     },
     scatter    = function(y, yPred) {
       plot_ppredictive_scatter(y, yPred, fun1, fun2, fun1Control, fun2Control, NULL, NULL, NULL, FALSE)
+    },
+    ks         = function(y, yPred) {
+      plot_ppredictive_ks(y, yPred, NULL, NULL, NULL, NULL, FALSE)
     }
   )
 
@@ -265,7 +268,6 @@ plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
   myFun <- function(x) {
     if (is.null(control)) { control <- list() }
     do.call(fun, c(list(x = x), control))
-    # do.call(fun, list(x = x))
   }
 
   yFun     <- myFun(y)
@@ -292,6 +294,24 @@ plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
       bty = "n"
     )
   }
+}
+
+plot_ppredictive_ks <- function(y, yPred, control = NULL, main = NULL,
+                                xlab = NULL, ylab = NULL, addLegend = TRUE) {
+
+  yPredFun <- suppressWarnings(
+    apply(yPred, 1, function(x) { ks.test(x, y)$statistic } )
+  )
+
+  hist(
+    yPredFun,
+    main = if (is.null(main)) { "" } else { main },
+    xlab = if (is.null(xlab)) { "Kolmogorov-Smirnov Statistic" } else { xlab },
+    ylab = if (is.null(ylab)) { "Frequency" } else { ylab },
+    breaks = "FD",
+    col    = "gray80",
+    border = "gray"
+  )
 }
 
 plot_ppredictive_boxplot <- function(y, yPred, control = NULL, main = NULL,
