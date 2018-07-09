@@ -12,7 +12,7 @@ test_calibration_dummy_model <- function() {
       Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
       Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
       Dirichlet(alpha = c(0.2, 0.2, 1.0)),
-    name = "Univariate Gaussian"
+    name = "Univariate Gaussian Dummy Model"
   )
 
   diagnose_calibration(mySpec, N = 3, T = 500, iter = 500, seed = 9000)

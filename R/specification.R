@@ -22,8 +22,6 @@ chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
 chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
 chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
-# extract_obs <- function(x) { UseMethod("extract_obs", x) }
-
 is.TVTransition <- function(x) { UseMethod("is.TVTransition", x) }
 is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
 
