@@ -1,4 +1,4 @@
-library(rstan)
+library(BayesHMM)
 
 mySpec <- hmm(
   K = 3, R = 1,
@@ -19,7 +19,7 @@ for (i in 1:10) {
     c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1))
   )
 
-  myFit <- sample.Specification(
+  myFit <- sampling(
     mySpec, stanModel = myModel, y = y,
     chains = 1, iter = 500
   )

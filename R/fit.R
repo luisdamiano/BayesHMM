@@ -31,6 +31,10 @@ select_obs_parameters <- function(fit) {
   select_parameters(fit, TRUE, FALSE, FALSE)
 }
 
+select_all_parameters <- function(fit) {
+  select_parameters(fit, TRUE, TRUE, TRUE)
+}
+
 extract_obs <- function(fit, ...) {
   extract(fit, pars = select_obs_parameters(fit), ...)
 }
@@ -41,6 +45,10 @@ plot_obs <- function(fit, ...) {
 
 print_obs <- function(fit, ...) {
   print(fit, pars = select_obs_parameters(fit), ...)
+}
+
+print_all <- function(fit, ...) {
+  print(fit, pars = select_all_parameters(fit), ...)
 }
 
 browse_model <- function(fit) {
@@ -122,4 +130,8 @@ extract_n_chains <- function(stanfit) {
 
 extract_spec <- function(stanfit) {
   attr(stanfit, "spec")
+}
+
+extract_filename <- function(stanfit) {
+  attr(stanfit, "filename")
 }

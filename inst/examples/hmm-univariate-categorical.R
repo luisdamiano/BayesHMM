@@ -1,5 +1,3 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Categorical(
@@ -20,8 +18,8 @@ y = as.matrix(
   )
 )
 
-myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-rstan::plot(myFit, pars = c("theta11", "theta21", "theta31"))
+plot_obs(myFit)
 
-print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
+print_all(myFit)

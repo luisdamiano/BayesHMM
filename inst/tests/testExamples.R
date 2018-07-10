@@ -1,4 +1,6 @@
 test_examples <- function() {
+  DEACTIVATED("Testing examples is temporarily deactivated.")
+
   exampleFiles <- dir(
     system.file(
       "examples",

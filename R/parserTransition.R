@@ -1,45 +1,3 @@
-# parse_transition_build_priors <- function(transition, K, R) {
-#   # We're sure to get a KxK list here.
-#   # i.e. transList[[i]][[i]] is always valid
-#   transList <- transition
-#   for (i in 1:K) { # from i
-#     for (j in 1:length(transList[[i]])) { # to j -- not 1:K!
-#       # Move down elements from transition density to parameters
-#       transList[[i]][[j]][["K"]]     <- K
-#       transList[[i]][[j]][["k"]]     <- lDensity$k
-#       transList[[i]][[j]][["r"]]     <- lDensity$r
-#       transList[[i]][[j]][["param"]] <- nameParam
-#       transList[[i]][[j]][["multivariate"]] <- is.multivariate(lDensity)
-#
-#       # Move up elements from parameters to transition density
-#       if ("bounds" %in% names(transList[[i]][[j]][[nameParam]])) {
-#         transList[[i]][[j]][[paste0(nameParam, "Bounds")]] <- transList[[i]][[j]][[nameParam]][["bounds"]]
-#       }
-#
-#       # lDensity <- transList[[i]][[j]]
-#       # lParam   <- getFreeParameters(lDensity)
-#       # if (!is.empty(lParam)) {
-#       #   for (p in 1:length(lParam)) {
-#       #     nameParam <- names(lParam)[p]
-#       #
-#       #     # Move down elements from transition density to parameters
-#       #     transList[[i]][[j]][[nameParam]][["K"]]     <- K
-#       #     transList[[i]][[j]][[nameParam]][["k"]]     <- lDensity$k
-#       #     transList[[i]][[j]][[nameParam]][["r"]]     <- lDensity$r
-#       #     transList[[i]][[j]][[nameParam]][["param"]] <- nameParam
-#       #     transList[[i]][[j]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
-#       #
-#       #     # Move up elements from parameters to transition density
-#       #     if ("bounds" %in% names(transList[[i]][[j]][[nameParam]])) {
-#       #       transList[[i]][[j]][[paste0(nameParam, "Bounds")]] <- transList[[i]][[j]][[nameParam]][["bounds"]]
-#       #     }
-#       #   }
-#       # }
-#     }
-#   }
-#   transList
-# }
-
 # Take 1 density in and repeat K x R times
 parse_transition_build_KxK <- function(transition, K, R) {
   transList <- list()
@@ -134,7 +92,8 @@ parse_transition_build_none_univariate <- function(transition, K, R) {
 
 parse_transition <- function(transition, K, R) {
   if (is.null(transition)) {
-    stop("Specification error: You must set a transition model. Please, read ?spec.")
+    return(NULL)
+    # stop("Specification error: You must set a transition model. Please, read ?spec.")
   }
 
   msgerr <- function() {

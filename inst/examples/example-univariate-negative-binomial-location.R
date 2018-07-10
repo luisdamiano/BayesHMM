@@ -1,5 +1,3 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 3, R = 1,
   observation = NegativeBinomial(
@@ -20,11 +18,11 @@ y = as.matrix(
   )
 )
 
-myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
+plot_obs(myFit)
 
-pars <- sapply(extract(myFit, pars = c("alpha11", "beta11", "alpha21", "beta21", "alpha31", "beta31")), mean)
+print_all(myFit)
 
 rbind(
   sort(c(pars[1]/pars[2], pars[3]/pars[4], pars[5]/pars[6])),

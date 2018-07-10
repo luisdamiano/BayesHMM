@@ -270,7 +270,7 @@ exCase12 <- hmm(
     ),
   initial =
     InitialSoftmax(
-      sBeta = Default()
+      vBeta = Default()
     ),
   transition  = Default(),
   name = "TV Initial distribution"
@@ -404,7 +404,7 @@ exCase18 <- hmm(
   initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  =
     TransitionSoftmax(
-      sBeta = Gaussian(mu = 0, sigma = 1)
+      uBeta = Gaussian(mu = 0, sigma = 1)
     ),
   name = "Different univariate densities for each element of the transition matrix"
 )
@@ -433,11 +433,11 @@ exCase19 <- hmm(
     ),
   initial =
     InitialSoftmax(
-      sBeta = Gaussian(mu = 0, sigma = 1)
+      vBeta = Gaussian(mu = 0, sigma = 1)
     ),
   transition  =
     TransitionSoftmax(
-      sBeta = Gaussian(mu = 0, sigma = 1)
+      uBeta = Gaussian(mu = 0, sigma = 1)
     ),
   name = "Fully Complex Model"
 )

@@ -1,4 +1,4 @@
-InitialSoftmax <- function(sBeta = NULL, bounds = list(NULL, NULL),
+InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
   LinkDensity(
     "InitialSoftmax",
@@ -7,21 +7,21 @@ InitialSoftmax <- function(sBeta = NULL, bounds = list(NULL, NULL),
 }
 
 freeParameters.InitialSoftmax <- function(x) {
-  sBetaStr <-
-    if (is.Density(x$sBeta)) {
-      sBetaBoundsStr <- make_bounds(x, "sBeta")
+  vBetaStr <-
+    if (is.Density(x$vBeta)) {
+      vBetaBoundsStr <- make_bounds(x, "vBeta")
       sprintf(
         "
-        matrix%s[K, S_init] sBeta_init;   // initial model regressors
-                                          // sBeta[state, s regressors]
+        matrix%s[K, Q] vBeta;   // initial model regressors
+                                // vBeta[state, Q regressors]
         ",
-        sBetaBoundsStr
+        vBetaBoundsStr
       )
     } else {
       ""
     }
 
-  sBetaStr
+  vBetaStr
 }
 
 fixedParameters.InitialSoftmax <- function(x) {
@@ -34,7 +34,7 @@ generated.InitialSoftmax <- function(x) {
 }
 
 getParameterNames.InitialSoftmax <- function(x) {
-  return("sBeta")
+  return("vBeta")
 }
 
 logLike.InitialSoftmax <- function(x) {
@@ -44,7 +44,7 @@ logLike.InitialSoftmax <- function(x) {
 
 link.InitialSoftmax <- function(x) {
   sprintf(
-    "pi = softmax((s%s' * sBeta%s)');",
+    "pi = softmax((v%s' * vBeta%s)');",
     x$k, x$k
   )
 }

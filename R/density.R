@@ -1,20 +1,22 @@
-data               <- function(x, ...) { UseMethod("data", x) }
-explain            <- function(x) { UseMethod("explain", x) }
+# Stan blocks & included chunks
 constants          <- function(x) { UseMethod("constants", x) }
 generated          <- function(x) { UseMethod("generated", x) }
+parameters         <- function(x) { UseMethod("parameters", x) }
+logLike            <- function(x) { UseMethod("logLike", x) }
+noLogLike          <- function(x) { UseMethod("noLogLike", x) }
+link               <- function(x) { UseMethod("link", x) }
+freeParameters     <- function(x) { UseMethod("freeParameters", x) }
+fixedParameters    <- function(x) { UseMethod("fixedParameters", x) }
+prior              <- function(x) { UseMethod("prior", x) }
+
+# Other (not directly related to Stan code)
+explain            <- function(x) { UseMethod("explain", x) }
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
 is.link            <- function(x) { UseMethod("is.link", x) }
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
-logLike            <- function(x) { UseMethod("logLike", x) }
-parameters         <- function(x) { UseMethod("parameters", x) }
-link               <- function(x) { UseMethod("link", x) }
-freeParameters     <- function(x) { UseMethod("freeParameters", x) }
-fixedParameters    <- function(x) { UseMethod("fixedParameters", x) }
-prior              <- function(x) { UseMethod("prior", x) }
-noLogLike          <- function(x) { UseMethod("noLogLike", x) }
 
 Density <- function(name, ...) {
   # Evaluate nested expressions (Densities)
@@ -75,8 +77,7 @@ is.Density <- function(x) {
   "Density" %in% class(x)
 }
 
-
-data.Density <- function(x, noLogLike) {
+block_data.Density <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
   } else {
@@ -84,7 +85,7 @@ data.Density <- function(x, noLogLike) {
   }
 }
 
-data.DiscreteDensity <- function(x, noLogLike) {
+block_data.DiscreteDensity <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
   } else {
@@ -160,23 +161,23 @@ is.link.LinkDensity <- function(x) { TRUE }
 constants.Density <- function(x) { "" }
 
 freeParameters.PriorOnlyDensity <- function(x) {
-  "" # stop("This density is only meant to be used as a prior.")
+  ""
 }
 
 fixedParameters.PriorOnlyDensity <- function(x) {
-  "" # stop("This density is only meant to be used as a prior.")
+  ""
 }
 
 generated.PriorOnlyDensity <- function(x) {
-  "" # stop("This density is only meant to be used as a prior.")
+  ""
 }
 
 getFreeParameters.PriorOnlyDensity <- function(x) {
-  "" # stop("This density is only meant to be used as a prior.")
+  ""
 }
 
 logLike.PriorOnlyDensity <- function(x) {
-  "" # stop("This density is only meant to be used as a prior.")
+  ""
 }
 
 link.Density <- function(x) { "" }

@@ -15,7 +15,7 @@ test_calibration_dummy_model <- function() {
     name = "Univariate Gaussian Dummy Model"
   )
 
-  diagnose_calibration(mySpec, N = 3, T = 500, iter = 500, seed = 9000)
+  validate_calibration(mySpec, N = 3, T = 500, iter = 500, seed = 9000)
 }
 
 test_calibration_hmm_Gaussian <- function() {
@@ -32,7 +32,7 @@ test_calibration_hmm_Gaussian <- function() {
     name = "test_calibration_hmm_Gaussian"
   )
 
-  diagnose_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000)
+  validate_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000)
 }
 
 test_calibration_hmm_Binomial <- function() {
@@ -60,7 +60,7 @@ test_calibration_hmm_Binomial <- function() {
     name = "test_calibration_hmm_Binomial"
   )
 
-  diagnose_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000)
+  validate_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000)
 }
 
 test_calibration_hmm_RegGaussian <- function() {
@@ -87,7 +87,7 @@ test_calibration_hmm_RegGaussian <- function() {
     )
   )
 
-  diagnose_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000, x)
+  validate_calibration(mySpec, N = 100, T = 500, iter = 500, seed = 9000, x)
 }
 
 test_calibration_hmm_MVGaussianCor <- function() {
@@ -106,7 +106,7 @@ test_calibration_hmm_MVGaussianCor <- function() {
     name = "test_calibration_hmm_MVGaussianCor"
   )
 
-  diagnose_calibration(mySpec, N = 1, T = 500, iter = 500, seed = 9000)
+  validate_calibration(mySpec, N = 1, T = 500, iter = 500, seed = 9000)
 }
 
 test_calibration_all <- function() {

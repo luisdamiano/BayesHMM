@@ -14,14 +14,6 @@ col2rgb_alpha <- function(bgCol, alpha = 1) {
   )
 }
 
-get_cluster_colors <- function(K) {
-  cols <- getOption("BayesHMM.clusterColors")
-  if (length(cols) < K) {
-    stop("Please, use options to set a larger pallete in BayesHMM.clusterColors")
-  }
-  cols[1:K]
-}
-
 par_reset <- function() {
   invisible(tryCatch({dev.off()}, error = function(e) { }))
 }

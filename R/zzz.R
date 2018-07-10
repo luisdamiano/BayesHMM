@@ -1,7 +1,7 @@
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     sprintf(
-      "Hey! BayesHHM v%s here o/",
+      "Hola! BayesHHM v%s here o/",
       utils::packageDescription("BayesHMM")$Version
     )
   )
@@ -11,19 +11,36 @@
 }
 
 .onLoad <- function(libname, pkgname) {
-  op <- options()
-  opNew <- list(
+  # See
+  # 1. https://github.com/stan-dev/rstan/issues/176
+  # 2. https://github.com/stan-dev/rstan/issues/353
+  # 3. https://github.com/krisrs1128/nmfSim/commit/225ef3970c04d7e4a3e477ed2be7a02bf945eb43
+  # 4. https://stackoverflow.com/a/6279889/2860744
+  # suppressPackageStartupMessages(library(rstan))
+
+  opDefaults <- list(
     BayesHHM.config = "example",
-    BayesHMM.colors.clusters = c(
-      "#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090", "#FFFFBF",
-      "#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"
+    BayesHMM.theme = list(
+      states       = c(
+        "#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090", "#FFFFBF",
+        "#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"
       ),
-    BayesHMM.colors.observations = palette(),
-    BayesHMM.colors.yLine = "gray40",
-    BayesHMM.colors.shadeAlpha = 0.2
+      observations = "black",
+      yDensity     = "black",
+      yPredDensity = "gray80",
+      yLine        = "gray40",
+      boxY         = "black",
+      boxYPred     = "gray80",
+      histCol      = "gray80",
+      histBorder   = "gray",
+      histLine     = "black",
+      shadeAlpha   = 0.2
+    )
   )
-  toset <- !(names(opNew) %in% names(op))
-  if (any(toset)) options(opNew[toset])
+
+  op    <- options()
+  toset <- !(names(opDefaults) %in% names(op))
+  if (any(toset)) options(opDefaults[toset])
 
   invisible()
 }

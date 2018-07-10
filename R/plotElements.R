@@ -1,23 +1,26 @@
-add_fan <- function(x, upper, lower, bgCol, lineCol) {
+add_fan <- function(x, upper, lower, bgCol, lineCol, ...) {
   polygon(
-    # x   = c(rev(x), x),
     x   = c(x, rev(x)),
     y   = c(lower, rev(upper)),
-    col = bgCol
+    col = bgCol,
+    ...
   )
 
   lines(x, lower, col = lineCol)
   lines(x, upper, col = lineCol)
 }
 
-add_shade <- function(x, bgCol) {
+add_shade <- function(x, bgCol, ...) {
+  theme <- getOption("BayesHMM.theme")
+
   rect(
     xleft   = head(x, -1),
     ybottom = get_ybottom(),
     xright  = tail(x, -1),
     ytop    = get_ytop(),
-    col     = col2rgb_alpha(bgCol, getOption("BayesHMM.colors.shadeAlpha")),
-    border  = NA
+    col     = col2rgb_alpha(bgCol, theme$shadeAlpha),
+    border  = NA,
+    ...
   )
 }
 
@@ -32,8 +35,10 @@ add_colored_lines <- function(x, y, col, ...) {
   )
 }
 
-add_features <- function(x, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL, features = NULL) {
-  kCol <- getOption("BayesHMM.colors.clusters")
+add_features <- function(x, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL,
+                         features = NULL) {
+  theme <- getOption("BayesHMM.theme")
+  kCol <- theme$states
   zCol <- kCol[z]
 
   if ("stateShade" %in% features) {
@@ -69,33 +74,19 @@ add_features <- function(x, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL,
   }
 }
 
-add_legend  <- function(p, ...) {
-  opar <- par(no.readonly = TRUE)
-  par(
-    mar = c(0, 0, 0, 0),
-    mai = c(0, 0, 0, 0)
-  )
-  plot.new()
-  legend(...)
-  par(opar)
-}
-
 add_title_overlay <- function(...) {
-  opar <- par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
+  opar <- par(
+    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
+  )
   plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
   title(...)
   par(opar)
 }
 
-add_mtext_overlay <- function(...) {
-  opar <- par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
-  plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-  mtext(...)
-  par(opar)
-}
-
 add_legend_overlay <- function(...) {
-  opar <- par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
+  opar <- par(
+    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
+  )
   plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
   legend(...)
   par(opar)

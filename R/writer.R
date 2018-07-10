@@ -15,12 +15,9 @@ write_functions <- function(spec, writeDir) {
 
 write_data <- function(spec, noLogLike, writeDir) {
   strSpec <- block_data(spec)
-  strObs  <- densityCollect(spec$observation$density, data, noLogLike = noLogLike)
-    # if (noLogLike) {
-    #   "// No observation vector"
-    # } else {
-    #   densityCollect(spec$observation$density, data, noLogLike = noLogLike)
-    # }
+  strObs  <- densityCollect(
+    spec$observation$density, block_data, noLogLike = noLogLike
+  )
 
   write_stanfile(
     c(strSpec, strObs),

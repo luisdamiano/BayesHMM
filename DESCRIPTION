@@ -1,6 +1,6 @@
 Package: BayesHMM
 Type: Package
-Title: Full Bayesian Inference for Hidden Markov Model
+Title: Full Bayesian Inference for Hidden Markov Models
 Version: 0.0.1
 Author: Luis Damiano, Michael Weylandt, Brian Peterson
 Maintainer: Luis Damiano <damiano.luis@gmail.com>
@@ -8,16 +8,16 @@ Description: An R Package to run full Bayesian inference on Hidden Markov Models
 License: GPL (>=3)
 Copyright: (c) 2018
 Encoding: UTF-8
-LazyData: treu
+LazyData: true
 Depends:
-    R (>= 3.2.0),
-    rstan (>= 2.16),
-    data.table,
+    R (>= 3.0.0),
+    Rcpp (>= 0.12.0)
+Imports:
     doParallel,
     foreach,
     methods,
+    rstan (>= 2.16),
     utils
-Imports:
 Suggests:
     RUnit,
     matrixcalc

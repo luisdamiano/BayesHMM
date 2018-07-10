@@ -1,5 +1,3 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Poisson(
@@ -7,7 +5,7 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "My simple model!..."
+  name = "Univariate Poisson Model"
 )
 
 set.seed(9000)
@@ -15,8 +13,8 @@ y = as.matrix(
   c(rpois(100, 5), rpois(100, 10), rpois(100, 1))
 )
 
-myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
-rstan::plot(myFit, pars = c("lambda11", "lambda21", "lambda31"))
+plot_obs(myFit)
 
-print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
+print_all(myFit)

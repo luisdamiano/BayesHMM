@@ -32,8 +32,8 @@ block_data.HMMSpecification <- function(spec) {
   strInitial <-
     if (is.TVInitial(spec)) {
       "
-      int<lower = 1> S_init;    // number of initial model predictors
-      vector[S_init] s_init;    // initial model predictors
+      int<lower = 1> Q;     // number of initial model predictors
+      vector[Q] v;          // initial model predictors
       "
     } else {
       ""
@@ -42,8 +42,8 @@ block_data.HMMSpecification <- function(spec) {
   strTransition <-
     if (is.TVTransition(spec)) {
       "
-      int<lower = 1> S; // number of transition model predictors
-      matrix[T, S] s;   // transition model predictors
+      int<lower = 1> P;     // number of transition model predictors
+      matrix[T, P] u;       // transition model predictors
       "
     } else {
       ""

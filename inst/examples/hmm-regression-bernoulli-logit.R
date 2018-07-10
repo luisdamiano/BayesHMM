@@ -1,9 +1,7 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 2, R = 1,
   observation = RegBernoulliLogit(
-    xBeta = Default(),
+    xBeta = Gaussian(mu = 0, sigma = 10),
     M     = 3
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5)),
@@ -26,14 +24,9 @@ y <- as.matrix(
   )
 )
 
-myData  <- make_data(
-  spec  = mySpec,
-  y     = y,
-  xBeta = x
-)
+myFit <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
 
-myFit <- run(mySpec, data = myData, chains = 1, iter = 500, writeDir = "out")
+plot_obs(myFit)
 
-rstan::plot(myFit, pars = c("xBeta11", "xBeta21"))
+print_all(myFit)
 
-print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)

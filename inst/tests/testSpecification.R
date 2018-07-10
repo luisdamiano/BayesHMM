@@ -78,6 +78,8 @@ test_nonK_univariate_observation_densities <- function() {
 }
 
 test_illegal_observation_density_mixing <- function() {
+  DEACTIVATED("check.Specification is temporarily deactivated.")
+
   checkException(
     hmm(
       K = 2, R = 1,
@@ -132,6 +134,7 @@ test_fixed_parameters_scalar <- function() {
 }
 
 test_illegal_fixed_parameters_scalar <- function() {
+  DEACTIVATED("check.Specification is temporarily deactivated.")
   checkException(
     hmm(
       K = 1, R = 1,
@@ -164,6 +167,7 @@ test_fixed_parameters_vector <- function() {
 }
 
 test_illegal_fixed_parameters_vector <- function() {
+  DEACTIVATED("check.Specification is temporarily deactivated.")
   checkException(
     hmm(
       K = 1, R = 1,
@@ -196,6 +200,7 @@ test_fixed_parameters_matrix <- function() {
 }
 
 test_illegal_fixed_parameters_matrix <- function() {
+  DEACTIVATED("check.Specification is temporarily deactivated.")
   checkException(
     hmm(
       K = 1, R = 1,
@@ -211,6 +216,7 @@ test_illegal_fixed_parameters_matrix <- function() {
 }
 
 test_illegal_fixed_parameters_cholesky_cov_matrix <- function() {
+  DEACTIVATED("check.Specification is temporarily deactivated.")
   checkException(
     hmm(
       K = 1, R = 1,

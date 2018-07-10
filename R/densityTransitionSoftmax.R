@@ -1,4 +1,4 @@
-TransitionSoftmax <- function(sBeta = NULL, bounds = list(NULL, NULL),
+TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
                            trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
   LinkDensity(
     "TransitionSoftmax",
@@ -7,21 +7,21 @@ TransitionSoftmax <- function(sBeta = NULL, bounds = list(NULL, NULL),
 }
 
 freeParameters.TransitionSoftmax <- function(x) {
-  sBetaStr <-
-    if (is.Density(x$sBeta)) {
-      sBetaBoundsStr <- make_bounds(x, "sBeta")
+  uBetaStr <-
+    if (is.Density(x$uBeta)) {
+      uBetaBoundsStr <- make_bounds(x, "uBeta")
       sprintf(
         "
-        matrix%s[K, S] sBeta[K];        // transition model regressors
-                                        // sBeta[to, from, s regressors]
+        matrix%s[K, P] uBeta[K];        // transition model regressors
+                                        // uBeta[to, from, p regressors]
         ",
-        sBetaBoundsStr
+        uBetaBoundsStr
       )
     } else {
       ""
     }
 
-  sBetaStr
+  uBetaStr
 }
 
 fixedParameters.TransitionSoftmax <- function(x) {
@@ -34,7 +34,7 @@ generated.TransitionSoftmax <- function(x) {
 }
 
 getParameterNames.TransitionSoftmax <- function(x) {
-  return("sBeta")
+  return("uBeta")
 }
 
 logLike.TransitionSoftmax <- function(x) {
@@ -44,7 +44,7 @@ logLike.TransitionSoftmax <- function(x) {
 
 link.TransitionSoftmax <- function(x) {
   sprintf(
-    "A[t, i] = softmax((s[t] * sBeta%s[i]')');",
+    "A[t, i] = softmax((u[t] * uBeta%s[i]')');",
     x$k
   )
 }

@@ -1,10 +1,19 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 3, R = 2,
   observation = MVGaussian(
     mu    = Gaussian(mu = 0, sigma = 100),
     sigma = Default()
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  name = "Multivariate Gaussian"
+)
+
+mySpec <- hmm(
+  K = 3, R = 2,
+  observation = MVGaussian(
+    mu    = Gaussian(mu = 0, sigma = 100),
+    sigma = Gaussian(mu = 0, sigma = 10)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
@@ -18,8 +27,8 @@ y = rbind(
   MASS::mvrnorm(n = 100, mu = c( 10,  30), Sigma = matrix(c(1, 0.2, 0.2, 1), 2, 2))
 )
 
-myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500)
+myFit <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
 
-rstan::plot(myFit, pars = c("mu1", "mu2", "mu3"))
+plot_obs(myFit)
 
-print(rstan::summary(myFit)[[1]][1:18, ], digits = 2)
+print_all(myFit)

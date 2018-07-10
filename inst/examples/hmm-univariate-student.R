@@ -1,5 +1,3 @@
-library(rstan)
-
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Student(
@@ -9,22 +7,21 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
   transition  = Dirichlet(alpha = c(0.1, 0.5, 1)),
-  name = "My Student model!..."
+  name = "Univariate Student Model"
 )
 
 set.seed(9000)
 y = as.matrix(
   c(
-    rt(100, df = 5, ncp = 0),
-    rt(100, df = 5, ncp = 10),
+    rt(100, df = 5, ncp =   0),
+    rt(100, df = 5, ncp =  10),
     rt(100, df = 5, ncp = -10)
   )
 )
 
-myFit <- run(mySpec, data = make_data(mySpec, y), chains = 1, iter = 500, writeDir = "sandbox//out")
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-rstan::plot(myFit, pars = c("mu11", "mu21", "mu31"))
+plot_obs(myFit)
 
-print(rstan::summary(myFit)[[1]][1:21, ], digits = 2)
+print_all(myFit)
 
-str(extract(myFit, par = "ypred")[[1]])

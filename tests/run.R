@@ -29,10 +29,6 @@ if (require("RUnit", quietly = TRUE)) {
     package = "BayesHMM"
   )
 
-  # Load helpers
-  source(file.path(fileDir, "diagnostics.R"))
-  source(file.path(fileDir, "simulation.R"))
-
   # Create test suite
   testSuite <- defineTestSuite(
     name           = paste(packageName, "RUnit Tests"),

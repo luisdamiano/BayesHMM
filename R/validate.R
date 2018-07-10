@@ -1,4 +1,4 @@
-diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores = NULL, ...) {
+validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores = NULL, ...) {
   dots <- list(...)
 
   # 1. Draw a sample from the prior predictive density
@@ -11,9 +11,9 @@ diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   myModel    <- compile(spec)
 
   if (is.null(cores)) { cores <- parallel::detectCores() / 2 }
-  cl <- makeCluster(cores, outfile = "")
-  registerDoParallel(cl)
-  l <- foreach(n = 1:N, .combine = c, .packages = c("BayesHMM", "rstan")) %dopar% {
+  cl <- parallel::makeCluster(cores, outfile = "")
+  doParallel::registerDoParallel(cl)
+  l <- foreach::foreach(n = 1:N, .combine = c, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, ] # Chain 1
     paramTrue  <- paramSim[n, , ]
     myFit      <- do.call(
@@ -27,14 +27,14 @@ diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
       spec$K
     )
 
-    myDiag     <- diagnose(myFit, trueParameters = paramTrue)
+    myDiag     <- validate(myFit, trueParameters = paramTrue)
     myDiag$chains$seed  <- seed
     myDiag$chains$n     <- n
     myDiag$parameters$n <- n
     rm(myFit); gc()
     return(myDiag)
   }
-  stopCluster(cl)
+  parallel::stopCluster(cl)
 
   sapply(unique(names(l)), function(name) {
     out <- do.call(rbind.data.frame, l[which(names(l) == name)])
@@ -43,7 +43,7 @@ diagnose_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   }, simplify = FALSE)
 }
 
-diagnose <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
+validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
   d       <- get_diagnose_parameters(stanfit, trueParameters, pars)
   nChains <- extract_n_chains(stanfit)
   spec    <- extract_spec(stanfit)

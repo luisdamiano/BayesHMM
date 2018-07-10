@@ -1,5 +1,10 @@
-plot_series <- function(stanfit, r = NULL, stateProbability = "smoothed", features = NULL,
-                        stateFun = "mean", main = NULL, xlab = NULL, ylab = NULL, addLegend = TRUE, legend.cex = 1, ...) {
+plot_series <- function(stanfit, r = NULL,
+                        stateProbability = "smoothed", features = NULL,
+                        stateFun = "mean", main = NULL, xlab = NULL, ylab = NULL,
+                        addLegend = TRUE, legend.cex = 1, ...) {
+
+  theme <- getOption("BayesHMM.theme")
+
   stateProbability <- match.arg(
     stateProbability,
     choices = c("filtered", "smoothed", "viterbi"),
@@ -39,7 +44,12 @@ plot_series <- function(stanfit, r = NULL, stateProbability = "smoothed", featur
       NULL,
       main = if (is.null(main)) { "" } else { main },
       xlab = if (is.null(xlab)) { "Time" } else { xlab },
-      ylab = if (is.null(ylab)) { if (R == 1) { "Observation" } else { sprintf("Variable %d", r) } } else { ylab },
+      ylab =
+        if (is.null(ylab)) {
+          if (R == 1) { "Observation" } else { sprintf("Variable %d", r) }
+        } else {
+          ylab
+        },
       xlim = quantile(tidx, probs = c(0, 1)),
       ylim = quantile(y, probs = c(0, 1))
     )
@@ -53,15 +63,19 @@ plot_series <- function(stanfit, r = NULL, stateProbability = "smoothed", featur
     legend = sprintf("Hidden state %d", 1:K),
     bty    = "n",
     horiz  = TRUE,
-    fill   = getOption("BayesHMM.colors.clusters")[1:K],
-    border = getOption("BayesHMM.colors.clusters")[1:K],
+    fill   = theme$states[1:K],
+    border = theme$states[1:K],
     cex    = legend.cex
   )
 }
 
-plot_state_probability <- function(stanfit, stateProbability = "smoothed", features = NULL,
-                                   stateProbabilityFun = "mean", stateProbabilityInterval = NULL,
-                                   main = NULL, xlab = NULL, ylab = NULL, addLegend = TRUE, legend.cex = 1, ...) {
+plot_state_probability <- function(stanfit, stateProbability = "smoothed",
+                                   features = NULL, stateProbabilityFun = "mean",
+                                   stateProbabilityInterval = NULL,
+                                   main = NULL, xlab = NULL, ylab = NULL,
+                                   addLegend = TRUE, legend.cex = 1, ...) {
+
+  theme <- getOption("BayesHMM.theme")
 
   stateProbability <- match.arg(
     stateProbability,
@@ -114,7 +128,7 @@ plot_state_probability <- function(stanfit, stateProbability = "smoothed", featu
       xlab = if (k == K) { xlab } else { "" },
       ylab = sprintf("Hidden state %d", k),
       type = "l",
-      col  = getOption("BayesHMM.colors.clusters")[k],
+      col  = theme$states[k],
       xaxt = "n",
       yaxt = "n",
       ...
@@ -134,8 +148,8 @@ plot_state_probability <- function(stanfit, stateProbability = "smoothed", featu
       legend = sprintf("Hidden state %d", 1:K),
       bty    = "n",
       horiz  = TRUE,
-      fill   = getOption("BayesHMM.colors.clusters")[1:K],
-      border = getOption("BayesHMM.colors.clusters")[1:K],
+      fill   = theme$states[1:K],
+      border = theme$states[1:K],
       cex    = legend.cex
     )
   }
@@ -150,6 +164,8 @@ plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL,
                              densityControl = NULL, cumulativeControl = NULL,
                              funControl = NULL, fun1Control = NULL, fun2Control = NULL,
                              boxplotControl = NULL, main = NULL) {
+  theme <- getOption("BayesHMM.theme")
+
   R     <- extract_R(stanfit)
   y     <- extract_y(stanfit)
   yPred <- extract_ypred(stanfit)
@@ -159,22 +175,40 @@ plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL,
 
   funList <- list(
     density    = function(y, yPred) {
-      plot_ppredictive_density(y, yPred, densityControl, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_density(
+        y, yPred, densityControl,
+        NULL, NULL, NULL, FALSE
+      )
     },
     cumulative = function(y, yPred) {
-      plot_ppredictive_cumulative(y, yPred, cumulativeControl, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_cumulative(
+        y, yPred, cumulativeControl,
+        NULL, NULL, NULL, FALSE
+      )
     },
     hist       = function(y, yPred) {
-      plot_ppredictive_hist(y, yPred, fun, funControl, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_hist(
+        y, yPred, fun, funControl,
+        NULL, NULL, NULL, FALSE
+      )
     },
     boxplot    = function(y, yPred) {
-      plot_ppredictive_boxplot(y, yPred, boxplotControl, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_boxplot(
+        y, yPred, boxplotControl,
+        NULL, NULL, NULL, FALSE
+      )
     },
     scatter    = function(y, yPred) {
-      plot_ppredictive_scatter(y, yPred, fun1, fun2, fun1Control, fun2Control, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_scatter(
+        y, yPred, fun1, fun2, fun1Control, fun2Control,
+        NULL, NULL, NULL, FALSE
+      )
     },
     ks         = function(y, yPred) {
-      plot_ppredictive_ks(y, yPred, NULL, NULL, NULL, NULL, FALSE)
+      plot_ppredictive_ks(
+        y, yPred,
+        NULL, NULL, NULL, NULL, FALSE
+      )
     }
   )
 
@@ -203,16 +237,19 @@ plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL,
   add_legend_overlay(
     x = "bottom",
     legend = c("Observed sample", "Posterior predictive samples"),
-    border = c("black", "gray80"),
-    fill   = c("black", "gray80"),
+    border = c(theme$yDensity, theme$yPredDensity),
+    fill   = c(theme$yDensity, theme$yPredDensity),
     bty    = "n",
     horiz  = TRUE
   )
 }
 
 plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
-                                             control1 = NULL, control2 = NULL, main = NULL,
-                                             xlab = NULL, ylab = NULL, addLegend = TRUE) {
+                                     control1 = NULL, control2 = NULL,
+                                     main = NULL, xlab = NULL, ylab = NULL,
+                                     addLegend = TRUE) {
+
+  theme <- getOption("BayesHMM.theme")
 
   myFun <- function(x) {
     if (is.null(control1)) { control1 <- list() }
@@ -239,15 +276,15 @@ plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
   points(
     yPredFun,
     pch = 21,
-    col = "gray80",
-    bg  = "gray80"
+    col = theme$yPredDensity,
+    bg  = theme$yPredDensity
   )
 
   points(
     yFun,
     pch = 21,
-    bg  = "black",
-    col = "black"
+    bg  = theme$yDensity,
+    col = theme$yDensity
   )
 
   if (addLegend) {
@@ -255,15 +292,18 @@ plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
       x = "topright",
       legend = c("Observed sample", "Posterior predictive samples"),
       pch = 21,
-      bg  = c("black", "gray80"),
-      col = c("black", "gray80"),
+      bg  = c(theme$yDensity, theme$yPredDensity),
+      col = c(theme$yDensity, theme$yPredDensity),
       bty = "n"
     )
   }
 }
 
 plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
-                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+                                     xlab = NULL, ylab = NULL,
+                                  addLegend = TRUE) {
+
+  theme <- getOption("BayesHMM.theme")
 
   myFun <- function(x) {
     if (is.null(control)) { control <- list() }
@@ -279,18 +319,18 @@ plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
     xlab = if (is.null(xlab)) { funinvarName(fun) } else { xlab },
     ylab = if (is.null(ylab)) { "Frequency" } else { ylab },
     breaks = "FD",
-    col    = "gray80",
-    border = "gray"
+    col    = theme$histCol,
+    border = theme$histBorder
   )
 
-  abline(v = yFun)
+  abline(v = yFun, col = theme$histLine)
 
   if (addLegend) {
     legend(
       x = "topright",
       legend = c("Observed sample", "Posterior predictive samples"),
       lwd = 2,
-      col = c("black", "gray80"),
+      col = c(theme$histLine, theme$histCol),
       bty = "n"
     )
   }
@@ -298,6 +338,8 @@ plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
 
 plot_ppredictive_ks <- function(y, yPred, control = NULL, main = NULL,
                                 xlab = NULL, ylab = NULL, addLegend = TRUE) {
+
+  theme <- getOption("BayesHMM.theme")
 
   yPredFun <- suppressWarnings(
     apply(yPred, 1, function(x) { ks.test(x, y)$statistic } )
@@ -309,20 +351,23 @@ plot_ppredictive_ks <- function(y, yPred, control = NULL, main = NULL,
     xlab = if (is.null(xlab)) { "Kolmogorov-Smirnov Statistic" } else { xlab },
     ylab = if (is.null(ylab)) { "Frequency" } else { ylab },
     breaks = "FD",
-    col    = "gray80",
-    border = "gray"
+    col    = theme$histCol,
+    border = theme$histBorder
   )
 }
 
 plot_ppredictive_boxplot <- function(y, yPred, control = NULL, main = NULL,
-                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+                                     xlab = NULL, ylab = NULL,
+                                     addLegend = TRUE) {
+
+  theme <- getOption("BayesHMM.theme")
 
   argList <- list(
     x    = cbind(y, t(yPred)),
     main = if (is.null(main)) { "" } else { main },
     xlab = if (is.null(xlab)) { "Sample" } else { xlab },
     ylab = if (is.null(ylab)) { "Observation" } else { ylab },
-    border = c("black", rep("gray80", nrow(yPred))),
+    border = c(theme$boxY, rep(theme$boxYPred, nrow(yPred))),
     names  = c("y", seq_len(nrow(yPred)))
   )
 
@@ -332,7 +377,10 @@ plot_ppredictive_boxplot <- function(y, yPred, control = NULL, main = NULL,
 }
 
 plot_ppredictive_cumulative <- function(y, yPred, control = NULL, main = NULL,
-                                        xlab = NULL, ylab = NULL, addLegend = TRUE) {
+                                        xlab = NULL, ylab = NULL,
+                                        addLegend = TRUE) {
+  theme <- getOption("BayesHMM.theme")
+
   qs <- seq(from = 0, to = 1, by = 0.01)
   myCumulative <- function(x) {
     if (is.null(control)) { control <- list() }
@@ -353,24 +401,27 @@ plot_ppredictive_cumulative <- function(y, yPred, control = NULL, main = NULL,
   )
 
   for (yrow in seq_len(nrow(yPredCumulative))) {
-    lines(x = yPredCumulative[yrow, ], y = qs, col = "gray80")
+    lines(x = yPredCumulative[yrow, ], y = qs, col = theme$yPredDensity)
   }
 
-  lines(x = yCumulative, y = qs, col = "black")
+  lines(x = yCumulative, y = qs, col = theme$yDensity)
 
   if (addLegend) {
     legend(
       x = "bottomright",
       legend = c("Observed sample", "Posterior predictive samples"),
       lwd = 2,
-      col = c("black", "gray80"),
+      col = c(theme$yDensity, theme$yPredDensity),
       bty = "n"
     )
   }
 }
 
 plot_ppredictive_density <- function(y, yPred, control = NULL, main = NULL,
-                                     xlab = NULL, ylab = NULL, addLegend = TRUE) {
+                                     xlab = NULL, ylab = NULL,
+                                     addLegend = TRUE) {
+  theme <- getOption("BayesHMM.theme")
+
   myDensity <- function(x) {
     if (is.null(control)) { control <- list(bw = "SJ") }
     do.call(density, c(list(x = x), control))
@@ -398,17 +449,17 @@ plot_ppredictive_density <- function(y, yPred, control = NULL, main = NULL,
   )
 
   for (yp in yPredDensity) {
-    lines(yp, col = "gray80")
+    lines(yp, col = theme$yPredDensity)
   }
 
-  lines(yDensity, col = "black")
+  lines(yDensity, col = theme$yDensity)
 
   if (addLegend) {
     legend(
       x = "topright",
       legend = c("Observed sample", "Posterior predictive samples"),
       lwd = 2,
-      col = c("black", "gray80"),
+      col = c(theme$yDensity, theme$yPredDensity),
       bty = "n"
     )
   }

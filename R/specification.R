@@ -1,29 +1,30 @@
-check         <- function(spec, ...) { UseMethod("check", spec) }
-run           <- function(spec, ...) { UseMethod("run", spec) }
-fit           <- function(spec, ...) { UseMethod("fit", spec) }
-sim           <- function(spec, ...) { UseMethod("sim", spec) }
-compile       <- function(spec, ...) { UseMethod("compile", spec) }
-sampling      <- function(spec, ...) { UseMethod("sampling", spec) }
-write_chunks  <- function(spec, ...) { UseMethod("write_chunks", spec) }
-write_model   <- function(spec, ...) { UseMethod("write_model", spec) }
-make_data     <- function(spec, ...) { UseMethod("make_data", spec) }
-
+# Stan code blocks
 block_functions   <- function(x) { UseMethod("block_functions", x) }
-block_data        <- function(x) { UseMethod("block_data", x) }
+block_data        <- function(x, ...) { UseMethod("block_data", x) }
 block_tdata       <- function(x) { UseMethod("block_tdata", x) }
 block_parameters  <- function(x) { UseMethod("block_parameters", x) }
 block_tparameters <- function(x) { UseMethod("block_tparameters", x) }
 block_generated   <- function(x) { UseMethod("block_generated", x) }
 block_target      <- function(x) { UseMethod("block_target", x) }
 
-browse_model      <- function(x) { UseMethod("browse_model", x) }
-
+# Stan included chunks
 chunk_calculate_target <- function(x) { UseMethod("chunk_calculate_target", x) }
 chunk_increase_target  <- function(x) { UseMethod("chunk_increase_target", x) }
 chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
-is.TVTransition <- function(x) { UseMethod("is.TVTransition", x) }
-is.TVInitial <- function(x) { UseMethod("is.TVInitial", x) }
+# Other methods for Specification objects
+check             <- function(spec, ...) { UseMethod("check", spec) }
+run               <- function(spec, ...) { UseMethod("run", spec) }
+fit               <- function(spec, ...) { UseMethod("fit", spec) }
+sim               <- function(spec, ...) { UseMethod("sim", spec) }
+compile           <- function(spec, ...) { UseMethod("compile", spec) }
+sampling          <- function(spec, ...) { UseMethod("sampling", spec) }
+write_chunks      <- function(spec, ...) { UseMethod("write_chunks", spec) }
+write_model       <- function(spec, ...) { UseMethod("write_model", spec) }
+make_data         <- function(spec, ...) { UseMethod("make_data", spec) }
+browse_model      <- function(x) { UseMethod("browse_model", x) }
+is.TVTransition   <- function(x) { UseMethod("is.TVTransition", x) }
+is.TVInitial      <- function(x) { UseMethod("is.TVInitial", x) }
 
 spec <- function(K, R, observation = NULL, initial = NULL,
                  transition = NULL, name = "") {
@@ -54,18 +55,21 @@ spec <- function(K, R, observation = NULL, initial = NULL,
   spec
 }
 
-block_functions.Specification   <- function(x) { "" }
-block_data.Specification        <- function(x) { "" }
-block_tdata.Specification       <- function(x) { "" }
-block_parameters.Specification  <- function(x) { "" }
-block_tparameters.Specification <- function(x) { "" }
-block_generated.Specification   <- function(x) { "" }
-block_target.Specification      <- function(x) { "" }
-chunk_calculate_target.Specification <- function(x) { "" }
-chunk_increase_target.Specification  <- function(x) { "" }
-chunk_zpredictive.Specification <- function(x) { "" }
+# Default methods for an empty Specification
+block_functions.Specification         <- function(x) { "" }
+block_data.Specification              <- function(x) { "" }
+block_tdata.Specification             <- function(x) { "" }
+block_parameters.Specification        <- function(x) { "" }
+block_tparameters.Specification       <- function(x) { "" }
+block_generated.Specification         <- function(x) { "" }
+block_target.Specification            <- function(x) { "" }
+chunk_calculate_target.Specification  <- function(x) { "" }
+chunk_increase_target.Specification   <- function(x) { "" }
+chunk_zpredictive.Specification       <- function(x) { "" }
 
 check.Specification <- function(spec) {
+  stop("TO BE IMPLEMENTED.")
+
   # Check if R and the observation tree are consistent
   if (spec$observation$R == 1 & is.multivariate(spec)) {
     stop("Inconsistent specification: although R was set to 1, a multivariate density was given.")
@@ -96,7 +100,8 @@ explain.Specification <- function(spec) {
   stop("TO BE IMPLEMENTED.")
 }
 
-compile.Specification <- function(spec, priorPredictive = FALSE, writeDir = tempdir(), ...) {
+compile.Specification <- function(spec, priorPredictive = FALSE,
+                                  writeDir = tempdir(), ...) {
 
   stanFile <- write_model(spec, noLogLike = priorPredictive, writeDir)
 
@@ -115,14 +120,14 @@ compile.Specification <- function(spec, priorPredictive = FALSE, writeDir = temp
   return(stanModel)
 }
 
-sampling.Specification <- function(spec, stanModel = NULL, y = NULL, x = NULL, control = NULL,
-                                   writeDir = tempdir(), switchLabels = FALSE, ...) {
+sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL,
+                                   control = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
-    stanModel <- compile(spec, writeDir, ...)
+    stanModel <- compile(spec, priorPredictive = FALSE, writeDir, ...)
   }
 
-  stanData <- make_data(spec, y, xBeta = x)
+  stanData <- make_data(spec, y, x = x)
   stanDots <- c(list(...), list(object = stanModel, data = stanData))
 
   stanSampling <- do.call(rstan::sampling, stanDots)
@@ -130,15 +135,12 @@ sampling.Specification <- function(spec, stanModel = NULL, y = NULL, x = NULL, c
   attr(stanSampling, "filename") <- attr(stanModel, "filename")
   attr(stanSampling, "spec")     <- spec
 
-  if (switchLabels) {
-    stanSampling <- stan_sort_chain(stanSampling, reference = 1, spec$K)
-  }
-
   return(stanSampling)
 }
 
 run.Specification <- function(spec, data = NULL, control = NULL,
-                              writeDir = tempdir(), switchLabels = FALSE, ...) {
+                              writeDir = tempdir(), ...) {
+
   stanData <- data
   stanFile <- write_model(spec, noLogLike = is.null(data$y), writeDir)
 
@@ -157,19 +159,15 @@ run.Specification <- function(spec, data = NULL, control = NULL,
   attr(stanFit, "filename") <- stanFile
   attr(stanFit, "spec")     <- spec
 
-  if (switchLabels) {
-    stanFit <- stan_sort_chain(stanFit, reference = 1, spec$K)
-  }
-
   return(stanFit)
 }
 
-fit.Specification <- function(spec, y, ...) {
-  run(spec, data = make_data(spec, y), ...)
+fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
+  run(spec, data = make_data(spec, y, x, u, v), ...)
 }
 
-sim.Specification <- function(spec, T = 1000, x = NULL, ...) {
-  run(spec, data = make_data(spec, y = NULL, xBeta = x, T = T), ...)
+sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, ...) {
+  run(spec, data = make_data(spec, y = NULL, x, u, v, T), ...)
 }
 
 is.multivariate.Specification <- function(spec) {
@@ -188,13 +186,15 @@ is.TVInitial.Specification <- function(spec) {
   all(densityApply(spec$initial$density, is.link))
 }
 
-make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
+make_data.Specification <- function(spec, y = NULL, x = NULL, u = NULL,
+                                    v = NULL, T = NULL) {
+  # x = covariates for observation model  M dimension
+  # u = covariates for transition model   P dimension
+  # v = covariates for initial model      Q dimension
   stanData <- list(
     K = spec$K,
     R = spec$observation$R
   )
-
-  # Each specification should work its own elements, then call nextMethod()
 
   if (!is.null(y)) {
     if (!is.matrix(y) || NCOL(y) != spec$observation$R)  {
@@ -210,13 +210,34 @@ make_data.Specification <- function(spec, y = NULL, xBeta = NULL, T = NULL) {
     }
   }
 
+  # Covariates in the observation model
   M <- unique(densityApply(spec$observation$density, "[[", "M"))
   if (is.numeric(M) & !is.null(M)) {
     stanData[["M"]] <- M
   }
 
-  if (!is.null(xBeta)) {
-    stanData[["x"]] <- xBeta
+  if (!is.null(x)) {
+    stanData[["x"]] <- x
+  }
+
+  # Covariates in the transition model
+  P <- unique(densityApply(spec$transition$density, "[[", "P"))
+  if (is.numeric(P) & !is.null(P)) {
+    stanData[["P"]] <- P
+  }
+
+  if (!is.null(u)) {
+    stanData[["u"]] <- u
+  }
+
+  # Covariates in the initial distribution model
+  Q <- unique(densityApply(spec$initial$density, "[[", "Q"))
+  if (is.numeric(Q) & !is.null(Q)) {
+    stanData[["Q"]] <- Q
+  }
+
+  if (!is.null(v)) {
+    stanData[["v"]] <- v
   }
 
   stanData

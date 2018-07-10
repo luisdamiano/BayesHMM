@@ -87,8 +87,7 @@ check_cholesky_factor_cov <- function(x, name = deparse(substitute(x))) {
 }
 
 check_cholesky_factor_cor <- function(x, name = deparse(substitute(x))) {
-  check_cholesky_factor(x) &
-    check_simplex(diag(x))
+  ok <- check_cholesky_factor(x) & check_simplex(diag(x))
 
   if (!ok) {
     stop(sprintf("%s must be a valid Cholesky factor for a correlation matrix (lower triangular matrix with positive elements in the diagonal that has non-negative elements in the diagonals summing to one).", name))
@@ -96,15 +95,6 @@ check_cholesky_factor_cor <- function(x, name = deparse(substitute(x))) {
 
   TRUE
 }
-
-# check_vector <- function(x, len) {
-#   is.vector(x) & !is.list(x) & all(sapply(x, is.numeric)) &
-#   !any(sapply(x, is.na)) & length(x) == len
-# }
-#
-# check_matrix <- function(x, nrow, ncol) {
-#   isTRUE(is.matrix(x) & nrow(x) == nrow & ncol(x) == ncol)
-# }
 
 check_list <- function(x, len, name = deparse(substitute(x))) {
   if (!is.list(x) || length(x) != len)
@@ -134,17 +124,6 @@ check_natural <- function(x, name = deparse(substitute(x))) {
 collapse <- function(...) {
   paste(..., sep = "\n", collapse = "\n")
 }
-
-# densityApply <- function(X, FUN, ..., simplify = TRUE) {
-#   if (is.Density(X)) {
-#     FUN(X, ...)
-#   # } else if (any(sapply(X, is.Density))) {
-#   } else {
-#     sapply(X, function(x) {
-#       densityApply(x, FUN, ..., simplify = simplify)
-#     })
-#   }
-# }
 
 densityApply <- function(X, FUN, ..., simplify = TRUE) {
   if (is.Density(X)) {
@@ -243,10 +222,6 @@ is.empty <- function(x) {
 is.freeParameter <- function(x) {
   is.Density(x) |
     is.list(x) & all(sapply(x, is.Density))
-}
-
-if_null <- function(test, yes, no = NULL ) {
-  if (is.null(text)) { yes } else { no }
 }
 
 funinvarName <- function(x) {
