@@ -42,11 +42,11 @@ sort_block <- function(x, y, K) {
 sort_chain <- function(stanfit, reference, K) {
   x <-
     if (is.numeric(reference) && (reference %% 1 == 0)) {
-      extract_obs(stanfit, permuted = FALSE, inc_warmup = TRUE)[, reference, ]
+      extract_obs_parameters(stanfit, permuted = FALSE, inc_warmup = TRUE)[, reference, ]
     } else {
       reference
     }
-  y <- extract_obs(stanfit, permuted = FALSE, inc_warmup = TRUE)
+  y <- extract_obs_parameters(stanfit, permuted = FALSE, inc_warmup = TRUE)
 
   nChains <- dim(y)[2]
   tmp     <- y

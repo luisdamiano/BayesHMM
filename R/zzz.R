@@ -22,7 +22,8 @@
     BayesHHM.config = "example",
     BayesHMM.theme = list(
       states       = c(
-        "#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090", "#FFFFBF",
+        "#E41F26", "#2EA147", "#1D79B4",
+        # "#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090", "#FFFFBF",
         "#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"
       ),
       observations = "black",

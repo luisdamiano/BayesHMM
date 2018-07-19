@@ -13,7 +13,16 @@ y <- as.matrix(
   c(rnorm(50, 5, 1), rnorm(300, 0, 1), rnorm(100, -5, 1))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myModel <- compile(mySpec)
+myFit   <- sampling(mySpec, myModel, y = y, chains = 1, iter = 500)
+myOpt   <- optimizing(mySpec, myModel, y = y, nRun = 20, keep = "all", nCores = 4)
+# myFit   <- fit(mySpec, myModel, y = y, chains = 1, iter = 500)
+
+myBest  <- extract_best(myOpt)
+
+plot_obs(myBest)
+
+print_obs(myBest)
 
 plot_obs(myFit)
 

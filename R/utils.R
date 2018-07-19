@@ -245,3 +245,14 @@ prank <- function(x, y, ...) {
 
   as.numeric(rank(c(x, y), ...)[1] / (length(y) + 1))
 }
+
+posterior_intervals <- function(...) {
+  function(x) {
+    quantile(x, ...)
+  }
+}
+
+posterior_mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}

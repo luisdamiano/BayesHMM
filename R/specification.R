@@ -19,6 +19,7 @@ fit               <- function(spec, ...) { UseMethod("fit", spec) }
 sim               <- function(spec, ...) { UseMethod("sim", spec) }
 compile           <- function(spec, ...) { UseMethod("compile", spec) }
 sampling          <- function(spec, ...) { UseMethod("sampling", spec) }
+optimizing        <- function(spec, ...) { UseMethod("optimizing", spec) }
 write_chunks      <- function(spec, ...) { UseMethod("write_chunks", spec) }
 write_model       <- function(spec, ...) { UseMethod("write_model", spec) }
 make_data         <- function(spec, ...) { UseMethod("make_data", spec) }
@@ -120,14 +121,14 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
   return(stanModel)
 }
 
-sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL,
+sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
                                    control = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
     stanModel <- compile(spec, priorPredictive = FALSE, writeDir, ...)
   }
 
-  stanData <- make_data(spec, y, x = x)
+  stanData <- make_data(spec, y, x, u, v)
   stanDots <- c(list(...), list(object = stanModel, data = stanData))
 
   stanSampling <- do.call(rstan::sampling, stanDots)
@@ -136,6 +137,70 @@ sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL,
   attr(stanSampling, "spec")     <- spec
 
   return(stanSampling)
+}
+
+optimizing_run  <- function(stanDots) {
+  sysTime <- system.time({
+    stanoptim <- do.call(rstan::optimizing, stanDots)
+  })
+  attr(stanoptim, "systemTime") <- sysTime
+  structure(stanoptim, class = c("Optimization", "list"))
+}
+
+optimizing_all  <- function(stanDots, nRuns, nCores) {
+  l <- if (nCores == 1) {
+    lapply(seq_len(nRuns), function(x) optimizing_run(stanDots))
+  } else {
+    cl <- parallel::makeCluster(nCores)
+    doParallel::registerDoParallel(cl)
+    on.exit({parallel::stopCluster(cl)})
+    foreach::foreach(n = seq_len(nRuns), .combine = c, .packages = c("rstan")) %dopar% {
+      optimizing_run(stanDots)
+    }
+  }
+  l <- lapply(seq_len(nRuns), function(x) optimizing_run(stanDots))
+  structure(l, class = c("OptimizationList", "list"))
+}
+
+optimizing_best <- function(stanDots, nRuns, nCores) {
+  best <- optimizing_run(stanDots)
+
+  for (i in seq_len(nRuns)[-1]) {
+    current <- optimizing_run(stanDots)
+    if (current$return_code == 0 && current$value > best$value)
+      best <- current
+  }
+
+  if (best$return_code) # from ?optimizing: Anything != 0 is problematic.
+    stop(
+      sprintf(
+        "After %d runs, none returned a code == 0. First iteration returned %d",
+        nRuns, best$return_code
+      )
+    )
+
+  best
+}
+
+optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
+                                     nRuns = 1, keep = "best", nCores = 1,
+                                     control = NULL, writeDir = tempdir(), ...) {
+
+  if (!(keep %in% c("best", "all")))
+    stop("keep must be either \"best\" or \"all\". See ?optimizing.")
+
+  if (is.null(stanModel))
+    stanModel <- compile(spec, priorPredictive = FALSE, writeDir, ...)
+
+  fun <- sprintf("optimizing_%s", keep)
+  stanData <- make_data(spec, y, x, u, v)
+  stanDots <- c(list(object = stanModel, data = stanData), list(...))
+  stanOptimizing <- do.call(fun, list(stanDots = stanDots, nRuns = nRuns, nCores = nCores))
+  attr(stanOptimizing, "data")     <- stanData
+  attr(stanOptimizing, "filename") <- attr(stanModel, "filename")
+  attr(stanOptimizing, "spec")     <- spec
+
+  return(stanOptimizing)
 }
 
 run.Specification <- function(spec, data = NULL, control = NULL,
@@ -246,16 +311,3 @@ make_data.Specification <- function(spec, y = NULL, x = NULL, u = NULL,
 browse_model.Specification <- function(spec) {
   browseURL(write_model(spec, noLogLike = FALSE, writeDir = tempdir()))
 }
-
-setGeneric(
-  "stan_file",
-  function(object) {
-    attr(object, "BayesHMM.filename")
-  }
-)
-
-methods::setGeneric("stan_file")
-
-methods::setMethod("stan_file", signature(object = "stanfit"), function(object) {
-  attr(object, "BayesHMM.filename")
-})

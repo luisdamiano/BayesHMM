@@ -18,13 +18,16 @@ y = as.matrix(
   )
 )
 
+# myModel <- compile(mySpec)
+# myBest  <- optimizing(mySpec, myModel, y = y, nRun = 10, keep = "best", as_vector = FALSE)
+
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
 plot_obs(myFit)
 
 print_all(myFit)
 
-rbind(
-  sort(c(pars[1]/pars[2], pars[3]/pars[4], pars[5]/pars[6])),
-  sort(c(mean(myData$y[1:1000]), mean(myData$y[1001:2000]), mean(myData$y[2001:3000])))
-)
+# rbind(
+#   sort(c(pars[1]/pars[2], pars[3]/pars[4], pars[5]/pars[6])),
+#   sort(c(mean(myData$y[1:1000]), mean(myData$y[1001:2000]), mean(myData$y[2001:3000])))
+# )

@@ -32,7 +32,7 @@ plot_state_probability(myFit, features = c("probabilityColoredDots"), main = "Ti
 
 plot_state_probability(myFit, features = c("probabilityColoredLine"), main = "Title", xlab = "Time")
 
-plot_state_probability(myFit, stateProbability = "filtered", features = c("bottomColoredMarks", "probabilityFan"), stateProbabilityInterval = c(0.05, 0.95), main = "Title", xlab = "Time")
+plot_state_probability(myFit, stateProbability = "filtered", features = c("bottomColoredMarks", "probabilityFan"), stateProbabilityInterval = posterior_intervals(c(0.05, 0.95)), main = "Title", xlab = "Time")
 
 plot_ppredictive(myFit, type = c("density", "cumulative", "summary"), fun = median)
 

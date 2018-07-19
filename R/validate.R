@@ -4,7 +4,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   # 1. Draw a sample from the prior predictive density
   mySim      <- do.call(sim, list(spec, seed = seed, x = x, T = T, iter = max(N + 1, 500), chains = 1))
   ySim       <- extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)
-  paramSim   <- extract_obs(mySim, permuted = FALSE)
+  paramSim   <- extract_obs_parameters(mySim, permuted = FALSE)
   rm(mySim); gc()
 
   # 2. Fit the model to simulated dataset
