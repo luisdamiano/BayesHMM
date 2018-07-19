@@ -77,8 +77,8 @@ check_cholesky_factor <- function(x, name = deparse(substitute(x))) {
   # * lower triangular,
   # * positive diagonal
   ok <- check_matrix(x) &
-    all(abs(upper.tri(x)) < .Machine$double.eps) &
-    all(diag(x)) > 0
+    all(abs(x[lower.tri(x)]) < .Machine$double.eps) &
+    all(diag(x) > 0)
 
   if (!ok) {
     stop(sprintf("%s must be a valid Cholesky factor (lower triangular matrix with positive elements in the diagonal).", name))
@@ -187,6 +187,19 @@ make_trunc <- function(x, name) {
 
 make_rsubindex <- function(x) {
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+  # string <-
+  #   if (is.multivariate(x)) {
+  #     if (x$multivariate) # multivariate density - multivariate parameter
+  #       ""
+  #     else                # multivariate density - univariate parameter
+  #       stop("Cannot specify a multivariate density for a univariate parameter. See ?spec for more information.")
+  #   } else {
+  #     if (x$multivariate) # univariatete density - multivariate parameter
+  #       "%s"
+  #     else                # univariatete density - univariate parameter
+  #       "[%s]"
+  #   }
+  # sprintf(string, x$r)
 }
 
 make_parameters <- function(density, string, stringNot = "",
@@ -228,11 +241,6 @@ matrix_to_stan <- function(x) {
 
 is.empty <- function(x) {
   is.null(x) | length(x) == 0
-}
-
-is.freeParameter <- function(x) {
-  is.Density(x) |
-    is.list(x) & all(sapply(x, is.Density))
 }
 
 funinvarName <- function(x) {

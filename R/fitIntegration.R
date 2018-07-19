@@ -87,6 +87,19 @@ extract_time.stanfit <- function(fit) {
 
 setMethod("extract_time", "stanfit", extract_time.stanfit)
 
+# extract_seed ------------------------------------------------------------
+extract_seed     <- function(fit, ...) { UseMethod("extract_seed", fit) }
+
+extract_seed.Optimization <- function(fit) {
+  attr(fit, "seed")
+}
+
+extract_seed.stanfit <- function(fit) {
+  rstan::get_seed(fit)
+}
+
+setMethod("extract_seed", "stanfit", extract_seed.stanfit)
+
 # classify_alpha ----------------------------------------------------------
 classify_alpha   <- function(fit, ...) { UseMethod("classify_alpha", fit) }
 

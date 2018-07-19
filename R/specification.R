@@ -139,34 +139,46 @@ sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL
   return(stanSampling)
 }
 
-optimizing_run  <- function(stanDots) {
+optimizing_run  <- function(stanDots, n) {
+  # sink(tempfile())
+
+  stanDots[["seed"]] <-
+    if ("seed" %in% names(stanDots)) {
+    stanDots[["seed"]] + n
+  } else {
+    sample.int(.Machine$integer.max, 1)
+  }
+
   sysTime <- system.time({
     stanoptim <- do.call(rstan::optimizing, stanDots)
   })
   attr(stanoptim, "systemTime") <- sysTime
+  attr(stanoptim, "seed")       <- stanDots[["seed"]]
   structure(stanoptim, class = c("Optimization", "list"))
+
+  # sink()
 }
 
 optimizing_all  <- function(stanDots, nRuns, nCores) {
   l <- if (nCores == 1) {
-    lapply(seq_len(nRuns), function(x) optimizing_run(stanDots))
+    lapply(seq_len(nRuns), function(n) optimizing_run(stanDots, n))
   } else {
-    cl <- parallel::makeCluster(nCores)
+    cl <- parallel::makeCluster(nCores, outfile = "")
     doParallel::registerDoParallel(cl)
     on.exit({parallel::stopCluster(cl)})
     foreach::foreach(n = seq_len(nRuns), .combine = c, .packages = c("rstan")) %dopar% {
-      optimizing_run(stanDots)
+      optimizing_run(stanDots, n)
     }
   }
-  l <- lapply(seq_len(nRuns), function(x) optimizing_run(stanDots))
+  l <- lapply(seq_len(nRuns), function(n) optimizing_run(stanDots, n))
   structure(l, class = c("OptimizationList", "list"))
 }
 
 optimizing_best <- function(stanDots, nRuns, nCores) {
-  best <- optimizing_run(stanDots)
+  best <- optimizing_run(stanDots, n = 1)
 
-  for (i in seq_len(nRuns)[-1]) {
-    current <- optimizing_run(stanDots)
+  for (n in seq_len(nRuns)[-1]) {
+    current <- optimizing_run(stanDots, n)
     if (current$return_code == 0 && current$value > best$value)
       best <- current
   }

@@ -5,6 +5,7 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
 
   unlist(
     c(
+      seed         = extract_seed(stanoptim),
       logPosterior = stanoptim$value,
       returnCode   = stanoptim$return_code,
       extract_time(stanoptim)[1:3],
@@ -14,7 +15,6 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
 }
 
 plot.Optimization <- function(stanoptim, pars, ...) {
-  # plot(extract_quantity(stanoptim, pars))
   dotchart(
     x = rev(extract_quantity(stanoptim, pars, combine = c)), ...
   )
