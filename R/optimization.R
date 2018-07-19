@@ -3,20 +3,20 @@ extract_grid     <- function(x, ...) { UseMethod("extract_grid", x) }
 extract_grid.Optimization <- function(stanoptim, pars = NULL) {
   if (is.null(pars)) { pars <- "" }
 
-  # unlist(
+  unlist(
     c(
       logPosterior = stanoptim$value,
       returnCode   = stanoptim$return_code,
       extract_time(stanoptim)[1:3],
       extract_quantity(stanoptim, pars = pars)
     )
-  # )
+  )
 }
 
 plot.Optimization <- function(stanoptim, pars, ...) {
   # plot(extract_quantity(stanoptim, pars))
   dotchart(
-    x = rev(extract_quantity(stanoptim, pars)), ...
+    x = rev(extract_quantity(stanoptim, pars, combine = c)), ...
   )
 }
 

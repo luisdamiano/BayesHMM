@@ -18,9 +18,12 @@ write_data <- function(spec, noLogLike, writeDir) {
   strObs  <- densityCollect(
     spec$observation$density, block_data, noLogLike = noLogLike
   )
+  strTrans <- densityCollect(
+    spec$transition$density, block_data, noLogLike = noLogLike
+  )
 
   write_stanfile(
-    c(strSpec, strObs),
+    unique(c(strSpec, strObs, strTrans)),
     writeDir,
     "data.stan"
   )
@@ -45,7 +48,8 @@ write_constants <- function(spec, writeDir) {
 write_parameters <- function(spec, writeDir) {
   write_stanfile(
     c(
-      densityApply(spec$observation$density, fixedParameters)#,
+      densityApply(spec$observation$density, fixedParameters),
+      densityCollect(mySpec$transition$density, fixedParameters)#,
       # densityApply(spec$initial$density, fixedParameters),
       # densityApply(spec$transition$density, fixedParameters)
       # pseudo-code to have fixed parameters in the transition:
@@ -106,7 +110,7 @@ write_logLikelihood <- function(spec, noLogLike, writeDir) {
 write_link <- function(spec, writeDir) {
   write_stanfile(
     if (all(densityApply(spec$initial$density, is.link))) {
-      densityApply(spec$initial$density, link)
+      densityCollect(spec$initial$density, link)
       } else {
         ""
       },
@@ -116,7 +120,7 @@ write_link <- function(spec, writeDir) {
 
   write_stanfile(
     if (all(densityApply(spec$transition$density, is.link))) {
-      densityApply(spec$transition$density, link)
+      densityCollect(spec$transition$density, link)
     } else {
       ""
     },

@@ -6,6 +6,13 @@ TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
   )
 }
 
+block_data.TransitionSoftmax <- function(x, noLogLike) {
+  c(
+    "int<lower = 1> P;     // number of transition model predictors",
+    "matrix[T, P] u;       // transition model predictors"
+  )
+}
+
 freeParameters.TransitionSoftmax <- function(x) {
   uBetaStr <-
     if (is.Density(x$uBeta)) {

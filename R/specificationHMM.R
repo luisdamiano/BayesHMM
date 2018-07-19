@@ -41,10 +41,11 @@ block_data.HMMSpecification <- function(spec) {
 
   strTransition <-
     if (is.TVTransition(spec)) {
-      "
-      int<lower = 1> P;     // number of transition model predictors
-      matrix[T, P] u;       // transition model predictors
-      "
+      ""
+      # "
+      # int<lower = 1> P;     // number of transition model predictors
+      # matrix[T, P] u;       // transition model predictors
+      # "
     } else {
       ""
     }

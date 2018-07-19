@@ -80,8 +80,6 @@ myAll   <- optimizing(mySpec, myModel, y = dataset$x, u = dataset$u, nRun = 10, 
 extract_grid(myBest, pars = "mu")
 extract_grid(myAll, pars = "mu")
 
-extract_obs_parameters(myBest)
-
 extract_quantity(myBest, pars = "mu")
 extract_quantity(myBest, pars = "alpha")
 extract_alpha(myBest)
@@ -89,14 +87,16 @@ extract_obs_parameters(myBest)
 
 sapply(myAll, extract_quantity, pars = "mu")
 
-plot(extract_zstar(myBest))
+table(real = dataset$z, viterbi = extract_zstar(myBest)[[1]])
 
-table(real = dataset$z, viterbi = extract_zstar(myBest))
-
-table(real = dataset$z, filtered = apply(myBest$par$alpha, 2, which.max))
+table(real = dataset$z, filtered = classify_alpha(myBest))
 
 plot_obs(myBest)
 
-# plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
+plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
+
+plot_state_probability(myBest, features = "stateShade")
 
 myBest$par$A[300, , ]
+
+extract_quantity(myBest, pars = "A")[[1]][300, , ]

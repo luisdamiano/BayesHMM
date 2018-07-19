@@ -31,7 +31,7 @@ check_vector <- function(x, name = deparse(substitute(x))) {
 }
 
 check_simplex <- function(x, name = deparse(substitute(x))) {
-  ok <- check_vector(x) & sum(x) == 1 & min(x) >= 0
+  ok <- check_vector(x) & identical(sum(x), 1) & min(x) >= 0
 
   if (!ok) {
     stop(sprintf("%s must be a simplex (vector with non-negative elements summing to 1.", name))
@@ -45,6 +45,17 @@ check_matrix <- function(x, name = deparse(substitute(x))) {
 
   if (!ok) {
     stop(sprintf("%s must be a matrix.", name))
+  }
+
+  TRUE
+}
+
+check_transition_matrix <- function(x, name = deparse(substitute(x))) {
+  ok <- isTRUE(is.matrix(x)) & dim(x)[1] == dim(x)[2] & min(x) >= 0 &
+    all(apply(x, 1, function(xi) { identical(sum(xi), 1) } ))
+
+  if (!ok) {
+    stop(sprintf("%s must be a square matrix with simplex rows.", name))
   }
 
   TRUE
