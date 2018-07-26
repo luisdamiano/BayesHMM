@@ -11,8 +11,8 @@ mySpec <- hmm(
   name = "Fixed Transition - Univariate Gaussian"
 )
 
-mySim <- sim(mySpec, T = 500, chain = 1, iter = 500, seed = 9000)
-y     <- extract_ypred(mySim)[[1]][1, ]
+mySim <- sim(mySpec, T = 500, chain = 1, nSimulations = 200, seed = 9000)
+y     <- extract_ysim(mySim)[1, ]
 
 mySpec <- hmm(
   K = 3, R = 1,

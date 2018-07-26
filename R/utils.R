@@ -239,6 +239,36 @@ matrix_to_stan <- function(x) {
   )
 }
 
+cast_to_matrix <- function(x, nRow, nCol, name = deparse(substitute(x))) {
+  if (is.matrix(x) && nrow(x) == nRow && ncol(x) == nCol)
+    return(x)
+
+  if (is.null(x))
+    stop(
+      sprintf(
+        "%s is not a valid input because it is NULL. See ?make_data.",
+        name
+      ))
+
+  xVector <- as.vector(x)
+  if (length(xVector) != nRow * nCol)
+    stop(
+      sprintf(
+        "Attempted to cast %s to a %dx%d matrix. The vector must have %d elements but %d were given. See ?make_data.",
+        name, nRow, nCol, nRow*nCol, length(xVector)
+      ))
+
+  if (!is.numeric(xVector))
+    stop(
+      sprintf(
+        "%s is not a valid input because it has non numeric elements. See ?make_data.",
+        name
+      )
+    )
+
+  matrix(as.numeric(xVector), nrow = nRow, ncol = nCol, byrow = FALSE)
+}
+
 is.empty <- function(x) {
   is.null(x) | length(x) == 0
 }
@@ -274,4 +304,35 @@ posterior_intervals <- function(...) {
 posterior_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
+}
+
+toproper <- function(string) {
+  # Credits for Matthew Plourde https://stackoverflow.com/a/24957143/2860744
+  gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(string), perl = TRUE)
+}
+
+get_package_info <- function() {
+  sprintf(
+    "%s v%s (Build %s)",
+    utils::packageDescription("BayesHMM")$Package,
+    utils::packageDescription("BayesHMM")$Version,
+    utils::packageDescription("BayesHMM")$Built
+  )
+}
+
+get_rstan_info <- function() {
+  sprintf(
+    "%s v%s (Build %s)",
+    utils::packageDescription("rstan")$Package,
+    utils::packageDescription("rstan")$Version,
+    utils::packageDescription("rstan")$Built
+  )
+}
+
+get_theme <- function() {
+  getOption("BayesHMM.theme")
+}
+
+get_print_settings <- function() {
+  getOption("BayesHMM.print")
 }

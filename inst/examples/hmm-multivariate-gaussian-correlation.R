@@ -20,4 +20,9 @@ y = rbind(
 
 myModel <- compile(mySpec)
 myFit   <- sampling(mySpec, stanModel = myModel, y = y, chains = 1, iter = 500, seed = 9000)
+
+explain(mySpec)
+
+print_model(myFit)
+
 print_obs(myFit)

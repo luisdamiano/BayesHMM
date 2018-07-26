@@ -20,6 +20,11 @@
 
   opDefaults <- list(
     BayesHHM.config = "example",
+    BayesHMM.print = list(
+      char         = "_",
+      tab          = "  ",
+      textWidth    = 80
+    ),
     BayesHMM.theme = list(
       states       = c(
         "#E41F26", "#2EA147", "#1D79B4",

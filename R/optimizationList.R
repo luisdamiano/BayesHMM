@@ -10,7 +10,7 @@ extract_best.OptimizationList <- function(stanoptimList, pars = NULL) {
     attr(stanoptim, name) <- attr(stanoptimList, name)
   }
 
-  if (myBest$return_code != 0)
+  if (stanoptim$return_code != 0)
     warning("All runs have a non-zero return code. I am returning the run with highest log-posterior density -- USE WITH CAUTION.")
 
   stanoptim

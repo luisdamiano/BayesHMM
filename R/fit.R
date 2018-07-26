@@ -33,11 +33,11 @@ select_obs_parameters <- function(fit) {
 }
 
 select_initial_parameters <- function(fit) {
-  select_parameters(fit, TRUE, FALSE, FALSE)
+  select_parameters(fit, FALSE, TRUE, FALSE)
 }
 
 select_transition_parameters <- function(fit) {
-  select_parameters(fit, TRUE, FALSE, FALSE)
+  select_parameters(fit, FALSE, FALSE, TRUE)
 }
 
 select_all_parameters <- function(fit) {
@@ -55,23 +55,34 @@ extract_obs_parameters <- function(fit, ...) {
 }
 
 extract_alpha <- function(fit, ...) {
-  extract_quantity(fit, "alpha", ...)
+  extract_quantity(fit, "alpha", ...)[[1]]
 }
 
 extract_gamma <- function(fit, ...) {
-  extract_quantity(fit, "gamma", ...)
+  extract_quantity(fit, "gamma", ...)[[1]]
 }
 
 extract_zstar <- function(fit, ...) {
-  extract_quantity(fit, "zstar", ...)
+  extract_quantity(fit, "zstar", ...)[[1]]
 }
 
 extract_ypred <- function(fit, ...) {
-  extract_quantity(fit, "ypred", ...)
+  extract_quantity(fit, "ypred", ...)[[1]]
+}
+
+extract_ysim  <- function(fit, n = NULL, ...) {
+  ysim <- extract_quantity(fit, "ypred", ...)[[1]]
+
+  if (is.null(n))
+    return(ysim)
+
+  out      <- ysim[slice.index(ysim, 1) == n]
+  dim(out) <- dim(ysim)[-1]
+  out
 }
 
 extract_zpred <- function(fit, ...) {
-  extract_quantity(fit, "zpred", ...)
+  extract_quantity(fit, "zpred", ...)[[1]]
 }
 
 extract_data <- function(fit) {

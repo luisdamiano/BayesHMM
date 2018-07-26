@@ -6,6 +6,13 @@ TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
   )
 }
 
+explain.TransitionSoftmax <- function(x) {
+  collapse(
+    "Time-varying probabilities driven by covariates via softmax mapping.",
+    NextMethod()
+  )
+}
+
 block_data.TransitionSoftmax <- function(x, noLogLike) {
   c(
     "int<lower = 1> P;     // number of transition model predictors",

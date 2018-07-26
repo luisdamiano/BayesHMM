@@ -14,6 +14,7 @@ mySpec <- hmm(
 
 mySim <- sim(mySpec, T = 500, chain = 1, iter = 500, seed = 9000)
 y     <- extract_ypred(mySim)[1, , ]
+colnames(y) <- c("Height", "Weight")
 myFit <- fit(mySpec, y = y, chain = 4, iter = 500, seed = 9000)
 
 plot_series(myFit, legend.cex = 0.8)

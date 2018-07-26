@@ -14,6 +14,10 @@ chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 
 # Other methods for Specification objects
 check             <- function(spec, ...) { UseMethod("check", spec) }
+explain           <- function(spec, ...) { UseMethod("explain", spec) }
+explain_observation <- function(spec, ...) { UseMethod("explain_observation", spec) }
+explain_initial     <- function(spec, ...) { UseMethod("explain_initial", spec) }
+explain_transition  <- function(spec, ...) { UseMethod("explain_transition", spec) }
 run               <- function(spec, ...) { UseMethod("run", spec) }
 fit               <- function(spec, ...) { UseMethod("fit", spec) }
 sim               <- function(spec, ...) { UseMethod("sim", spec) }
@@ -97,8 +101,26 @@ check.Specification <- function(spec) {
   )
 }
 
-explain.Specification <- function(spec) {
-  stop("TO BE IMPLEMENTED.")
+explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
+                                  transition = TRUE, print = TRUE) {
+  strHeader      <- make_text_header(spec$name)
+  strObservation <- if (observation) { explain_observation(spec) }
+  strInitial     <- if (initial)     { explain_initial(spec) }
+  strTransition  <- if (transition)  { explain_transition(spec) }
+  strFooter      <- sprintf(
+    "Note for reproducibility: \n%s.\n",
+    get_package_info()
+  )
+
+  out <- gsub(
+    "\\t",
+    get_print_settings()$tab,
+    collapse(strHeader, strObservation, strInitial, strTransition, strFooter)
+  )
+
+  if (print) { cat(out) }
+
+  invisible(out)
 }
 
 compile.Specification <- function(spec, priorPredictive = FALSE,
@@ -243,8 +265,13 @@ fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   run(spec, data = make_data(spec, y, x, u, v), ...)
 }
 
-sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, ...) {
-  run(spec, data = make_data(spec, y = NULL, x, u, v, T), ...)
+sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
+  dots <- list(...)
+  dots[["spec"]] = spec
+  dots[["data"]] = data = make_data(spec, y = NULL, x, u, v, T)
+  dots[["iter"]] = nSimulations
+  do.call(run, dots)
+  # run(spec, data = make_data(spec, y = NULL, x, u, v, T), ...)
 }
 
 is.multivariate.Specification <- function(spec) {
@@ -273,48 +300,42 @@ make_data.Specification <- function(spec, y = NULL, x = NULL, u = NULL,
     R = spec$observation$R
   )
 
-  if (!is.null(y)) {
-    if (!is.matrix(y) || NCOL(y) != spec$observation$R)  {
-      y <- matrix(as.numeric(y), ncol = spec$observation$R)
-    }
-    stanData[["T"]] <- NROW(y)
-    stanData[["y"]] <- y
-  } else {
+  if (is.null(y)) {
     if (is.null(T)) {
       stanData[["T"]] <- 1E3
     } else {
       stanData[["T"]] <- T
     }
+  } else {
+    stanData[["T"]] <- NROW(y)
+    stanData[["y"]] <- cast_to_matrix(y, nRow = stanData[["T"]], nCol = stanData[["R"]])
   }
 
   # Covariates in the observation model
-  M <- unique(densityApply(spec$observation$density, "[[", "M"))
-  if (is.numeric(M) & !is.null(M)) {
+  M <- unique(densityApply(spec$observation$density, "[[", "M"))[[1]]
+  if (!is.null(M) && check_natural(M)) {
     stanData[["M"]] <- M
-  }
 
-  if (!is.null(x)) {
-    stanData[["x"]] <- x
+    if (!is.null(x))
+      stanData[["x"]] <- cast_to_matrix(x, stanData[["T"]], M)
   }
 
   # Covariates in the transition model
-  P <- unique(densityApply(spec$transition$density, "[[", "P"))
-  if (is.numeric(P) & !is.null(P)) {
+  P <- unique(densityApply(spec$transition$density, "[[", "P"))[[1]]
+  if (!is.null(P) && check_natural(P)) {
     stanData[["P"]] <- P
-  }
 
-  if (!is.null(u)) {
-    stanData[["u"]] <- u
+    if (!is.null(u))
+      stanData[["u"]] <- cast_to_matrix(u, stanData[["T"]], P)
   }
 
   # Covariates in the initial distribution model
-  Q <- unique(densityApply(spec$initial$density, "[[", "Q"))
-  if (is.numeric(Q) & !is.null(Q)) {
+  Q <- unique(densityApply(spec$initial$density, "[[", "Q"))[[1]]
+  if (!is.null(Q) && check_natural(Q)) {
     stanData[["Q"]] <- Q
-  }
 
-  if (!is.null(v)) {
-    stanData[["v"]] <- v
+    if (!is.null(v))
+      stanData[["v"]] <- cast_to_matrix(v, stanData[["T"]], Q)
   }
 
   stanData
