@@ -46,7 +46,8 @@ sort_chain <- function(stanfit, reference, K) {
     } else {
       reference
     }
-  y <- extract_obs_parameters(stanfit, permuted = FALSE, inc_warmup = TRUE)
+  y <- rstan::extract(stanfit, permuted = FALSE, inc_warmup = TRUE, pars = select_obs_parameters(stanfit))
+  # extract_obs_parameters(stanfit, permuted = FALSE, inc_warmup = TRUE)
 
   nChains <- dim(y)[2]
   tmp     <- y

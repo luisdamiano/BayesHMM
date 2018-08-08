@@ -20,7 +20,10 @@ Imports:
     utils
 Suggests:
     RUnit,
-    matrixcalc
+    matrixcalc,
+    knitr,
+    rmarkdown
 URL: https://github.com/luisdamiano/BayesHMM/, https://summerofcode.withgoogle.com/projects/#4681157036212224
 BugReports: https://github.com/luisdamiano/BayesHMM/issues
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

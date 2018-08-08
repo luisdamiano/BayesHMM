@@ -16,7 +16,7 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
 plot.Optimization <- function(stanoptim, pars, ...) {
   # plot(extract_quantity(stanoptim, pars))
   dotchart(
-    x = rev(extract_quantity(stanoptim, pars)), ...
+    x = rev(extract_quantity(stanoptim, pars, combine = c)), ...
   )
 }
 

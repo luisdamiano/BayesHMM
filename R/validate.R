@@ -4,7 +4,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   # 1. Draw a sample from the prior predictive density
   mySim      <- do.call(sim, list(spec, seed = seed, x = x, T = T, iter = max(N + 1, 500), chains = 1))
   ySim       <- extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)
-  paramSim   <- extract_obs_parameters(mySim, permuted = FALSE)
+  paramSim   <- extract_obs_parameters(mySim, combine = cbind) # extract_obs_parameters(mySim, permuted = FALSE)
   rm(mySim); gc()
 
   # 2. Fit the model to simulated dataset
@@ -15,9 +15,9 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   doParallel::registerDoParallel(cl)
   l <- foreach::foreach(n = 1:N, .combine = c, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, ] # Chain 1
-    paramTrue  <- paramSim[n, , ]
+    paramTrue  <- paramSim[n, ] #paramSim[n, , ]
     myFit      <- do.call(
-      sampling,
+      sampling.Specification, #sampling,
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 
@@ -88,14 +88,14 @@ get_diagnose_parameters <- function(stanfit, trueParameters = NULL, pars = NULL,
   paramNames <- if (is.null(trueParameters)) { pars } else { names(trueParameters) }
   paramFit   <-
     if (is.null(paramNames)) {
-      extract(stanfit, permuted = FALSE)
+      rstan::extract(stanfit, permuted = FALSE)
     } else {
-      extract(stanfit, pars = paramNames, permuted = FALSE)
+      rstan::extract(stanfit, pars = paramNames, permuted = FALSE)
     }
   paramNames <- dimnames(paramFit)[[3]]
 
   fun <- function(nChain, paramNames, stanfit) {
-    monitorFit <- monitor(paramFit[, nChain, , drop = FALSE], print = FALSE, ...)
+    monitorFit <- rstan::monitor(paramFit[, nChain, , drop = FALSE], print = FALSE, ...)
 
     if (!is.null(trueParameters)) {
       rankFit  <- sapply(paramNames, function(paramName) {
@@ -117,8 +117,9 @@ get_diagnose_parameters <- function(stanfit, trueParameters = NULL, pars = NULL,
 
 get_diagnose_ppredictive <- function(stanfit) {
   y     <- extract_y(stanfit)
-  yPred <- extract_ypred(stanfit, permuted = FALSE)
-  dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
+  yPred <- extract_ypred(stanfit)[[1]]
+    #extract_ypred(stanfit, permuted = FALSE)
+  # dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
   # ^ Extract flattens yPred[iters, chains, T, R] into yPred[iters, chains, T*R]
 
   innerFun <- function(y, yPred) {

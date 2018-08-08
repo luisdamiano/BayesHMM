@@ -8,7 +8,7 @@ softmax <- function(x) {
 }
 
 tvhmm_sim <- function(T, K, u, w, p.init) {
-  m <- ncol(u)
+  # m <- ncol(u)
 
   if (dim(u)[1] != T)
     stop("The input matrix must have T rows.")
@@ -91,12 +91,12 @@ sapply(myAll, extract_quantity, pars = "mu")
 
 plot(extract_zstar(myBest))
 
-table(real = dataset$z, viterbi = extract_zstar(myBest))
+table(real = dataset$z, viterbi = classify_zstar(myBest))
 
-table(real = dataset$z, filtered = apply(myBest$par$alpha, 2, which.max))
+table(real = dataset$z, filtered = classify_alpha(myBest))
 
 plot_obs(myBest)
 
-# plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
+plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
 
 myBest$par$A[300, , ]
