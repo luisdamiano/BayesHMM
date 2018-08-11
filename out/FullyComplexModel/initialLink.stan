@@ -1,1 +1,0 @@
-pi = softmax((v' * vBeta)');

@@ -10,3 +10,27 @@ We create an R Package to run full Bayesian inference on Hidden Markov Models (H
 devtools::install_github("luisdamiano/BayesHMM")
 ```
 
+### Prerequisites
+  * R >= 3.0
+  
+### Examples
+
+See the [vignette](inst\doc\introduction.pdf). Note that you may also find examples in [inst\examples](inst\examples), but these may not work with the last version in the repository.
+  
+## Contributing
+
+Reach out to us at [#r-finance](http://webchat.freenode.net/?channels=r-finance) (freenode.net).
+
+## Authors
+
+* **Luis Damiano** - *Creator, author, maintainer* - [luisdamiano](https://github.com/luisdamiano)
+* **Brian Peterson** - *Author* - [braverock](https://github.com/braverock)
+* **Michael Weylandt** - *Author* - [michaelweylandt](https://github.com/michaelweylandt)
+
+## License
+GPL (>=3)
+
+## Acknowledgments
+
+* The Google Summer Of Code (GSOC) program for funding.
+* The members of the Stan Development Team.

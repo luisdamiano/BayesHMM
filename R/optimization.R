@@ -8,7 +8,7 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
       logPosterior = stanoptim$value,
       returnCode   = stanoptim$return_code,
       extract_time(stanoptim)[1:3],
-      extract_quantity(stanoptim, pars = pars)
+      extract_quantity(stanoptim, pars = pars, combine = c)
     )
   # )
 }

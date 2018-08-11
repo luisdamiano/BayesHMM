@@ -1,9 +1,0 @@
-A[t, i] = softmax((u[t] * uBeta[1, 1][i]')');
-A[t, i] = softmax((u[t] * uBeta[1, 2][i]')');
-A[t, i] = softmax((u[t] * uBeta[1, 3][i]')');
-A[t, i] = softmax((u[t] * uBeta[2, 1][i]')');
-A[t, i] = softmax((u[t] * uBeta[2, 2][i]')');
-A[t, i] = softmax((u[t] * uBeta[2, 3][i]')');
-A[t, i] = softmax((u[t] * uBeta[3, 1][i]')');
-A[t, i] = softmax((u[t] * uBeta[3, 2][i]')');
-A[t, i] = softmax((u[t] * uBeta[3, 3][i]')');

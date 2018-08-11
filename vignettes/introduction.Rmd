@@ -1,12 +1,13 @@
 ---
 title: "An introduction to BayesHMM"
-author: "Vignette Author"
+author: "Luis Damiano, Michael Weylandt, Brian Peterson"
 date: "`r Sys.Date()`"
 output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{An introduction to BayesHMM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+urlcolor: blue
 ---
 
 ```{r setup, include = FALSE}
@@ -29,17 +30,19 @@ knitr::opts_chunk$set(
 \newcommand{\mat}[1]{\mathbf{#1}}
 
 % Math symbols
-\renewcommand{\DD}{\mathcal{D}}
-\renewcommand{\NN}{\mathcal{N}}
-\renewcommand{\UU}{\mathcal{U}}
-\renewcommand{\LL}{\mathcal{L}}
-\renewcommand{\RR}{\mathbb{R}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\RR}{\mathbb{R}}
 
-BayesHMM is an R Package to run full Bayesian inference on Hidden Markov Models (HMM) using the probabilistic programming language Stan. By providing an intuitive, expressive yet flexible input interface, we enable non-technical users to carry out research using the Bayesian workflow. We provide the user with an expressive interface to mix and match a wide array of options for the observation and latent models, including ample choices of densities, priors, and link functions whenever covariates are present. The software enables users to fit HMM with time-homogeneous transitions as well as time-varying transition probabilities. Priors can be set for every model parameter. Implemented inference algorithms include forward (filtering), forward-backwards (smoothing), Viterbi (most likely hidden path), prior predictive sampling, and posterior predictive sampling. Graphs, tables and other convenience methods for convergence diagnosis, goodness of fit, and data analysis are provided.
+BayesHMM is an R Package to run full Bayesian inference on Hidden Markov Models (HMM) using the probabilistic programming language Stan. By providing an intuitive, expressive yet flexible input interface, we enable researchers to profit the most out of the Bayesian workflow. We provide the user with an expressive interface to mix and match a wide array of options for the observation and latent models, including ample choices of densities, priors, and link functions whenever covariates are present. The software enables users to fit HMM with time-homogeneous transitions as well as time-varying transition probabilities. Priors can be set for every model parameter. Implemented inference algorithms include forward (filtering), forward-backwards (smoothing), Viterbi (most likely hidden path), prior predictive sampling, and posterior predictive sampling. Graphs, tables and other convenience methods for convergence diagnosis, goodness of fit, and data analysis are provided.
 
-This vignette introduces the software and briefly reviews current capabilities. Although we walk the reader through most of the functionalities, we do not discuss function parameters and other details typically reviewed in the documentations. A list of future features may be found in the [Roadmap wiki page](https://github.com/luisdamiano/BayesHMM/wiki/Roadmap). We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/projects/#4681157036212224) for funding.
+This vignette introduces the software and briefly reviews current capabilities. Although we walk the reader through most of the functionalities, we do not discuss function arguments, implementation details, and other details typically reviewed in the documentations. A list of future features may be found in the [Roadmap wiki page](https://github.com/luisdamiano/BayesHMM/wiki/Roadmap).
 
-__NOTE__: Our software is work in progress. We will review naming conventions and other design decisions at a later stage.
+We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/projects/#4681157036212224) for funding.
+
+__NOTE__: Our software is work in progress. We will review naming conventions as well as other design decisions at a later stage. Fully detailed documentation will be available at the time of release.
 
 # Introduction
 
@@ -69,7 +72,7 @@ If the output is continuous, observations may follow for example a conditional G
 p(\mat{y}_t | z_t = k, \mat{\theta}) = \mathcal{N}(\mat{y}_t | \mat{\mu}_k, \mat{\Sigma}_k).
 \]
 
-Alternatively, time-varying covariates $\mat{x}_t \in \RR^M$ may be used to drive the location parameter of the chose density,
+Alternatively, time-varying covariates $\mat{x}_t \in \RR^M$ may be used to drive the location parameter of the chosen density,
 
 \[
 p(\mat{y}_t | \mat{x}_t, z_t = k, \mat{\theta}) = \mathcal{N}(\mat{y}_t | \mat{x}_t \mat{\beta}^x_k, \mat{\Sigma}_k).
@@ -87,7 +90,7 @@ p(z_t | \mat{u}_{t}, z_{t-1} = i) = \text{softmax}(\mat{u}_{t} \mat{\beta}^u_i).
 
 ## Initial distribution model
 
-Most frequently in applications, the initial distribution model is characterized by a $K$ sized simplex $\mat{\pi}$ with initial probabilities $\pi_{i} = p(z_1 = i)$. Alternatively, the first observation may be assigned to a state via a multinomial regression if relevant information is avaliable in the form of a covariate vector $\mat{v} \in \RR^Q$,
+Most frequently in applications, the initial distribution model is characterized by a $K$ sized simplex $\mat{\pi}$ with initial probabilities $\pi_{i} = p(z_1 = i)$. Alternatively, the first observation may be assigned to a state via a multinomial regression if relevant information is available in the form of a covariate vector $\mat{v} \in \RR^Q$,
 
 \[
 p(z_1 | \mat{v}, \mat{\theta}) = \text{softmax}(\mat{v} \mat{\beta}^v).
@@ -95,7 +98,7 @@ p(z_1 | \mat{v}, \mat{\theta}) = \text{softmax}(\mat{v} \mat{\beta}^v).
 
 ## Naming convention
 
-Documentation and software adapt the following naming convention. Minor modifications may be found due to syntax restrictions in R or Stan.
+Documentation and software adopts the following naming convention. Minor modifications may be found due to syntax restrictions in R or Stan.
 
 ```
 Constants
@@ -130,15 +133,17 @@ zstar		Viterbi
 (Prior/Posterior) predictive quantities
 yPred		Sample of observations drawn from the  predictive density
 zPred		Sample of latent path drawn from the  predictive density
+
+Note: time suffix t is optional.
 ```
 
 # Using BayesHMM
 
-The typical workflow is (1) specify, (2) validate, (3) fit, (4) diagnose, (5) visualize, (6) compare models. Only steps 1:5 are currently implemented as of now.
+The typical data analysis workflow includes the following steps: (1) specify, (2) validate, (3) simulate, (4) fit, (5) diagnose, (6) visualize, (7) compare. All steps except for 5 and 7 are implemented as of today.
 
 You may install the last version of our software from GitHub. Please note that BayesHMM requires rstan (>= 2.17), the R interface for the probabilistic programming language [Stan](http://mc-stan.org/).
 
-```{r include = FALSE}
+```{r, echo = FALSE}
 library(BayesHMM)
 ```
 
@@ -163,33 +168,42 @@ hmm(
 
 where $K$ is the number of hidden states and $R$ is the number of dimensions in the observation variable.
 
-Observation, initial, and transition rely on ` Density` S3 objects to specify density form, parameter priors, and fixed values for parameters. For example, `Gaussian(mu = 0, sigma = 1)` specifies a Gaussian density with fixed parameters, while `Gaussian(mu = Gaussian(0, 10), sigma = Cauchy(0, 10, bounds = list(0, NA)))` specifies a Gaussian density with a Gaussian prior on the location parameter and a Cauchy prior on the scale parameter, which is bounded on $[0, \infty)$. User may specify bounds in the parameter space as well as truncation in prior densities.
+The `observation`, `initial`, and `transition` fields rely on S3 objects called `Density` to specify density form, parameter priors, and fixed values for parameters. User may specify bounds in the parameter space as well as truncation in prior densities. For example:
 
-The followings are currently avaliable:
+* `Gaussian(mu = 0, sigma = 1)` specifies a Gaussian density with fixed parameters.
+* `Gaussian(mu = Gaussian(0, 10), sigma = Cauchy(0, 10, bounds = list(0, NA)))` specifies a Gaussian density with a Gaussian prior on the location parameter and a Cauchy prior on the scale parameter, which is bounded on $[0, \infty)$.
 
-TABLE ABOUT HERE
+Currently available densities are listed below:
+
+* Observation model:
+    * Univariate: Bernoulli, Beta, Binomial, Categorical, Cauchy, Dirichlet, Gaussian, Multinomial, Negative Binomial (traditional and location parameterizations), Poisson, Student.
+    * Multivariate: Multivariate Gaussian (traditional, Cholesky decomposition of covariance matrix, and Cholesky decomposition of correlation matrix parameterizations), Multivariate Student.
+    * Regressions: Bernoulli regression with logit link, Binomial regression (logit and probit links), Softmax regression, Gaussian regression.
+    * Prior-only density: LKJ, Wishart.
+* Transition model: Dirichlet, Softmax regression.
+* Initial model: Dirichlet, Softmax regression.
 
 ### Observation model
 
-The observation model may be specified in any of the following ways:
+Internally, a specification stores either $K$ multivariate densities (i.e. one multivariate density for state) or $K \times R$ univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). As shown in the next table, densities are recycled to simplify user-input code.
 
-  |R    | Length  | Density             | FUN         |
-  |-----|---------|---------------------|-------------|
-  | 1   | 1       | UnivariateDensity   | repeat_K    |
-  | 1   | K       | UnivariateDensity   | repeat_none |
-  |>1   | 1       | MultivariateDensity | repeat_K    |
-  |>1   | 1       | UnivariateDensity   | repeat_KxR  |
-  |>1   | K       | MultivariateDensity | repeat_none |
-  |>1   | K       | UnivariateDensity   | repeat_R    |
-  |>1   | R       | UnivariateDensity   | repeat_K    |
-  |>1   | KxR     | UnivariateDensity   | repeat_none |
+  |R    | User input | Density             | Action      |
+  |-----|------------|---------------------|-------------|
+  | 1   | 1          | UnivariateDensity   | repeat_K    |
+  | 1   | K          | UnivariateDensity   | repeat_none |
+  |>1   | 1          | MultivariateDensity | repeat_K    |
+  |>1   | 1          | UnivariateDensity   | repeat_KxR  |
+  |>1   | K          | MultivariateDensity | repeat_none |
+  |>1   | K          | UnivariateDensity   | repeat_R    |
+  |>1   | R          | UnivariateDensity   | repeat_K    |
+  |>1   | KxR        | UnivariateDensity   | repeat_none |
 
-For a univariate model (i.e. $R = 1$):
+For a univariate model ($R = 1$):
 
   * User enters one univariate density: specify the same density in each hidden state variable.
   * User enters $K$ univariate density: specify one different density in each hidden state (ex. Gaussian in one state and Student in the other).
-  
-This system is flexible enough to let the user specify different densities and priors for each state. For example, the following snippet specify a (rather unrealistic) model where each state are a priori believed to have negative, near zero, and positive location parameters.
+
+This system is flexible enough to let the user specify different densities and priors for each state. The following snippet specify a (rather unrealistic) model where states are a priori believed to have negative, near zero, and positive location parameters.
       
 ```{r}
 mySpec <- hmm(
@@ -208,10 +222,11 @@ For a multivariate model ($R > 1$):
 
   * User enters one univariate density: same density for each dimension of the observation variable in all states (i.e. same density and priors for the R variables in the K latent states).
   * User enters one multivariate density: same density for the observation vector in all hidden states.
-  * User enters $K$ univariate density: each dimension of the observation variable has the same specification across states.
-  * User enters $K$ multivariate density: specify a multivariate density for the observation vector which changes per state.
+  * User enters $K$ univariate density: each dimension of the observation variable has the same specification within a each state.
+  * User enters $K$ multivariate density: specify a multivariate density for the observation vector for each state.
   * User enters $R$ univariate density: specify one density for each element of the observation vector, which is the same across state.
-  * User enters $R \times K$ univariate density: specify density for each element of the observation vector in each state. Order is $k_1r_1, \dots, k_1, r_R, k_2r_1, \dots, k_2r_R, \dots, k_Kr_1, \dots, k_K,r_R$.
+  * User enters $R \times K$ univariate density: specify density for each element of the observation vector in each state. Order is $k_1 r_1, \dots, k_1, r_R, k_2r_1, \dots, k_2r_R, \dots, k_Kr_1, \dots, k_K,r_R$.
+  * When $K = R$, $K$ prevails.
 
 ### Transition model
 
@@ -232,29 +247,29 @@ mySpec <- hmm(
 )
 ```
 
-Internally, a specification stores either $K$ multivariate densities (i.e. one multivariate density for each row in the transition matrix) or $K\timesK$ univariate densities (i.e. one univariate density for each element in the transition matrix). Densities are recycled accordingly.
+Internally, a specification stores either $K$ multivariate densities (i.e. one multivariate density for each row in the transition matrix) or $K \times K$ univariate densities (i.e. one univariate density for each element in the transition matrix). Densities are recycled accordingly.
 
-  | Length  | Density             | FUN                       |
-  |---------|---------------------|-------------------------- |
-  | 1       | UnivariateDensity   | repeat_KxK                |
-  | 1       | MultivariateDensity | repeat_K                  |
-  | 1       | LinkDensity         | nothing                   |
-  | K       | UnivariateDensity   | repeat_K                  |
-  | K       | MultivariateDensity | repeat_none_multivariate  |
-  | KxK     | UnivariateDensity   | repeat_none_univariate    |
+  | User-input | Density             | Action                   |
+  |------------|---------------------|--------------------------|
+  | 1          | UnivariateDensity   | repeat_KxK               |
+  | 1          | MultivariateDensity | repeat_K                 |
+  | 1          | LinkDensity         | nothing                  |
+  | K          | UnivariateDensity   | repeat_K                 |
+  | K          | MultivariateDensity | repeat_none_multivariate |
+  | KxK        | UnivariateDensity   | repeat_none_univariate   |
 
-__NOTE__: Unfortunately, we haven't implemented fixed values for transition parameters see.
+__NOTE__: As of the time of this writing, fixed values for transition parameters have not been implemented yet.
 
 ### Initial model
 
 Internally, a specification stores either one multivariate densities for the whole initial probability vector, or $K$ univariate densities for each element of said vector. Densities are recycled accordingly.
 
-  | Length  | Density             | FUN
-  | --------|---------------------|--------------------------
-  | 1       | UnivariateDensity   | repeat_K
-  | 1       | MultivariateDensity | repeat_none_multivariate
-  | 1       | LinkDensity         | repeat_none_multivariate
-  | K       | UnivariateDensity   | repeat_none_univariate
+  | User-input | Density             | Action
+  | -----------|---------------------|--------------------------
+  | 1          | UnivariateDensity   | repeat_K
+  | 1          | MultivariateDensity | repeat_none_multivariate
+  | 1          | LinkDensity         | repeat_none_multivariate
+  | K          | UnivariateDensity   | repeat_none_univariate
 
 ```{r}
 mySpec <- hmm(
@@ -267,11 +282,332 @@ mySpec <- hmm(
     vBeta = Gaussian(0, 5)
   ),
   transition  = Dirichlet(alpha = Default()),
-  name = "TVHMM Softmax Univariate Gaussian"
+  name = "Univariate Gaussian with covariates for initial model"
 )
 ```
 
 ### Examples
+
+Many possible configurations are shown in the Appendix \ref{sec:appendix}.
+
+## 2. Validate
+
+Bayesian Software Validation allows users to test software accuracy [CITE]. We provide a one-liner to run a validation protocol based on the prior predictive density. Iterations are run in parallel using `foreach` and `doParallel`.
+
+__Validation protocol inspired by Simulation Based Calibration (cite)__
+
+* Compile the prior predictive model (i.e. no likelihood statement in the Stan code).
+* Draw $N$ samples of the parameter vector $\theta$ and the observation vector $\mat{y}_t$ from prior predictive density.
+* Compile the posterior predictive model (i.e. Stan code includes both prior density and likelihood statement).
+* For all $n \in 1, \dots, N$:
+    * Feed $\mat{y}_t^{(n)}$ to the full model.
+    * Draw one posterior sample of the observation variable $\mat{y_t}^{(n)}_{\text{new}}$.
+    * Collect Hamiltonian Monte Carlo diagnostics: number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sample times.
+    * Collect posterior sampling diagnostics: posterior summary measures (mean, sd, quantiles), comparison against the true value (rank), MCMC convergence measures (Monte Carlo SE, ESS, R Hat).
+    * Collect posterior predictive diagnostics: observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples.
+    * Other: we expect to enrich the protocol with more relevant quantities in future iterations.
+
+There is no such a thing as an universal, automatic way to validate models. The software computes and summarizes different diagnostic measures and provides the user with high-level tools to assess calibration (including printouts, tables, and plots). Because the user may want to single out and inspect one of the iterations, in future versions it will be able to recover (or reproduce) the full posterior sample drawn in the $n$-th iteration.
+
+In the following snippet, we specify a HMM and validate its calibration.
+
+```{r, results = "hide"}
+  mySpec <- hmm(
+    K = 3, R = 2,
+    observation =
+      Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
+      Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
+      Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
+    initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+    transition  =
+      Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
+      Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
+      Dirichlet(alpha = c(0.2, 0.2, 1.0)),
+    name = "Dummy Model"
+  )
+
+  val <- validate_calibration(mySpec, N = 2, T = 100, iter = 500, seed = 9000)
+```
+
+The function returns a named list with two elements, `chains` and `parameters`, which are data frames storing the aforementioned summary quantities.
+
+```{r}
+knitr::kable(
+  head(val$chains), 
+  digits = 2, caption = "Chains diagnostics"
+)
+
+knitr::kable(
+  head(val$parameters), 
+  digits = 2, caption = "Parameters diagnostics"
+)
+
+plot(
+  val$parameters$Rhat, 
+  type = "h", ylim = c(0.9, 1.15),
+  ylab = expression(hat(R)),
+  xlab = "Validation run (n)"
+)
+abline(h = 1.1)
+```
+
+## 3. Simulate & Fit
+
+Once specified, the user may:
+
+* Call `sim()` to simulate $N$ datasets containing the observation variables $\mat{y}$ and the hidden paths $z$.
+* Call `compile()` to compile the underlying Stan model. The returned object may be later used for either sampling (MCMC) or optimization (MAP).
+    * Call `sampling()` to draw posterior samples from a compiled model effectively allowing for full Bayesian inference via MCMC.
+    * Call `optimizing()` to maximize the joint posterior density and obtain a point estimate.
+* Call `fit()` to compile and sample in one step.
+
+After fitting, the underlying Stan code may be inspected by calling `browse_model`, which opens the Stan file in the editor.
+
+### 3.1. Fully Bayesian Inferencia via MCMC
+
+Because `sampling()` and `fit()` return a `stanfit` S4 object, the posterior samples are compatible out of box with every tool in the `rstan` ecosystem [TRY AND LIST SOME SUCH AS bayesplot].
+
+### 3.2. Maximum At Posteriori estimates via posterior optimization
+
+`optimizing` is able to run several initialization of the optimization algorithm in parallel. The user may decide to `keep = "all"` runs, or just `keep = "best"`. If the former, `extract_grid` returns a summary of the different runs and `extract_best` retrieves the one with highest posterior log likelihood. If no run achieves convergence, a warning message is prompt to the console.
+
+```{r, results = "hide"}
+mySpec <- hmm(
+  K = 3, R = 1,
+  observation =
+    Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  name = "Univariate Gaussian"
+)
+
+set.seed(9000)
+y <- as.matrix(
+  c(rnorm(100, -10, 1), rnorm(100, 0, 1), rnorm(100, 10, 1))
+)
+y <- sample(y)
+
+myModel <- compile(mySpec)
+myAll   <- optimizing(mySpec, myModel, y = y, nRun = 10, keep = "all", nCores = 4)
+myBest <- extract_best(myAll)
+```
+
+```{r}
+print(
+  round(extract_grid(myAll, pars = "mu"), 2)
+)
+
+plot_obs(myBest, pch = 21, bg = "red")
+```
+
+__NOTE__: Passing both the specification and the compiled model is redundant. In future versions, user will not need to pass the specification.
+
+### 3.3 Common high-level routines
+
+Most of these extractors rely on the lower level `extract_quantity` function. By default, it returns a named list where each element is an array representing a sampled quantity. The dimension of the array varies according to the number of iterations, the length of the series, and the structure of the quantity itself (for example, whether they are univariate or multivariate). Additionally, the function accepts wildcards `*` for easy extraction of a family of quantity.
+
+This function has two convenience arguments:
+
+* `reduce` takes a function that is run with-in chain, effectively reducing the $N$ draws per chain into one or more quantity.
+* `combine` takes a function that is run on the reduced quantity for each parameter, effectively combining the summary quantity from each parameter into a single data structure.
+
+Besides `extract_quantity`, which takes an argument `pars`, the software comes with extractors for the most typical quantities: `extract_alpha` (filtered probability), `extract_gamma` (smoothed probability), `extract_zstar` (MPM, also known a Viterbi), `extract_ypred` and `extract_zpred` for predictive quantities, and `extract_obs_parameters` and `extract_parameters` for observation model and all model parameters respectively.
+
+__NOTE__: Naming convention may be changed before submitting to CRAN. Consider for example `extract_alpha` versus `extract_filtered_probability`, or `extract_zstar` versus `extract_viterbi`.
+
+Compare in these examples different configurations of `reduce` and `combine` :
+
+```{r}
+mySpec <- hmm(
+  K = 3, R = 1,
+  observation =
+    Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  name = "Univariate Gaussian"
+)
+
+set.seed(9000)
+y <- as.matrix(
+  c(rnorm(100, -10, 1), rnorm(100, 0, 1), rnorm(100, 10, 1))
+)
+y <- sample(y)
+
+myFit <- fit(mySpec, y = y)
+
+# 3 parameters, 1,000 iterations, 4 chains
+print(
+  str(extract_obs_parameters(myFit))
+)
+
+# reduce within-chain draws to one quantity (median)
+print(
+  extract_obs_parameters(myFit, reduce = median)
+)
+
+# reduce within-chain draws to two quantities (quantiles)
+print(
+  extract_obs_parameters(
+    myFit, reduce = posterior_intervals(c(0.1, 0.9))
+  )
+)
+
+# combine quantities into a matrix
+print(
+  extract_obs_parameters(
+      myFit, 
+      reduce  = median,
+      combine = rbind
+  )
+)
+```
+
+Since classification is a frequent task in the data analysis workflow, we provide a family of `classify_*` functions that extract the estimated quantities and return the most likely state: `classify_alpha` and `classify_gamma` return the state with highest posterior probability at each time step, while `classify_zstar` returns the posterior mode of the jointly most likely state. 
+
+```{r}
+print(
+  str(classify_alpha(myFit))
+)
+
+print(
+  str(classify_gamma(myFit))
+)
+
+print(
+  str(classify_zstar(myFit))
+)
+```
+
+## 4. Diagnose
+
+This step is not implemented as of the date of this writing. We plan to explore how to diagnose a HMM outside posterior predictive checks (think, for example, pseudo residuals).
+
+## 5. Visualize
+
+We expect that visualization will play a very important role in our software once it arrives to a mature stage. At this point, we support a small amount of graphical routines:
+
+* `plot_series` focuses on the observation variables.
+* `plot_state_probability` focuses on the estimated assignment probability.
+* `plot_ppredictive` focuses on posterior predictive checks.
+
+Besides functions for fully-customizable individual plots such as ` plot_ppredictive_density(y, yPred)` (note that the function takes as arguments the actual values and not a fitted object), the software includes a convenient way to automatically include one or more plots from the same family on a single layout. Each plot may toggle one or more "feature" such as colored lines, points, or backgrounds. Additionally, plots adjust automatically for multivariate observations, and variable names are automatically shown if the data matrix used to fitted the model has named columns. Colors are themeable via global options.
+
+The following features are currently available:
+
+* When plotting the observation variables:
+		* `stateShade` to shade the background based on the state probability.
+		* `yColoredLine` to include a line colored according to the state probability.
+		* `yColoredDots` to include dots colored according to the state probability.
+
+* When plotting the state probabilities:
+		* `stateShade` to shade the background based on the state probability.
+		* `probabilityColoredLine` to include a line colored according to the state probability.
+		* `probabilityColoredDots` to include dots colored according to the state probability.
+		* `bottomColoredMarks` and `topColoredMarks` to include colored tick marks on the bottom or top axis.
+		* `probabilityFan` to show the posterior interval of assignment probabilities.
+
+Again, the objects returned by `fit` and `sampling` are compatible with the rstan ecosystem, including visualization routines in the bayesplot package.
+
+```{r, results = "hide"}
+mySpec <- hmm(
+  K = 3, R = 2,
+  observation =
+    Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
+    Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  =
+    Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
+    Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
+    Dirichlet(alpha = c(0.2, 0.2, 1.0)),
+  name = "Univariate Gaussian Dummy Model"
+)
+
+mySim <- sim(mySpec, T = 300, seed = 9000, iter = 500, chains = 1)
+ySim  <- extract_ypred(mySim)[[1]][1, , ]
+colnames(ySim) <- c("Weight", "Height")
+
+myFit <- fit(mySpec, y = ySim, seed = 9000, iter = 500, chains = 1)
+```
+
+```{r}
+plot_series(myFit, legend.cex = 0.8)
+
+plot_series(myFit, xlab = "Time steps", features = c("yColoredLine"))
+
+plot_series(
+  myFit, stateProbability =  "smoothed", 
+  features = c("stateShade", "bottomColoredMarks")
+)
+
+plot_state_probability(myFit, main = "Title", xlab = "Time")
+
+plot_state_probability(myFit, features = c("stateShade"), main = "Title", xlab = "Time")
+
+# plot_state_probability(myFit, features = c("bottomColoredMarks"), main = "Title", xlab = "Time")
+
+plot_state_probability(myFit, features = c("probabilityColoredDots"), main = "Title", xlab = "Time")
+
+plot_state_probability(myFit, features = c("probabilityColoredLine"), main = "Title", xlab = "Time")
+
+# plot_state_probability(myFit, stateProbability = "filtered", features = c("bottomColoredMarks", "probabilityFan"), stateProbabilityInterval = c(0.05, 0.95), main = "Title", xlab = "Time")
+
+plot_ppredictive(myFit, type = c("density", "cumulative", "summary"), fun = median)
+
+plot_ppredictive(myFit, type = c("density", "boxplot"), fun = median, subset = 1:10)
+
+plot_ppredictive(
+  myFit, 
+  type = c("density", "boxplot", "scatter"), 
+  fun = median, fun1 = mean, fun2 = median, 
+  subset = 1:40
+)
+
+plot_ppredictive(myFit, type = c("density", "cumulative", "hist"), fun = median)
+
+plot_ppredictive(myFit, type = c("density", "cumulative", "ks"))
+```
+
+## 6. Select
+
+Model comparison is an important step in the statistical workflow, and future versions of the software will provide information criterion and other quantities for model selection.
+
+# Mixture models
+
+Mixture models may be seen as a simplified version of HMM, where the assignment probabilities do not have a Markovian structure. We provide a simple implementation, and future iterations of our software will include extracting the individual assignment probabilities, and support for visualization and other data analysis procedures specific to mixture models.
+
+```{r, results = "hide"}
+mySpec <- mixture(
+  K = 3, R = 1,
+  observation = Student(
+    mu    = Default(),
+    sigma = Gaussian(0,  10, bounds = list(0, NULL)),
+    nu    = Gaussian(0, 100, bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = Default()),
+  name = "Univariate Student t Mixture"
+)
+
+set.seed(9000)
+y <- as.matrix(
+  c(rnorm(50, 5, 1), rnorm(300, 0, 1), rnorm(100, -5, 1))
+)
+
+myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+```
+
+```{r}
+plot_obs(myFit)
+
+print_all(myFit)
+```
+
+# Appendix
+\label{sec:appendix}
 
 We present 19 different possible configurations.
 
@@ -305,8 +641,6 @@ exCase1  <- hmm(
   name = "A different multivariate density for each each state"
 )
 
-write_model(exCase1, noLogLike = FALSE, "out")
-
 # Case 2. Same multivariate density for every state
 #   Input: One multivariate density
 #   Behaviour: Repeat input K times
@@ -323,8 +657,6 @@ exCase2  <- hmm(
   name = "Same multivariate density for every state"
 )
 
-write_model(exCase2, noLogLike = FALSE, "out")
-
 # Case 3. Same univariate density for every state and every output variable
 #   Input: One univariate density
 #   Behaviour: Repeat input K %nested% R times
@@ -340,8 +672,6 @@ exCase3  <- hmm(
   transition  = Default(),
   name = "Same univariate density for every state and every output variable"
 )
-
-write_model(exCase3, noLogLike = FALSE, "out")
 
 # Case 4. Same R univariate densities for every state
 #   Input: R univariate densities
@@ -362,8 +692,6 @@ exCase4  <- hmm(
   transition  = Default(),
   name = "Same R univariate densities for every state"
 )
-
-write_model(exCase4, noLogLike = FALSE, "out")
 
 # Case 5. Same univariate density for every output variable
 #   Input: K univariate densities
@@ -388,8 +716,6 @@ exCase5  <- hmm(
   transition  = Default(),
   name = "Same univariate density for every output variable"
 )
-
-write_model(exCase5, noLogLike = FALSE, "out")
 
 # Case 6. Different univariate densities for every pair of state and output variable
 #   Input: K %nested% R univariate densities
@@ -427,8 +753,6 @@ exCase6  <- hmm(
   name = "Different univariate densities for every pair of state and output variable"
 )
 
-write_model(exCase6, noLogLike = FALSE, "out")
-
 # UNIVARIATE Observation model --------------------------------------------
 
 K = 3
@@ -458,8 +782,6 @@ exCase7  <- hmm(
   name = "A different univariate density for each each state"
 )
 
-write_model(exCase7, noLogLike = FALSE, "out")
-
 # Case 8. Same univariate density for every state
 #   Input: One univariate density
 #   Behaviour: Repeat input K times
@@ -475,8 +797,6 @@ exCase8  <- hmm(
   transition  = Default(),
   name = "Same multivariate density for every state"
 )
-
-write_model(exCase8, noLogLike = FALSE, "out")
 
 # INITIAL MODEL -----------------------------------------------------------
 K = 3
@@ -501,8 +821,6 @@ exCase9  <- hmm(
   name = "Same univariate density for every initial state"
 )
 
-write_model(exCase9, noLogLike = FALSE, "out")
-
 # Case 10. One multivariate density for the whole initial vector
 #   Input: One multivariate density
 #   Behaviour: Nothing
@@ -520,8 +838,6 @@ exCase10  <- hmm(
   transition  = Default(),
   name = "One multivariate density for the whole initial vector"
 )
-
-write_model(exCase10, noLogLike = FALSE, "out")
 
 # Case 11. A different univariate density for each initial state
 #   Input: K univariate densities
@@ -550,8 +866,6 @@ exCase11 <- hmm(
   name = "A different univariate density for each initial state"
 )
 
-write_model(exCase11, noLogLike = FALSE, "out")
-
 # Case 12. A link
 #   Input: One link density
 #   Behaviour: Nothing
@@ -569,8 +883,6 @@ exCase12 <- hmm(
   transition  = Default(),
   name = "TV Initial distribution"
 )
-
-write_model(exCase12, noLogLike = FALSE, "out")
 
 # TRANSITION MODEL --------------------------------------------------------
 K = 3
@@ -592,8 +904,6 @@ exCase13 <- hmm(
   name = "Same univariate density for every transition"
 )
 
-write_model(exCase13, noLogLike = FALSE, "out")
-
 # Case 14. Same multivariate density for every transition row
 #   Input: One multivariate density
 #   Behaviour: Repeat input K times
@@ -612,8 +922,6 @@ exCase14 <- hmm(
     ),
   name = "Same multivariate density for every transition row"
 )
-
-write_model(exCase14, noLogLike = FALSE, "out")
 
 # Case 15. A different univariate density for each element of the transition row
 #   Input: K univariate densities
@@ -634,8 +942,6 @@ exCase15 <- hmm(
   name = "A different univariate density for each element of the transition row"
 )
 
-write_model(exCase15, noLogLike = FALSE, "out")
-
 # Case 16. A different multivariate density for each transition row
 #   Input: K multivariate densities
 #   Behaviour: nothing
@@ -654,8 +960,6 @@ exCase16 <- hmm(
     Dirichlet(alpha = c(0.9, 0.9, 0.9)),
   name = "A different multivariate density for each transition row"
 )
-
-write_model(exCase16, noLogLike = FALSE, "out")
 
 # Case 17. Different univariate densities for each element of the transition matrix
 #   Input: KxK univariate densities
@@ -682,8 +986,6 @@ exCase17 <- hmm(
   name = "Different univariate densities for each element of the transition matrix"
 )
 
-write_model(exCase17, noLogLike = FALSE, "out")
-
 # Case 18. A link
 #   Input: One link density
 #   Behaviour: Nothing
@@ -702,8 +1004,6 @@ exCase18 <- hmm(
     ),
   name = "Different univariate densities for each element of the transition matrix"
 )
-
-write_model(exCase18, noLogLike = FALSE, "out")
 
 # A FULLY COMPLEX MODEL ---------------------------------------------------
 
@@ -735,57 +1035,4 @@ exCase19 <- hmm(
     ),
   name = "Fully Complex Model"
 )
-
-write_model(exCase19, noLogLike = FALSE, "out")
 ```
-
-## 2. Validate
-
-Bayesian Software Validation allows users to test software accuracy. We provide a one-liner to run a validation protocol based on the prior predictive density. Iterations are run in parallel using `foreach` and `doParallel`.
-
-__Validation protocol inspired by Simulation Based Calibration (cite)__
-
-* Compile the prior predictive model (i.e. no likelihood statement in the Stan code).
-* Draw $N$ samples of the parameter vector $\theta$ and the observation vector $y$ from prior predictive density.
-* Compile the posterior predictive model (i.e. Stan code includes both prior density and likelihood statement).
-* For all $n \in 1, \dots, N$ ...
-    * Feed $y^{(n)}$ to the full model.
-    * Draw posterior samples for the observation variable $y^{(n)}_{\text{new}}$.
-    * Collect Hamiltoniam Monte Carlo diagnostics: number of divergences, number of times it hits max tree depth, maximum leapfrogs, warmup and sample times.
-    * Collect posterior sampling diagnostics: posterior summary measures (mean, sd, quantiles), comparison against the true value (rank), MCMC convergence measures (Monte Carlo SE, ESS, RHat).
-    * Collect posterior predictive diagnostics: observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples.
-    * Other: we expect to implement a better protocol in future iterations.
-
-There is no such a thing as an universal, automatic way to validate models. The software computes and summarizes different diagnostic measures and provides the user with high-level tools to assess calibration (including printouts, tables, and plots). Because the user may want to single out and inspect one of the iterations, in future versions it will be able to recover (or reproduce) the full posterior sample drawn in the $n$-th iteration.
-
-In the following snippet, we specify a HMM and validate its calibration.
-
-```{r}
-  mySpec <- hmm(
-    K = 3, R = 2,
-    observation =
-      Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
-      Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
-      Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
-    initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-    transition  =
-      Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
-      Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
-      Dirichlet(alpha = c(0.2, 0.2, 1.0)),
-    name = "Univariate Gaussian Dummy Model"
-  )
-
-  val <- validate_calibration(mySpec, N = 2, T = 100, iter = 500, seed = 9000)
-```
-
-The function returns a named list with two elements, `chains` and `parameters`, which are data frames with the corresponding summary measures.
-
-```{r}
-knitr::kable(head(val$chains), digits = 2, caption = "Chains diagnostics")
-knitr::kable(head(val$parameters), digits = 2, caption = "Parameters diagnostics")
-plot(val$parameters$Rhat, type = "h", ylim = c(0.9, 1.15))
-abline(h = 1.1)
-# Sort to fix label switching
-```
-
-More than one density may be chained using the plus sign operator `+`, which creates a `DensityList` S3 object under the hood. <!-- Internally, the package includes some convenience functions such as `densityApply()`, which applies a function to any (possibly nested) density in the list. --> 

@@ -126,7 +126,7 @@ classify_zstar.Optimization <- function(fit, reduce = NULL, chain = NULL) {
 }
 
 classify_zstar.stanfit <- function(fit, reduce = posterior_mode, chain = 1) {
-  extract_zstar(fit, reduce, chain)[[1]]
+  extract_zstar(fit, reduce = reduce, chain = chain)[[1]]
 }
 
 setMethod("classify_zstar", "stanfit", classify_zstar.stanfit)

@@ -2,8 +2,9 @@ Package: BayesHMM
 Type: Package
 Title: Full Bayesian Inference for Hidden Markov Models
 Version: 0.0.1
-Author: Luis Damiano, Michael Weylandt, Brian Peterson
-Maintainer: Luis Damiano <damiano.luis@gmail.com>
+Authors@R: c(person("Luis",    "Damiano",  email = "damiano.luis@gmail.com",     role = c("aut", "cre", "cph")),
+  person("Michael", "Weylandt", email = "michael.weylandt@gmail.com", role = c("aut")),
+  person("Brian",   "Peterson", email = "brian@braverock.com",        role = c("aut")))
 Description: An R Package to run full Bayesian inference on Hidden Markov Models (HMM) using the probabilistic programming language Stan. The software enables users to fit HMM with time-homogeneous transitions as well as time-varying transition probabilities. Priors can be set for every model parameter. Implemented inference algorithms include forward (filtering), forward-backwards (smoothing), Viterbi (most likely hidden path), prior predictive sampling, and posterior predictive sampling. Graphs, tables and other convenience methods for convergence diagnosis, goodness of fit, and data analysis are provided.
 License: GPL (>=3)
 Copyright: (c) 2018
@@ -25,5 +26,5 @@ Suggests:
     rmarkdown
 URL: https://github.com/luisdamiano/BayesHMM/, https://summerofcode.withgoogle.com/projects/#4681157036212224
 BugReports: https://github.com/luisdamiano/BayesHMM/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
