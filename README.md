@@ -15,7 +15,7 @@ devtools::install_github("luisdamiano/BayesHMM")
   
 ### Examples
 
-See the [vignette](inst\doc\introduction.pdf). Note that you may also find examples in [inst\examples](inst\examples), but these may not work with the last version in the repository.
+See the [vignette](inst/doc/introduction.pdf). Note that you may also find examples in [inst/examples](inst/examples), but these may not work with the last version in the repository.
   
 ## Contributing
 
