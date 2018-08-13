@@ -1,10 +1,10 @@
 ---
-title: "An introduction to BayesHMM"
+title: "An Introduction to BayesHMM"
 author: "Luis Damiano, Michael Weylandt, Brian Peterson"
 date: "`r Sys.Date()`"
 output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{An introduction to BayesHMM}
+  %\VignetteIndexEntry{An Introduction to BayesHMM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 urlcolor: blue
@@ -40,13 +40,15 @@ BayesHMM is an R Package to run full Bayesian inference on Hidden Markov Models 
 
 This vignette introduces the software and briefly reviews current capabilities. Although we walk the reader through most of the functionalities, we do not discuss function arguments, implementation details, and other details typically reviewed in the documentations. A list of future features may be found in the [Roadmap wiki page](https://github.com/luisdamiano/BayesHMM/wiki/Roadmap).
 
-We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/projects/#4681157036212224) for funding.
-
 __NOTE__: Our software is work in progress. We will review naming conventions as well as other design decisions at a later stage. Fully detailed documentation will be available at the time of release.
 
 # Introduction
 
 # Hidden Markov Models
+
+Real-world processes produce observable outputs characterized as signals. These can be discrete or continuous in nature, be pure or contaminated with noise, come from a stationary or non stationary source, among many other variations. These signals are modelled to allow for both theoretical descriptions and practical applications. The model itself can be deterministic or stochastic, in which case the signal is well characterized as a parametric random process whose parameters can be estimated in a well-defined manner.
+
+Autocorrelation, a key feature in most signals, can be modelled in countless forms. While certainly pertinent to this purpose, high-order Markov chains can prove inconvenient when the range of the correlation amongst the observations is long. A more parsimonious approach assumes that the observed sequence is a noisy observation of an underlying hidden process represented as a first-order Markov chain. In other terms, long-range dependencies between observations are mediated via latent variables. It is important to note that the Markov property is only assumed for the hidden states and not for the observations themselves.
 
 Hidden Markov Models (HMM) involve two interconnected models. The state model consists of a discrete-time, discrete-state first-order Markov chain $z_t \in \{1, \dots, K\}$ that transitions according to $p(z_t | z_{t-1})$. In turns, the observation model is governed by $p(\mat{y}_t | z_t)$, where $\mat{y}_t \in \RR^R$ are the observations, emissions or output. The corresponding joint distribution is
 
@@ -96,11 +98,266 @@ Most frequently in applications, the initial distribution model is characterized
 p(z_1 | \mat{v}, \mat{\theta}) = \text{softmax}(\mat{v} \mat{\beta}^v).
 \]
 
+## Inference
+
+There are several quantities of interest that can be inferred via different algorithms. Our code contains the implementation of the most relevant methods for unsupervised data: forward, forward-backward and Viterbi decoding algorithms. We acknowledge the authors of the Stan Manual for the thorough illustrations and code snippets, some of which served as a starting point for our own code. As estimation is treated later, we assume that model parameters $\mat{\theta}$ are known.
+
+```{r inference_table, echo = FALSE, eval = TRUE}
+df <- data.frame(
+  name = c("Filtering", 
+           "Smoothing", 
+           "Fixed lag smoothing", 
+           "State prediction", 
+           "Observation prediction", 
+           "MAP Estimation", 
+           "Log likelihood"),
+  hidden = c("$p(z_t | \\mat{y}_{1:t})$",
+             "$p(z_t | \\mat{y}_{1:T})$",
+             "$p(z_{t - \\ell} | \\mat{y}_{1:t})$, $\\ell \\ge 1$",
+             "$p(z_{t+h} | \\mat{y}_{1:t})$, $h\\ge 1$",
+             "$p(y_{t+h} | \\mat{y}_{1:t})$, $h\\ge 1$",
+             "$\\argmax_{\\mat{z}_{1:T}} p(\\mat{z}_{1:T} | \\mat{y}_{1:T})$",
+             "$p(\\mat{y}_{1:T})$"),
+  availability = c("$t$ (online)",
+                   "$T$ (offline)",
+                   "$t + \\ell$ (lagged)",
+                   "$t$",
+                   "$t$",
+                   "$T$",
+                   "$T$"),
+  algorithm = c("Forward",
+                "Forward-backward",
+                "Forward-backward",
+                "",
+                "",
+                "Viterbi decoding",
+                "Forward"),
+  complexity = c("$O(K^2T)$ \\ $O(KT)\\dagger$",
+                 "$O(K^2T)$ \\ $O(KT)\\dagger$",
+                 "$O(K^2T)$ \\ $O(KT)\\dagger$",
+                 "",
+                 "",
+                 "$O(K^2T)$",
+                 "$O(K^2T)$ \\ $O(KT)\\dagger$")
+)
+
+df.col <- c("Name",
+            "Hidden Quantity",
+            "Availability at",
+            "Algorithm",
+            "Complexity")
+
+knitr::kable(df, format = "pandoc", col.names = df.col, 
+             caption = "Summary of the hidden quantities and their corresponding inference algorithm. $\\dagger$ Time complexity is reduced to $O(KT)$ for inference on a left-to-right (upper triangular) transition matrix.")
+```
+
+### Filtering
+A filter infers the posterior distribution of the hidden states at a given step $t$ based on all the information available up to that point $p(z_t | \mat{y}_{1:t})$. It achieves better noise reduction than simply estimating the hidden state based on the current estimate $p(z_t | \mat{y}_{t})$. The filtering process can be run online, or recursively, as new data streams in.
+
+Filtered marginals can be computed recursively using the forward algorithm [@baum1967inequality]. Let $\psi_t(j) = p(\mat{y}_t | z_t = j)$ be the local evidence at step $t$ and $\Psi(i, j) = p(z_t = j | z_{t-1} = i)$ be the transition probability. First, the one-step-ahead predictive density is computed
+
+\[
+p(z_t = j | \mat{y}_{1:t-1}) = \sum_{i}{\Psi(i, j) p(z_{t-1} = i | \mat{y}_{1:t-1})}.
+\]
+
+Acting as prior information, this quantity is updated with observed data at the step $t$ using the Bayes rule,
+
+\begin{align*}
+\label{eq:filtered-beliefstate}
+\alpha_t(j) 
+  & \triangleq  p(z_t = j | \mat{y}_{1:t}) \\
+  &= p(z_t = j | \mat{y}_{t}, \mat{y}_{1:t-1}) \\
+  &= Z_t^{-1} \psi_t(j) p(z_t = j | \mat{y}_{1:t-1}) \\
+\end{align*}
+  
+where the normalization constant is given by
+
+\[
+Z_t
+  \triangleq  p(\mat{y}_t | \mat{y}_{1:t-1})
+  = \sum_{l=1}^{K}{p(\mat{y}_{t} | z_t = l) p(z_t = l | \mat{y}_{1:t-1})}
+  = \sum_{l=1}^{K}{\psi_t(l) p(z_t = l | \mat{y}_{1:t-1})}.
+\]
+
+This predict-update cycle results in the filtered belief states at step $t$. As this algorithm only requires the evaluation of the quantities $\psi_t(j)$ for each value of $z_t$ for every $t$ and fixed $\mat{y}_t$, the posterior distribution of the latent states is independent of the form of the observation density or indeed of whether the observed variables are continuous or discrete [@jordan2003introduction]. In other words, $\alpha_t(j)$ does not depend on the complete form of the density function $p(\mat{y} | \mat{z})$ but only on the point values $p(\mat{y}_t | z_t = j)$ for every $\mat{y}_t$ and $z_t$.
+
+Let $\mat{\alpha}_t$ be a $K$-sized vector with the filtered belief states at step $t$, $\mat{\psi}_t(j)$ be the $K$-sized vector of local evidence at step $t$, $\mat{\Psi}$ be the transition matrix and $\mat{u} \odot \mat{v}$ be the Hadamard product, representing element-wise vector multiplication. Then, the Bayesian updating procedure can be expressed in matrix notation as
+
+\[
+\mat{\alpha}_t \propto \mat{\psi}_t \odot (\mat{\Psi}^T \mat{\alpha}_{t-1}).
+\]
+
+In addition to computing the hidden states, the algorithm yields the log likelihood
+
+\[
+\LL = \log p(\mat{y}_{1:T} | \mat{\theta}) = \sum_{t=1}^{T}{\log p(\mat{y}_{t} | \mat{y}_{1:t-1})} = \sum_{t=1}^{T}{\log Z_t}.
+\]
+
+The time complexity of the algorithm is $O(K^2T)$: there are $K \times K$ iterations within each of the $T$ iterations of the outer loop. Brute-forcing through all possible hidden states $K^T$ would prove prohibitive for realistic problems as time complexity increases exponentially with sequence length $O(K^TT)$.
+
+### Smoothing
+A smoother infers the posterior distribution of the hidden states at a given state based on all the observations or evidence $p(z_t | \mat{y}_{1:T})$. Although noise and uncertainty are significantly reduced as a result of conditioning on past and future data, the smoothing process can only be run offline.
+
+Inference can be done by means of the forward-backward algorithm, which also plays an important role in the Baum-Welch algorithm for learning model parameters [@baum1967inequality; @baum1970maximization]. Let $\gamma_t(j)$ be the desired smoothed posterior marginal,
+
+\[
+\gamma_t(j)
+  \triangleq p(z_t = j | \mat{y}_{1:T}),
+\]
+
+$\alpha_t(j)$ be the filtered belief state at the step $t$ as defined previously, and $\beta_t(j)$ be the conditional likelihood of future evidence given that the hidden state at step $t$ is $j$,
+
+\[
+\beta_t(j) 
+  \triangleq p(\mat{y}_{t+1:T} | z_t = j).
+\]
+
+Then, the chain of smoothed marginals can be segregated into the past and the future components by conditioning on the belief state $z_t$,
+
+\[
+\gamma_t(j)
+  = \frac{\alpha_t(j) \beta_t(j)}{p(\mat{y}_{1:T})}
+  \propto \alpha_t(j) \beta_t(j).
+\]
+
+The future component can be computed recursively from right to left:
+
+\begin{align*}
+\beta_{t-1}(i)
+  &= p(\mat{y}_{t:T} | z_{t-1} = i) \\
+  &= \sum_{j=1}^{K}{p(z_t =j, \mat{y}_{t}, \mat{y}_{t+1:T} | z_{t-1} = i)} \\
+  &= \sum_{j=1}^{K}{p(\mat{y}_{t+1:T} | z_t = j)p(z_t = j, \mat{y}_{t} | z_{t-1} = i)} \\
+  &= \sum_{j=1}^{K}{p(\mat{y}_{t+1:T} | z_t = j)p(\mat{y}_t | z_t = j)p(z_t = j | z_{t-1} = i)} \\
+  &= \sum_{j=1}^{K}{\beta_t(j) \psi_t(j) \Psi(i, j)}
+\end{align*}
+
+Let $\mat{\beta}_t$ be a $K$-sized vector with the conditional likelihood of future evidence given the hidden state at step $t$. Then, the backward procedure can be expressed in matrix notation as
+
+\[
+\mat{\beta}_{t-1} \propto \mat{\Psi} (\mat{\psi}_t \odot \mat{\beta}_{t}).
+\]
+
+At the last step, the base case is given by
+\[
+\beta_{T}(i)
+  = p(\mat{y}_{T+1:T} | z_{T} = i) = p(\varnothing | z_t = i) = 1.
+\]
+
+Intuitively, the forward-backward algorithm passes information from left to right and then from right to left, combining them at each node. A straightforward implementation of the algorithm runs in $O(K^2 T)$ time because of the $K \times K$ matrix multiplication at each step. Nonetheless the frequent description as two subsequent passes, these procedures are not inherently sequential and share no information. As a result, they could be implemented in parallel.
+
+There is a significant reduction if the transition matrix is sparse. Inference for a left-to-right (upper triangular) transition matrix, a model where the state index increases or stays the same as time passes, runs in $O(TK)$ time [@bakis1976continuous;@jelinek1976continuous]. Additional assumptions about the form of the transition matrix may ease complexity further, for example decreasing the time to $O(TK\log K)$ if $\psi(i, j) \propto \exp(-\sigma^2 |\mat{z}_i - \mat{z}_j|)$. Finally, ad-hoc data pre-processing strategies may help control complexity, for example by pruning nodes with low conditional probability of occurrence.
+
+The forward-backward algorithm was designed to exploit via recursion the conditional independencies in the HMM. First, the posterior marginal probability of the latent states at a given time step is broken down into two quantities: the past and the future components. Second, taking advantage of the Markov properties, each of the two are further broken down into simpler pieces via conditioning and marginalizing, thus creating an efficient predict-update cycle.
+
+This strategy makes otherwise unfeasible calculations possible. Consider for example a time series with $T = 100$ observations and $K = 5$ hidden states. Summing the joint probability over all possible state sequences would involve $2 \times 100 \times 5^{100} \approx 10^{72}$ computations, while the forward and backward passes only take $3,000$ each. Moreover, one pass may be avoided depending on the goal of the data analysis. Summing the forward probabilities at the last time step is enough to compute the likelihood, and the backwards recursion would be only needed if the posterior probabilities of the states were also required.
+
+### MAP: Viterbi
+
+It is also of interest to compute the most probable state sequence or path,
+
+\[
+\mat{z}^* = \argmax_{\mat{z}_{1:T}} p(\mat{z}_{1:T} | \mat{y}_{1:T}).
+\]
+
+The jointly most probable sequence of states can be inferred via maximum *a posteriori* (MAP) estimation. Note that the jointly most probable sequence is not necessarily the same as the sequence of marginally most probable states given by the maximizer of the posterior marginals (MPM),
+
+\[
+\mat{\hat{z}} = (\argmax_{z_1} p(z_1 | \mat{y}_{1:T}), \ \dots, \ \argmax_{z_T} p(z_T | \mat{y}_{1:T})),
+\]
+
+which maximizes the expected number of correct individual states.
+
+The MAP estimate is always globally consistent: while locally a state may be most probable at a given step, the Viterbi or max-sum algorithm decodes the most likely single plausible path [@viterbi1967error]. Furthermore, the MPM sequence may have zero joint probability if it includes two successive states that, while being individually the most probable, are connected in the transition matrix by a zero. On the other hand, MPM may be considered more robust since the state at each step is estimated by averaging over its neighbors rather than conditioning on a specific value of them.
+
+The Viterbi applies the max-sum algorithm in a forward fashion plus a traceback procedure to recover the most probable path. In simple terms, once the most probable state $z_t$ is estimated, the procedure conditions the previous states on it. Let $\delta_t(j)$ be the probability of arriving to the state $j$ at step $t$ given the most probable path was taken,
+
+\[
+\delta_t(j)
+  \triangleq \max_{z_1, \dots, z_{t-1}} p(\mat{z}_{1:t-1}, z_t = j | \mat{y}_{1:t}).
+\]
+
+The most probable path to state $j$ at step $t$ consists of the most probable path to some other state $i$ at point $t-1$, followed by a transition from $i$ to $j$,
+
+\[
+\delta_t(j)
+  = \max_{i} \delta_{t-1}(i) \ \psi(i, j) \ \psi_t(j).
+\]
+
+Additionally, the most likely previous state on the most probable path to $j$ at step $t$ is given by
+\[
+a_t(j)
+  = \argmax_{i} \delta_{t-1}(i) \ \psi(i, j) \ \psi_t(j).
+\]
+
+By initializing with $\delta_1 = \pi_j \phi_1(j)$ and terminating with the most probable final state $z_T^* = \argmax_{i} \delta_T(i)$, the most probable sequence of states is estimated using the traceback,
+
+\[
+z_t^* = a_{t+1}(z_{t+1}^*).
+\]
+
+It is advisable to work in the log domain to avoid numerical underflow,
+
+\[
+\delta_t(j)
+  \triangleq \max_{\mat{z}_{1:t-1}} \log p(\mat{z}_{1:t-1}, z_t = j | \mat{y}_{1:t})
+  = \max_{i} \log \delta_{t-1}(i) + \log \psi(i, j) + \log \psi_t(j).
+\]
+
+As with the backward-forward algorithm, the time complexity of Viterbi is $O(K^2T)$ and the space complexity is $O(KT)$. If the transition matrix has the form $\psi(i, j) \propto \exp(-\sigma^2 ||\mat{z}_i - \mat{z}_j||^2)$, implementation runs in $O(TK)$ time.
+
+## Parameter estimation
+
+The model likelihood can be derived from the definition of the quantity $\gamma_t(j)$: given that its sum over all possible values of the latent variable must equal one, the log likelihood at time index $t$ becomes
+
+\[
+\LL_t = \sum_{i = 1}^{K}{\alpha_t(i) \beta_{t}(i)}.
+\]
+
+The last step $T$ has two convenient characteristics. First, the recurrent nature of the forward probability implies that the last iteration retains the information of all the intermediate state probabilities. Second, the base case for the backwards quantity is $\beta_{T}(i) = 1$. Consequently, the log likelihood reduces to
+
+\[
+\LL_T \propto \sum_{i = 1}^{K}{\alpha_T(i)}.
+\]
+
 ## Naming convention
 
-Documentation and software adopts the following naming convention. Minor modifications may be found due to syntax restrictions in R or Stan.
+Documentation and software adopts the following naming convention. Minor modifications may be found due to syntax restrictions in R or Stan. Time suffix `_t` is optional.
 
-```
+| Constants                               	|                                                          	|
+|-----------------------------------------	|----------------------------------------------------------	|
+| R                                       	| Observation dimension                                    	|
+| K                                       	| Number of hidden states                                  	|
+| M                                       	| Number of covariates for the observation model           	|
+| P                                       	| Number of covariates for the transition model            	|
+| Q                                       	| Number of covariates for the initial model               	|
+|                                         	|                                                          	|
+| Covariates                              	|                                                          	|
+| x_t                                     	| Time-varying covariates for the observation model        	|
+| u_t                                     	| Time-varying covariates for the transition model         	|
+| v                                       	| Covariates for the initial model                         	|
+|                                         	|                                                          	|
+| Known-stochastic quantities             	|                                                          	|
+| y_t                                     	| Observation vector                                       	|
+|                                         	|                                                          	|
+| Model parameters                        	|                                                          	|
+| *_kr                                    	| Ex. mu_11 or sigma_11 (suffixes k and r are optional)    	|
+| A                                       	| Transition model parameters (if no covariates)           	|
+| pi                                      	| Initial distribution parameters (if no covariates)       	|
+| xBeta                                   	| Regression parameters for the observation model          	|
+| uBeta                                   	| Regression parameters for the transition model           	|
+| vBeta                                   	| Regression parameters for the initial model              	|
+|                                         	|                                                          	|
+| Estimated quantities                    	|                                                          	|
+| z_t                                     	| Hidden state                                             	|
+| alpha_t Filtered probability            	|                                                          	|
+| gamma_t Smoothed probability            	|                                                          	|
+| zstar                                   	| Viterbi                                                  	|
+|                                         	|                                                          	|
+| (Prior/Posterior) predictive quantities 	|                                                          	|
+| yPred                                   	| Sample of observations drawn from the predictive density 	|
+| zPred                                   	| Sample of latent path drawn from the predictive density  	|
+
+```{r, include = FALSE, eval = FALSE, echo = FALSE}
 Constants
 R		    Observation dimension
 K		    Number of hidden states
@@ -141,7 +398,7 @@ Note: time suffix t is optional.
 
 The typical data analysis workflow includes the following steps: (1) specify, (2) validate, (3) simulate, (4) fit, (5) diagnose, (6) visualize, (7) compare. All steps except for 5 and 7 are implemented as of today.
 
-You may install the last version of our software from GitHub. Please note that BayesHMM requires rstan (>= 2.17), the R interface for the probabilistic programming language [Stan](http://mc-stan.org/).
+You may install the lastest version of our software from GitHub. Please note that BayesHMM requires rstan (>= 2.17), the R interface for the probabilistic programming language [Stan](http://mc-stan.org/).
 
 ```{r, echo = FALSE}
 library(BayesHMM)
@@ -203,7 +460,7 @@ For a univariate model ($R = 1$):
   * User enters one univariate density: specify the same density in each hidden state variable.
   * User enters $K$ univariate density: specify one different density in each hidden state (ex. Gaussian in one state and Student in the other).
 
-This system is flexible enough to let the user specify different densities and priors for each state. The following snippet specify a (rather unrealistic) model where states are a priori believed to have negative, near zero, and positive location parameters.
+This system is flexible enough to let the user specify different densities and priors for each state. The following example demonstrates a (rather unrealistic) model where states are a priori believed to have negative, near zero, and positive location parameters.
       
 ```{r}
 mySpec <- hmm(
@@ -230,7 +487,7 @@ For a multivariate model ($R > 1$):
 
 ### Transition model
 
-The user may enter a `Density` S3 object such as a `Dirichlet`, or a `LinkDensity` S3 object (inherits from `Density`) such as `TransitionSoftmax()`. The latter allows to specify priors for the transition regression parameter vector. For example, the following snippet sets regularizing priors on the regression coefficients. Note that this model is hard to identify, although we achieved satisfactory results optimizing the posterior density (i.e. maximum a posterior estimates).
+The user may enter a `Density` S3 object such as a `Dirichlet`, or a `LinkDensity` S3 object (inherits from `Density`) such as `TransitionSoftmax()`. The latter allows to specify priors for the transition regression parameter vector. For example, the following example sets regularizing priors near zero on the regression coefficients (because softmax coefficients are location invariant, we use priors to better inform the model). Note that this model is hard to identify, although we achieved satisfactory results optimizing the posterior density (i.e. maximum a posterior estimates).
 
 ```{r}
 mySpec <- hmm(
@@ -309,7 +566,7 @@ __Validation protocol inspired by Simulation Based Calibration (cite)__
 
 There is no such a thing as an universal, automatic way to validate models. The software computes and summarizes different diagnostic measures and provides the user with high-level tools to assess calibration (including printouts, tables, and plots). Because the user may want to single out and inspect one of the iterations, in future versions it will be able to recover (or reproduce) the full posterior sample drawn in the $n$-th iteration.
 
-In the following snippet, we specify a HMM and validate its calibration.
+In the following example, we specify a HMM and validate its calibration.
 
 ```{r, results = "hide"}
   mySpec <- hmm(
@@ -361,13 +618,13 @@ Once specified, the user may:
     * Call `optimizing()` to maximize the joint posterior density and obtain a point estimate.
 * Call `fit()` to compile and sample in one step.
 
-After fitting, the underlying Stan code may be inspected by calling `browse_model`, which opens the Stan file in the editor.
+After fitting, the underlying Stan code may be inspected by calling `browse_model`, which opens the Stan file in the editor. None that this function is only for reading purposes: changes in the Stan code will not affect the specification object.
 
 ### 3.1. Fully Bayesian Inferencia via MCMC
 
-Because `sampling()` and `fit()` return a `stanfit` S4 object, the posterior samples are compatible out of box with every tool in the `rstan` ecosystem [TRY AND LIST SOME SUCH AS bayesplot].
+Because `sampling()` and `fit()` return a `stanfit` S4 object, the posterior samples are compatible out of box with the `rstan` ecosystem [TRY AND LIST SOME SUCH AS bayesplot].
 
-### 3.2. Maximum At Posteriori estimates via posterior optimization
+### 3.2. Maximum a Posteriori estimates via posterior optimization
 
 `optimizing` is able to run several initialization of the optimization algorithm in parallel. The user may decide to `keep = "all"` runs, or just `keep = "best"`. If the former, `extract_grid` returns a summary of the different runs and `extract_best` retrieves the one with highest posterior log likelihood. If no run achieves convergence, a warning message is prompt to the console.
 
@@ -398,8 +655,6 @@ myBest <- extract_best(myAll)
 print(
   round(extract_grid(myAll, pars = "mu"), 2)
 )
-
-plot_obs(myBest, pch = 21, bg = "red")
 ```
 
 __NOTE__: Passing both the specification and the compiled model is redundant. In future versions, user will not need to pass the specification.
@@ -601,10 +856,12 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 ```
 
 ```{r}
-plot_obs(myFit)
-
 print_all(myFit)
 ```
+
+# Acknowledgements
+
+We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/projects/#4681157036212224) for funding.
 
 # Appendix
 \label{sec:appendix}
