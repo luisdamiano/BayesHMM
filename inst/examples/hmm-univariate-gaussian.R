@@ -6,7 +6,7 @@ mySpec <- hmm(
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  name = "Univariate Gaussian"
+  name = "Univariate Gaussian Hidden Markov Model"
 )
 
 set.seed(9000)
@@ -14,8 +14,18 @@ y <- as.matrix(
   c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1))
 )
 
+explain(mySpec)
+
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-plot_obs(myFit)
+print_fit(myFit)
+# ^ will add seeds, running time, fixed parameters, n chains, etc.
+# Add * in parameters with problems in MCMC diags (ex. rhat > 1.1)
 
-print_all(myFit)
+# Hard-classify observations based on filtered, smoothed, and Viterbi
+classify_alpha(myFit)
+
+classify_gamma(myFit)
+
+classify_zstar(myFit)
+

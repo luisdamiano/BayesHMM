@@ -47,7 +47,7 @@ plot_series <- function(fit, r = NULL,
       xlab = if (is.null(xlab)) { "Time" } else { xlab },
       ylab =
         if (is.null(ylab)) {
-          if (R == 1) { "Observation" } else { sprintf("Variable %d", r) }
+          colnames(y)[r]
         } else {
           ylab
         },
@@ -107,8 +107,8 @@ plot_state_probability <- function(fit, stateProbability = "smoothed",
     smoothed = extract_gamma,
     viterbi  = extract_zstar
   )
-  p    <- zFun(fit, reduce = stateProbabilityFun, chain = chain)[[1]]
-  pInt <- zFun(fit, reduce = stateProbabilityInterval, chain = chain)[[1]]
+  p    <- zFun(fit, reduce = stateProbabilityFun, chain = chain)
+  pInt <- zFun(fit, reduce = stateProbabilityInterval, chain = chain)
   tidx <- seq_len(get_dim(z)[1])
   K    <- extract_K(fit)
 

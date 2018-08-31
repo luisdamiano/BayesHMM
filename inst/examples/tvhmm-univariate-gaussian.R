@@ -1,3 +1,5 @@
+library(BayesHMM)
+
 logsumexp <- function(x) {
   y = max(x)
   y + log(sum(exp(x - y)))
@@ -74,13 +76,11 @@ uBeta <- list(
 
 dataset <- tvhmm_sim(300, 2, u, uBeta, p.init = c(0.5, 0.5))
 myModel <- compile(mySpec)
-myBest  <- optimizing(mySpec, myModel, y = dataset$x, u = dataset$u, nRun = 10, keep = "best", as_vector = FALSE)
-myAll   <- optimizing(mySpec, myModel, y = dataset$x, u = dataset$u, nRun = 10, keep = "all", nCores = 4)
+myAll   <- optimizing(mySpec, myModel, y = dataset$x, u = dataset$u, nRun = 10, keep = "all", nCores = 4, as_vector = FALSE)
+myBest  <- extract_best(myAll)
 
 extract_grid(myBest, pars = "mu")
 extract_grid(myAll, pars = "mu")
-
-extract_obs_parameters(myBest)
 
 extract_quantity(myBest, pars = "mu")
 extract_quantity(myBest, pars = "alpha")
@@ -99,4 +99,13 @@ plot_obs(myBest)
 
 plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
 
+plot_state_probability(myBest, features = "stateShade")
+
 myBest$par$A[300, , ]
+
+extract_quantity(myBest, pars = "A")[[1]][300, , ]
+
+explain(mySpec)
+
+# print_observation(myBest)
+# ^ missing feature: print_observation not implemented for Optimization

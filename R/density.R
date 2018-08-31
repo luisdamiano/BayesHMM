@@ -94,11 +94,87 @@ block_data.DiscreteDensity <- function(x, noLogLike) {
 }
 
 explain.Density <- function(x) {
-  # We should find a general way to explain the Density.
-  sprintf(
-    "%s(%s)",
-    x[1],
-    paste(names(x[-1]), "=", x[-1], collapse = ", ")
+  freeParam  <- getFreeParameters(x)
+  fixedParam <- getFixedParameters(x)
+
+  strBounds <- paste(
+    if (is.null(x$bounds[[1]])) { "(-infty" } else { sprintf("[%s", x$bounds[[1]]) },
+    if (is.null(x$bounds[[2]])) { "infty)"  } else { sprintf("%s]", x$bounds[[2]]) },
+    sep = ", "
+  )
+
+  strTrunc  <- paste(
+    if (is.null(x$trunc[[1]])) { "(-infty" } else { sprintf("[%s", x$trunc[[1]]) },
+    if (is.null(x$trunc[[2]])) { "infty)"  } else { sprintf("%s]", x$trunc[[2]]) },
+    sep = ", "
+  )
+
+  strFreeParam <-
+    if (is.null(freeParam) || length(freeParam) == 0) {
+      NULL
+    } else {
+      l <- lapply(names(freeParam), function(paramName) {
+        e <- sprintf(
+          "\n\t\t%-5s = %s",
+          paramName, explain(freeParam[[paramName]])
+        )
+
+        e <- gsub("\t", "\t\t\t", e)
+        e <- gsub("^\n\t\t\t\t\t\t", "\n\t\t", e)
+        e
+      })
+
+      paste(l, collapse = ", ")
+    }
+
+  strFixedParam <-
+    if (is.null(fixedParam) || length(fixedParam) == 0) {
+      NULL
+    } else {
+      l <- lapply(names(fixedParam), function(paramName) {
+        sprintf(
+          "%s = %s",
+          paramName, paste(fixedParam[[paramName]], collapse = "")
+        )
+      })
+
+      paste(l, sep = "", collapse = ", ")
+    }
+
+  block1 <-
+    sprintf(
+      "%sDensity: %s %s",
+      if (is.null(x$param)) { "Variable " } else { "Prior " },
+      x$name,
+      if (all(sapply(x$trunc, is.null))) { strBounds } else { strTrunc }
+    )
+
+  block2 <-
+    if (!is.null(freeParam) && length(freeParam) != 0)
+      sprintf(
+        "\tFree parameters: %d (%s)%s",
+        length(freeParam),
+        paste(names(freeParam), collapse = ", "),
+        strFreeParam
+      )
+
+  block3 <-
+    if (!is.null(fixedParam) && length(fixedParam) != 0)
+      sprintf(
+        "\tFixed parameters: %d (%s)",
+        length(fixedParam),
+        strFixedParam
+      )
+
+  collapse(c(block1, block2, block3))
+}
+
+getParameterNames.Density <- function(x) {
+  warning(
+    sprintf(
+      "getParameterNames not implemented for the %s density.",
+      x$name
+    )
   )
 }
 
@@ -197,6 +273,10 @@ is.TVTransition.Density <- function(x) { FALSE }
       if (is.DensityList(x)) { c(x, list(y)) } else { list(x, y) }
     }
   structure(l, class = c("DensityList"))
+}
+
+explain.DensityList <- function(x){
+  lapply(x, explain)
 }
 
 is.DensityList <- function(x) {

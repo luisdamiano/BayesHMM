@@ -31,7 +31,7 @@ check_vector <- function(x, name = deparse(substitute(x))) {
 }
 
 check_simplex <- function(x, name = deparse(substitute(x))) {
-  ok <- check_vector(x) & sum(x) == 1 & min(x) >= 0
+  ok <- check_vector(x) & identical(sum(x), 1) & min(x) >= 0
 
   if (!ok) {
     stop(sprintf("%s must be a simplex (vector with non-negative elements summing to 1.", name))
@@ -45,6 +45,17 @@ check_matrix <- function(x, name = deparse(substitute(x))) {
 
   if (!ok) {
     stop(sprintf("%s must be a matrix.", name))
+  }
+
+  TRUE
+}
+
+check_transition_matrix <- function(x, name = deparse(substitute(x))) {
+  ok <- isTRUE(is.matrix(x)) & dim(x)[1] == dim(x)[2] & min(x) >= 0 &
+    all(apply(x, 1, function(xi) { identical(sum(xi), 1) } ))
+
+  if (!ok) {
+    stop(sprintf("%s must be a square matrix with simplex rows.", name))
   }
 
   TRUE
@@ -66,8 +77,8 @@ check_cholesky_factor <- function(x, name = deparse(substitute(x))) {
   # * lower triangular,
   # * positive diagonal
   ok <- check_matrix(x) &
-    all(abs(upper.tri(x)) < .Machine$double.eps) &
-    all(diag(x)) > 0
+    all(abs(x[lower.tri(x)]) < .Machine$double.eps) &
+    all(diag(x) > 0)
 
   if (!ok) {
     stop(sprintf("%s must be a valid Cholesky factor (lower triangular matrix with positive elements in the diagonal).", name))
@@ -176,6 +187,19 @@ make_trunc <- function(x, name) {
 
 make_rsubindex <- function(x) {
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+  # string <-
+  #   if (is.multivariate(x)) {
+  #     if (x$multivariate) # multivariate density - multivariate parameter
+  #       ""
+  #     else                # multivariate density - univariate parameter
+  #       stop("Cannot specify a multivariate density for a univariate parameter. See ?spec for more information.")
+  #   } else {
+  #     if (x$multivariate) # univariatete density - multivariate parameter
+  #       "%s"
+  #     else                # univariatete density - univariate parameter
+  #       "[%s]"
+  #   }
+  # sprintf(string, x$r)
 }
 
 make_parameters <- function(density, string, stringNot = "",
@@ -215,13 +239,38 @@ matrix_to_stan <- function(x) {
   )
 }
 
-is.empty <- function(x) {
-  is.null(x) | length(x) == 0
+cast_to_matrix <- function(x, nRow, nCol, name = deparse(substitute(x))) {
+  if (is.matrix(x) && nrow(x) == nRow && ncol(x) == nCol)
+    return(x)
+
+  if (is.null(x))
+    stop(
+      sprintf(
+        "%s is not a valid input because it is NULL. See ?make_data.",
+        name
+      ))
+
+  xVector <- as.vector(x)
+  if (length(xVector) != nRow * nCol)
+    stop(
+      sprintf(
+        "Attempted to cast %s to a %dx%d matrix. The vector must have %d elements but %d were given. See ?make_data.",
+        name, nRow, nCol, nRow*nCol, length(xVector)
+      ))
+
+  if (!is.numeric(xVector))
+    stop(
+      sprintf(
+        "%s is not a valid input because it has non numeric elements. See ?make_data.",
+        name
+      )
+    )
+
+  matrix(as.numeric(xVector), nrow = nRow, ncol = nCol, byrow = FALSE)
 }
 
-is.freeParameter <- function(x) {
-  is.Density(x) |
-    is.list(x) & all(sapply(x, is.Density))
+is.empty <- function(x) {
+  is.null(x) | length(x) == 0
 }
 
 funinvarName <- function(x) {
@@ -255,4 +304,35 @@ posterior_intervals <- function(...) {
 posterior_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
+}
+
+toproper <- function(string) {
+  # Credits for Matthew Plourde https://stackoverflow.com/a/24957143/2860744
+  gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(string), perl = TRUE)
+}
+
+get_package_info <- function() {
+  sprintf(
+    "%s v%s (Build %s)",
+    utils::packageDescription("BayesHMM")$Package,
+    utils::packageDescription("BayesHMM")$Version,
+    utils::packageDescription("BayesHMM")$Built
+  )
+}
+
+get_rstan_info <- function() {
+  sprintf(
+    "%s v%s (Build %s)",
+    utils::packageDescription("rstan")$Package,
+    utils::packageDescription("rstan")$Version,
+    utils::packageDescription("rstan")$Built
+  )
+}
+
+get_theme <- function() {
+  getOption("BayesHMM.theme")
+}
+
+get_print_settings <- function() {
+  getOption("BayesHMM.print")
 }

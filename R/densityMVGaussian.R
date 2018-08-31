@@ -81,5 +81,11 @@ logLike.MVGaussian <- function(x) {
 }
 
 prior.MVGaussian <- function(x) {
-  stop("TO BE IMPLEMENTED.")
+  truncStr <- make_trunc(x, "")
+  sprintf(
+    "%s%s ~ multi_normal(%s, %s) %s;",
+    x$param, x$k,
+    vector_to_stan(x$mu), matrix_to_stan(x$sigma),
+    truncStr
+  )
 }

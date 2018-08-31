@@ -87,16 +87,29 @@ extract_time.stanfit <- function(fit) {
 
 setMethod("extract_time", "stanfit", extract_time.stanfit)
 
+# extract_seed ------------------------------------------------------------
+extract_seed     <- function(fit, ...) { UseMethod("extract_seed", fit) }
+
+extract_seed.Optimization <- function(fit) {
+  attr(fit, "seed")
+}
+
+extract_seed.stanfit <- function(fit) {
+  rstan::get_seed(fit)
+}
+
+setMethod("extract_seed", "stanfit", extract_seed.stanfit)
+
 # classify_alpha ----------------------------------------------------------
 classify_alpha   <- function(fit, ...) { UseMethod("classify_alpha", fit) }
 
 classify_alpha.Optimization <- function(fit, reduce = NULL, chain = NULL) {
-  alpha  <- extract_alpha(fit)[[1]]
+  alpha  <- extract_alpha(fit)
   apply(alpha, 2, which.max)
 }
 
 classify_alpha.stanfit <- function(fit, reduce = median, chain = 1) {
-  alpha  <- extract_alpha(fit, reduce = reduce, chain = chain)[[1]]
+  alpha  <- extract_alpha(fit, reduce = reduce, chain = chain)
   apply(alpha, 2, which.max)
 }
 
@@ -106,13 +119,13 @@ setMethod("classify_alpha", "stanfit", classify_alpha.stanfit)
 classify_gamma   <- function(fit, ...) { UseMethod("classify_gamma", fit) }
 
 classify_gamma.Optimization <- function(fit, reduce = NULL, chain = NULL) {
-  gamma  <- extract_gamma(fit)[[1]]
+  gamma  <- extract_gamma(fit)
   apply(gamma, 2, which.max)
 }
 
 classify_gamma.stanfit <- function(fit, reduce = median, chain = 1) {
   if (chain == "all") { warning("chain = all not gonna work") }
-  gamma  <- extract_gamma(fit, reduce = reduce, chain = chain)[[1]]
+  gamma  <- extract_gamma(fit, reduce = reduce, chain = chain)
   apply(gamma, 2, which.max)
 }
 
@@ -122,11 +135,11 @@ setMethod("classify_gamma", "stanfit", classify_gamma.stanfit)
 classify_zstar   <- function(fit, ...) { UseMethod("classify_zstar", fit) }
 
 classify_zstar.Optimization <- function(fit, reduce = NULL, chain = NULL) {
-  extract_zstar(fit)[[1]]
+  extract_zstar(fit)
 }
 
 classify_zstar.stanfit <- function(fit, reduce = posterior_mode, chain = 1) {
-  extract_zstar(fit, reduce = reduce, chain = chain)[[1]]
+  extract_zstar(fit, reduce = reduce, chain = chain)
 }
 
 setMethod("classify_zstar", "stanfit", classify_zstar.stanfit)

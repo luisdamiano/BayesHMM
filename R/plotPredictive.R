@@ -9,7 +9,7 @@ plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL
 
   R     <- extract_R(stanfit)
   y     <- extract_y(stanfit)
-  yPred <- extract_ypred(stanfit, chain = chain)[[1]]
+  yPred <- extract_ypred(stanfit, chain = chain)
   if (R == 1) { dim(yPred) <- c(dim(yPred), 1) } # extract_ypred drops index for [iteration, chain, r] when r = 1
   if (!is.null(subset)) { yPred <- yPred[subset, , , drop = FALSE] }
 
@@ -66,7 +66,8 @@ plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL
     for (f in funSeq) {
       f(y[, r], yPred[, , r])
       if (R != 1) {
-        title(sprintf("Variable %d", r), adj = 1, line = 0.5, cex.main = 1)
+        title(colnames(y)[r], adj = 1, line = 0.5, cex.main = 1)
+        # title(sprintf("Variable %d", r), adj = 1, line = 0.5, cex.main = 1)
       }
     }
   }
@@ -160,7 +161,7 @@ plot_ppredictive_hist <- function(y, yPred, fun, control = NULL, main = NULL,
   hist(
     yPredFun,
     main = if (is.null(main)) { "" } else { main },
-    xlab = if (is.null(xlab)) { funinvarName(fun) } else { xlab },
+    xlab = if (is.null(xlab)) { toproper(funinvarName(fun)) } else { xlab },
     ylab = if (is.null(ylab)) { "Frequency" } else { ylab },
     breaks = "FD",
     col    = theme$histCol,

@@ -49,7 +49,7 @@ fixedParameters.MVGaussianCov <- function(x) {
     if (is.Density(x$L)) {
       ""
     } else {
-      if (!check_cholesky_factor_cor(x$L)) {
+      if (!check_cholesky_factor_cov(x$L)) {
         stop("If fixed, L must be a valid Cholesky factor for a covariance matrix")
       }
 
@@ -72,7 +72,6 @@ generated.MVGaussianCov <- function(x) {
 getParameterNames.MVGaussianCov <- function(x) {
   return(c("mu", "L"))
 }
-
 
 logLike.MVGaussianCov <- function(x) {
   sprintf(
