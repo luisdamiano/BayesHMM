@@ -1,6 +1,6 @@
 #' Prologue
 #'
-#' @keywords internals
+#' @keywords internal
 #' @name zzz
 #' @importClassesFrom rstan stanfit
 NULL

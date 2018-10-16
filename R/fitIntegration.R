@@ -166,6 +166,8 @@ extract_seed.stanfit <- function(fit) {
 setMethod("extract_seed", "stanfit", extract_seed.stanfit)
 
 # Classify_quantity -------------------------------------------------------
+#' Classify observations based on latent state probabilities.
+#'
 #' Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest quantity of interest.
 #'
 #' @name classify_quantity
@@ -194,8 +196,11 @@ classify_quantity <- function(fit, reduce, chain, quantity) {
 }
 
 # classify_alpha ----------------------------------------------------------
-#' Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated filtered probability (\emph{alpha}).
+#' Classify observations based on filtered probabilities.
 #'
+#' This function assigns the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated filtered probability (\emph{alpha}).
+#'
+#' @usage classify_alpha(fit, reduce = NULL, chain = NULL)
 #' @inherit classify_quantity
 #' @export
 #' @examples
@@ -212,8 +217,10 @@ classify_alpha.stanfit <- function(fit, reduce = median, chain = "all") {
 setMethod("classify_alpha", "stanfit", classify_alpha.stanfit)
 
 # classify_gamma ----------------------------------------------------------
-#' Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).
+#' Classify observations based on smoothed probabilities.
 #'
+#' This function assigns the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).
+#' @usage classify_gamma(fit, reduce = NULL, chain = NULL)
 #' @inherit classify_quantity
 #' @export
 classify_gamma   <- function(fit, ...) { UseMethod("classify_gamma", fit) }
@@ -229,8 +236,10 @@ classify_gamma.stanfit <- function(fit, reduce = median, chain = "all") {
 setMethod("classify_gamma", "stanfit", classify_gamma.stanfit)
 
 # classify_zstar ----------------------------------------------------------
-#' Assign the hidden states to the most likely path (\emph{zstar}). This is the result of Viterbi algorithm, which considers the joint distribution of the states.
+#' Assign the hidden states to the most likely path (\emph{zstar}).
 #'
+#' This is the result of Viterbi algorithm, which considers the joint distribution of the states.
+#' @usage classify_zstar(fit, reduce = NULL, chain = NULL)
 #' @inherit classify_quantity
 #' @export
 #' @examples

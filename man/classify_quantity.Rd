@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitIntegration.R
 \name{classify_quantity}
 \alias{classify_quantity}
-\title{Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest quantity of interest.}
+\title{Classify observations based on latent state probabilities.}
 \usage{
 classify_quantity(fit, reduce, chain, quantity)
 }

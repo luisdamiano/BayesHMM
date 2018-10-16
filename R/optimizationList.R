@@ -1,5 +1,7 @@
 #' Return the optimization object for the run with the hightest posterior log density.
 #'
+#' It doesn't do anything fancy but it's a neat quality-of-life feature :).
+#'
 #' @inherit extract_grid
 #' @param stanoptimList An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.
 #' @export

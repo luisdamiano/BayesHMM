@@ -4,7 +4,7 @@
 \alias{extract_alpha}
 \title{Extract the estimates of the filtered probability (alpha).}
 \usage{
-extract_alpha(fit, ...)
+extract_alpha(fit, reduce, combine, chain)
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
@@ -13,10 +13,7 @@ extract_alpha(fit, ...)
 A numeric array with four dimensions [N, M, K, T]: number of iterations \emph{N}, number of chains \emph{M}, number of hidden states \emph{K}, length of the time series {T}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a three-dimensional numeric array [N, K, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, K, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, K, T].
 }
 \description{
-The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object).
-}
-\details{
-The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, specification object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{sampling}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
+Extract the estimates of the filtered probability (alpha).
 }
 \seealso{
 Other extract: \code{\link{extract_K}},

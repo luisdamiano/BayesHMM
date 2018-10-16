@@ -13,5 +13,5 @@ extract_best(x, ...)
 A named matrix with one row for each time the optimization procedure was run. Columns include the seed, the estimated log posterior evaluated at the maximum, the code returned by the optimization algorithm, the time elapsed (user, system and total) in seconds, and the estimated value of the parameters selected in
 }
 \description{
-Return the optimization object for the run with the hightest posterior log density.
+It doesn't do anything fancy but it's a neat quality-of-life feature :).
 }

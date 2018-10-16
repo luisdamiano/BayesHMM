@@ -4,7 +4,7 @@
 \alias{explain_initial}
 \title{Create an outline of the initial model.}
 \usage{
-explain_initial(spec, ...)
+explain_initial(spec)
 }
 \arguments{
 \item{spec}{An object returned by the \code{\link{spec}}) function.}
@@ -20,3 +20,4 @@ Other explain: \code{\link{explain_observation}},
   \code{\link{explain_transition}}
 }
 \concept{explain}
+\keyword{internals}

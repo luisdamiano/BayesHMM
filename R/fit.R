@@ -128,7 +128,8 @@ extract_obs_parameters <- function(fit, ...) {
 
 #' Extract the estimates of the filtered probability (alpha).
 #'
-#' @inherit extract
+#' @inheritParams extract
+#' @usage extract_alpha(fit, reduce, combine, chain)
 #' @return A numeric array with four dimensions [N, M, K, T]: number of iterations \emph{N}, number of chains \emph{M}, number of hidden states \emph{K}, length of the time series {T}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a three-dimensional numeric array [N, K, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, K, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, K, T].
 #' @family extract
 #' @export

@@ -4,7 +4,7 @@
 \alias{browse_model}
 \title{Load the underlying Stan code into an IDE or browser (platform dependent).}
 \usage{
-browse_model(x)
+browse_model(fit, ...)
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}

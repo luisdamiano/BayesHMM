@@ -4,7 +4,7 @@
 \alias{explain_transition}
 \title{Create an outline of the transition model.}
 \usage{
-explain_transition(spec, ...)
+explain_transition(spec)
 }
 \arguments{
 \item{spec}{An object returned by the \code{\link{spec}}) function.}
@@ -20,3 +20,4 @@ Other explain: \code{\link{explain_initial}},
   \code{\link{explain_observation}}
 }
 \concept{explain}
+\keyword{internals}

@@ -13,10 +13,7 @@ extract_zpred(fit, ...)
 A numeric array with three dimensions [N, M, T]: number of iterations \emph{N}, number of chains \emph{M}, length of the time series {T}, the dimension of the observation vector \emph{R}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a two-dimensional numeric array [N, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a two-dimensional numeric array [M, T].
 }
 \description{
-The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object).
-}
-\details{
-The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, specification object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{sampling}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
+Extract the sample of the hidden state path drawn from the posterior predictive density (zpred).
 }
 \seealso{
 Other extract: \code{\link{extract_K}},

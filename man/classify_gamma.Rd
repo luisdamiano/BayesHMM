@@ -2,9 +2,9 @@
 % Please edit documentation in R/fitIntegration.R
 \name{classify_gamma}
 \alias{classify_gamma}
-\title{Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).}
+\title{Classify observations based on smoothed probabilities.}
 \usage{
-classify_gamma(fit, ...)
+classify_gamma(fit, reduce = NULL, chain = NULL)
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
@@ -13,5 +13,5 @@ classify_gamma(fit, ...)
 A numeric vector with size equal to the time series length \emph{T} with values from 1 to the number of hidden states \emph{K}.
 }
 \description{
-Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).
+This function assigns the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).
 }

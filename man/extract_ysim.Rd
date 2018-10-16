@@ -15,9 +15,6 @@ A numeric array with four dimensions [N, M, T, R]: number of iterations \emph{N}
 \description{
 If the \emph{fit} object was created via the \code{\link{sim}} method, this function returns a sample of the observation variable from the prior predictive densitiy (i.e. using random values of the parameters). If a dataset was provided when fitting the model instead, the sample is simulated from the posterior predictive density. In the latter case, calling either \code{\link{extract_ysim}} and \code{\link{extract_ypred}} are equivalent.
 }
-\details{
-The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, specification object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{sampling}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
-}
 \seealso{
 Other extract: \code{\link{extract_K}},
   \code{\link{extract_R}}, \code{\link{extract_T}},
