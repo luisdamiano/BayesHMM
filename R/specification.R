@@ -15,9 +15,40 @@ chunk_zpredictive      <- function(x) { UseMethod("chunk_zpredictive", x) }
 # Other methods for Specification objects
 check             <- function(spec, ...) { UseMethod("check", spec) }
 explain           <- function(spec, ...) { UseMethod("explain", spec) }
+
+#' Create an outline of the observation model.
+#'
+#' @param spec An object returned by the \code{\link{spec}}) function.
+#'
+#' @return A character vector with an outline of the observation model.
+#' @family explain
+#' @export
+#'
+#' @examples
 explain_observation <- function(spec, ...) { UseMethod("explain_observation", spec) }
+
+#' Create an outline of the initial model.
+#'
+#' @param spec An object returned by the \code{\link{spec}}) function.
+#'
+#' @return A character vector with an outline of the initial model.
+#' @family explain
+#' @export
+#'
+#' @examples
 explain_initial     <- function(spec, ...) { UseMethod("explain_initial", spec) }
+
+#' Create an outline of the transition model.
+#'
+#' @param spec An object returned by the \code{\link{spec}}) function.
+#'
+#' @return A character vector with an outline of the transition model.
+#' @family explain
+#' @export
+#'
+#' @examples
 explain_transition  <- function(spec, ...) { UseMethod("explain_transition", spec) }
+
 run               <- function(spec, ...) { UseMethod("run", spec) }
 fit               <- function(spec, ...) { UseMethod("fit", spec) }
 sim               <- function(spec, ...) { UseMethod("sim", spec) }
@@ -35,6 +66,9 @@ spec <- function(K, R, observation = NULL, initial = NULL,
                  transition = NULL, name = "") {
   check_natural(K, "K")
   check_natural(R, "R")
+
+  K <- as.integer(K)
+  R <- as.integer(R)
 
   l <- list(
     name = name,
@@ -166,7 +200,7 @@ optimizing_run  <- function(stanDots, n) {
 
   stanDots[["seed"]] <-
     if ("seed" %in% names(stanDots)) {
-    stanDots[["seed"]] + n
+      as.integer(stanDots[["seed"]] + n)
   } else {
     sample.int(.Machine$integer.max, 1)
   }
@@ -188,6 +222,7 @@ optimizing_all  <- function(stanDots, nRuns, nCores) {
     cl <- parallel::makeCluster(nCores, outfile = "")
     doParallel::registerDoParallel(cl)
     on.exit({parallel::stopCluster(cl)})
+    `%dopar%` <- foreach:::`%dopar%`
     foreach::foreach(n = seq_len(nRuns), .combine = c, .packages = c("rstan")) %dopar% {
       optimizing_run(stanDots, n)
     }

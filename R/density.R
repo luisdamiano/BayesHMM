@@ -18,6 +18,20 @@ is.link            <- function(x) { UseMethod("is.link", x) }
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
+
+#' Create a representation of a probability mass or density function. It can be
+#' used to specify either a prior distribution for a model parameter or a
+#' likelihood function for an observation model.
+#'
+#' Description
+#'
+#' @param name TO BE DOCUMENTED
+#' @param ...  TO BE DOCUMENTED
+#'
+#' @return TO BE DOCUMENTED
+#' @export
+#' @family Density
+#' @examples
 Density <- function(name, ...) {
   # Evaluate nested expressions (Densities)
   dots <- list(...)[[1]]
@@ -27,7 +41,7 @@ Density <- function(name, ...) {
     }
   }
 
-  # Check generic parameters
+  # Check for generic parameters
   check_list(dots[["bounds"]], 2, "bounds")
   check_list(dots[["trunc"]], 2, "trunc")
 

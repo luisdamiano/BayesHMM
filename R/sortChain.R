@@ -1,3 +1,7 @@
+################################################################################
+# This file contains very experimental stuff to fix label switching - BEWARE
+################################################################################
+
 permutations <- function(n, r, v = 1:n) {
   # Simplified implementation from gtools::permutations
   # Credits for gtools::permutations

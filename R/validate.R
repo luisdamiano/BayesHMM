@@ -1,23 +1,57 @@
-validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores = NULL, ...) {
+#' Validate a model via a procedure based on simulated data.
+#'
+#' Validation protocol inspired on Simulation Based Calibration (cite). Also known as fake data.
+#'
+#' \enumerate{
+#'   \item Compile the prior predictive model (i.e. no likelihood statement in the Stan code).
+#'   \item Draw \eqn{N} samples of the parameter vector \eqn{\theta} and the observation vector \eqn{\strong{y}_t} from prior predictive density.
+#'   \item Compile the posterior predictive model (i.e. Stan code includes both prior density and likelihood statement).
+#'   \item For all \eqn{n \in 1, \dots, N}:
+#'   \enumerate{
+#'     \item Feed \eqn{\strong{y}_t^{(n)}} to the full model.
+#'     \item Draw one posterior sample of the observation variable \eqn{\strong{y_t}^{(n)}_{\text{new}}}.
+#'     \item Collect Hamiltonian Monte Carlo diagnostics: number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sample times.
+#'     \item Collect posterior sampling diagnostics: posterior summary measures (mean, sd, quantiles), comparison against the true value (rank), MCMC convergence measures (Monte Carlo SE, ESS, R Hat).
+#'     \item Collect posterior predictive diagnostics: observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples.
+#'   }
+#' }
+#'
+#' @param spec A specification object returned by \code{\link{spec}}.
+#' @param N An integer with the number of repetitions of the validation protocol.
+#' @param T An optional integer with the length of the time series to be simulated. It defaults to 1000 observations.
+#' @param x An optional numeric matrix with covariates for Markov-switching regression. It defaults to NULL (no covariates).
+#' @param seed An optional integer with the seed used for the simulations. It defaults to 9000.
+#' @param nCores An optional integer with the number of cores to use to run the protocol in parallel. It defaults to half the number of available cores
+#' @param ... Arguments to be passed to \code{\link{sampling}}.
+#' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
+#' @export
+#' @examples
+validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCores = NULL, ...) {
   dots <- list(...)
 
   # 1. Draw a sample from the prior predictive density
-  mySim      <- do.call(sim, list(spec, seed = seed, x = x, T = T, iter = max(N + 1, 500), chains = 1))
-  ySim       <- extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)
-  paramSim   <- extract_obs_parameters(mySim, combine = cbind) # extract_obs_parameters(mySim, permuted = FALSE)
+  mySim      <- do.call(
+    sim,
+    list(spec, seed = seed, x = x, T = T, iter = max(N + 1, 500), chains = 1)
+  )
+  ySim       <- rstan::extract(mySim, pars = "ypred", permuted = FALSE, inc_warmup = FALSE)
+  dim(ySim) <- c(dim(ySim)[1:2], mySim@par_dims$ypred)
+  # ^ Extract flattens yPred[iters, chains, T, R] into yPred[iters, chains, T*R]
+  paramSim   <- extract_obs_parameters(mySim, combine = cbind)
   rm(mySim); gc()
 
   # 2. Fit the model to simulated dataset
   myModel    <- compile(spec)
 
-  if (is.null(cores)) { cores <- parallel::detectCores() / 2 }
-  cl <- parallel::makeCluster(cores, outfile = "")
+  if (is.null(nCores)) { nCores <- parallel::detectCores() / 2 }
+  cl <- parallel::makeCluster(nCores, outfile = "")
   doParallel::registerDoParallel(cl)
-  l <- foreach::foreach(n = 1:N, .combine = c, .packages = c("BayesHMM", "rstan")) %dopar% {
-    y          <- ySim[n, 1, ] # Chain 1
-    paramTrue  <- paramSim[n, ] #paramSim[n, , ]
+  `%dopar%` <- foreach:::`%dopar%`
+  l <- foreach::foreach(n = 1:N, .packages = c("BayesHMM", "rstan")) %dopar% {
+    y          <- ySim[n, 1, , ]  # Chain 1
+    paramTrue  <- paramSim[n, ] # paramSim[n, , ]
     myFit      <- do.call(
-      sampling.Specification, #sampling,
+      sampling.Specification,   # sampling
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 
@@ -36,13 +70,13 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, cores
   }
   parallel::stopCluster(cl)
 
-  sapply(unique(names(l)), function(name) {
-    out <- do.call(rbind.data.frame, l[which(names(l) == name)])
-    rownames(out) <- NULL
-    out
-  }, simplify = FALSE)
+  list(
+    chains     = do.call(rbind.data.frame, lapply(l, `[[`, 1)),
+    parameters = do.call(rbind.data.frame, lapply(l, `[[`, 2))
+  )
 }
 
+# Undocumented internal functions needed for validate_calibration ---------
 validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
   d       <- get_diagnose_parameters(stanfit, trueParameters, pars)
   nChains <- extract_n_chains(stanfit)
@@ -70,7 +104,7 @@ validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParamet
 
 get_diagnose_chain_convergence <- function(stanfit) {
   fun <- function(nChain, stanfit) {
-    d <- get_sampler_params(stanfit, inc_warmup = FALSE)[[nChain]]
+    d <- rstan::get_sampler_params(stanfit, inc_warmup = FALSE)[[nChain]]
 
     c(
       divergences  = sum(d[, "divergent__"]),
@@ -117,9 +151,8 @@ get_diagnose_parameters <- function(stanfit, trueParameters = NULL, pars = NULL,
 
 get_diagnose_ppredictive <- function(stanfit) {
   y     <- extract_y(stanfit)
-  yPred <- extract_ypred(stanfit)[[1]]
-    #extract_ypred(stanfit, permuted = FALSE)
-  # dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
+  yPred <- extract_ypred(stanfit)
+  dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
   # ^ Extract flattens yPred[iters, chains, T, R] into yPred[iters, chains, T*R]
 
   innerFun <- function(y, yPred) {

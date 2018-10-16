@@ -1,3 +1,10 @@
+#' Prologue
+#'
+#' @keywords internals
+#' @name zzz
+#' @importClassesFrom rstan stanfit
+NULL
+
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     sprintf(

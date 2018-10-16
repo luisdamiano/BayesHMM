@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> • BayesHMM</title>
+<title>Function reference • BayesHMM</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="" />
+<meta property="og:title" content="Function reference" />
 
 
 
@@ -117,13 +117,240 @@
       <col class="title" />
     </colgroup>
 
-    
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="Density.html">Density()</a></code> </p>
+        </td>
+        <td><p>Create a representation of a probability mass or density function. It can be
+used to specify either a prior distribution for a model parameter or a
+likelihood function for an observation model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="browse_model.html">browse_model()</a></code> </p>
+        </td>
+        <td><p>Load the underlying Stan code into an IDE or browser (platform dependent).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="classify_alpha.html">classify_alpha()</a></code> </p>
+        </td>
+        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest estimated filtered probability (<em>alpha</em>).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="classify_gamma.html">classify_gamma()</a></code> </p>
+        </td>
+        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest estimated smoothed probability (<em>gamma</em>).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="classify_quantity.html">classify_quantity()</a></code> </p>
+        </td>
+        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest quantity of interest.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="classify_zstar.html">classify_zstar()</a></code> </p>
+        </td>
+        <td><p>Assign the hidden states to the most likely path (<em>zstar</em>). This is the result of Viterbi algorithm, which considers the joint distribution of the states.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="explain_initial.html">explain_initial()</a></code> </p>
+        </td>
+        <td><p>Create an outline of the initial model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="explain_observation.html">explain_observation()</a></code> </p>
+        </td>
+        <td><p>Create an outline of the observation model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="explain_transition.html">explain_transition()</a></code> </p>
+        </td>
+        <td><p>Create an outline of the transition model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract.html">extract</a></code> </p>
+        </td>
+        <td><p>Extract quantities from a model fitted with BayesHMM.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_K.html">extract_K()</a></code> </p>
+        </td>
+        <td><p>Extract the number of hidden states <em>K</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_R.html">extract_R()</a></code> </p>
+        </td>
+        <td><p>Extract the dimension of the observation vector <em>R</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_T.html">extract_T()</a></code> </p>
+        </td>
+        <td><p>Extract the length of the time series <em>T</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_alpha.html">extract_alpha()</a></code> </p>
+        </td>
+        <td><p>Extract the estimates of the filtered probability (alpha).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_best.html">extract_best()</a></code> </p>
+        </td>
+        <td><p>Return the optimization object for the run with the hightest posterior log density.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_data.html">extract_data()</a></code> </p>
+        </td>
+        <td><p>Extract the dataset used to fit the model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_filename.html">extract_filename()</a></code> </p>
+        </td>
+        <td><p>Extract the path to file with the underlying Stan code <em>filename</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_gamma.html">extract_gamma()</a></code> </p>
+        </td>
+        <td><p>Extract the estimates of the smoothed probability (gamma).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_n_chains.html">extract_n_chains()</a></code> </p>
+        </td>
+        <td><p>Extract the number of chains (M).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_obs_parameters.html">extract_obs_parameters()</a></code> </p>
+        </td>
+        <td><p>Extract the estimates of the observation model parameters.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_parameter_names.html">extract_parameter_names()</a></code> </p>
+        </td>
+        <td><p>Extract the names of all the model parameters in the fit object.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_parameters.html">extract_parameters()</a></code> </p>
+        </td>
+        <td><p>Extract the estimates of the model parameters (observation, transition and initial models).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_quantity.html">extract_quantity()</a></code> </p>
+        </td>
+        <td><p>Extract estimated quantities from fit objects.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_seed.html">extract_seed()</a></code> </p>
+        </td>
+        <td><p>Extract the time elapsed when fitting the model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_spec.html">extract_spec()</a></code> </p>
+        </td>
+        <td><p>Extract the specification object used to fit the model <em>spec</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_time.html">extract_time()</a></code> </p>
+        </td>
+        <td><p>Extract the time elapsed when fitting the model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_y.html">extract_y()</a></code> </p>
+        </td>
+        <td><p>Extract the obsevation matrix used to fit the model <em>y</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_ypred.html">extract_ypred()</a></code> </p>
+        </td>
+        <td><p>Extract the sample of the observation variable drawn from the posterior predictive density (ypred).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_ysim.html">extract_ysim()</a></code> </p>
+        </td>
+        <td><p>Extract the simulated sample of the observation variable (ysim).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_zpred.html">extract_zpred()</a></code> </p>
+        </td>
+        <td><p>Extract the sample of the hidden state path drawn from the posterior predictive density (zpred).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_zstar.html">extract_zstar()</a></code> </p>
+        </td>
+        <td><p>Extract the estimates of the most likely hidden state (zstar).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_ppredictive.html">plot_ppredictive()</a></code> </p>
+        </td>
+        <td><p>Plot samples drawn from the posterior predictive density.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_series.html">plot_series()</a></code> </p>
+        </td>
+        <td><p>Plot the observation series along with many other customizable options.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_state_probability.html">plot_state_probability()</a></code> </p>
+        </td>
+        <td><p>Plot the estimated hidden path along with many other customizable options.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="validate_calibration.html">validate_calibration()</a></code> </p>
+        </td>
+        <td><p>Validate a model via a procedure based on simulated data.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="zzz.html">zzz</a></code> </p>
+        </td>
+        <td><p>Prologue</p></td>
+      </tr>
+    </tbody>
     </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#section-all-functions">All functions</a></li>
     </ul>
   </div>
 </div>

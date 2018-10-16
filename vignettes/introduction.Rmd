@@ -783,7 +783,7 @@ mySpec <- hmm(
 )
 
 mySim <- sim(mySpec, T = 300, seed = 9000, iter = 500, chains = 1)
-ySim  <- extract_ypred(mySim)[[1]][1, , ]
+ySim  <- extract_ypred(mySim)[1, , ]
 colnames(ySim) <- c("Weight", "Height")
 
 myFit <- fit(mySpec, y = ySim, seed = 9000, iter = 500, chains = 1)
@@ -856,7 +856,7 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 ```
 
 ```{r}
-print_all(myFit)
+# print_all(myFit)
 ```
 
 # Acknowledgements
