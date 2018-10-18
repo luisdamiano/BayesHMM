@@ -1,8 +1,17 @@
-hmm <- function(...) {
-  x <- spec(...)
+#' Specify a Hidden Markov Model
+#'
+#' @inherit specify
+#' @export
+#' @examples
+#' @family models
+hmm <- function(K, R, observation = NULL, initial = NULL,
+                transition = NULL, name = "") {
+  x <- specify(K, R, observation, initial, transition, name)
   class(x) <- append(class(x), "HMMSpecification", 0)
   x
 }
+
+# Undocumented internal methods
 
 block_functions.HMMSpecification <- function(spec) {
   if (is.TVTransition(spec)) {

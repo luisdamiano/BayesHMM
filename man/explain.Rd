@@ -7,7 +7,7 @@
 explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRUE)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{spec}} or \code{\link{hmm}}.}
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
 \item{observation}{An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.}
 

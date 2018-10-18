@@ -14,9 +14,9 @@ optimizing_best(stanDots, nRuns, nCores)
 \item{nCores}{An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.}
 }
 \value{
-An \epm{Optimization} object.
+An \emph{Optimization} object.
 }
 \description{
 Note that this function returns the results of the converging instance with highest log posterior density while \code{\link{optimizing_all}} returns all.
 }
-\keyword{internals}
+\keyword{internal}

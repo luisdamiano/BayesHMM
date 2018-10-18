@@ -7,7 +7,7 @@
 optimizing(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL, nRuns = 1, keep = "best", nCores = 1, writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{spec}} or \code{\link{hmm}}.}
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{optimizing}}.}
 

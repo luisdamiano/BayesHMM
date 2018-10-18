@@ -1,3 +1,6 @@
+
+# Math & data types -------------------------------------------------------
+
 check_psd <- function(x) {
   if (requireNamespace("matrixcalc", quietly = TRUE)) {
     matrixcalc::is.positive.semi.definite(x)
@@ -107,13 +110,6 @@ check_cholesky_factor_cor <- function(x, name = deparse(substitute(x))) {
   TRUE
 }
 
-check_list <- function(x, len, name = deparse(substitute(x))) {
-  if (!is.list(x) || length(x) != len)
-    stop(sprintf("%s must be a list with %s elements.", name, len))
-
-  TRUE
-}
-
 check_whole <- function(x, name = deparse(substitute(x))) {
   if (length(x) != 1
       || !is.numeric(x)
@@ -131,6 +127,15 @@ check_natural <- function(x, name = deparse(substitute(x))) {
 
   TRUE
 }
+
+check_list <- function(x, len, name = deparse(substitute(x))) {
+  if (!is.list(x) || length(x) != len)
+    stop(sprintf("%s must be a list with %s elements.", name, len))
+
+  TRUE
+}
+
+# Parser and writer -------------------------------------------------------
 
 collapse <- function(...) {
   paste(..., sep = "\n", collapse = "\n")
@@ -288,6 +293,8 @@ get_dim <- function(x) {
   }
 }
 
+# Posterior predictive checks ---------------------------------------------
+
 prank <- function(x, y, ...) {
   check_scalar(x)
   check_vector(y)
@@ -306,8 +313,10 @@ posterior_mode <- function(x) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
+# Print and text ----------------------------------------------------------
+
 toproper <- function(string) {
-  # Credits for Matthew Plourde https://stackoverflow.com/a/24957143/2860744
+  # Credits to Matthew Plourde https://stackoverflow.com/a/24957143/2860744
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(string), perl = TRUE)
 }
 
@@ -329,10 +338,78 @@ get_rstan_info <- function() {
   )
 }
 
-get_theme <- function() {
-  getOption("BayesHMM.theme")
+#' Make a string with a line (horizontal rule).
+#'
+#' This function creates a horizontal line using the character and text width set in the \emph{char} and \emph{textWidth} theme fields respectively.
+#' @return A string with a line.
+#' @keywords internal
+make_text_line <- function() {
+  theme      <- getOption("BayesHMM.print")
+  char       <- theme$char
+  textWidth  <- theme$textWidth
+  paste(rep(char, textWidth), collapse = "")
 }
 
-get_print_settings <- function() {
-  getOption("BayesHMM.print")
+#' Make a string with a header.
+#'
+#' This function formats the text into a header.
+#' @return A string with a header.
+#' @keywords internal
+make_text_header <- function(text) {
+  textLine   <- make_text_line()
+
+  sprintf(
+    "%-80s\n%s\n",
+    toupper(text), textLine
+  )
+}
+
+#' Make a string with a subheader.
+#'
+#' This function formats the text into a subheader.
+#' @return A string with a subheader.
+#' @keywords internal
+make_text_subheader <- function(text) {
+  textLine   <- make_text_line()
+
+  sprintf(
+    "%s\n%s\n",
+    textLine, text
+  )
+}
+
+# Plots -------------------------------------------------------------------
+
+col2rgb_alpha <- function(bgCol, alpha = 1) {
+  if (alpha >= 0 && alpha <= 1) {
+    alpha <- alpha * 255
+  } else if (alpha < 0 || alpha > 255) {
+    stop("Not a valid entry for alpha (transparency).")
+  }
+
+  apply(
+    col2rgb(bgCol, alpha = FALSE),
+    2,
+    function(tidx) {
+      rgb(tidx[1], tidx[2], tidx[3], alpha = alpha, maxColorValue = 255)
+    }
+  )
+}
+
+par_reset <- function() {
+  invisible(tryCatch({dev.off()}, error = function(e) { }))
+}
+
+get_ytop    <- function() { par()$usr[4] }
+
+get_ybottom <- function() { par()$usr[3] }
+
+par_edit    <- function(par, ...) {
+  dots  <- list(...)
+  for (i in seq_len(length(dots))) {
+    if (!is.null(dots[[i]])) {
+      par[i] <- dots[[i]]
+    }
+  }
+  par
 }

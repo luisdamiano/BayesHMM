@@ -12,9 +12,9 @@ optimizing_run(stanDots, n)
 \item{n}{An integer with the number of the instance (i.e. the n-th time the algorithm is run on this model).}
 }
 \value{
-An \epm{Optimization} object.
+An \emph{Optimization} object.
 }
 \description{
 Run one instance of the
 }
-\keyword{internals}
+\keyword{internal}

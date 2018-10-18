@@ -1,8 +1,18 @@
-mixture <- function(...) {
-  x <- spec(...)
+#' Specify a mixture model
+#'
+#' Note: not exported as it needs to be tested.
+#'
+#' @inherit specify
+#' @examples
+#' @family models
+mixture <- function(K, R, observation = NULL, initial = NULL,
+                    transition = NULL, name = "") {
+  x <- specify(K, R, observation, initial, transition, name)
   class(x) <- append(class(x), "MixtureSpecification", 0)
   x
 }
+
+# Undocumented internal methods
 
 block_data.MixtureSpecification <- function(spec) {
   "

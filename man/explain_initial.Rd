@@ -2,22 +2,22 @@
 % Please edit documentation in R/specification.R
 \name{explain_initial}
 \alias{explain_initial}
-\title{Create an outline of the initial model.}
+\title{Create an outline of the initial distribution model.}
 \usage{
 explain_initial(spec)
 }
 \arguments{
-\item{spec}{An object returned by the \code{\link{spec}}) function.}
+\item{spec}{An object returned by the \code{\link{specify}}) function.}
 }
 \value{
 A character vector with an outline of the initial model.
 }
 \description{
-Create an outline of the initial model.
+Create an outline of the initial distribution model.
 }
 \seealso{
 Other explain: \code{\link{explain_observation}},
   \code{\link{explain_transition}}
 }
 \concept{explain}
-\keyword{internals}
+\keyword{internal}

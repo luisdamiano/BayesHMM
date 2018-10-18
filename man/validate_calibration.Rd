@@ -8,7 +8,7 @@ validate_calibration(spec, N, T = 1000, x = NULL, seed = 9000,
   nCores = NULL, ...)
 }
 \arguments{
-\item{spec}{A specification object returned by \code{\link{spec}}.}
+\item{spec}{A specification object returned by \code{\link{specify}}.}
 
 \item{N}{An integer with the number of repetitions of the validation protocol.}
 

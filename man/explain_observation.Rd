@@ -7,7 +7,7 @@
 explain_observation(spec)
 }
 \arguments{
-\item{spec}{An object returned by the \code{\link{spec}}) function.}
+\item{spec}{An object returned by the \code{\link{specify}}) function.}
 }
 \value{
 A character vector with an outline of the observation model.
@@ -20,4 +20,4 @@ Other explain: \code{\link{explain_initial}},
   \code{\link{explain_transition}}
 }
 \concept{explain}
-\keyword{internals}
+\keyword{internal}

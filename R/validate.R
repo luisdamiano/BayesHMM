@@ -16,7 +16,7 @@
 #'   }
 #' }
 #'
-#' @param spec A specification object returned by \code{\link{spec}}.
+#' @param spec A specification object returned by \code{\link{specify}}.
 #' @param N An integer with the number of repetitions of the validation protocol.
 #' @param T An optional integer with the length of the time series to be simulated. It defaults to 1000 observations.
 #' @param x An optional numeric matrix with covariates for Markov-switching regression. It defaults to NULL (no covariates).
@@ -76,7 +76,8 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   )
 }
 
-# Undocumented internal functions needed for validate_calibration ---------
+# Undocumented internal methods
+
 validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
   d       <- get_diagnose_parameters(stanfit, trueParameters, pars)
   nChains <- extract_n_chains(stanfit)

@@ -7,7 +7,7 @@
 check(spec)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{spec}} or \code{\link{hmm}}.}
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 }
 \value{
 A logical value with TRUE if the object is a valid specification or FALSE otherwise.

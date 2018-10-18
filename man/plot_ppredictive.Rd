@@ -11,7 +11,7 @@ plot_ppredictive(stanfit, type = "", r = NULL, subset = NULL,
   fun2Control = NULL, ksControl = NULL, main = NULL)
 }
 \arguments{
-\item{stanfit}{Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.}
+\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{sampling}}.}
 
 \item{type}{An optional vector of strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.}
 
@@ -27,11 +27,11 @@ plot_ppredictive(stanfit, type = "", r = NULL, subset = NULL,
 
 \item{fun2}{An optional function summarizing the whole sample into a single value (e.g. \code{\link{sd}}). This function is applied ot each sample (actual and generated) and the values returned are plotted in the vertical axis of the scatterplot.}
 
-\item{boxplotControl}{Arguments to be passed to `boxplot` if the argument \emph{type} includes "boxplot".}
+\item{boxplotControl}{Arguments to be passed to \code{\link{boxplot}} if the argument \emph{type} includes "boxplot".}
 
-\item{cumulativeControl}{Arguments to be passed to `quantile` if the argument \emph{type} includes "cumulative" (e.g. use `probs` to set a range if the default is innapropiate).}
+\item{cumulativeControl}{Arguments to be passed to \code{\link{quantile}} if the argument \emph{type} includes "cumulative" (e.g. use `probs` to set a range if the default is innapropiate).}
 
-\item{densityControl}{Arguments to be passed to `density` if the argument \emph{type} includes "density".}
+\item{densityControl}{Arguments to be passed to \code{\link{density}} if the argument \emph{type} includes "density".}
 
 \item{funControl}{Arguments to be passed to `fun` if the argument \emph{type} includes "histogram".}
 
@@ -39,10 +39,20 @@ plot_ppredictive(stanfit, type = "", r = NULL, subset = NULL,
 
 \item{fun2Control}{Arguments to be passed to `fun2` if the argument \emph{type} includes "scatterplot".}
 
-\item{ksControl}{Arguments to be passed to `ks.test` if the argument \emph{type} includes "ks".}
+\item{ksControl}{Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".}
 
 \item{main}{An optional string with the overall title for the plot.}
 }
 \description{
-Plot samples drawn from the posterior predictive density.
+When the observed random variable is multivariate, one individual plot per dimension will be drawn (i.e. the analysis will be carried out marginally). As with all visualizations from this package, colors are fully customizable via a \code{\link{theme}}. Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.
 }
+\note{
+If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
+}
+\seealso{
+Other visualization functions: \code{\link{get_current_theme}},
+  \code{\link{get_default_theme}},
+  \code{\link{plot_series}},
+  \code{\link{plot_state_probability}}, \code{\link{theme}}
+}
+\concept{visualization functions}

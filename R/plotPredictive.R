@@ -1,6 +1,8 @@
 #' Plot samples drawn from the posterior predictive density.
 #'
-#' @param stanfit Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.
+#' When the observed random variable is multivariate, one individual plot per dimension will be drawn (i.e. the analysis will be carried out marginally). As with all visualizations from this package, colors are fully customizable via a \code{\link{theme}}. Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
 #' @param type An optional vector of strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.
 #' @param r An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.
 #' @param subset An optional boolean vector indicating with TRUE which elements of the observation vector should be included in the analysis (some plots may become slow with large datasets). It defaults to NULL, meaning all the sample units.
@@ -8,15 +10,17 @@
 #' @param fun An optional function summarizing the whole sample into a single value (e.g. \code{\link{median}}). This function is applied ot each sample (actual and generated) and the values returned are plotted in the histogram.
 #' @param fun1 An optional function summarizing the whole sample into a single value (e.g. \code{\link{mean}}). This function is applied ot each sample (actual and generated) and the values returned are plotted in the horizontal axis of the scatterplot.
 #' @param fun2 An optional function summarizing the whole sample into a single value (e.g. \code{\link{sd}}). This function is applied ot each sample (actual and generated) and the values returned are plotted in the vertical axis of the scatterplot.
-#' @param boxplotControl Arguments to be passed to `boxplot` if the argument \emph{type} includes "boxplot".
-#' @param cumulativeControl Arguments to be passed to `quantile` if the argument \emph{type} includes "cumulative" (e.g. use `probs` to set a range if the default is innapropiate).
-#' @param densityControl Arguments to be passed to `density` if the argument \emph{type} includes "density".
+#' @param boxplotControl Arguments to be passed to \code{\link{boxplot}} if the argument \emph{type} includes "boxplot".
+#' @param cumulativeControl Arguments to be passed to \code{\link{quantile}} if the argument \emph{type} includes "cumulative" (e.g. use `probs` to set a range if the default is innapropiate).
+#' @param densityControl Arguments to be passed to \code{\link{density}} if the argument \emph{type} includes "density".
 #' @param funControl Arguments to be passed to `fun` if the argument \emph{type} includes "histogram".
 #' @param fun1Control Arguments to be passed to `fun1` if the argument \emph{type} includes "scatterplot".
 #' @param fun2Control Arguments to be passed to `fun2` if the argument \emph{type} includes "scatterplot".
-#' @param ksControl Arguments to be passed to `ks.test` if the argument \emph{type} includes "ks".
+#' @param ksControl Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".
 #' @param main An optional string with the overall title for the plot.
 #' @export
+#' @note If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
+#' @family visualization functions
 #' @examples
 setGeneric(
   "plot_ppredictive",
@@ -111,12 +115,14 @@ plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL
   add_legend_overlay(
     x = "bottom",
     legend = c("Observed sample", "Posterior predictive samples"),
-    border = c(theme$yDensity, theme$yPredDensity),
-    fill   = c(theme$yDensity, theme$yPredDensity),
+    border = c(theme$densityY, theme$densityYPred),
+    fill   = c(theme$densityY, theme$densityYPred),
     bty    = "n",
     horiz  = TRUE
   )
 }
+
+# Internal undocumented methods -------------------------------------------
 
 setMethod("plot_ppredictive", "stanfit", plot_ppredictive.stanfit)
 
@@ -138,7 +144,7 @@ plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
 
   yFun     <- myFun(y)
   yPredFun <- t(apply(yPred, 1, myFun))
-  yAll         <- rbind(yFun, yPredFun)
+  yAll     <- rbind(yFun, yPredFun)
 
   plot(
     NULL,
@@ -152,15 +158,15 @@ plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
   points(
     yPredFun,
     pch = 21,
-    col = theme$yPredDensity,
-    bg  = theme$yPredDensity
+    col = theme$scatterYPred,
+    bg  = theme$scatterYPred
   )
 
   points(
     yFun,
     pch = 21,
-    bg  = theme$yDensity,
-    col = theme$yDensity
+    bg  = theme$scatterY,
+    col = theme$scatterY
   )
 
   if (addLegend) {
@@ -168,8 +174,8 @@ plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
       x = "topright",
       legend = c("Observed sample", "Posterior predictive samples"),
       pch = 21,
-      bg  = c(theme$yDensity, theme$yPredDensity),
-      col = c(theme$yDensity, theme$yPredDensity),
+      bg  = c(theme$scatterY, theme$scatterYPred),
+      col = c(theme$scatterY, theme$scatterYPred),
       bty = "n"
     )
   }
@@ -286,17 +292,17 @@ plot_ppredictive_cumulative <- function(y, yPred, control = NULL, main = NULL,
   )
 
   for (yrow in seq_len(nrow(yPredCumulative))) {
-    lines(x = yPredCumulative[yrow, ], y = control$probs, col = theme$yPredDensity)
+    lines(x = yPredCumulative[yrow, ], y = control$probs, col = theme$cumulativeYPred)
   }
 
-  lines(x = yCumulative, y = control$probs, col = theme$yDensity)
+  lines(x = yCumulative, y = control$probs, col = theme$cumulativeY)
 
   if (addLegend) {
     legend(
       x = "bottomright",
       legend = c("Observed sample", "Posterior predictive samples"),
       lwd = 2,
-      col = c(theme$yDensity, theme$yPredDensity),
+      col = c(theme$cumulativeY, theme$cumulativeYPred),
       bty = "n"
     )
   }
@@ -329,22 +335,21 @@ plot_ppredictive_density <- function(y, yPred, control = NULL, main = NULL,
     xlab = if (is.null(xlab)) { "Observation" } else { xlab },
     ylab = if (is.null(ylab)) { "Density" } else { ylab },
     xlim = c(min(yExtremes[1, ]), max(yExtremes[2, ])),
-    ylim = c(min(yExtremes[3, ]), max(yExtremes[4, ])),
-    col  = "black"
+    ylim = c(min(yExtremes[3, ]), max(yExtremes[4, ]))
   )
 
   for (yp in yPredDensity) {
-    lines(yp, col = theme$yPredDensity)
+    lines(yp, col = theme$densityYPred)
   }
 
-  lines(yDensity, col = theme$yDensity)
+  lines(yDensity, col = theme$densityY)
 
   if (addLegend) {
     legend(
       x = "topright",
       legend = c("Observed sample", "Posterior predictive samples"),
       lwd = 2,
-      col = c(theme$yDensity, theme$yPredDensity),
+      col = c(theme$densityY, theme$densityYPred),
       bty = "n"
     )
   }

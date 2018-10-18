@@ -6,4 +6,4 @@
 \description{
 Prologue
 }
-\keyword{internals}
+\keyword{internal}

@@ -30,17 +30,17 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
   )
 }
 
-plot.Optimization <- function(stanoptim, pars, ...) {
-  dotchart(
-    x = rev(extract_quantity(stanoptim, pars, combine = c)), ...
-  )
-}
+# plot.Optimization <- function(stanoptim, pars, ...) {
+#   dotchart(
+#     x = rev(extract_quantity(stanoptim, pars, combine = c)), ...
+#   )
+# }
+#
+# print.Optimization <- function(stanoptim, pars = NULL) {
+#   print(extract_quantity(stanoptim, pars))
+# }
 
-print.Optimization <- function(stanoptim, pars = NULL) {
-  print(extract_quantity(stanoptim, pars))
-}
-
-#' Check if it is an object created by \code{\link{optimizing}}.
+#' Verify that the object was created by \code{\link{optimizing}}.
 #'
 #' @keywords internal
 #' @param x An object.

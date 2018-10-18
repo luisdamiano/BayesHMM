@@ -141,45 +141,45 @@ likelihood function for an observation model.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="check.html">check()</a></code> </p>
+        </td>
+        <td><p>Verify that the object is a valid specification. TO BE IMPLEMENTED.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="classify_alpha.html">classify_alpha()</a></code> </p>
         </td>
-        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest estimated filtered probability (<em>alpha</em>).</p></td>
+        <td><p>Classify observations based on filtered probabilities.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="classify_gamma.html">classify_gamma()</a></code> </p>
         </td>
-        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest estimated smoothed probability (<em>gamma</em>).</p></td>
+        <td><p>Classify observations based on smoothed probabilities.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="classify_quantity.html">classify_quantity()</a></code> </p>
         </td>
-        <td><p>Assign the hidden states at each time step <em>t</em> to the hidden state <em>k</em> with largest quantity of interest.</p></td>
+        <td><p>Classify observations based on latent state probabilities.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="classify_zstar.html">classify_zstar()</a></code> </p>
         </td>
-        <td><p>Assign the hidden states to the most likely path (<em>zstar</em>). This is the result of Viterbi algorithm, which considers the joint distribution of the states.</p></td>
+        <td><p>Assign the hidden states to the most likely path (<em>zstar</em>).</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="explain_initial.html">explain_initial()</a></code> </p>
+          <p><code><a href="compile.html">compile()</a></code> </p>
         </td>
-        <td><p>Create an outline of the initial model.</p></td>
+        <td><p>Compile a specified model.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="explain_observation.html">explain_observation()</a></code> </p>
+          <p><code><a href="explain.html">explain()</a></code> </p>
         </td>
-        <td><p>Create an outline of the observation model.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="explain_transition.html">explain_transition()</a></code> </p>
-        </td>
-        <td><p>Create an outline of the transition model.</p></td>
+        <td><p>Create an user-friendly text describing the model.</p></td>
       </tr><tr>
         
         <td>
@@ -315,6 +315,42 @@ likelihood function for an observation model.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="fit.html">fit()</a></code> </p>
+        </td>
+        <td><p>Fit a model by MCMC</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_current_theme.html">get_current_theme()</a></code> </p>
+        </td>
+        <td><p>Return the current theme.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_default_theme.html">get_default_theme()</a></code> </p>
+        </td>
+        <td><p>Return the default theme.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hmm.html">hmm()</a></code> </p>
+        </td>
+        <td><p>Specify a Hidden Markov Model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mixture.html">mixture()</a></code> </p>
+        </td>
+        <td><p>Specify a mixture model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="optimizing.html">optimizing()</a></code> </p>
+        </td>
+        <td><p>Fit a model by MAP</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="plot_ppredictive.html">plot_ppredictive()</a></code> </p>
         </td>
         <td><p>Plot samples drawn from the posterior predictive density.</p></td>
@@ -333,15 +369,33 @@ likelihood function for an observation model.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="validate_calibration.html">validate_calibration()</a></code> </p>
+          <p><code><a href="sampling.html">sampling</a></code> </p>
         </td>
-        <td><p>Validate a model via a procedure based on simulated data.</p></td>
+        <td><p>Draw samples from a specification.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="zzz.html">zzz</a></code> </p>
+          <p><code><a href="sim.html">sim()</a></code> </p>
         </td>
-        <td><p>Prologue</p></td>
+        <td><p>Simulate data from the prior predictive density.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="specify.html">specify()</a></code> </p>
+        </td>
+        <td><p>Specify a model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="theme.html">theme</a></code> </p>
+        </td>
+        <td><p>Theme for BayesHMM visualizations and printouts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="validate_calibration.html">validate_calibration()</a></code> </p>
+        </td>
+        <td><p>Validate a model via a procedure based on simulated data.</p></td>
       </tr>
     </tbody>
     </table>

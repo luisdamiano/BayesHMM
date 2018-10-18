@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Extract the sample of the observation variable drawn from the posterior predictive density (ypred). — extract_ypred" />
 
-<meta property="og:description" content="The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object)." />
+<meta property="og:description" content="Extract the sample of the observation variable drawn from the posterior predictive density (ypred)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,13 +110,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract the sample of the observation variable drawn from the posterior predictive density (ypred).</h1>
-    <small class="dont-index">Source: <a href='https://github.com/luisdamiano/BayesHMM//blob/master/R/fit.R'><code>R/fit.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/luisdamiano/BayesHMM//blob/master/R/extract.R'><code>R/extract.R</code></a></small>
     <div class="hidden name"><code>extract_ypred.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object).</p>
+    <p>Extract the sample of the observation variable drawn from the posterior predictive density (ypred).</p>
     
     </div>
 
@@ -127,17 +127,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>fit</th>
-      <td><p>An object returned by either <code>sampling</code> or <code>optimizing</code>.</p></td>
+      <td><p>An object returned by either <code><a href='sampling.html'>sampling</a></code> or <code><a href='optimizing.html'>optimizing</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A numeric array with four dimensions [N, M, T, R]: number of iterations <em>N</em>, number of chains <em>M</em>, length of the time series T, the dimension of the observation vector <em>R</em>. If the argument <em>chain</em> was set, the chain dimension is dropped and the function returns a three-dimensional numeric array [N, T, R]. If the argument <em>reduce</em> was set to a function returning a vector of size <em>n</em>, the returned array has dimension [n, M, T, R]. When <em>n</em> is simply one (e.g. <code>median</code>), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, T, R].</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The extract_family is the safest way to access the generated samples (filtered probability <em>alpha</em>, smoothed probability <em>gamma</em>, most likely hidden path <em>zstar</em>, observation samples from the posterior predictive density <em>ypred</em>, hidden path samples from the posterior predictive density <em>zpred</em>, simulated observations <em>ysim</em>), the fixed pre-specified quantities (observations <em>y</em>, time series length <em>T</em>, number of hidden states <em>K</em>, dimension of the observation vector <em>R</em>), and other internal elements stored in a fit object (dataset in list format <em>data</em>, specification object <em>spec</em>, path to the underlying Stan file <em>filename</em>). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by <code>sampling</code> and maximum a posteriori estimates returned by <code>optimizing</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -160,8 +156,6 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

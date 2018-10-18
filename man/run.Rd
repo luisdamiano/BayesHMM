@@ -7,7 +7,7 @@
 run(spec, data = NULL, writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{spec}} or \code{\link{hmm}}.}
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
 }
@@ -20,4 +20,4 @@ Run a Markov-chain Monte Carlo algorithm to sample from the log posterior densit
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }
-\keyword{internals}
+\keyword{internal}

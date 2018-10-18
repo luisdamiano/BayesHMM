@@ -79,7 +79,7 @@
       <h1>An Introduction to BayesHMM</h1>
                         <h4 class="author">Luis Damiano, Michael Weylandt, Brian Peterson</h4>
             
-            <h4 class="date">2018-10-14</h4>
+            <h4 class="date">2018-10-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/luisdamiano/BayesHMM//blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -494,19 +494,14 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <p>The typical data analysis workflow includes the following steps: (1) specify, (2) validate, (3) simulate, (4) fit, (5) diagnose, (6) visualize, (7) compare. All steps except for 5 and 7 are implemented as of today.</p>
 <p>You may install the lastest version of our software from GitHub. Please note that BayesHMM requires rstan (&gt;= 2.17), the R interface for the probabilistic programming language <a href="http://mc-stan.org/">Stan</a>.</p>
 <pre><code>#&gt; Loading required package: Rcpp
-#&gt; Hola! BayesHHM v0.0.1 here o/
-#&gt; 
-#&gt; Attaching package: 'BayesHMM'
-#&gt; The following object is masked from 'package:base':
-#&gt; 
-#&gt;     summary</code></pre>
+#&gt; Hola! BayesHHM v0.0.1 here o/</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"luisdamiano/BayesHMM"</span>, <span class="dt">ref =</span> <span class="st">"master"</span>)
 <span class="kw">library</span>(BayesHMM)</code></pre></div>
 <div id="specify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#specify" class="anchor"></a>1. Specify</h2>
 <p>A HMM may be specified by calling the <code>hmm</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">2</span>,
   <span class="dt">observation =</span> {...}
   <span class="dt">initial     =</span> {...}
@@ -602,7 +597,7 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <li>User enters <span class="math inline">\(K\)</span> univariate density: specify one different density in each hidden state (ex. Gaussian in one state and Student in the other).</li>
 </ul>
 <p>This system is flexible enough to let the user specify different densities and priors for each state. The following example demonstrates a (rather unrealistic) model where states are a priori believed to have negative, near zero, and positive location parameters.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="op">-</span><span class="dv">10</span>, <span class="dt">sigma =</span> <span class="dv">10</span>) <span class="op">+</span>
@@ -627,7 +622,7 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <h3 class="hasAnchor">
 <a href="#transition-model-1" class="anchor"></a>Transition model</h3>
 <p>The user may enter a <code>Density</code> S3 object such as a <code>Dirichlet</code>, or a <code>LinkDensity</code> S3 object (inherits from <code>Density</code>) such as <code>TransitionSoftmax()</code>. The latter allows to specify priors for the transition regression parameter vector. For example, the following example sets regularizing priors near zero on the regression coefficients (because softmax coefficients are location invariant, we use priors to better inform the model). Note that this model is hard to identify, although we achieved satisfactory results optimizing the posterior density (i.e. maximum a posterior estimates).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">2</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span> <span class="kw">Gaussian</span>(
     <span class="dt">mu    =</span> <span class="kw">Gaussian</span>(<span class="dv">0</span>, <span class="dv">10</span>),
@@ -714,7 +709,7 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">2</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span> <span class="kw">Gaussian</span>(
     <span class="dt">mu    =</span> <span class="kw">Gaussian</span>(<span class="dv">0</span>, <span class="dv">10</span>),
@@ -755,7 +750,7 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 </ul>
 <p>There is no such a thing as an universal, automatic way to validate models. The software computes and summarizes different diagnostic measures and provides the user with high-level tools to assess calibration (including printouts, tables, and plots). Because the user may want to single out and inspect one of the iterations, in future versions it will be able to recover (or reproduce) the full posterior sample drawn in the <span class="math inline">\(n\)</span>-th iteration.</p>
 <p>In the following example, we specify a HMM and validate its calibration.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
     <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">2</span>,
     <span class="dt">observation =</span>
       <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="op">-</span><span class="dv">10</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">sigma =</span> <span class="dv">1</span>) <span class="op">+</span>
@@ -808,8 +803,8 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">33</td>
 <td align="right">0</td>
 <td align="right">25</td>
-<td align="right">0.76</td>
-<td align="right">0.52</td>
+<td align="right">0.80</td>
+<td align="right">0.68</td>
 <td align="right">0.12</td>
 <td align="right">0.61</td>
 <td align="right">0.82</td>
@@ -831,8 +826,8 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">15</td>
-<td align="right">0.82</td>
-<td align="right">0.73</td>
+<td align="right">0.86</td>
+<td align="right">0.53</td>
 <td align="right">0.02</td>
 <td align="right">0.14</td>
 <td align="right">0.74</td>
@@ -854,8 +849,8 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">15</td>
-<td align="right">1.00</td>
-<td align="right">0.61</td>
+<td align="right">0.92</td>
+<td align="right">0.49</td>
 <td align="right">0.01</td>
 <td align="right">0.17</td>
 <td align="right">0.41</td>
@@ -877,7 +872,7 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">31</td>
-<td align="right">1.06</td>
+<td align="right">0.94</td>
 <td align="right">0.42</td>
 <td align="right">0.02</td>
 <td align="right">0.03</td>
@@ -900,8 +895,8 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">31</td>
-<td align="right">1.27</td>
-<td align="right">0.63</td>
+<td align="right">1.33</td>
+<td align="right">0.56</td>
 <td align="right">0.05</td>
 <td align="right">0.02</td>
 <td align="right">0.61</td>
@@ -923,8 +918,8 @@ z_t^* = a_{t+1}(z_{t+1}^*).
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">15</td>
-<td align="right">0.97</td>
-<td align="right">0.73</td>
+<td align="right">1.07</td>
+<td align="right">0.61</td>
 <td align="right">0.02</td>
 <td align="right">0.00</td>
 <td align="right">0.24</td>
@@ -1093,26 +1088,26 @@ knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentati
 <a href="#simulate-fit" class="anchor"></a>3. Simulate &amp; Fit</h2>
 <p>Once specified, the user may:</p>
 <ul>
-<li>Call <code>sim()</code> to simulate <span class="math inline">\(N\)</span> datasets containing the observation variables <span class="math inline">\({\mathbf{y}}\)</span> and the hidden paths <span class="math inline">\(z\)</span>.</li>
-<li>Call <code>compile()</code> to compile the underlying Stan model. The returned object may be later used for either sampling (MCMC) or optimization (MAP).
+<li>Call <code><a href="../reference/sim.html">sim()</a></code> to simulate <span class="math inline">\(N\)</span> datasets containing the observation variables <span class="math inline">\({\mathbf{y}}\)</span> and the hidden paths <span class="math inline">\(z\)</span>.</li>
+<li>Call <code><a href="../reference/compile.html">compile()</a></code> to compile the underlying Stan model. The returned object may be later used for either sampling (MCMC) or optimization (MAP).
 <ul>
-<li>Call <code>sampling()</code> to draw posterior samples from a compiled model effectively allowing for full Bayesian inference via MCMC.</li>
-<li>Call <code>optimizing()</code> to maximize the joint posterior density and obtain a point estimate.</li>
+<li>Call <code><a href="../reference/sampling.html">sampling()</a></code> to draw posterior samples from a compiled model effectively allowing for full Bayesian inference via MCMC.</li>
+<li>Call <code><a href="../reference/optimizing.html">optimizing()</a></code> to maximize the joint posterior density and obtain a point estimate.</li>
 </ul>
 </li>
-<li>Call <code>fit()</code> to compile and sample in one step.</li>
+<li>Call <code><a href="../reference/fit.html">fit()</a></code> to compile and sample in one step.</li>
 </ul>
 <p>After fitting, the underlying Stan code may be inspected by calling <code>browse_model</code>, which opens the Stan file in the editor. None that this function is only for reading purposes: changes in the Stan code will not affect the specification object.</p>
 <div id="fully-bayesian-inferencia-via-mcmc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fully-bayesian-inferencia-via-mcmc" class="anchor"></a>3.1. Fully Bayesian Inferencia via MCMC</h3>
-<p>Because <code>sampling()</code> and <code>fit()</code> return a <code>stanfit</code> S4 object, the posterior samples are compatible out of box with the <code>rstan</code> ecosystem [TRY AND LIST SOME SUCH AS bayesplot].</p>
+<p>Because <code><a href="../reference/sampling.html">sampling()</a></code> and <code><a href="../reference/fit.html">fit()</a></code> return a <code>stanfit</code> S4 object, the posterior samples are compatible out of box with the <code>rstan</code> ecosystem [TRY AND LIST SOME SUCH AS bayesplot].</p>
 </div>
 <div id="maximum-a-posteriori-estimates-via-posterior-optimization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#maximum-a-posteriori-estimates-via-posterior-optimization" class="anchor"></a>3.2. Maximum a Posteriori estimates via posterior optimization</h3>
 <p><code>optimizing</code> is able to run several initialization of the optimization algorithm in parallel. The user may decide to <code>keep = "all"</code> runs, or just <code>keep = "best"</code>. If the former, <code>extract_grid</code> returns a summary of the different runs and <code>extract_best</code> retrieves the one with highest posterior log likelihood. If no run achieves convergence, a warning message is prompt to the console.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="op">-</span><span class="dv">10</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">sigma =</span> <span class="dv">1</span>) <span class="op">+</span>
@@ -1129,23 +1124,23 @@ y &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(
 )
 y &lt;-<span class="st"> </span><span class="kw">sample</span>(y)
 
-myModel &lt;-<span class="st"> </span><span class="kw">compile</span>(mySpec)
-myAll   &lt;-<span class="st"> </span><span class="kw">optimizing</span>(mySpec, myModel, <span class="dt">y =</span> y, <span class="dt">nRun =</span> <span class="dv">10</span>, <span class="dt">keep =</span> <span class="st">"all"</span>, <span class="dt">nCores =</span> <span class="dv">4</span>)
+myModel &lt;-<span class="st"> </span><span class="kw"><a href="../reference/compile.html">compile</a></span>(mySpec)
+myAll   &lt;-<span class="st"> </span><span class="kw"><a href="../reference/optimizing.html">optimizing</a></span>(mySpec, myModel, <span class="dt">y =</span> y, <span class="dt">nRun =</span> <span class="dv">10</span>, <span class="dt">keep =</span> <span class="st">"all"</span>, <span class="dt">nCores =</span> <span class="dv">4</span>)
 myBest &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_best.html">extract_best</a></span>(myAll)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(
   <span class="kw">round</span>(<span class="kw">extract_grid</span>(myAll, <span class="dt">pars =</span> <span class="st">"mu"</span>), <span class="dv">2</span>)
 )
 <span class="co">#&gt;        n       seed logPosterior returnCode user.self sys.self elapsed</span>
-<span class="co">#&gt;  [1,]  8 1111034741      -820.72          0      0.09     0.00    0.09</span>
-<span class="co">#&gt;  [2,]  2  768003877      -820.72          0      0.14     0.00    0.14</span>
-<span class="co">#&gt;  [3,]  6  820771557      -820.72          0      0.08     0.00    0.09</span>
-<span class="co">#&gt;  [4,] 10 2115105852      -820.72          0      0.07     0.00    0.07</span>
-<span class="co">#&gt;  [5,]  5 1539977502     -1018.84          0      0.09     0.00    0.09</span>
-<span class="co">#&gt;  [6,]  9  355282361     -1018.84          0      0.09     0.00    0.09</span>
-<span class="co">#&gt;  [7,]  7 2066428059     -1020.17          0      0.09     0.00    0.09</span>
-<span class="co">#&gt;  [8,]  3 1898572606     -1020.17          0      0.08     0.00    0.08</span>
-<span class="co">#&gt;  [9,]  1 1144725567     -1119.23          0      0.17     0.01    0.18</span>
-<span class="co">#&gt; [10,]  4  433311989     -1119.23          0      0.07     0.00    0.07</span>
+<span class="co">#&gt;  [1,]  8 1111034741      -820.72          0      0.07        0    0.08</span>
+<span class="co">#&gt;  [2,]  2  768003877      -820.72          0      0.12        0    0.13</span>
+<span class="co">#&gt;  [3,]  6  820771557      -820.72          0      0.08        0    0.08</span>
+<span class="co">#&gt;  [4,] 10 2115105852      -820.72          0      0.09        0    0.09</span>
+<span class="co">#&gt;  [5,]  5 1539977502     -1018.84          0      0.08        0    0.08</span>
+<span class="co">#&gt;  [6,]  9  355282361     -1018.84          0      0.08        0    0.08</span>
+<span class="co">#&gt;  [7,]  7 2066428059     -1020.17          0      0.08        0    0.08</span>
+<span class="co">#&gt;  [8,]  3 1898572606     -1020.17          0      0.08        0    0.08</span>
+<span class="co">#&gt;  [9,]  1 1144725567     -1119.23          0      0.18        0    0.19</span>
+<span class="co">#&gt; [10,]  4  433311989     -1119.23          0      0.07        0    0.08</span>
 <span class="co">#&gt;         mu11  mu21  mu31</span>
 <span class="co">#&gt;  [1,] -10.06  9.98  0.04</span>
 <span class="co">#&gt;  [2,] -10.06  9.98  0.04</span>
@@ -1173,7 +1168,7 @@ myBest &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extr
 <p>Besides <code>extract_quantity</code>, which takes an argument <code>pars</code>, the software comes with extractors for the most typical quantities: <code>extract_alpha</code> (filtered probability), <code>extract_gamma</code> (smoothed probability), <code>extract_zstar</code> (MPM, also known a Viterbi), <code>extract_ypred</code> and <code>extract_zpred</code> for predictive quantities, and <code>extract_obs_parameters</code> and <code>extract_parameters</code> for observation model and all model parameters respectively.</p>
 <p><strong>NOTE</strong>: Naming convention may be changed before submitting to CRAN. Consider for example <code>extract_alpha</code> versus <code>extract_filtered_probability</code>, or <code>extract_zstar</code> versus <code>extract_viterbi</code>.</p>
 <p>Compare in these examples different configurations of <code>reduce</code> and <code>combine</code> :</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="op">-</span><span class="dv">10</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">sigma =</span> <span class="dv">1</span>) <span class="op">+</span>
@@ -1190,7 +1185,7 @@ y &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(
 )
 y &lt;-<span class="st"> </span><span class="kw">sample</span>(y)
 
-myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span class="dt">y =</span> y)
+myFit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.html">fit</a></span>(mySpec, <span class="dt">y =</span> y)
 
 <span class="co"># 3 parameters, 1,000 iterations, 4 chains</span>
 <span class="kw">print</span>(
@@ -1292,7 +1287,7 @@ myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span cl
 <li><p>When plotting the state probabilities: * <code>stateShade</code> to shade the background based on the state probability. * <code>probabilityColoredLine</code> to include a line colored according to the state probability. * <code>probabilityColoredDots</code> to include dots colored according to the state probability. * <code>bottomColoredMarks</code> and <code>topColoredMarks</code> to include colored tick marks on the bottom or top axis. * <code>probabilityFan</code> to show the posterior interval of assignment probabilities.</p></li>
 </ul>
 <p>Again, the objects returned by <code>fit</code> and <code>sampling</code> are compatible with the rstan ecosystem, including visualization routines in the bayesplot package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">2</span>,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="kw">Gaussian</span>(<span class="dt">mu =</span> <span class="op">-</span><span class="dv">10</span>, <span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">sigma =</span> <span class="dv">1</span>) <span class="op">+</span>
@@ -1306,14 +1301,14 @@ myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span cl
   <span class="dt">name =</span> <span class="st">"Univariate Gaussian Dummy Model"</span>
 )
 
-mySim &lt;-<span class="st"> </span><span class="kw">sim</span>(mySpec, <span class="dt">T =</span> <span class="dv">300</span>, <span class="dt">seed =</span> <span class="dv">9000</span>, <span class="dt">iter =</span> <span class="dv">500</span>, <span class="dt">chains =</span> <span class="dv">1</span>)
+mySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sim.html">sim</a></span>(mySpec, <span class="dt">T =</span> <span class="dv">300</span>, <span class="dt">seed =</span> <span class="dv">9000</span>, <span class="dt">iter =</span> <span class="dv">500</span>, <span class="dt">chains =</span> <span class="dv">1</span>)
 <span class="co">#&gt; Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
 <span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span>
 ySim  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/extract_ypred.html">extract_ypred</a></span>(mySim)[<span class="dv">1</span>, , ]
 <span class="kw">colnames</span>(ySim) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"Weight"</span>, <span class="st">"Height"</span>)
 
-myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span class="dt">y =</span> ySim, <span class="dt">seed =</span> <span class="dv">9000</span>, <span class="dt">iter =</span> <span class="dv">500</span>, <span class="dt">chains =</span> <span class="dv">1</span>)
+myFit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.html">fit</a></span>(mySpec, <span class="dt">y =</span> ySim, <span class="dt">seed =</span> <span class="dv">9000</span>, <span class="dt">iter =</span> <span class="dv">500</span>, <span class="dt">chains =</span> <span class="dv">1</span>)
 <span class="co">#&gt; hash mismatch so recompiling; make sure Stan code ends with a blank line</span>
 <span class="co">#&gt; Warning: There were 3 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
 <span class="co">#&gt; http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
@@ -1377,7 +1372,7 @@ myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span cl
 <h1 class="hasAnchor">
 <a href="#mixture-models" class="anchor"></a>Mixture models</h1>
 <p>Mixture models may be seen as a simplified version of HMM, where the assignment probabilities do not have a Markovian structure. We provide a simple implementation, and future iterations of our software will include extracting the individual assignment probabilities, and support for visualization and other data analysis procedures specific to mixture models.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw">mixture</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mySpec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mixture.html">mixture</a></span>(
   <span class="dt">K =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="dv">1</span>,
   <span class="dt">observation =</span> <span class="kw">Student</span>(
     <span class="dt">mu    =</span> <span class="kw">Default</span>(),
@@ -1393,7 +1388,7 @@ y &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(
   <span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">50</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">300</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="op">-</span><span class="dv">5</span>, <span class="dv">1</span>))
 )
 
-myFit &lt;-<span class="st"> </span><span class="kw">fit</span>(mySpec, <span class="dt">y =</span> y, <span class="dt">chains =</span> <span class="dv">1</span>, <span class="dt">iter =</span> <span class="dv">500</span>)</code></pre></div>
+myFit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.html">fit</a></span>(mySpec, <span class="dt">y =</span> y, <span class="dt">chains =</span> <span class="dv">1</span>, <span class="dt">iter =</span> <span class="dv">500</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># print_all(myFit)</span></code></pre></div>
 </div>
 <div id="acknowledgements" class="section level1">
@@ -1415,7 +1410,7 @@ R =<span class="st"> </span><span class="dv">2</span>
 <span class="co">#   Input: K multivariate densities</span>
 <span class="co">#   Behaviour: Nothing</span>
 
-exCase1  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase1  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">MVGaussianCor</span>(
@@ -1439,7 +1434,7 @@ exCase1  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: One multivariate density</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
 
-exCase2  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase2  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">MVGaussianCor</span>(
@@ -1455,7 +1450,7 @@ exCase2  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: One univariate density</span>
 <span class="co">#   Behaviour: Repeat input K %nested% R times</span>
 
-exCase3  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase3  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1471,7 +1466,7 @@ exCase3  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: R univariate densities</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
 
-exCase4  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase4  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1491,7 +1486,7 @@ exCase4  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: K univariate densities</span>
 <span class="co">#   Behaviour: Repeat input R times</span>
 
-exCase5  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase5  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1515,7 +1510,7 @@ exCase5  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: K %nested% R univariate densities</span>
 <span class="co">#   Behaviour: None</span>
 
-exCase6  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase6  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1556,7 +1551,7 @@ R =<span class="st"> </span><span class="dv">1</span>
 <span class="co">#   Input: K univariate densities</span>
 <span class="co">#   Behaviour: Nothing</span>
 
-exCase7  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase7  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1580,7 +1575,7 @@ exCase7  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: One univariate density</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
 
-exCase8  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase8  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1599,7 +1594,7 @@ R =<span class="st"> </span><span class="dv">2</span>
 <span class="co"># Case 9. Same univariate density for every initial state</span>
 <span class="co">#   Input: One univariate density</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
-exCase9  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase9  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1618,7 +1613,7 @@ exCase9  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co"># Case 10. One multivariate density for the whole initial vector</span>
 <span class="co">#   Input: One multivariate density</span>
 <span class="co">#   Behaviour: Nothing</span>
-exCase10  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase10  &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1636,7 +1631,7 @@ exCase10  &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co"># Case 11. A different univariate density for each initial state</span>
 <span class="co">#   Input: K univariate densities</span>
 <span class="co">#   Behaviour: Nothing</span>
-exCase11 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase11 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1663,7 +1658,7 @@ exCase11 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co"># Case 12. A link</span>
 <span class="co">#   Input: One link density</span>
 <span class="co">#   Behaviour: Nothing</span>
-exCase12 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase12 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1685,7 +1680,7 @@ R =<span class="st"> </span><span class="dv">2</span>
 <span class="co"># Case 13. Same univariate density for every transition</span>
 <span class="co">#   Input: One univariate density</span>
 <span class="co">#   Behaviour: Repeat input KxK times</span>
-exCase13 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase13 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1702,7 +1697,7 @@ exCase13 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: One multivariate density</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
 
-exCase14 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase14 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1721,7 +1716,7 @@ exCase14 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: K univariate densities</span>
 <span class="co">#   Behaviour: Repeat input K times</span>
 
-exCase15 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase15 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1740,7 +1735,7 @@ exCase15 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: K multivariate densities</span>
 <span class="co">#   Behaviour: nothing</span>
 
-exCase16 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase16 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1759,7 +1754,7 @@ exCase16 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: KxK univariate densities</span>
 <span class="co">#   Behaviour: None</span>
 
-exCase17 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase17 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1784,7 +1779,7 @@ exCase17 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co">#   Input: One link density</span>
 <span class="co">#   Behaviour: Nothing</span>
 
-exCase18 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase18 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(
@@ -1804,7 +1799,7 @@ exCase18 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
 <span class="co"># Case 19. A link in both the transition and initial distribution.</span>
 <span class="co">#   Input: A link in both the transition and initial distribution.</span>
 <span class="co">#   Behaviour: Nothing</span>
-exCase19 &lt;-<span class="st"> </span><span class="kw">hmm</span>(
+exCase19 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hmm.html">hmm</a></span>(
   <span class="dt">K =</span> K, <span class="dt">R =</span> R,
   <span class="dt">observation =</span>
     <span class="kw">Gaussian</span>(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/optimization.R
 \name{is.stanoptim}
 \alias{is.stanoptim}
-\title{Check if it is an object created by \code{\link{optimizing}}.}
+\title{Verify that the object was created by \code{\link{optimizing}}.}
 \usage{
 is.stanoptim(x)
 }
@@ -13,6 +13,6 @@ is.stanoptim(x)
 TRUE if it is an object created by \code{\link{optimizing}}.
 }
 \description{
-Check if it is an object created by \code{\link{optimizing}}.
+Verify that the object was created by \code{\link{optimizing}}.
 }
 \keyword{internal}
