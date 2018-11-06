@@ -49,9 +49,9 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   `%dopar%` <- foreach:::`%dopar%`
   l <- foreach::foreach(n = 1:N, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, , ]  # Chain 1
-    paramTrue  <- paramSim[n, ] # paramSim[n, , ]
+    paramTrue  <- paramSim[n, ]   # paramSim[n, , ]
     myFit      <- do.call(
-      sampling.Specification,   # sampling
+      sampling.Specification,     # sampling
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 

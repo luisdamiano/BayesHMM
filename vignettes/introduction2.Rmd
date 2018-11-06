@@ -1,0 +1,274 @@
+---
+title: "An Introduction to BayesHMM"
+author: "Luis Damiano, Michael Weylandt, Brian Peterson"
+date: "`r Sys.Date()`"
+output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{An Introduction to BayesHMM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+urlcolor: blue
+bibliography: "references.bib"
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{positioning}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo     = TRUE,
+  eval     = TRUE,
+  cache    = TRUE,
+  collapse = TRUE,
+  comment  = "#>"
+)
+```
+
+% Math operators
+\newcommand{\argmax}{\arg\!\max}
+\newcommand{\argmin}{\arg\!\min}
+\newcommand\ev[1]{E\left\langle#1\right\rangle}
+\newcommand\vv[1]{V\left\langle#1\right\rangle}
+
+% Math commands
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+% Math symbols
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\RR}{\mathbb{R}}
+
+In this vignette, you will learn:
+
+\begin{itemize}
+  \item What is BayesHMM?
+  \item What is the scope of BayesHMM in terms of models and ?
+  \item How to use BayesHMM?
+\end{itemize}
+
+# Introduction
+
+BayesHMM is an R Package to run full Bayesian inference on Hidden Markov Models (HMM) using the probabilistic programming language Stan [cite]. By providing an intuitive, expressive yet flexible input interface, we enable researchers to profit the most out of the modern Bayesian workflow. We provide the user with an expressive interface to mix and match a wide array of options for the observation and latent models, including ample choices of densities, priors, and link functions whenever covariates are present. The software enables users to fit HMM with time-homogeneous transitions as well as time-varying transition probabilities. Priors can be set for every model parameter. Implemented inference algorithms include forward (filtering), forward-backwards (smoothing), Viterbi (most likely hidden path), prior predictive sampling, and posterior predictive sampling. Graphs, tables and other convenience methods for convergence diagnosis, goodness of fit, and data analysis are provided.
+
+We aspire to produce a high-quality open-source software that is able to:
+
+* Compute full Bayesian inference and maximum a posteriori estimates for the unknown quantities in Hidden Markov Models and family.
+* Provide a high-performance implementation leveraging on the Stan probabilistic programming language [@Carpenter2017, @SDT2018].
+* Adhere to the modern Bayesian methodology for Bayesian Data Analysis [@Betancourt2018, @Gelman2013] by providing built-in tools that we developed to specilize for HMM general Bayesian methodology recommendations for software validation [@Cook2006], model calibration [@Talts2018], and visualization [@Gabry2017]. A one stop shop for Bayesian HMM.
+* Provide an intuitive, expressive and user-friendly interface to facilitate Bayesian inference, an intrinsecally complex problem from the computationally point of view, to researchers across many different fields of science.
+* Interact out of the box with other tools developed for the ever-growing Stan ecosystem, such as [@gabry2018].
+* Be flexible enough in terms of model specification to accomodate for the needs of different fields where HMM are applied (compare with having only a finite set of pre-built models).
+
+<!--
+Strong motivation about HMM. Cite papers from different fields.
+specialized plotting
+Mix previous draft and stuff written for help lie ?specify.
+-->
+
+## Naming convention
+
+We designed the software to have a unified naming convention across programming code (both in R and Stan) and documentations (vignette, manual, and function help). Minor, and hopefully obvious, variants may be found due to different syntax restrictions in R and Stan.
+
+We selected the snake case for methods and functions (e.g. `validate_calibration`), lower camel case for function arguments and variables (e.g. `optimizing(nRuns = 1, nCores = 1, ...`), and upper camel case for density functions (e.g. `Gaussian`, `NegativeBinomial`). We use verbs to reflect actions, such as `compile`, `explain`, and `run`. Exceptions include `sampling` and `optimizing` to avoid masking the base R methods `sample` and `optimize`.
+
+Most of the model quantities keep their mathematical notation (e.g. `classify_alpha`, `extract_K`, `extract_zstar`). These are listed in Table \ref{tab:naming}.
+
+| Constants                               	|                                                          	|
+|-----------------------------------------	|----------------------------------------------------------	|
+| R                                       	| Observation dimension                                    	|
+| K                                       	| Number of hidden states                                  	|
+| M                                       	| Number of covariates for the observation model           	|
+| P                                       	| Number of covariates for the transition model            	|
+| Q                                       	| Number of covariates for the initial model               	|
+|                                         	|                                                          	|
+| Covariates                              	|                                                          	|
+| x_t                                     	| Time-varying covariates for the observation model        	|
+| u_t                                     	| Time-varying covariates for the transition model         	|
+| v                                       	| Covariates for the initial model                         	|
+|                                         	|                                                          	|
+| Known-stochastic quantities             	|                                                          	|
+| y_t                                     	| Observation vector                                       	|
+|                                         	|                                                          	|
+| Model parameters                        	|                                                          	|
+| *_kr                                    	| Ex. mu_11 or sigma_11 (suffixes k and r are optional)    	|
+| A                                       	| Transition model parameters (if no covariates)           	|
+| pi                                      	| Initial distribution parameters (if no covariates)       	|
+| xBeta                                   	| Regression parameters for the observation model          	|
+| uBeta                                   	| Regression parameters for the transition model           	|
+| vBeta                                   	| Regression parameters for the initial model              	|
+|                                         	|                                                          	|
+| Estimated quantities                    	|                                                          	|
+| z_t                                     	| Hidden state                                             	|
+| alpha_t                                 	| Filtered probability                                     	|
+| gamma_t                                 	| Smoothed probability                                     	|
+| zStar                                   	| Jointly most likely path (Viterbi)                       	|
+|                                         	|                                                          	|
+| (Prior/Posterior) predictive quantities 	|                                                          	|
+| yPred                                   	| Sample of observations drawn from the predictive density 	|
+| zPred                                   	| Sample of latent path drawn from the predictive density  	|
+
+Table: Naming convention for model quantities. The time suffix `_t` is optional. \label{tab:naming}
+
+# A Walk through BayesHMM
+
+The typical data analysis workflow includes the following steps:
+
+1. **Specify** a model: define the structure of the observation, transition, and initial distribution components. By structure, we mean the density function for the observation random variable, as well as the density function for each component parameters.
+2. **Compile** a model: translate a model specification to Stan code, which is turn translated to C++ and compiled into a dynamic shared object that can be loaded and sampled from.
+3. **Validate**: verify that the software is correct in that it can recover accurately the hidden quantities. This step is directly related to the concept of _Computational Faithfulness_ as defined by @Betancourt2018, and the built-in tools for automatically diagnosis a model are based on @Cook2006 and @Talts2018.
+4. **Simulate**: generate data complying with the model specification by drawing samples from the prior posterior distribution (a procedure that has been informally called _fake data_).
+5. **Fit**: estimate the unknown quantities by either MCMC (full Bayesian estimates) or optimization procedures (maximum a posteriori point estimates).
+6. **Diagnose**: convergence and goodness of fit (BEWARE: reword this, don't use goodness of fit, look for the bayesian counterpart).
+7. **Visualize**: use visualization tools for model evaluation. We designed HMM-specific plots that are highly influenced by the methodology described by @Gabry2017.
+8. **Compare**: develop HMM-specific tools for model comparison.
+
+At this early stage, all the steps except for 6 and 8 are implemented in our software.
+
+## 1. Specify
+
+This is the stage where most modeling decisions have to be made. A HMM is completely specified when we define the structure of the observation, transition, and initial distribution components. Before delving into each of these submodels, it is important to remark why model specification is a key step in the modeling workflow: the fact that a model can be specified does not guaranteed by itself that we can make inference given reasonable time and resource constrains. BayesHMM is purposedly flexible to allow an extremely wide variety of hidden markov models, yet the user has to take care of Label switching, Using priors to center parameters. Using priors to break symmetry.
+
+Programmatically, HMM are specified by calling the `hmm` function:
+
+```{r, eval = FALSE}
+hmm(
+  K = 3, R = 2,
+  observation = {...}
+  initial     = {...}
+  transition  = {...}
+  name = "Model name"
+)
+```
+
+where $K$ is the number of hidden states and $R$ is the number of dimensions in the observation variable. The name is a string used for model printouts.
+
+The `observation`, `initial`, and `transition` arguments rely on S3 objects called `Density` that specify density form, parameter priors, and fixed values for parameters. These allow for bounds in the parameter space as well as truncation in prior densities. For instance:
+
+* `Gaussian(mu = 0, sigma = 1)` specifies a Gaussian density with fixed parameters.
+* `Gaussian(mu = Gaussian(0, 10), sigma = Cauchy(0, 10, bounds = list(0, NA)))` specifies a Gaussian density with a Gaussian prior on the location parameter and a Cauchy prior on the scale parameter, whose parameter space is bounded on $[0, \infty)$.
+
+### 1.1. Observation model
+
+The structure of the observation model comprises the density function for the observation random variable (e.g. continuous versus discrete, bounded versus unbounded, symmetrical versus skewed) as well as the prior density for the observation model parameters.
+
+Most `Density` objects relate directly with well-established probability density functions, in some cases providing more than one parametrization for the same distribution. For example, `MVGaussian`, `MVGaussianCov`, and `MVGaussianCor` specify a Multivariate Gaussian distribution with the location-scale parametrization, the parametrization based on the Cholesky factor of the covariance matrix, and the parametrization based on the Cholesky factor of the correlation matrix respectively. In practice, the latter proved to be the most performant parametrization in many use cases.
+
+Other `Density` objects relate to regression models, and thus represent the density function of the observed random variable conditional on fixed covariates. These include `RegGaussian`, `RegBernoulliLogit` (Bernoulli regression for $y_i \in \{0, 1\}$), `RegBinomialLogit` (Binomial regression with logit link and $N$ trials for $y_i \in \{0, 1, \dots, N\}$), `RegBinomialProbit` (Binomial regression with probit link and $N$ trials for $y_i \in \{0, 1, \dots, N\}$), `RegCategoricalSoftmax` (Multinomial regression with $N$ categories for $y_i \in \{0, 1, \dots, N\}$).
+
+Currently available densities are listed below. Information about the density parameterization can be accessed via the question mark operator (e.g. `?Gaussian`).
+
+* Observation density and priors:
+  * Univariate: Bernoulli, Beta, Binomial, Categorical, Cauchy, Dirichlet, Gaussian, Multinomial, Negative Binomial (traditional and location parameterizations), Poisson, Student.
+  * Multivariate: Multivariate Gaussian (traditional, Cholesky decomposition of covariance matrix, and Cholesky decomposition of correlation matrix parameterizations), Multivariate Student.
+* Observation density only: Bernoulli regression with logit link, Binomial regression (logit and probit links), Softmax regression, Gaussian regression.
+* Prior-only density: LKJ, Wishart.
+
+__MORE ON HOW TO SPECIFY. USE ?specify__.
+
+### 1.2. Transition model
+
+__MORE ON HOW TO SPECIFY. USE ?specify__.
+
+### 1.3. Initial state model
+
+__MORE ON HOW TO SPECIFY. USE ?specify__.
+
+## 2. Compile
+
+A model specification is simply a named nested list designed for the purpose of BayesHMM. The following step is then translate this list to Stan code, which is in turn translated to C++ and compiled into a dynamic shared object that can be loaded and sampled from.
+
+<!--
+\begin{tikzpicture}
+  \draw[fill = red!20, draw, double, rounded corners, align=center]
+       (0, 0) node(specification){BayesHMM's\\hmm()}
+  -> ++(4, 0) node(stanCode){Stan code}
+  -> ++(4, 0) node(stanObject){rstan's\\stanmodel }
+  -> ++(4, 0) node(fit){BayesHMM's\\fit()}
+  -> ++(0, 1) node(optimizing){BayesHMM's\\optimizing()}
+  -> ++(0, 1) node(sim){BayesHMM's\\sim()};
+\end{tikzpicture}
+-->
+
+\definecolor{stanred}{RGB}{228, 31, 38}
+\definecolor{bayeshmmgreen}{RGB}{46, 161, 71}
+
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}[
+    align = center,
+    every node/.style = {scale=0.6},
+    stannode/.style = {rectangle, draw = stanred, very thick, minimum width = 2cm, minimum height = 1cm, rounded corners},
+    bayeshmmgreen/.style = {rectangle, draw = bayeshmmgreen, very thick, minimum width = 2cm, minimum height = 1cm, rounded corners},
+    ]
+  
+    \node[bayeshmmgreen](specification){hmm()};
+    \node[stannode](code)[right = 1cm of specification]{Stan\\code};
+    \node[stannode](stanmodel)[right = 1cm of code]{rstan's\\stanmodel};
+    \node[bayeshmmgreen, minimum width = 4cm](optimizing)[right = 1cm of stanmodel]{optimizing()};
+    \node[bayeshmmgreen, minimum width = 4cm](sampling)[above = 0.5cm of optimizing]{sampling()};
+    \node[bayeshmmgreen, minimum width = 4cm](sim)[below = 0.5cm of optimizing]{sim()};
+    \node[bayeshmmgreen, minimum width = 4cm](validate_calibration)[below = 0.5cm of sim]{validate\_calibration()};
+    
+    \draw[->] (specification) -- (code);
+    \draw[->] (code) -- (stanmodel);
+    \draw[->] (stanmodel) -- (sampling);
+    \draw[->] (stanmodel) -- (optimizing);
+    \draw[->] (stanmodel) -- (sim);
+    \draw[->] (stanmodel) -- (validate_calibration);
+  \end{tikzpicture}
+\caption{Diagram of compilation.}
+\end{figure}
+
+__Add legend to diagram.__
+
+The reader is advised to read @Team2017 to learn the technical details behind compilation. As this process may be time consuming (e.g. a model may take up to a minute to compile), it is desirable to compile the model once, store the object in the memory, and reuse it to call other related methods (namely `sampling`, `optimizing`, `sim`, `validate_calibration`) one or more times. If any of these methods is only given a Specification object when called, it will compile the model, run the analysis, discard the compiled object and return the results of the analysis.
+
+```{r, eval = FALSE}
+# Assume a specification object called mySpec
+# Most efficient: only compiles the model once.
+myModel <- compile(mySpec)
+myVal   <- validate_calibration(myModel, N = 100)
+myData  <- sim(myModel, T = 500)
+myFit   <- sampling(myModel, y = myData$y)
+
+# Least efficient: the model is compiled under the hood three times. 
+myVal   <- validate_calibration(mySpec, N = 100)
+myData  <- sim(mySpec, T = 500)
+myFit   <- sampling(mySpec, y = myData$y)
+```
+
+## 3. Validate
+
+After a model is compiled, it is always best to validate the correctness of the software. This step is directly related to the concepts of __computational correctness__ and _computational faithfulness_ as defined by @Cook2006 and @Betancourt2018 respectively. The built-in tools for automatically diagnosis a model are based on these ideas as well as @Talts2018.
+
+The implementation of the core algorithms for HMM inference (namely the forward, the forward-backward and the Viterbi algorithm) are based on publicly available software [@Damiano2018]. Nonetheless, it is wise to validate that the specific combination of submodels and priors chosen in the specification step functions properly. Besides detecting errors in the software, the nature of these deviances may be informative about the nature and location of such errors.
+
+The goal is to verify that the software recovers accurately the unknown quantities. If we know the true value of the unknown quantities that generate a dataset, we can compute the estimates and verify that they provide a good approximation. The main challenge is these results are inherently stochastic, and thus we need to account for variability even when running the software under ideal conditions.
+
+In the specification stage, we defined the prior distribution of the parameter vector $p(\mat{\Theta})$ and the sampling distribution of the data $p(\mat{y} | \mat{\Theta})$. These specify __the model__, that is the joint distribution of the observation vector $p(\mat{y}) = p(\mat{y} | \mat{\Theta}) p(\mat{\Theta})$. Our validation protocol is as follows:
+
+1. Compile the prior predictive model.
+2. Draw $N$ independent samples of the parameter vector from the prior distribution $\mat{\Theta}^{(n)} \sim p(\mat{\Theta})$ and the observation vector from prior predictive density $\mat{y}^{(n)}_t \sim p(\mat{y}) = p(\mat{y} | \mat{\Theta}^{(n)}) p(\mat{\Theta}^{(n)}), n \in \{1, \dots, N\}$ ^[Although @Cook2006 state that the samples do not need to be independent nor jointly exchangeable, in our implemenetation they are generated independently. Additionally, although the second step may be more naturally thought as a substep of #4, it is more computationally efficient to produce the $N$ independent samples in one run.].
+3. Compile the posterior predictive model.
+4. For all $n \in \{1, \dots, N\}$:
+    1. Feed $\mat{y}_t^{(n)}$ to the model.
+    2. Draw one posterior sample of the observation vector from the posterior predictive density $\mat{y_t}^{(n)}_{\text{new}} \sim p( \mat{y_t}_{\text{new}} | \mat{y})$.
+    3. Collect Hamiltonian Monte Carlo diagnostics for each chain: number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sample times.
+    4. Collect posterior sampling diagnostics for each unknown quantity: posterior summary measures (mean, standard deviation, quantiles), comparison against the true value (ranks as defined by @Talts2018), MCMC convergence measures (Monte Carlo SE, ESS, R Hat).
+    5. Collect posterior predictive diagnostics for the observation vector: observation ranks, Kolmogorov-Smirnov statistic for observed sample versus posterior predictive samples.
+
+The prior predictive model is defined as the model where the posterior density equals to the prior density, i.e. the posterior density is not informed by the sampling distribution of the data. __EXPLAIN POSTERIORS AND PRIORS HERE WITH EQUATIONS__.
+
+__TABLE WITH ALL THE QUANTITIES AND THE INTERPRETATION, RULE OF THUMB, REFERENCE__.
+
+## 4. Simulate
+
+
+
+
+
+
+
+# References
