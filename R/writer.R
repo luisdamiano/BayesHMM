@@ -18,9 +18,11 @@ write_data <- function(spec, noLogLike, writeDir) {
   strObs  <- densityCollect(
     spec$observation$density, block_data, noLogLike = noLogLike
   )
-  strTrans <- densityCollect(
-    spec$transition$density, block_data, noLogLike = noLogLike
-  )
+
+  strTrans <- ""
+  # strTrans <- densityCollect(
+  #   spec$transition$density, block_data, noLogLike = noLogLike
+  # )
 
   write_stanfile(
     unique(c(strSpec, strObs, strTrans)),
