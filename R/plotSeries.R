@@ -169,7 +169,10 @@ plot_state_probability <- function(fit, stateProbability = "smoothed",
       ...
     )
 
-    add_features(tidx, y[, 1], z, p = p[k, ], pInt = pInt[, k, ], k, features)
+    add_features(
+      x = tidx, z = z, p = p[k, ],
+      pInt = pInt[, k, ], k = k, features = features
+    )
 
     axis(if (k %% 2) { 4 } else { 2 })
 

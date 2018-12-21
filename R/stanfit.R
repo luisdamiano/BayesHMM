@@ -1,8 +1,8 @@
 # extract_n_chains ------------------------------------------------------------
 #' Extract the number of chains (M).
 #'
-#' @param fit An object returned by either \code{\link{sampling}}.
-#' @return The number of chains used (M) to fit the model.
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
+#' @return The number of chains (M) used to fit the model.
 #' @export
 #' @examples
 setGeneric("extract_n_chains", function(stanfit) {standardGeneric("extract_n_chains")} )

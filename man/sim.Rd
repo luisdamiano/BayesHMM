@@ -4,14 +4,23 @@
 \alias{sim}
 \title{Simulate data from the prior predictive density.}
 \usage{
-sim(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...)
+sim(spec, T = 1000, x = NULL, u = NULL, v = NULL,
+  nSimulations = 500, ...)
 }
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
+\item{T}{An optional integer with the length of the time series. It defaults to 1000 observations.}
+
+\item{x}{An optional numeric matrix with the covariates for the observation model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the covariate vector \emph{M}. If not a matrix, the function tries to cast the object to a \eqn{T\times M} matrix. Useful for Hidden Markov Regression Model (also known as Markov-switching regressions).}
+
+\item{u}{An optional numeric matrix with the covariates for the transition model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the transition covariate vector \emph{P}. If not a matrix, the function tries to cast the object to a \eqn{T\times P} matrix. Useful for Hidden Markov Models with time-varying transition probabilities.}
+
+\item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
 
 \item{nSimulations}{An optional integer with the number of simulations. It defaults to 500 time series.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 }
 \description{
 Simulate data from the prior predictive density.

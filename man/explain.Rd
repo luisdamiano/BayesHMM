@@ -4,7 +4,8 @@
 \alias{explain}
 \title{Create an user-friendly text describing the model.}
 \usage{
-explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRUE)
+explain(spec, observation = TRUE, initial = TRUE, transition = TRUE,
+  print = TRUE)
 }
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}

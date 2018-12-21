@@ -46,7 +46,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   if (is.null(nCores)) { nCores <- parallel::detectCores() / 2 }
   cl <- parallel::makeCluster(nCores, outfile = "")
   doParallel::registerDoParallel(cl)
-  `%dopar%` <- foreach:::`%dopar%`
+  `%dopar%` <- foreach::`%dopar%`
   l <- foreach::foreach(n = 1:N, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, , ]  # Chain 1
     paramTrue  <- paramSim[n, ]   # paramSim[n, , ]

@@ -4,21 +4,34 @@
 \alias{optimizing}
 \title{Fit a model by MAP}
 \usage{
-optimizing(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL, nRuns = 1, keep = "best", nCores = 1, writeDir = tempdir(), ...)
+optimizing(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
+  nRuns = 1, keep = "best", nCores = 1, writeDir = tempdir(), ...)
 }
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{optimizing}}.}
+\item{stanModel}{An optional instance of S4 class stanmodel returned by \code{\link{compile}}. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.}
+
+\item{y}{A numeric matrix with the observation sample. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the observation vector \emph{R}. If not a matrix, the function tries to cast the object to a \eqn{T\times R} matrix.}
+
+\item{x}{An optional numeric matrix with the covariates for the observation model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the covariate vector \emph{M}. If not a matrix, the function tries to cast the object to a \eqn{T\times M} matrix. Useful for Hidden Markov Regression Model (also known as Markov-switching regressions).}
+
+\item{u}{An optional numeric matrix with the covariates for the transition model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the transition covariate vector \emph{P}. If not a matrix, the function tries to cast the object to a \eqn{T\times P} matrix. Useful for Hidden Markov Models with time-varying transition probabilities.}
+
+\item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
 
 \item{nRuns}{An optional integer with the number of initializations.}
 
 \item{keep}{An optional string specifying whether the function should return the converging instance with the maximum posterior log density (\emph{best}) or all the instances (\emph{all}). The latter may be useful for debugging. It defaults to \emph{best}.}
 
 \item{nCores}{An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.}
+
+\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{optimizing}}.}
 }
 \value{
-An \emph{Optimization} object if \emph{keep} is set to \emph{best}), or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
+An \emph{Optimization} object if \emph{keep} is set to \emph{best}, or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
 }
 \description{
 This function computes a maximum a posteriori estimate by running one or more instances of a numerical optimization procedure to maximize the joint posterior density. If no seed is given, one is automatically generated and stored as an attribute in the returned object. An error is printed if no convergence was achieved after all the runs.

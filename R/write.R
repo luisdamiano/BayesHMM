@@ -51,7 +51,7 @@ write_parameters <- function(spec, writeDir) {
   write_stanfile(
     c(
       densityApply(spec$observation$density, fixedParameters),
-      densityCollect(mySpec$transition$density, fixedParameters)#,
+      densityCollect(spec$transition$density, fixedParameters)#,
       # densityApply(spec$initial$density, fixedParameters),
       # densityApply(spec$transition$density, fixedParameters)
       # pseudo-code to have fixed parameters in the transition:
@@ -67,19 +67,15 @@ write_parameters <- function(spec, writeDir) {
     c(
       densityApply(spec$observation$density, freeParameters),
       if (is.TVInitial(spec)) {
-        # freeParameters(spec$initial$density[[1]])
         densityCollect(spec$initial$density, freeParameters)
       } else {
         ""
       },
       if (is.TVTransition(spec)) {
-        # freeParameters(spec$transition$density[[1]])
         densityCollect(spec$transition$density, freeParameters)
       } else {
         ""
       }
-      # densityApply(spec$initial$density, freeParameters),
-      # densityApply(spec$transition$density, freeParameters)
     ),
     writeDir,
     "freeParameters.stan"
@@ -154,33 +150,6 @@ write_priors <- function(spec, writeDir) {
       densityApply(paramList, prior)
     }
   }
-
-  # initPriors  <- densityApply(
-  #   spec$initial$density,
-  #   getFreeParameterPriors
-  # )
-
-  # initPriors <-
-    # if (all(!densityApply(spec$initial$density, is.link))) {
-    #   densityApply(spec$initial$density, prior)
-    # } else {
-    #   ""
-    # }
-
-  # tranPriors <-
-  #   if (all(!densityApply(spec$transition$density, is.link))) {
-  #     densityApply(spec$transition$density, prior)
-  #   } else {
-  #     ""
-  #   }
-    # densityApply(spec$transition$density, prior)
-
-  # tranPriors  <- densityApply(
-  #   spec$transition$density,
-  #   getFreeParameterPriors
-  # )
-  #
-  #
 
   initPriors <- densityApply(spec$init_prob$density, prior)
   tranPriors <- densityApply(spec$transition$density, prior)

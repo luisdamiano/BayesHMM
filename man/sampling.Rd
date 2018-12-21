@@ -4,12 +4,11 @@
 \alias{sampling}
 \title{Draw samples from a specification.}
 \usage{
-function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL, writeDir = tempdir(), ...)
+sampling(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
+  writeDir = tempdir(), ...)
 }
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
-
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 
 \item{stanModel}{An optional instance of S4 class stanmodel returned by \code{\link{compile}}. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.}
 
@@ -22,6 +21,8 @@ function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL, writeDir = tem
 \item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
 
 \item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 }
 \value{
 An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.

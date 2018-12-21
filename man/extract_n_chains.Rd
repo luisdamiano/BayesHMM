@@ -7,10 +7,10 @@
 extract_n_chains(stanfit)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}}.}
+\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{sampling}}.}
 }
 \value{
-The number of chains used (M) to fit the model.
+The number of chains (M) used to fit the model.
 }
 \description{
 Extract the number of chains (M).

@@ -1,4 +1,3 @@
-
 # Math & data types -------------------------------------------------------
 
 check_psd <- function(x) {
@@ -192,19 +191,6 @@ make_trunc <- function(x, name) {
 
 make_rsubindex <- function(x) {
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
-  # string <-
-  #   if (is.multivariate(x)) {
-  #     if (x$multivariate) # multivariate density - multivariate parameter
-  #       ""
-  #     else                # multivariate density - univariate parameter
-  #       stop("Cannot specify a multivariate density for a univariate parameter. See ?spec for more information.")
-  #   } else {
-  #     if (x$multivariate) # univariatete density - multivariate parameter
-  #       "%s"
-  #     else                # univariatete density - univariate parameter
-  #       "[%s]"
-  #   }
-  # sprintf(string, x$r)
 }
 
 make_parameters <- function(density, string, stringNot = "",
@@ -278,11 +264,21 @@ is.empty <- function(x) {
   is.null(x) | length(x) == 0
 }
 
+findGeneric <- function(fname, envir) {
+  f <- function(pkg, name) {
+    pkg <- as.character(substitute(pkg))
+    name <- as.character(substitute(name))
+    get(name, envir = asNamespace(pkg), inherits = FALSE)
+  }
+
+  f("utils", "findGeneric")
+}
+
 funinvarName <- function(x) {
   if (is.function(x)) {
     x <- deparse(substitute(x))
   }
-  utils:::findGeneric(x, parent.frame())
+  findGeneric(x, parent.frame())
 }
 
 get_dim <- function(x) {

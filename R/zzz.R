@@ -3,7 +3,13 @@
 #' @keywords internal
 #' @name zzz
 #' @importClassesFrom rstan stanfit
+#' @import utils
 NULL
+
+# Hack to avoid R CMD check
+# You may find what functions are affected by the hack simply by
+# uncommenting the following line and running R CMD check.
+utils::globalVariables(c("n"))
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(

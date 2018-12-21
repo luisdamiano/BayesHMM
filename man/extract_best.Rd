@@ -4,7 +4,7 @@
 \alias{extract_best}
 \title{Return the optimization object for the run with the hightest posterior log density.}
 \usage{
-extract_best(x, ...)
+extract_best(stanoptimList)
 }
 \arguments{
 \item{stanoptimList}{An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.}

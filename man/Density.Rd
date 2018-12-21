@@ -9,14 +9,16 @@ likelihood function for an observation model.}
 Density(name, ...)
 }
 \arguments{
-\item{name}{TO BE DOCUMENTED}
+\item{name}{A character vector with the name of the density.}
 
-\item{...}{TO BE DOCUMENTED}
+\item{...}{Other arguments for the density.}
 }
 \value{
-TO BE DOCUMENTED
+A Density object.
 }
 \description{
-Description
+Create a representation of a probability mass or density function. It can be
+used to specify either a prior distribution for a model parameter or a
+likelihood function for an observation model.
 }
 \concept{Density}

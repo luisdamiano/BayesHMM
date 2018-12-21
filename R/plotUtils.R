@@ -6,7 +6,7 @@ col2rgb_alpha <- function(bgCol, alpha = 1) {
   }
 
   apply(
-    col2rgb(bgCol, alpha = FALSE),
+    grDevices::col2rgb(bgCol, alpha = FALSE),
     2,
     function(tidx) {
       rgb(tidx[1], tidx[2], tidx[3], alpha = alpha, maxColorValue = 255)

@@ -9,6 +9,8 @@ run(spec, data = NULL, writeDir = tempdir(), ...)
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
+\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
 }
 \value{

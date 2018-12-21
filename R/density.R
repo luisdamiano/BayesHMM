@@ -18,20 +18,15 @@ is.link            <- function(x) { UseMethod("is.link", x) }
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
-
 #' Create a representation of a probability mass or density function. It can be
 #' used to specify either a prior distribution for a model parameter or a
 #' likelihood function for an observation model.
 #'
-#' Description
+#' @param name A character vector with the name of the density.
+#' @param ...  Other arguments for the density.
 #'
-#' @param name TO BE DOCUMENTED
-#' @param ...  TO BE DOCUMENTED
-#'
-#' @return TO BE DOCUMENTED
-#' @export
+#' @return A Density object.
 #' @family Density
-#' @examples
 Density <- function(name, ...) {
   # Evaluate nested expressions (Densities)
   dots <- list(...)[[1]]
@@ -275,6 +270,15 @@ link.Density <- function(x) { "" }
 is.TVInitial.Density <- function(x) { FALSE }
 is.TVTransition.Density <- function(x) { FALSE }
 
+#' Append two Density objects.
+#'
+#' @aliases +
+#' @usage x + y
+#' @param x A Density object (e.g. \code{\link{Gaussian}})
+#' @param y A Density object (e.g. \code{\link{Gaussian}})
+#' @return A DensityList object.
+#' @export
+#' @examples Gaussian() + Gaussian()
 `+.Density` <- function(x, y = NULL) {
   if (!is.null(y) & !is.Density(y)) {
     stop("Error: Please use the plus sign to join two Density object")

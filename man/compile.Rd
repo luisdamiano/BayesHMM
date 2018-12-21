@@ -9,11 +9,11 @@ compile(spec, priorPredictive = FALSE, writeDir = tempdir(), ...)
 \arguments{
 \item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.}
-
 \item{priorPredictive}{An optional logical stating whether the log-likelihood should be excluded from the program. If TRUE, the returned object can only be used to draw samples from the prior predictive density. If FALSE, the returned object can only be used to draw samples from the posterior predictive density. It defaults to FALSE.}
 
 \item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.}
 }
 \value{
 An instance of S4 class stanmodel.

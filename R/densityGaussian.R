@@ -1,3 +1,23 @@
+#' Gaussian Density (univariate, continuous)
+#'
+#' @inherit Density
+#' @param mu Either a density with a prior for the location parameter or a fixed value.
+#' @param sigma Either a density with a prior for the scale parameter or a fixed value.
+#' @param bounds (optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.
+#' @param trunc (optional) A list with two elements specifying the lower and upper bound for the domain of the density function. Use either a fixed value for a finite bound or NULL for no truncation. It defaults to an unbounded domain.
+#' @param k (optional) The number of the hidden state for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
+#' @param r (optional) The dimension of the observation vector dimension for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
+#' @param param (optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
+#'
+#' @family Density
+#' @export
+#'
+#' @example
+#' # As a Density for the observed variable
+#' Gaussian(
+#'   mu    = Gaussian(mu = 0, sigma = 10),
+#'   sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
+#' )
 Gaussian <- function(mu = NULL, sigma = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
   Density(

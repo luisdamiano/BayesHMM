@@ -1,3 +1,4 @@
+# Useful functions for other tests ----------------------------------------
 error_in_function <- function(f) {
   tryCatch({
     f()
@@ -16,13 +17,14 @@ error_in_write_model <- function(spec) {
   error_in_function(f)
 }
 
+# Test suite --------------------------------------------------------------
 if (require("RUnit", quietly = TRUE)) {
   packageName <- utils::packageDescription("BayesHMM")$Package
   require(packageName, quietly = TRUE, character.only = TRUE) ||
     stop("Package '", packageName, "' not found.")
 
-  # Setup
-  filePattern     <- "^test.*\\.R$"
+  # Set up test suit
+  filePattern     <- "^test_*\\.R$"
   functionPattern <- "^test_+"
   fileDir <- system.file(
     "tests",

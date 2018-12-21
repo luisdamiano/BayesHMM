@@ -19,8 +19,6 @@ explain(mySpec)
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
 print_fit(myFit)
-# ^ will add seeds, running time, fixed parameters, n chains, etc.
-# Add * in parameters with problems in MCMC diags (ex. rhat > 1.1)
 
 # Hard-classify observations based on filtered, smoothed, and Viterbi
 classify_alpha(myFit)

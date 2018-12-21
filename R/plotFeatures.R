@@ -1,3 +1,9 @@
+#' @importFrom grDevices col2rgb dev.off n2mfrow rgb
+#' @importFrom graphics abline axis boxplot hist legend lines par plot points polygon rect segments title
+#' @importFrom stats density ks.test median quantile
+#' @importFrom utils browseURL glob2rx head tail
+NULL
+
 add_colored_lines <- function(x, y, col, ...) {
   segments(
     x0  = head(x, -1), # First T-1 obs
@@ -19,6 +25,38 @@ add_fan <- function(x, upper, lower, bgCol, lineCol, ...) {
 
   lines(x, lower, col = lineCol)
   lines(x, upper, col = lineCol)
+}
+
+add_legend_overlay <- function(...) {
+  opar <- par(
+    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
+  )
+  plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+  legend(...)
+  par(opar)
+}
+
+add_shade <- function(x, bgCol, ...) {
+  theme <- getOption("BayesHMM.theme")
+
+  rect(
+    xleft   = head(x, -1),
+    ybottom = get_ybottom(),
+    xright  = tail(x, -1),
+    ytop    = get_ytop(),
+    col     = col2rgb_alpha(bgCol, theme$shadeAlpha),
+    border  = NA,
+    ...
+  )
+}
+
+add_title_overlay <- function(...) {
+  opar <- par(
+    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
+  )
+  plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+  title(...)
+  par(opar)
 }
 
 add_features <- function(x, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL,
@@ -52,42 +90,10 @@ add_features <- function(x, y = NULL, z = NULL, p = NULL, pInt = NULL, k = NULL,
   }
 
   if ("bottomColoredMarks" %in% features) {
-    points(x, rep(par()$usr[3], length(y)), pch = "|", bg = zCol, col = zCol)
+    points(x, rep(par()$usr[3], length(x)), pch = "|", bg = zCol, col = zCol)
   }
 
   if ("topColoredMarks" %in% features) {
-    points(x, rep(par()$usr[4], length(y)), pch = "|", bg = zCol, col = zCol)
+    points(x, rep(par()$usr[4], length(x)), pch = "|", bg = zCol, col = zCol)
   }
-}
-
-add_legend_overlay <- function(...) {
-  opar <- par(
-    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
-  )
-  plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-  legend(...)
-  par(opar)
-}
-
-add_shade <- function(x, bgCol, ...) {
-  theme <- getOption("BayesHMM.theme")
-
-  rect(
-    xleft   = head(x, -1),
-    ybottom = get_ybottom(),
-    xright  = tail(x, -1),
-    ytop    = get_ytop(),
-    col     = col2rgb_alpha(bgCol, theme$shadeAlpha),
-    border  = NA,
-    ...
-  )
-}
-
-add_title_overlay <- function(...) {
-  opar <- par(
-    fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE
-  )
-  plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-  title(...)
-  par(opar)
 }
