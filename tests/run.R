@@ -1,20 +1,27 @@
-# Useful functions for other tests ----------------------------------------
-error_in_function <- function(f) {
-  tryCatch({
-    f()
-    TRUE
-  }, error = function(e) {
-    FALSE
-  })
-}
+#' Checks if there is no error in a model specification
+#' @param string A character vector with a specification.
+#' @return TRUE is the string is a valid specification, FALSE if the string cannot be parsed or cannot be translated into a valid Stan model.
+no_error_in_spec <- function(string) {
+  spec <-
+    tryCatch({
+      eval(parse(text = string))
+    }, error = function(error) {
+      # Early stop if the string cannot be parsed.
+      return(RUnit::checkTrue(FALSE, sprintf(
+        "The model string cannot be parsed: %s.", error$message
+      )))
+    })
 
-error_in_write_model <- function(spec) {
-  f <- function() {
-    write_model(spec, noLogLike = FALSE, writeDir = tempdir())
-    write_model(spec, noLogLike = TRUE , writeDir = tempdir())
-  }
+    tryCatch({
+      write_model(spec, noLogLike = FALSE, writeDir = tempdir())
+      write_model(spec, noLogLike = TRUE , writeDir = tempdir())
+    }, error = function(error) {
+      return(RUnit::checkTrue(FALSE, sprintf(
+        "The model cannot be translated to Stan: %s.", error$message
+      )))
+    })
 
-  error_in_function(f)
+  invisible()
 }
 
 # Test suite --------------------------------------------------------------
@@ -24,7 +31,7 @@ if (require("RUnit", quietly = TRUE)) {
     stop("Package '", packageName, "' not found.")
 
   # Set up test suit
-  filePattern     <- "^test_*\\.R$"
+  filePattern     <- "^test.*\\.R$"
   functionPattern <- "^test_+"
   fileDir <- system.file(
     "tests",

@@ -15,4 +15,4 @@ myFit <- sim(mySpec, chains = 1, iter = 500, seed = 9000)
 
 plot(extract_ypred(myFit, permuted = FALSE)[1, 1, ], type = "l")
 
-print_all(myFit)
+print_fit(myFit)

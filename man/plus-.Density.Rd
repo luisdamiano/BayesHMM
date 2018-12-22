@@ -3,7 +3,7 @@
 \name{+.Density}
 \alias{+.Density}
 \alias{+}
-\title{Appends two Density objects.}
+\title{Append two Density objects.}
 \usage{
 x + y
 }
@@ -16,8 +16,8 @@ x + y
 A DensityList object.
 }
 \description{
-Appends two Density objects.
+Append two Density objects.
 }
 \examples{
-Gaussian() + Gaussian()
+Gaussian(0, 1) + Gaussian(0, 1)
 }

@@ -159,7 +159,9 @@ densityCollect <- function(X, FUN, ..., simplify = TRUE) {
 }
 
 make_names <- function(s) {
-  substr(gsub('[^a-zA-Z1-9]', '', make.names(s)), 1, 48)
+  if (s == "")
+    s <- strftime(Sys.time(), "%F %T")
+  substr(gsub('[^a-zA-Z0-9]', '', make.names(s)), 1, 48)
 }
 
 make_limit  <- function(x, name, limit, strLU, strL, strU) {
@@ -298,12 +300,30 @@ prank <- function(x, y, ...) {
   as.numeric(rank(c(x, y), ...)[1] / (length(y) + 1))
 }
 
+#' Return a function that computes the posterior intervals.
+#'
+#' @param ... Arguments to be passed to \code{\link{quantile}}.
+#'
+#' @return A scalar with same type as `x`.
+#' @export
+#'
+#' @examples
+#' f <- posterior_intervals(probs = c(0.05, 0.95))
+#' print(f(1:100))
 posterior_intervals <- function(...) {
   function(x) {
     quantile(x, ...)
   }
 }
 
+#' Return the posterior mode of a vector
+#'
+#' @param x A vector
+#'
+#' @return A scalar with same type as `x`.
+#' @export
+#'
+#' @examples posterior_mode(sample(1:3, 20, replace = TRUE))
 posterior_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]

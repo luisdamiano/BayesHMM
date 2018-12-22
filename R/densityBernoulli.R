@@ -1,9 +1,22 @@
+#' Bernoulli mass (univariate, discrete, binary space)
+#'
+#' @inherit Density
+#' @param theta Either a fixed value or a prior density for the success proportion parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Bernoulli(0.5)
+#'
+#' # With priors for the parameters
+#' Bernoulli(
+#'   Beta(1, 1)
+#' )
 Bernoulli <- function(theta = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "Bernoulli",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("Bernoulli", bounds, trunc, k, r, param, theta = theta)
 }
 
 freeParameters.Bernoulli <- function(x) {

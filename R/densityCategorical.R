@@ -1,9 +1,27 @@
+#' Categorical mass (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param theta Either a fixed value or a prior density for the success proportion vector parameter.
+#' @param N     An integer with the number of trials (fixed quantity).
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Categorical(
+#'   theta = c(0.2, 0.4, 0.1, 0.3),
+#'   N = 4
+#' )
+#'
+#' # With priors for the parameters
+#' Categorical(
+#'   theta = Dirichlet(alpha = c(1, 1, 1, 1)),
+#'   N = 4
+#' )
 Categorical <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "Categorical",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("Categorical", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 constants.Categorical <- function(x) {
@@ -37,8 +55,9 @@ fixedParameters.Categorical <- function(x) {
       }
 
       sprintf(
-        "simplex[N] theta%s%s = %s;",
-        x$k, x$r, x$theta
+        # "real<lower = 0, upper = 1> theta%s%s = %s;",
+        "simplex[N] theta%s%s = %s';",
+        x$k, x$r, vector_to_stan(x$theta)
       )
     }
 

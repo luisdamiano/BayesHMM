@@ -1,9 +1,24 @@
+#' Cauchy density (univariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param mu    Either a fixed value or a prior density for the location parameter.
+#' @param sigma AEither a fixed value or a prior density for the shape parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Cauchy(0, 1)
+#'
+#' # With priors for the parameters
+#' Cauchy(
+#'   mu    = Cauchy(mu = 0, sigma = 10),
+#'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL))
+#' )
 Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
                    trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
-    "Cauchy",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("Cauchy", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 freeParameters.Cauchy <- function(x) {

@@ -19,6 +19,7 @@
 #' @param ksControl Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".
 #' @param main An optional string with the overall title for the plot.
 #' @export
+#' @exportMethod plot_ppredictive
 #' @note If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
 #' @family visualization functions
 #' @examples
@@ -34,6 +35,8 @@ setGeneric(
     }
 )
 
+#' @rdname plot_ppredictive
+#' @aliases plot_ppredictive,stanfit-method
 plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL, chain = 1,
                              fun = NULL, fun1 = NULL, fun2 = NULL,
                              boxplotControl = NULL, cumulativeControl = NULL, densityControl = NULL,

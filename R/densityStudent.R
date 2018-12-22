@@ -1,10 +1,27 @@
+#' Student density (univariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param mu    Either a fixed value or a prior density for the location parameter.
+#' @param sigma Either a fixed value or a prior density for the shape parameter.
+#' @param nu    Either a fixed value or a prior density for the degree-of-freedom parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Student(0, 1, 1)
+#'
+#' # With priors for the parameters
+#' Student(
+#'   mu    = 0,
+#'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
+#'   nu    = Gamma(2, 0.1)
+#' )
 Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
                     bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                     k = NULL, r = NULL, param = NULL) {
-  Density(
-    "Student",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("Student", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 freeParameters.Student <- function(x) {

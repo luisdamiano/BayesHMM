@@ -1,9 +1,23 @@
+#' Binomial mass (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param theta Either a fixed value or a prior density for the success proportion parameter.
+#' @param N     An integer with the number of trials (fixed quantity).
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Binomial(0.5, 10)
+#'
+#' # With priors for the parameters
+#' Binomial(
+#'   Beta(1, 1), 10
+#' )
 Binomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "Binomial",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("Binomial", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 constants.Binomial <- function(x) {

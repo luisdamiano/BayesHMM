@@ -95,7 +95,7 @@ table(real = dataset$z, viterbi = classify_zstar(myBest))
 
 table(real = dataset$z, filtered = classify_alpha(myBest))
 
-plot_obs(myBest)
+plot_series(myBest)
 
 plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
 

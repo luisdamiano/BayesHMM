@@ -2,9 +2,17 @@
 % Please edit documentation in R/plotPredictive.R
 \name{plot_ppredictive}
 \alias{plot_ppredictive}
+\alias{plot_ppredictive.stanfit}
+\alias{plot_ppredictive,stanfit-method}
 \title{Plot samples drawn from the posterior predictive density.}
 \usage{
 plot_ppredictive(stanfit, type = "", r = NULL, subset = NULL,
+  chain = 1, fun = NULL, fun1 = NULL, fun2 = NULL,
+  boxplotControl = NULL, cumulativeControl = NULL,
+  densityControl = NULL, funControl = NULL, fun1Control = NULL,
+  fun2Control = NULL, ksControl = NULL, main = NULL)
+
+plot_ppredictive.stanfit(stanfit, type = "", r = NULL, subset = NULL,
   chain = 1, fun = NULL, fun1 = NULL, fun2 = NULL,
   boxplotControl = NULL, cumulativeControl = NULL,
   densityControl = NULL, funControl = NULL, fun1Control = NULL,

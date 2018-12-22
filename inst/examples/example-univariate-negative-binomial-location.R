@@ -23,9 +23,9 @@ y = as.matrix(
 
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-plot_obs(myFit)
+plot_series(myFit)
 
-print_all(myFit)
+print_fit(myFit)
 
 # rbind(
 #   sort(c(pars[1]/pars[2], pars[3]/pars[4], pars[5]/pars[6])),

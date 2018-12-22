@@ -39,16 +39,6 @@ link.TransitionFixed <- function(x) {
     "A[t, i] = %s[i]';",
     matrix_to_stan(x$A)
   )
-
-  # sprintf(
-  #   "matrix[K, K] tmp = %s; A[t, i] = tmp[i]';",
-  #   matrix_to_stan(x$A)
-  # )
-
-  # sprintf(
-  #   "matrix[K, K] A = %s;",
-  #   matrix_to_stan(x$A)
-  # )
 }
 
 prior.TransitionFixed <- function(x) {

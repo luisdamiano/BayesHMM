@@ -1,9 +1,23 @@
+#' Negative Binomial mass in the mean value parametrization (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param mu  Either a fixed value or a prior density for the mean parameter.
+#' @param phi Either a fixed value or a prior density for the dispersion parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' NegativeBinomialLocation(0.5, 1, 10)
+#'
+#' # With priors for the parameters
+#' NegativeBinomialLocation(
+#'   Beta(0, 1), Exponential(1), 10
+#' )
 NegativeBinomialLocation <- function(mu = NULL, phi = NULL, bounds = list(NULL, NULL),
                                      trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "NegativeBinomialLocation",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("NegativeBinomialLocation", bounds, trunc, k, r, param, mu = mu, phi = phi)
 }
 
 freeParameters.NegativeBinomialLocation <- function(x) {
@@ -54,7 +68,7 @@ fixedParameters.NegativeBinomialLocation <- function(x) {
       }
 
       sprintf(
-        "real NegativeBinomialLocation%s%s = %s;",
+        "real phi%s%s = %s;",
         x$k, x$r, x$phi
       )
     }

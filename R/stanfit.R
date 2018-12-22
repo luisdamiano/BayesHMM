@@ -3,10 +3,12 @@
 #'
 #' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
 #' @return The number of chains (M) used to fit the model.
-#' @export
+#' @exportMethod extract_n_chains
 #' @examples
 setGeneric("extract_n_chains", function(stanfit) {standardGeneric("extract_n_chains")} )
 
+#' @rdname extract_n_chains
+#' @aliases extract_n_chains,stanfit-method
 setMethod("extract_n_chains", "stanfit", function(stanfit) {
   stanfit@sim$chains
 })

@@ -1,9 +1,27 @@
+#' Multivariate Gaussian density (Multivariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param mu    Either a fixed value or a prior density for the mean vector.
+#' @param sigma Either a fixed value or a prior density for the covariance matrix.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' MVGaussian(
+#'   mu    = c(0, 0),
+#'   sigma = matrix(c(1, 0, 0, 1), 2, 2)
+#' )
+#'
+#' # With priors for the parameters
+#' MVGaussian(
+#'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
+#'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
+#' )
 MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
                        trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity(
-    "MVGaussian",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  MultivariateDensity("MVGaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 freeParameters.MVGaussian <- function(x) {

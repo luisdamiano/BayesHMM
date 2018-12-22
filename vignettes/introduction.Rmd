@@ -856,7 +856,7 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 ```
 
 ```{r}
-# print_all(myFit)
+# print_fit(myFit)
 ```
 
 # Acknowledgements

@@ -1,9 +1,23 @@
+#' Negative Binomial mass (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param alpha Either a fixed value or a prior density for the first shape parameter.
+#' @param beta  Either a fixed value or a prior density for the second shape parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' NegativeBinomial(1, 2, 10)
+#'
+#' # With priors for the parameters
+#' NegativeBinomial(
+#'   Exponential(1), Exponential(1), 10
+#' )
 NegativeBinomial <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
                              trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "NegativeBinomial",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("NegativeBinomial", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 freeParameters.NegativeBinomial <- function(x) {
@@ -54,7 +68,7 @@ fixedParameters.NegativeBinomial <- function(x) {
       }
 
       sprintf(
-        "real NegativeBinomial%s%s = %s;",
+        "real beta%s%s = %s;",
         x$k, x$r, x$beta
       )
     }

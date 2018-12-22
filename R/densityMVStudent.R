@@ -1,9 +1,30 @@
+#' Multivariate Student density (Multivariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param mu    Either a fixed value or a prior density for the mean vector.
+#' @param sigma Either a fixed value or a prior density for the covariance matrix.
+#' @param nu    Either a fixed value or a prior density for the degree-of-freedom scalar parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' MVStudent(
+#'   mu    = c(0, 0),
+#'   sigma = matrix(c(1, 0, 0, 1), 2, 2),
+#'   nu    = 2
+#' )
+#'
+#' # With priors for the parameters
+#' MVStudent(
+#'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
+#'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2)),
+#'   nu    = Gamma(2, 0.1)
+#' )
 MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, NULL),
-                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity(
-    "MVStudent",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
+  MultivariateDensity("MVStudent", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 freeParameters.MVStudent <- function(x) {
@@ -31,8 +52,8 @@ freeParameters.MVStudent <- function(x) {
     if (is.Density(x$nu)) {
       nuBoundsStr <- make_bounds(x, "nu")
       sprintf(
-        "real%s nu%s;",
-        nuBoundsStr, x$k
+        "real%s nu%s[1];", # Since the distribution is MV, we write all the parameters in matrix form.
+        nuBoundsStr, x$k   # nu, a scalar, thus become a row vector.
       )
     } else {
       ""
@@ -79,8 +100,10 @@ fixedParameters.MVStudent <- function(x) {
       }
 
       sprintf(
-        "real nu%s = %s;",
-        x$k, x$r, x$nu
+        # If you wonder why we cast nu to float and make it a 1-d array,
+        # see comment in freeParameters.MVStudent
+        "real nu%s[1] = {%s};",
+        x$k, sprintf("%f", x$nu)
       )
     }
 
@@ -88,8 +111,9 @@ fixedParameters.MVStudent <- function(x) {
 }
 
 generated.MVStudent <- function(x) {
+  # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
-    "if(zpred[t] == %s) ypred[t] = multi_student_t_rng(nu%s, mu%s, sigma%s)';",
+    "if(zpred[t] == %s) ypred[t] = multi_student_t_rng(nu%s[1], mu%s, sigma%s)';",
     x$k, x$k, x$k, x$k
   )
 }
@@ -99,8 +123,9 @@ getParameterNames.MVStudent <- function(x) {
 }
 
 logLike.MVStudent <- function(x) {
+  # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
-    "loglike[%s][t] = multi_student_t_lpdf(y[t] | nu%s, mu%s, sigma%s);",
+    "loglike[%s][t] = multi_student_t_lpdf(y[t] | nu%s[1], mu%s, sigma%s);",
     x$k, x$k, x$k, x$k
   )
 }

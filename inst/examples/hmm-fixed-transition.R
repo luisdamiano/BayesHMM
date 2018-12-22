@@ -29,7 +29,7 @@ myModel <- compile(mySpec)
 myOptim <- optimizing(mySpec, stanModel = myModel, y = y, nRuns = 20, nCores = 4, keep = "all")
 myBest  <- extract_best(myOptim)
 
-plot_obs(myBest)
+plot_series(myBest)
 
 print_obs(myBest)
 

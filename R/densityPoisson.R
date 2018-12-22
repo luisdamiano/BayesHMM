@@ -1,9 +1,20 @@
+#' Poisson mass (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param lambda Either a fixed value or a prior density for the rate parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Poisson(5)
+#'
+#' # With priors for the parameters
+#' Poisson(Gamma(1, 1))
 Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "Poisson",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  DiscreteDensity("Poisson", bounds, trunc, k, r, param, lambda = lambda)
 }
 
 freeParameters.Poisson <- function(x) {

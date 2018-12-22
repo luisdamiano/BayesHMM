@@ -23,25 +23,34 @@ is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 #' likelihood function for an observation model.
 #'
 #' @param name A character vector with the name of the density.
+#' @param bounds (optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.
+#' @param trunc (optional) A list with two elements specifying the lower and upper bound for the domain of the density function. Use either a fixed value for a finite bound or NULL for no truncation. It defaults to an unbounded domain.
+#' @param k (optional) The number of the hidden state for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
+#' @param r (optional) The dimension of the observation vector dimension for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
+#' @param param (optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
 #' @param ...  Other arguments for the density.
 #'
 #' @return A Density object.
 #' @family Density
-Density <- function(name, ...) {
+#' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
+Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
+                    k = NULL, r = NULL, param = NULL, ...) {
   # Evaluate nested expressions (Densities)
-  dots <- list(...)[[1]]
+  dots <- list(...)
   for (i in seq_along(dots)) {
     if (is.language(dots[[i]])) {
       dots[[i]] <- eval(dots[[i]])
     }
   }
 
-  # Check for generic parameters
-  check_list(dots[["bounds"]], 2, "bounds")
-  check_list(dots[["trunc"]], 2, "trunc")
+  densityParams <- c(dots, list(bounds = bounds, trunc = trunc, k = k, r = r, param = param))
+
+  # # Check for generic parameters
+  # check_list(dots[["bounds"]], 2, "bounds")
+  # check_list(dots[["trunc"]], 2, "trunc")
 
   structure(
-    c(list(name = name), dots),
+    c(list(name = name), densityParams),
     class = c(name, "Density")
   )
 }
@@ -278,7 +287,7 @@ is.TVTransition.Density <- function(x) { FALSE }
 #' @param y A Density object (e.g. \code{\link{Gaussian}})
 #' @return A DensityList object.
 #' @export
-#' @examples Gaussian() + Gaussian()
+#' @examples Gaussian(0, 1) + Gaussian(0, 1)
 `+.Density` <- function(x, y = NULL) {
   if (!is.null(y) & !is.Density(y)) {
     stop("Error: Please use the plus sign to join two Density object")

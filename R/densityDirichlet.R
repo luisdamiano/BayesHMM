@@ -1,9 +1,20 @@
+#' Dirichlet density (multivariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param alpha Either a fixed value or a prior density for the vector parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Dirichlet(alpha = c(0.5, 0.5, 0.5))
+#'
+#' # With priors for the parameters
+#' Dirichlet(alpha = Beta(1, 1))
 Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
                       trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity(
-    "Dirichlet",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  MultivariateDensity("Dirichlet", bounds, trunc, k, r, param, alpha = alpha)
 }
 
 freeParameters.Dirichlet <- function(x) {

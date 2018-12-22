@@ -12,7 +12,8 @@ browse_model(fit, ...)
 ## S3 method for signature 'Optimization'
 browse_model(fit, ...)
 
-\S4method{browse_model}{stanfit}(fit, ...)
+## S4 method for signature 'stanfit'
+browse_model(fit, ...)
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}

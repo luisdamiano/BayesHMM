@@ -20,10 +20,10 @@ myOpt   <- optimizing(mySpec, myModel, y = y, nRun = 20, keep = "all", nCores = 
 
 myBest  <- extract_best(myOpt)
 
-plot_obs(myBest)
+plot_series(myBest)
 
 print_obs(myBest)
 
-plot_obs(myFit)
+plot_series(myFit)
 
-print_all(myFit)
+print_fit(myFit)

@@ -14,7 +14,7 @@
 #' @section Model specification:
 #' A Hidden Markov Model may be seen as three submodels that jointly specify the dinamics of the observed random variable. To specify the observation, initial distribution, and transition models, we designed S3 objects called \code{\link{Density}} that define density form, parameter priors, and fixed values for parameters. These are flexible enough to include bounds in the parameter space as well as truncation in prior densities.
 #'
-#' Internally, a \code{\link{Specification}} object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
+#' Internally, a Specification object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
 #'
 #' \strong{Univariate observation model} (i.e. \emph{R} = 1):
 #' \enumerate{
@@ -199,7 +199,7 @@
 #' @family models
 #' @examples
 specify <- function(K, R, observation = NULL, initial = NULL,
-                 transition = NULL, name = "") {
+                    transition = NULL, name = "") {
   check_natural(K, "K")
   check_natural(R, "R")
 
@@ -654,7 +654,7 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 #' @inheritParams sampling
 #' @param T An optional integer with the length of the time series. It defaults to 1000 observations.
 #' @param nSimulations An optional integer with the number of simulations. It defaults to 500 time series.
-#' @return
+#' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
 #' @export
 #' @examples
 sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,

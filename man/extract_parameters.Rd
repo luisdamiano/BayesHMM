@@ -15,6 +15,8 @@ extract_parameters(fit, observation = TRUE, initial = TRUE,
 \item{initial}{A boolean indicating whether the initial model parameters should be returned.}
 
 \item{transition}{A boolean indicating whether the transition model parameters should be returned.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{sampling}}.}
 }
 \value{
 A named list with as many elements as model parameters. Each element is a numeric array with dimensions [N, M, ...]: number of iterations \emph{N}, number of chains \emph{M}, and one or more dimensions related to the characteristics of the parameter. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a numeric array with dimensions [N, ...]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, ...]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, ...].

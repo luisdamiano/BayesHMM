@@ -15,8 +15,8 @@ y <- as.matrix(
 
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 
-plot_obs(myFit)
+plot_series(myFit)
 
-print_all(myFit)
+print_fit(myFit)
 
 myVal <- validate_calibration(mySpec, N = 5, T = 300)

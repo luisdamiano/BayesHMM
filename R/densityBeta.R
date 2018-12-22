@@ -1,9 +1,23 @@
+#' Beta density (univariate, continuous, bounded space)
+#'
+#' @inherit Density
+#' @param alpha Either a fixed value or a prior density for the first shape parameter.
+#' @param beta  Either a fixed value or a prior density for the second shape parameter.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With fixed values for the parameters
+#' Beta(1, 1)
+#'
+#' # With priors for the parameters
+#' Beta(
+#'   alpha = Exponential(1), beta = Exponential(1)
+#' )
 Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
-    "Beta",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("Beta", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 freeParameters.Beta <- function(x) {
@@ -77,5 +91,13 @@ logLike.Beta <- function(x) {
 }
 
 prior.Beta <- function(x) {
-  sprintf("%s%s%s ~ beta(%s, %s);", x$param, x$k, x$r, x$alpha, x$beta)
+  truncStr <- make_trunc(x, "")
+  rStr     <- make_rsubindex(x)
+  sprintf(
+    "%s%s%s ~ beta(%s, %s) %s;",
+    x$param,
+    x$k, rStr,
+    x$alpha, x$beta,
+    truncStr
+  )
 }

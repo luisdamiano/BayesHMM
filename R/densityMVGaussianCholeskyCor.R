@@ -1,12 +1,24 @@
-MVGaussianCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL),
-                          trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity(
-    "MVGaussianCor",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+#' Multivariate Gaussian density with Cholesky decomposition of the correlation matrix (Multivariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param mu    Either a fixed value or a prior density for the mean vector.
+#' @param L     Either a fixed value or a prior density for the Cholesky factor of the correlation matrix.
+#'
+#' @family Density
+#' @export
+#'
+#' @examples
+#' # With priors for the parameters
+#' MVGaussianCholeskyCor(
+#'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
+#'   L     = CholeskyLKJCor(1)
+#' )
+MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL),
+                                  trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
+  MultivariateDensity("MVGaussianCholeskyCor", bounds, trunc, k, r, param, mu = mu, L = L)
 }
 
-freeParameters.MVGaussianCor <- function(x) {
+freeParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
       sprintf(
@@ -30,7 +42,7 @@ freeParameters.MVGaussianCor <- function(x) {
   collapse(muStr, LStr)
 }
 
-fixedParameters.MVGaussianCor <- function(x) {
+fixedParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
       ""
@@ -62,24 +74,24 @@ fixedParameters.MVGaussianCor <- function(x) {
   collapse(muStr, LStr)
 }
 
-generated.MVGaussianCor <- function(x) {
+generated.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = multi_normal_cholesky_rng(mu%s, L%s)';",
     x$k, x$k, x$k
   )
 }
 
-getParameterNames.MVGaussianCor <- function(x) {
+getParameterNames.MVGaussianCholeskyCor <- function(x) {
   return(c("mu", "L"))
 }
 
-logLike.MVGaussianCor <- function(x) {
+logLike.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "loglike[%s][t] = multi_normal_cholesky_lpdf(y[t] | mu%s, L%s);",
     x$k, x$k, x$k
   )
 }
 
-prior.MVGaussianCor <- function(x) {
+prior.MVGaussianCholeskyCor <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
