@@ -1,3 +1,8 @@
+# Internal functions to write a specification into Stan code --------------
+# This file contains internal functions that write a specification into
+# Stan code.
+# We regret to say that these functions are currently undocumented :(.
+
 # Stan code blocks
 block_functions   <- function(x) { UseMethod("block_functions", x) }
 block_data        <- function(x, ...) { UseMethod("block_data", x) }

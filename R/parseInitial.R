@@ -1,3 +1,8 @@
+# Internal functions to parse the initial distribution model --------------
+# This file contains all the internal functions that translate the
+# initial model portion of the specification list into Stan code.
+# We regret to say that these functions are currently undocumented :(.
+
 # Take 1 density in and repeat K times
 parse_initial_build_K <- function(initial, K, R) {
   initList <- list()

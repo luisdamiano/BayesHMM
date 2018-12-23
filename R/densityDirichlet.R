@@ -17,28 +17,34 @@ Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
   MultivariateDensity("Dirichlet", bounds, trunc, k, r, param, alpha = alpha)
 }
 
+#' @export
 freeParameters.Dirichlet <- function(x) {
   ""
   # stop("TO BE IMPLEMENTED.")
 }
 
+#' @export
 fixedParameters.Dirichlet <- function(x) {
   ""
   # stop("TO BE IMPLEMENTED.")
 }
 
+#' @export
 generated.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
+#' @export
 getParameterNames.Dirichlet <- function(x) {
   return(c("alpha"))
 }
 
+#' @export
 logLike.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
+#' @export
 prior.Dirichlet <- function(x) {
   sprintf("%s%s%s ~ dirichlet(%s);", x$param, x$k, x$r,
           sprintf("[%s]'", paste(eval(x$alpha), collapse = ", ")))

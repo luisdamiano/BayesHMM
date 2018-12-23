@@ -3,7 +3,6 @@
 #' @keywords internal
 #' @name zzz
 #' @importClassesFrom rstan stanfit
-#' @import utils
 NULL
 
 # Hack to avoid R CMD check
@@ -27,8 +26,11 @@ utils::globalVariables(c("n"))
   # suppressPackageStartupMessages(library(rstan))
   rstan::rstan_options(auto_write = TRUE)
   options(mc.cores = parallel::detectCores())
+
+  # Create a global option with the current theme
+  load_theme()
 }
 
 .onLoad <- function(libname, pkgname) {
-  load_theme()
+
 }

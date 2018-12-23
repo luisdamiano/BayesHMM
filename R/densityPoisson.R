@@ -11,7 +11,7 @@
 #' Poisson(5)
 #'
 #' # With priors for the parameters
-#' Poisson(Gamma(1, 1))
+#' Poisson(GammaDensity(1, 1))
 Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
   DiscreteDensity("Poisson", bounds, trunc, k, r, param, lambda = lambda)

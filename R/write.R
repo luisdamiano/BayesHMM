@@ -1,3 +1,8 @@
+# Internal functions to write a specification into Stan code --------------
+# This file contains internal functions that write a specification into
+# Stan code.
+# We regret to say that these functions are currently undocumented :(.
+
 write_stanfile <- function(code, dir, filename, ...) {
   write(
     collapse(code, ...),

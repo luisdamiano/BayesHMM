@@ -10,7 +10,7 @@ is.stanoptim(x)
 \item{x}{An object.}
 }
 \value{
-TRUE if it is an object created by \code{\link{optimizing}}.
+TRUE if it is an object created by \code{\link{optimizing}}, FALSE otherwise.
 }
 \description{
 Verify that the object was created by \code{\link{optimizing}}.

@@ -1,3 +1,8 @@
+# Internal functions for plots --------------------------------------------
+# This file contains all the internal utility functions for many of the
+# plots available in these package. We regret to say that these functions
+# are currently undocumented :(.
+
 col2rgb_alpha <- function(bgCol, alpha = 1) {
   if (alpha >= 0 && alpha <= 1) {
     alpha <- alpha * 255

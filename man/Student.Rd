@@ -39,7 +39,7 @@ Student(0, 1, 1)
 Student(
   mu    = 0,
   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
-  nu    = Gamma(2, 0.1)
+  nu    = GammaDensity(2, 0.1)
 )
 }
 \seealso{
@@ -48,7 +48,7 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
   \code{\link{Default}}, \code{\link{Density}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
-  \code{\link{Gamma}}, \code{\link{Gaussian}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
   \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},

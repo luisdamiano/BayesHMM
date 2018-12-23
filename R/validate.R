@@ -51,7 +51,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
     y          <- ySim[n, 1, , ]  # Chain 1
     paramTrue  <- paramSim[n, ]   # paramSim[n, , ]
     myFit      <- do.call(
-      sampling.Specification,     # sampling
+      sampling              ,     # sampling
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 
@@ -76,7 +76,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   )
 }
 
-# Undocumented internal methods
+# Undocumented internal methods -------------------------------------------
 
 validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
   d       <- get_diagnose_parameters(stanfit, trueParameters, pars)

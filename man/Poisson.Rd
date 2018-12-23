@@ -31,7 +31,7 @@ Poisson mass (univariate, discrete, bounded space)
 Poisson(5)
 
 # With priors for the parameters
-Poisson(Gamma(1, 1))
+Poisson(GammaDensity(1, 1))
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
@@ -39,7 +39,7 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
   \code{\link{Default}}, \code{\link{Density}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
-  \code{\link{Gamma}}, \code{\link{Gaussian}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
   \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},

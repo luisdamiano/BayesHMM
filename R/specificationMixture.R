@@ -12,7 +12,7 @@ mixture <- function(K, R, observation = NULL, initial = NULL,
   x
 }
 
-# Undocumented internal methods
+# Undocumented internal methods -------------------------------------------
 
 block_data.MixtureSpecification <- function(spec) {
   "

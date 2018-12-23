@@ -63,6 +63,11 @@ sort_chain <- function(stanfit, reference, K) {
   tmp
 }
 
+#' Sorts the samples from a stanfit object.
+#'
+#' It's very experimental stuff to fix label switching - BEWARE
+#' @keywords internals
+#' @export
 stan_sort_chain <- function(stanfit, reference, K) {
   newSample <- sort_chain(stanfit, reference, K)
   newFit    <- stanfit

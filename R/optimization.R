@@ -30,8 +30,7 @@ extract_grid.Optimization <- function(stanoptim, pars = NULL) {
 #'
 #' @keywords internal
 #' @param x An object.
-#' @return TRUE if it is an object created by \code{\link{optimizing}}.
-#' @examples
+#' @return TRUE if it is an object created by \code{\link{optimizing}}, FALSE otherwise.
 is.stanoptim <- function(x) {
   is.list(x) & all(c("par", "value", "return_code") %in% names(x))
 }

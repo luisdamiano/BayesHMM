@@ -1,4 +1,4 @@
-#' Gamma density (univariate, continuous, bounded space)
+#' GammaDensity density (univariate, continuous, bounded space)
 #'
 #' @inherit Density
 #' @param alpha Either a fixed value or a prior density for the shape parameter.
@@ -9,18 +9,18 @@
 #'
 #' @examples
 #' # With fixed values for the parameters
-#' Gamma(1, 1)
+#' GammaDensity(1, 1)
 #'
 #' # With priors for the parameters
-#' Gamma(
+#' GammaDensity(
 #'   alpha = Exponential(1), beta = Exponential(1)
 #' )
-Gamma <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
+GammaDensity <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Gamma", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  Density("GammaDensity", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
-freeParameters.Gamma <- function(x) {
+freeParameters.GammaDensity <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
       alphaBoundsStr <- make_bounds(x, "alpha")
@@ -46,7 +46,7 @@ freeParameters.Gamma <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
-fixedParameters.Gamma <- function(x) {
+fixedParameters.GammaDensity <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
       ""
@@ -78,19 +78,19 @@ fixedParameters.Gamma <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
-generated.Gamma <- function(x) {
+generated.GammaDensity <- function(x) {
   sprintf("if(zpred[t] == %s) ypred[t][%s] = gamma_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
-getParameterNames.Gamma <- function(x) {
+getParameterNames.GammaDensity <- function(x) {
   return(c("alpha", "beta"))
 }
 
-logLike.Gamma <- function(x) {
+logLike.GammaDensity <- function(x) {
   sprintf("loglike[%s][t] = gamma_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
-prior.Gamma <- function(x) {
+prior.GammaDensity <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)
   sprintf(

@@ -1,3 +1,8 @@
+# Internal functions to add features to plot ------------------------------
+# This file contains all the internal functions for the features an user
+# may add to many of the plots available in these package. We regret to
+# say that these functions are currently undocumented :(.
+
 #' @importFrom grDevices col2rgb dev.off n2mfrow rgb
 #' @importFrom graphics abline axis boxplot hist legend lines par plot points polygon rect segments title
 #' @importFrom stats density ks.test median quantile

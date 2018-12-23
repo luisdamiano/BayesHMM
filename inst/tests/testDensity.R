@@ -91,9 +91,9 @@ test_density.txt_22 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observat
 
 test_density.txt_23 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observation = MVStudent(mu = MVGaussian(mu = c(0, 
     0), sigma = matrix(c(100, 0, 0, 100), 2, 2)), sigma = InverseWishart(nu = 5, 
-    sigma = matrix(c(1, 0, 0, 1), 2, 2)), nu = Gamma(2, 0.1)), 
-    initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
-        0.5, 0.5)))") } 
+    sigma = matrix(c(1, 0, 0, 1), 2, 2)), nu = GammaDensity(2, 
+    0.1)), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
+    0.5, 0.5)))") } 
 
 test_density.txt_24 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomial(alpha = 1, beta = 2), 
     initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
@@ -107,16 +107,16 @@ test_density.txt_26 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observat
     phi = 2), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), 
     transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
 
-test_density.txt_27 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomialLocation(mu = Gamma(1, 
-    1), phi = Gamma(1, 1)), initial = Dirichlet(alpha = c(0.5, 
+test_density.txt_27 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomialLocation(mu = GammaDensity(1, 
+    1), phi = GammaDensity(1, 1)), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
 
 test_density.txt_28 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Poisson(5), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
 
-test_density.txt_29 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Poisson(lambda = Gamma(1, 1)), 
-    initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
-        0.5, 0.5)))") } 
+test_density.txt_29 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Poisson(lambda = GammaDensity(1, 
+    1)), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
+    0.5, 0.5)))") } 
 
 test_density.txt_30 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Student(mu = 0, sigma = 1, nu = 1), 
     initial = Dirichlet(alpha = c(0.1, 0.5, 1)), transition = Dirichlet(alpha = c(0.1, 

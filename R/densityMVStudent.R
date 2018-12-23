@@ -20,7 +20,7 @@
 #' MVStudent(
 #'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2)),
-#'   nu    = Gamma(2, 0.1)
+#'   nu    = GammaDensity(2, 0.1)
 #' )
 MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {

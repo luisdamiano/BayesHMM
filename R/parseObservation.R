@@ -1,3 +1,8 @@
+# Internal functions to parse the observation model -----------------------
+# This file contains all the internal functions that translate the
+# observation model portion of the specification list into Stan code.
+# We regret to say that these functions are currently undocumented :(.
+
 parse_observation_build_priors <- function(observation, K, R) {
   # We're sure to get a KxR list here.
   # i.e. obsList[[k]][[r]] is always valid

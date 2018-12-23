@@ -1,3 +1,7 @@
+# Internal utility functions with general purpose -------------------------
+# This file contains internal utility functions.
+# We regret to say that these functions are currently undocumented :(.
+
 # Math & data types -------------------------------------------------------
 
 check_psd <- function(x) {
@@ -132,6 +136,34 @@ check_list <- function(x, len, name = deparse(substitute(x))) {
     stop(sprintf("%s must be a list with %s elements.", name, len))
 
   TRUE
+}
+
+
+# Text printouts ----------------------------------------------------------
+
+make_text_line <- function() {
+  theme      <- getOption("BayesHMM.print")
+  char       <- theme$char
+  textWidth  <- theme$textWidth
+  paste(rep(char, textWidth), collapse = "")
+}
+
+make_text_header <- function(text) {
+  textLine   <- make_text_line()
+
+  sprintf(
+    "%-80s\n%s\n",
+    toupper(text), textLine
+  )
+}
+
+make_text_subheader <- function(text) {
+  textLine   <- make_text_line()
+
+  sprintf(
+    "%s\n%s\n",
+    textLine, text
+  )
 }
 
 # Parser and writer -------------------------------------------------------
@@ -334,6 +366,33 @@ posterior_mode <- function(x) {
 toproper <- function(string) {
   # Credits to Matthew Plourde https://stackoverflow.com/a/24957143/2860744
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(string), perl = TRUE)
+}
+
+get_time_info    <- function() {
+  t <- Sys.time()
+  sprintf("Printed on %s at %s.", format(t, "%Y-%m-%d"), format(t, "%T"))
+}
+
+#' @importFrom utils sessionInfo
+get_session_info <- function() {
+  session     <- utils::sessionInfo()
+  strPlatform <- sprintf("%s %s", session$running, session$platform)
+  strR        <- session$R.version$version.string
+
+  sprintf("%s\n%s", strPlatform, strR)
+}
+
+#' @importFrom utils sessionInfo
+get_other_packages_info <- function() {
+  # Based on utils:::print.sessionInfo
+  make_label <- function(L, n) {
+    pkg  <- sapply(L[[n]], function(x) x[["Package"]])
+    vers <- sapply(L[[n]], function(x) x[["Version"]])
+    paste(pkg, vers, sep = " ")
+  }
+
+  session     <- utils::sessionInfo()
+  paste(make_label(session, "otherPkgs"), collapse = ", ")
 }
 
 get_package_info <- function() {

@@ -223,55 +223,14 @@ specify <- function(K, R, observation = NULL, initial = NULL,
     )
   )
 
-  spec <- structure(l, class = "Specification")
-
-  # check(spec)
-
-  spec
-}
-
-#' Verify that the object is a valid specification. TO BE IMPLEMENTED.
-#'
-#' This function verifies that the structure of the object is valid. Useful to spot inconsistencies in the specification. \strong{TO BE IMPLEMENTED}.
-#' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
-#' @return A logical value with TRUE if the object is a valid specification or FALSE otherwise.
-#' @export
-#' @examples
-check             <- function(spec) { UseMethod("check", spec) }
-
-check.Specification <- function(spec) {
-  stop("TO BE IMPLEMENTED.")
-
-  # Check if R and the observation tree are consistent
-  if (spec$observation$R == 1 & is.multivariate(spec)) {
-    stop("Inconsistent specification: although R was set to 1, a multivariate density was given.")
-  }
-
-  # if (spec$observation$R != 1 & !is.multivariate(spec)) {
-  #   stop(
-  #     sprintf(
-  #       "Inconsistent specification: although R is set to %s, a univariate density was given.",
-  #       spec$observation$R
-  #     )
-  #   )
-  # }
-
-  # Check if univariate and mulvariate densities are mixed
-  dens <- densityApply(spec$observation$density, is.multivariate)
-  if (length(unique(dens)) != 1) {
-    stop("Inconsistent specification: univariate and multivariate densities for the observation model cannot be mixed.")
-  }
-
-  # Check if fixed parameters are well specified
-  invisible(
-    densityApply(spec$observation$density, fixedParameters)
-  )
+  structure(l, class = "Specification")
 }
 
 #' Create an user-friendly text describing the model.
 #'
 #' The function creates a user-friendly text describing any of the three elements of the model. It includes the hidden states, variables, densities, bounds, priors, and fixed parameters. It also records environment details for easier reproducibility (package version, R version, time, OS).
 #'
+#' @usage explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRUE)
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @param observation An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.
 #' @param initial An optional logical indicating whether the initial distribution model should be included in the description. It defaults to TRUE.
@@ -279,13 +238,25 @@ check.Specification <- function(spec) {
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character string with the model description.
 #' @export
-#'
 #' @examples
-explain           <- function(spec, observation = TRUE, initial = TRUE,
-                              transition = TRUE, print = TRUE) {
+#' explain(
+#'   hmm(
+#'     K = 3, R = 1,
+#'     observation = Gaussian(
+#'       mu    = Gaussian(0, 10),
+#'       sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
+#'     ),
+#'     initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+#'     transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+#'     name = "Univariate Gaussian Hidden Markov Model"
+#'   )
+#' )
+explain               <- function(spec, observation = TRUE, initial = TRUE,
+                                  transition = TRUE, print = TRUE) {
   UseMethod("explain", spec)
 }
 
+#' @export
 explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
                                   transition = TRUE, print = TRUE) {
   strHeader      <- make_text_header(spec$name)
@@ -297,15 +268,16 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
     get_package_info()
   )
 
-  out <- gsub(
+  strOut <- gsub(
     "\\t",
     get_print_settings()$tab,
     collapse(strHeader, strObservation, strInitial, strTransition, strFooter)
   )
 
-  if (print) { cat(out) }
+  if (print)
+      cat(strOut)
 
-  invisible(out)
+  invisible(strOut)
 }
 
 #' Create an outline of the observation model.
@@ -318,6 +290,7 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
 #' @examples
 explain_observation <- function(spec) { UseMethod("explain_observation", spec) }
 
+#' @export
 explain_observation.Specification <- function(spec) {
   R <- spec$observation$R
 
@@ -328,7 +301,7 @@ explain_observation.Specification <- function(spec) {
       R, "Variable names"
     )
 
-  l <- densityApply(spec$observation$density, explain)
+  l <- densityApply(spec$observation$density, explain_density)
 
   block2 <-
     if (all(sapply(l, identical, l[[1]]))) {
@@ -357,8 +330,9 @@ explain_observation.Specification <- function(spec) {
 #' @examples
 explain_initial     <- function(spec) { UseMethod("explain_initial", spec) }
 
+#' @export
 explain_initial.Specification <- function(spec) {
-  l <- densityApply(spec$initial$density, explain)
+  l <- densityApply(spec$initial$density, explain_density)
 
   block1 <-
     if (all(sapply(l, identical, l[[1]]))) {
@@ -386,8 +360,9 @@ explain_initial.Specification <- function(spec) {
 #' @examples
 explain_transition  <- function(spec) { UseMethod("explain_transition", spec) }
 
+#' @export
 explain_transition.Specification <- function(spec) {
-  l <- densityApply(spec$transition$density, explain)
+  l <- densityApply(spec$transition$density, explain_density)
 
   block1 <-
     if (all(sapply(l, identical, l[[1]]))) {
@@ -422,6 +397,7 @@ compile           <- function(spec, priorPredictive = FALSE,
   UseMethod("compile", spec)
 }
 
+#' @export
 compile.Specification <- function(spec, priorPredictive = FALSE,
                                   writeDir = tempdir(), ...) {
 
@@ -463,8 +439,9 @@ sampling          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
   UseMethod("sampling", spec)
 }
 
-sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
-                                   writeDir = tempdir(), ...) {
+#' @export
+sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+                                   v = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
     stanModel <- compile(spec, priorPredictive = FALSE, writeDir)
@@ -481,6 +458,10 @@ sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL
   return(stanSampling)
 }
 
+setClass("Specification")
+setGeneric("sampling")
+setMethod("sampling", "Specification", sampling.Specification)
+
 #' Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
 #'
 #' @inherit sampling
@@ -491,6 +472,7 @@ run               <- function(spec, data = NULL, writeDir = tempdir(), ...) {
   UseMethod("run", spec)
 }
 
+#' @export
 run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
   stanData <- data
@@ -523,6 +505,7 @@ fit               <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   UseMethod("fit", spec)
 }
 
+#' @export
 fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   run(spec, data = make_data(spec, y, x, u, v), ...)
 }
@@ -548,6 +531,7 @@ optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
   UseMethod("optimizing", spec)
 }
 
+#' @export
 optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
                                      nRuns = 1, keep = "best", nCores = 1,
                                      writeDir = tempdir(), ...) {
@@ -662,6 +646,7 @@ sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,
   UseMethod("sim", spec)
 }
 
+#' @export
 sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
   dots <- list(...)
   dots[["spec"]] <- spec

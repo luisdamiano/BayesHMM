@@ -1,6 +1,61 @@
-summary <- function(myFit) {
+#' Prints the result of the model in a human friendly format.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
+#' @param posteriorInterval An optional numeric vector with the quantilies of the posterior marginal distributions.
+#' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
+#' @param observation An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.
+#' @param initial An optional logical indicating whether the initial distribution model should be included in the description. It defaults to TRUE.
+#' @param transition An optional logical indicating whether the transition model should be included in the description. It defaults to TRUE.
+#' @param fixed An optional logical indicating whether the fixed parameters should be included in the description. It defaults to TRUE.
+#' @param print An optional logical indicating whether the description should be printing out.
+#' @return A character string with the model description.
+#' @export
+#' @examples
+print_fit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
+                      observation = TRUE, initial = TRUE, transition = TRUE, fixed = TRUE, print = TRUE) {
+  spec           <- extract_spec(stanfit)
+  strHeader      <- make_text_header(spec$name)
+  strObservation <- if (observation) {
+    cat(explain_observation(spec))
+    print_observation(stanfit)
+    cat(make_text_line(), "\n")
+  }
+  strInitial     <- if (initial)     {
+    cat(explain_initial(spec))
+    print_initial(stanfit)
+    cat(make_text_line(), "\n")
+  }
+  strTransition  <- if (transition)  {
+    cat(explain_transition(spec))
+    print_transition(stanfit)
+    cat(make_text_line(), "\n")
+  }
+  strFixed       <- if (fixed) {
+    "Fixed parameters: not implemented yet."
+  }
+  strFooter      <- sprintf(
+    "Notes for reproducibility: \n%s\n%s\n%s\n%s.\n%s.\n",
+    get_time_info(),
+    get_session_info(),
+    get_package_info(),
+    get_rstan_info(),
+    get_other_packages_info()
+  )
 
+  out <- gsub(
+    "\\t",
+    get_print_settings()$tab,
+    collapse(strHeader, strFixed, strObservation, strInitial, strTransition, strFooter)
+  )
+
+  if (print)
+    cat(out)
+
+  invisible(out)
+  # Seeds, rstan, time, etc, fixed parameters
 }
+
+# Internal undocumented print functions -----------------------------------
 
 monitor <- function(stanfit, pars, posteriorInterval) {
   sim <- rstan::extract(stanfit, pars, permuted = FALSE, inc_warmup = FALSE)
@@ -87,51 +142,10 @@ format_fixed_parameters <- function(tree) {
     l <- lapply(names(fixedParam), function(paramName) {
       sprintf(
         "%s = %s",
-        # paramName, paste(fixedParam[[paramName]], collapse = "")
         paramName, format_quantity(fixedParam[[paramName]])
       )
     })
 
     paste(l, sep = "", collapse = ", ")
   }
-}
-
-print_fit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
-                      observation = TRUE, initial = TRUE, transition = TRUE, fixed = TRUE, print = TRUE) {
-  spec           <- extract_spec(stanfit)
-  strHeader      <- make_text_header(spec$name)
-  strObservation <- if (observation) {
-    cat(explain_observation(spec))
-    print_observation(stanfit)
-    cat(make_text_line(), "\n")
-    }
-  strInitial     <- if (initial)     {
-    cat(explain_initial(spec))
-    print_initial(stanfit)
-    cat(make_text_line(), "\n")
-  }
-  strTransition  <- if (transition)  {
-    cat(explain_transition(spec))
-    print_transition(stanfit)
-    cat(make_text_line(), "\n")
-  }
-  # strFixed       <- ""
-    strFooter      <- sprintf(
-      "Note for reproducibility: \n%s.\n%s.\n",
-      get_package_info(),
-      get_rstan_info()
-    )
-
-    cat(strFooter)
-
-  # out <- gsub(
-  #   "\\t",
-  #   get_print_settings()$tab,
-  #   collapse(strHeader, strObservation, strInitial, strTransition, strFooter)
-  # )
-  #
-  # if (print) { cat(out) }
-  #
-  # invisible(out)
-  # Seeds, rstan, time, etc, fixed parameters
 }

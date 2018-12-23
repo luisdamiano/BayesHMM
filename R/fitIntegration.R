@@ -1,3 +1,8 @@
+# Integrate stanfit and stanoptim objects ---------------------------------
+# This file contains all the implementation of those methods that should be
+# available to both stanfit and stanoptim objects. Our goal is to unify
+# these two objects as much as possible for the final user.
+
 # extract_quantity --------------------------------------------------------
 
 #' Extract estimated quantities from fit objects.
@@ -164,7 +169,6 @@ setMethod("extract_time", "stanfit", extract_time.stanfit)
 #' @param fit An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.
 #' @return An integer with the seed used to fit the model.
 #' @export
-#' @examples
 extract_seed     <- function(fit) { UseMethod("extract_seed", fit) }
 
 #' @usage
@@ -226,7 +230,9 @@ classify_quantity <- function(fit, reduce, chain, quantity) {
 #' @inherit classify_quantity
 #' @export
 #' @examples
-classify_alpha   <- function(fit, reduce = mean, chain = "all") { UseMethod("classify_alpha", fit) }
+classify_alpha   <- function(fit, reduce = mean, chain = "all") {
+  UseMethod("classify_alpha", fit)
+}
 
 #' @usage
 #' ## S3 method for signature 'Optimization'

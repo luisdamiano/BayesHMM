@@ -13,8 +13,8 @@ no_error_in_spec <- function(string) {
     })
 
     tryCatch({
-      write_model(spec, noLogLike = FALSE, writeDir = tempdir())
-      write_model(spec, noLogLike = TRUE , writeDir = tempdir())
+      BayesHMM:::write_model.Specification(spec, noLogLike = FALSE, writeDir = tempdir())
+      BayesHMM:::write_model.Specification(spec, noLogLike = TRUE , writeDir = tempdir())
     }, error = function(error) {
       return(RUnit::checkTrue(FALSE, sprintf(
         "The model cannot be translated to Stan: %s.", error$message

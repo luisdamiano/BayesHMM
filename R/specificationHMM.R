@@ -11,7 +11,7 @@ hmm <- function(K, R, observation = NULL, initial = NULL,
   x
 }
 
-# Undocumented internal methods
+# Undocumented internal methods -------------------------------------------
 
 block_functions.HMMSpecification <- function(spec) {
   if (is.TVTransition(spec)) {

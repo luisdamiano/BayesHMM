@@ -6,7 +6,9 @@
 #' @param stanoptimList An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.
 #' @export
 #' @examples
-extract_best     <- function(stanoptimList) { UseMethod("extract_best") }
+extract_best <- function(stanoptimList) {
+  UseMethod("extract_best")
+}
 
 #' @keywords internal
 #' @export

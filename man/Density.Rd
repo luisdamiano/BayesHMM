@@ -2,9 +2,10 @@
 % Please edit documentation in R/density.R
 \name{Density}
 \alias{Density}
-\title{Create a representation of a probability mass or density function. It can be
-used to specify either a prior distribution for a model parameter or a
-likelihood function for an observation model.}
+\title{Create a representation of a probability mass or density function for a
+continuous univariate random variable. It can be used to specify either a
+prior distribution for a model parameter or a likelihood function for an
+observation model.}
 \usage{
 Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
   k = NULL, r = NULL, param = NULL, ...)
@@ -28,9 +29,10 @@ Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
 A Density object.
 }
 \description{
-Create a representation of a probability mass or density function. It can be
-used to specify either a prior distribution for a model parameter or a
-likelihood function for an observation model.
+Create a representation of a probability mass or density function for a
+continuous univariate random variable. It can be used to specify either a
+prior distribution for a model parameter or a likelihood function for an
+observation model.
 }
 \note{
 The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
@@ -40,7 +42,7 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{Binomial}}, \code{\link{Categorical}},
   \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
   \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{Gamma}},
+  \code{\link{Exponential}}, \code{\link{GammaDensity}},
   \code{\link{Gaussian}}, \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},

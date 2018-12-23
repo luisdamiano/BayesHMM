@@ -16,7 +16,7 @@
 #' Student(
 #'   mu    = 0,
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
-#'   nu    = Gamma(2, 0.1)
+#'   nu    = GammaDensity(2, 0.1)
 #' )
 Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
                     bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
@@ -24,6 +24,7 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
   Density("Student", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
+#' @export
 freeParameters.Student <- function(x) {
   muStr <- if (is.Density(x$mu)) {
     muBoundsStr <- make_bounds(x, "mu")
@@ -58,6 +59,7 @@ freeParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @export
 fixedParameters.Student <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -104,6 +106,7 @@ fixedParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @export
 generated.Student <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);",
@@ -114,10 +117,12 @@ generated.Student <- function(x) {
   )
 }
 
+#' @export
 getParameterNames.Student <- function(x) {
   return(c("mu", "sigma", "nu"))
 }
 
+#' @export
 logLike.Student <- function(x) {
   sprintf(
     "loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
@@ -128,6 +133,7 @@ logLike.Student <- function(x) {
   )
 }
 
+#' @export
 prior.Student <- function(x) {
   truncStr    <- make_trunc(x, "")
   # rStr        <- sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)

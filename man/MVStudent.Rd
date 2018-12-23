@@ -43,7 +43,7 @@ MVStudent(
 MVStudent(
   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2)),
-  nu    = Gamma(2, 0.1)
+  nu    = GammaDensity(2, 0.1)
 )
 }
 \seealso{
@@ -52,7 +52,7 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
   \code{\link{Default}}, \code{\link{Density}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
-  \code{\link{Gamma}}, \code{\link{Gaussian}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
   \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{Multinomial}},

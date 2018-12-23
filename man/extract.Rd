@@ -32,6 +32,7 @@ Other extract: \code{\link{extract_K}},
   \code{\link{extract_parameters}},
   \code{\link{extract_spec}}, \code{\link{extract_ypred}},
   \code{\link{extract_ysim}}, \code{\link{extract_y}},
-  \code{\link{extract_zpred}}, \code{\link{extract_zstar}}
+  \code{\link{extract_zpred}}, \code{\link{extract_zsim}},
+  \code{\link{extract_zstar}}
 }
 \concept{extract}

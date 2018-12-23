@@ -1,3 +1,8 @@
+# Internal functions to parse the transition model ------------------------
+# This file contains all the internal functions that translate the
+# transition model portion of the specification list into Stan code.
+# We regret to say that these functions are currently undocumented :(.
+
 # Take 1 density in and repeat K x R times
 parse_transition_build_KxK <- function(transition, K, R) {
   transList <- list()
