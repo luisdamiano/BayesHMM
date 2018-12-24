@@ -7,10 +7,12 @@
 extract_best(stanoptimList)
 }
 \arguments{
-\item{stanoptimList}{An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.}
+\item{stanoptimList}{An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.
+#'}
 }
 \value{
 A named matrix with one row for each time the optimization procedure was run. Columns include the seed, the estimated log posterior evaluated at the maximum, the code returned by the optimization algorithm, the time elapsed (user, system and total) in seconds, and the estimated value of the parameters selected in
+#'
 }
 \description{
 It doesn't do anything fancy but it's a neat quality-of-life feature :).

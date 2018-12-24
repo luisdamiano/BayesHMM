@@ -11,6 +11,7 @@ posterior_intervals(...)
 }
 \value{
 A scalar with same type as `x`.
+#'
 }
 \description{
 Return a function that computes the posterior intervals.

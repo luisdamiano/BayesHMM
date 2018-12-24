@@ -1,6 +1,6 @@
 #' Prints the result of the model in a human friendly format.
 #'
-#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @param posteriorInterval An optional numeric vector with the quantilies of the posterior marginal distributions.
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @param observation An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.
@@ -9,9 +9,9 @@
 #' @param fixed An optional logical indicating whether the fixed parameters should be included in the description. It defaults to TRUE.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character string with the model description.
-#' @export
+#' #'
 #' @examples
-print_fit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
+print.stanfit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
                       observation = TRUE, initial = TRUE, transition = TRUE, fixed = TRUE, print = TRUE) {
   spec           <- extract_spec(stanfit)
   strHeader      <- make_text_header(spec$name)
@@ -54,6 +54,13 @@ print_fit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.9
   invisible(out)
   # Seeds, rstan, time, etc, fixed parameters
 }
+
+# Overwrite stanfit's show method
+# I know this may be controversial but sorry rstan =/
+setMethod("show", "stanfit",
+          function(object) {
+            print.stanfit(stanfit = object)
+          })
 
 # Internal undocumented print functions -----------------------------------
 

@@ -10,7 +10,9 @@ LinkDensity(name, ...)
 \arguments{
 \item{name}{A character vector with the name of the density.}
 
-\item{...}{Other arguments for the density.}
+\item{...}{Other arguments for the density.
+
+#'}
 }
 \value{
 A Density object.
@@ -18,19 +20,5 @@ A Density object.
 \description{
 Create a representation of a link function that may be used only to specify
 a transition model.
-}
-\seealso{
-Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
-  \code{\link{Binomial}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{GammaDensity}},
-  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
-  \code{\link{MVGaussianCholeskyCor}},
-  \code{\link{MVGaussian}}, \code{\link{MVStudent}},
-  \code{\link{Multinomial}},
-  \code{\link{NegativeBinomialLocation}},
-  \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
-  \code{\link{Student}}, \code{\link{Wishart}}
 }
 \concept{LinkDensity}

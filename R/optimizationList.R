@@ -4,14 +4,14 @@
 #'
 #' @inherit extract_grid
 #' @param stanoptimList An object returned by \code{\link{optimizing}} when called with `nRuns` greater than one and `keep = "all"`.
-#' @export
+#' #'
 #' @examples
 extract_best <- function(stanoptimList) {
   UseMethod("extract_best")
 }
 
 #' @keywords internal
-#' @export
+#' #'
 extract_best.OptimizationList <- function(stanoptimList) {
   ind       <- extract_grid(stanoptimList, pars = "none")[1, "n"]
   stanoptim <- stanoptimList[[ind]]
@@ -29,7 +29,7 @@ extract_best.OptimizationList <- function(stanoptimList) {
 
 #' @keywords internal
 #' @describeIn extract_grid For OptimizationList objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{all}.
-#' @export
+#' #'
 #' @examples
 extract_grid.OptimizationList <- function(stanoptim, pars = NULL) {
   mat <- do.call(

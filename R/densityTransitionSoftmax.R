@@ -6,7 +6,7 @@ TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
   )
 }
 
-explain.TransitionSoftmax <- function(x) {
+explain_density.TransitionSoftmax <- function(x) {
   collapse(
     "Time-varying probabilities driven by covariates via softmax mapping.",
     NextMethod()

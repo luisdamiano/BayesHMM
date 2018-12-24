@@ -22,6 +22,7 @@ mixture(K, R, observation = NULL, initial = NULL, transition = NULL,
 }
 \value{
 An specification object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
+#'
 }
 \description{
 Note: not exported as it needs to be tested.

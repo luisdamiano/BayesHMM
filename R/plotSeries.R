@@ -1,6 +1,6 @@
 #' Plot the observation series along with many other customizable options.
 #'
-#' @param fit An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
 #' @param r An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.
 #' @param features An optional vector of strings with the names of the features to include in the plot. These may be \emph{stateShade} (shaded background), \emph{yColoredLine} (colored observation line), \emph{yColoredDots} (colored observation dots), \emph{bottomColoredMarks} (colored marks on the lower axis), \emph{topColoredMarks} (colored marks on the top axis). All colors are based on the hidden state assigned to each time step using the \emph{stateProbability} quantity. Note that more than one feature may be plotted at the same time. It allows for partial matching. It defaults to none.
 #' @param stateProbability An optional string with the name of the quantity used to classify the observations (either filtered, smoothed, or viterbi). It allows for partial matching. It defaults to the smoothed probability.
@@ -12,7 +12,7 @@
 #' @param addLegend An optional boolean indicating whether a legend should be included.
 #' @param legend.cex A numerical value giving the amount by which plotting legend text and symbols should be magnified relative to the default. It defaults to one.
 #' @param ... Arguments to be passed to the \code{\link{plot}} function.
-#' @export
+#' #'
 #' @family visualization functions
 #' @examples
 plot_series <- function(fit, r = NULL,
@@ -93,7 +93,7 @@ plot_series <- function(fit, r = NULL,
 #' @inherit plot_series
 #' @param features An optional vector of strings with the names of the features to include in the plot. These may be \emph{stateShade} (shaded background), \emph{probabilityColoredLine} (colored probability line), \emph{probabilityColoredDots} (colored probability dots), \emph{probabilityFan} (shaded probability fan for posterior intervals), \emph{bottomColoredMarks} (colored marks on the lower axis), \emph{topColoredMarks} (colored marks on the top axis). All colors are based on the hidden state assigned to each time step using the \emph{stateProbability} quantity. Note that more than one feature may be plotted at the same time. It allows for partial matching. It defaults to none.
 #' @param stateProbabilityInterval An optional function returning the upper and lower bound of the posterior intervals, such as \code{\link{posterior_intervals}}. It defaults to `posterior_intervals(c(0.1, 0.9))`.
-#' @export
+#' #'
 #' @family visualization functions
 #' @examples
 plot_state_probability <- function(fit, stateProbability = "smoothed",

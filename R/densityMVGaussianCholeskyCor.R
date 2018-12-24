@@ -5,7 +5,7 @@
 #' @param L     Either a fixed value or a prior density for the Cholesky factor of the correlation matrix.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With priors for the parameters

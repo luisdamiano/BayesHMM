@@ -14,7 +14,7 @@ y <- as.matrix(
 )
 
 myModel <- compile(mySpec)
-myFit   <- sampling(mySpec, myModel, y = y, chains = 1, iter = 500)
+myFit   <- drawSamples(mySpec, myModel, y = y, chains = 1, iter = 500)
 myOpt   <- optimizing(mySpec, myModel, y = y, nRun = 20, keep = "all", nCores = 4)
 # myFit   <- fit(mySpec, myModel, y = y, chains = 1, iter = 500)
 

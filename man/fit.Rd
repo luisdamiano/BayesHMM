@@ -27,4 +27,5 @@ Fit a model by MCMC
 }
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
+#'
 }

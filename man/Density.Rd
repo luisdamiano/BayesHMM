@@ -23,7 +23,9 @@ Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
 
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 
-\item{...}{Other arguments for the density.}
+\item{...}{Other arguments for the density.
+
+#'}
 }
 \value{
 A Density object.
@@ -36,19 +38,5 @@ observation model.
 }
 \note{
 The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
-}
-\seealso{
-Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
-  \code{\link{Binomial}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{GammaDensity}},
-  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
-  \code{\link{MVGaussianCholeskyCor}},
-  \code{\link{MVGaussian}}, \code{\link{MVStudent}},
-  \code{\link{Multinomial}},
-  \code{\link{NegativeBinomialLocation}},
-  \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
-  \code{\link{Student}}, \code{\link{Wishart}}
 }
 \concept{Density}

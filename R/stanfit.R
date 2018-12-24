@@ -1,9 +1,9 @@
 # extract_n_chains ------------------------------------------------------------
 #' Extract the number of chains (M).
 #'
-#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @return The number of chains (M) used to fit the model.
-#' @exportMethod extract_n_chains
+#' #'Method extract_n_chains
 #' @examples
 setGeneric("extract_n_chains", function(stanfit) {standardGeneric("extract_n_chains")} )
 
@@ -13,11 +13,11 @@ setMethod("extract_n_chains", "stanfit", function(stanfit) {
   stanfit@sim$chains
 })
 
-#' Check if it is an object created by \code{\link{sampling}}.
+#' Check if it is an object created by \code{\link{drawSamples}}.
 #'
 #' @keywords internal
 #' @param x An object.
-#' @return TRUE if it is an object created by \code{\link{sampling}}.
+#' @return TRUE if it is an object created by \code{\link{drawSamples}}.
 #' @examples
 is.stanfit <- function(x) {
   class(x) == "stanfit"

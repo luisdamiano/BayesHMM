@@ -5,7 +5,7 @@
 #' @param phi Either a fixed value or a prior density for the dispersion parameter.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

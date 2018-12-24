@@ -300,12 +300,12 @@ is.empty <- function(x) {
 
 findGeneric <- function(fname, envir) {
   f <- function(pkg, name) {
-    pkg <- as.character(substitute(pkg))
+    pkg  <- as.character(substitute(pkg))
     name <- as.character(substitute(name))
     get(name, envir = asNamespace(pkg), inherits = FALSE)
   }
 
-  f("utils", "findGeneric")
+  f("utils", "findGeneric")(fname, envir)
 }
 
 funinvarName <- function(x) {
@@ -337,7 +337,7 @@ prank <- function(x, y, ...) {
 #' @param ... Arguments to be passed to \code{\link{quantile}}.
 #'
 #' @return A scalar with same type as `x`.
-#' @export
+#' #'
 #'
 #' @examples
 #' f <- posterior_intervals(probs = c(0.05, 0.95))
@@ -353,7 +353,7 @@ posterior_intervals <- function(...) {
 #' @param x A vector
 #'
 #' @return A scalar with same type as `x`.
-#' @export
+#' #'
 #'
 #' @examples posterior_mode(sample(1:3, 20, replace = TRUE))
 posterior_mode <- function(x) {

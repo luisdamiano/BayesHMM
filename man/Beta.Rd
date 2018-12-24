@@ -38,13 +38,13 @@ Beta(
 )
 }
 \seealso{
-Other Density: \code{\link{Bernoulli}},
+Other Density
+#': \code{\link{Bernoulli}},
   \code{\link{Binomial}}, \code{\link{Categorical}},
   \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Density}},
-  \code{\link{Dirichlet}}, \code{\link{Exponential}},
-  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
-  \code{\link{InverseWishart}},
+  \code{\link{Default}}, \code{\link{Dirichlet}},
+  \code{\link{Exponential}}, \code{\link{GammaDensity}},
+  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},
   \code{\link{Multinomial}},
@@ -52,4 +52,5 @@ Other Density: \code{\link{Bernoulli}},
   \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
   \code{\link{Student}}, \code{\link{Wishart}}
 }
-\concept{Density}
+\concept{Density
+#'}

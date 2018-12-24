@@ -22,7 +22,9 @@ Gaussian(mu, sigma, bounds = list(NULL, NULL), trunc = list(NULL,
 
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 
-\item{...}{Other arguments for the density.}
+\item{...}{Other arguments for the density.
+
+#'}
 }
 \value{
 A Density object.
@@ -41,10 +43,11 @@ Gaussian(
 )
 }
 \seealso{
-Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
-  \code{\link{Binomial}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Density}},
+Other Density
+#': \code{\link{Bernoulli}},
+  \code{\link{Beta}}, \code{\link{Binomial}},
+  \code{\link{Categorical}}, \code{\link{Cauchy}},
+  \code{\link{CholeskyLKJCor}}, \code{\link{Default}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
   \code{\link{GammaDensity}}, \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
@@ -54,4 +57,5 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
   \code{\link{Student}}, \code{\link{Wishart}}
 }
-\concept{Density}
+\concept{Density
+#'}

@@ -4,7 +4,7 @@
 #' @param theta Either a fixed value or a prior density for the success proportion parameter.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

@@ -5,7 +5,7 @@
 #' @param N     An integer with the number of trials (fixed quantity).
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

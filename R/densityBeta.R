@@ -5,7 +5,7 @@
 #' @param beta  Either a fixed value or a prior density for the second shape parameter.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

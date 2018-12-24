@@ -14,6 +14,7 @@ x + y
 }
 \value{
 A DensityList object.
+#'
 }
 \description{
 Append two Density objects.

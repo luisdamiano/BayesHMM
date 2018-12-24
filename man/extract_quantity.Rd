@@ -12,12 +12,14 @@ extract_quantity(fit, pars, reduce = NULL, combine = NULL,
 
 ## S3 method for signature 'Optimization'
 extract_quantity(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...)
+#'
 
 ## S4 method for signature 'stanfit'
 extract_quantity(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...)
+#'
 }
 \arguments{
-\item{fit}{An object returned by \code{\link{fit}}, \code{\link{sampling}}, or \code{\link{optimizing}}.}
+\item{fit}{An object returned by \code{\link{fit}}, \code{\link{drawSamples}}, or \code{\link{optimizing}}.}
 
 \item{pars}{A vector of characters with the name of the quantities to be extracted. The characters strings may include regular expressions. Further, wildcards are automatically translated into regex: \emph{?} matches a single character, while \emph{*} matches any string including an empty one. For example, \emph{?pred} will match both ypred and zpred, and \emph{z*} will match zstar and zpred.}
 
@@ -27,13 +29,14 @@ extract_quantity(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...)
 
 \item{chain}{Either "all" or any integer number between 1 and the number of chains M. In the latter case, the chain dimension in the returned object is dropped.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{sampling}}.}
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.}
 }
 \value{
 A list of named elements with type and dimension depending on the characteristics of the quantity. If the argument \emph{combine} is set, the returned value equals to the return value of the function given (e.g. a matrix if \code{\link{cbind}}) is used).
+#'
 }
 \description{
-This function extracts estimated quantities from fit objects. It works transparently with both Markov-chain Monte Carlo samples returned by \code{\link{sampling}} and maximum a posteriori estimates returned by \code{\link{optimizing}}. Most of the user-friendly extractors (e.g. \code{\link{extract_alpha}}) are built upon this function. As such, it was not designed to be used directly by users, except perhaps for the most advanced ones.
+This function extracts estimated quantities from fit objects. It works transparently with both Markov-chain Monte Carlo samples returned by \code{\link{drawSamples}} and maximum a posteriori estimates returned by \code{\link{optimizing}}. Most of the user-friendly extractors (e.g. \code{\link{extract_alpha}}) are built upon this function. As such, it was not designed to be used directly by users, except perhaps for the most advanced ones.
 }
 \details{
 Note that \emph{rstan} does not provide a unified way to extract quantities from full bayesian and optimization fits, and the structure of the returned objects are not homogeneous. \emph{extract_quantity} solves these two inconvenients. Additionally, it allows for regex expressions in the name of the quantities to be extracted.

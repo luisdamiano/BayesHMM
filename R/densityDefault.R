@@ -5,7 +5,7 @@
 #' @inherit Density
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # As a prior

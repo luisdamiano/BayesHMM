@@ -19,5 +19,5 @@ y = rbind(
 )
 
 myModel <- compile(mySpec)
-myFit   <- sampling(mySpec, stanModel = myModel, y = y, chains = 1, iter = 500, seed = 9000)
+myFit   <- drawSamples(mySpec, stanModel = myModel, y = y, chains = 1, iter = 500, seed = 9000)
 print_obs(myFit)

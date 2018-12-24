@@ -18,7 +18,7 @@ explain(mySpec)
 
 myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
 
-print_fit(myFit)
+print(myFit)
 
 # Hard-classify observations based on filtered, smoothed, and Viterbi
 classify_alpha(myFit)

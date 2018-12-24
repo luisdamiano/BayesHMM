@@ -22,9 +22,9 @@
 #' @param x An optional numeric matrix with covariates for Markov-switching regression. It defaults to NULL (no covariates).
 #' @param seed An optional integer with the seed used for the simulations. It defaults to 9000.
 #' @param nCores An optional integer with the number of cores to use to run the protocol in parallel. It defaults to half the number of available cores
-#' @param ... Arguments to be passed to \code{\link{sampling}}.
+#' @param ... Arguments to be passed to \code{\link{drawSamples}}.
 #' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
-#' @export
+#' #'
 #' @examples
 validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCores = NULL, ...) {
   dots <- list(...)
@@ -51,7 +51,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
     y          <- ySim[n, 1, , ]  # Chain 1
     paramTrue  <- paramSim[n, ]   # paramSim[n, , ]
     myFit      <- do.call(
-      sampling              ,     # sampling
+      drawSamples              ,     # drawSamples
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 

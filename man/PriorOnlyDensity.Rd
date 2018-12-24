@@ -11,7 +11,9 @@ PriorOnlyDensity(name, ...)
 \arguments{
 \item{name}{A character vector with the name of the density.}
 
-\item{...}{Other arguments for the density.}
+\item{...}{Other arguments for the density.
+
+#'}
 }
 \value{
 A Density object.

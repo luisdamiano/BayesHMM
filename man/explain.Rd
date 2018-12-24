@@ -19,6 +19,7 @@ explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRU
 }
 \value{
 A character string with the model description.
+#'
 }
 \description{
 The function creates a user-friendly text describing any of the three elements of the model. It includes the hidden states, variables, densities, bounds, priors, and fixed parameters. It also records environment details for easier reproducibility (package version, R version, time, OS).

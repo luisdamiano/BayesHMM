@@ -10,7 +10,7 @@ plot_series(fit, r = NULL, features = NULL,
   addLegend = TRUE, legend.cex = 1, ...)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 
 \item{r}{An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.}
 
@@ -32,7 +32,8 @@ plot_series(fit, r = NULL, features = NULL,
 
 \item{legend.cex}{A numerical value giving the amount by which plotting legend text and symbols should be magnified relative to the default. It defaults to one.}
 
-\item{...}{Arguments to be passed to the \code{\link{plot}} function.}
+\item{...}{Arguments to be passed to the \code{\link{plot}} function.
+#'}
 }
 \description{
 Plot the observation series along with many other customizable options.

@@ -21,5 +21,6 @@ Run a Markov-chain Monte Carlo algorithm to sample from the log posterior densit
 }
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
+#'
 }
 \keyword{internal}

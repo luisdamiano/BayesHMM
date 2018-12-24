@@ -692,7 +692,7 @@ y <- as.matrix(
 )
 y <- sample(y)
 
-myFit <- fit(mySpec, y = y)
+myFit <- fit(mySpec, y = y, iter = 500)
 
 # 3 parameters, 1,000 iterations, 4 chains
 print(
@@ -831,11 +831,12 @@ plot_ppredictive(myFit, type = c("density", "cumulative", "ks"))
 
 Model comparison is an important step in the statistical workflow, and future versions of the software will provide information criterion and other quantities for model selection.
 
+<!--
 # Mixture models
 
 Mixture models may be seen as a simplified version of HMM, where the assignment probabilities do not have a Markovian structure. We provide a simple implementation, and future iterations of our software will include extracting the individual assignment probabilities, and support for visualization and other data analysis procedures specific to mixture models.
 
-```{r, results = "hide"}
+```{r, results = "hide", include = FALSE, eval = FALSE}
 mySpec <- mixture(
   K = 3, R = 1,
   observation = Student(
@@ -859,6 +860,8 @@ myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
 # print_fit(myFit)
 ```
 
+-->
+
 # Acknowledgements
 
 We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/projects/#4681157036212224) for funding.
@@ -868,7 +871,7 @@ We acknowledge [Google Summer of Code 2018](https://summerofcode.withgoogle.com/
 
 We present 19 different possible configurations.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, eval = FALSE}
 # OBSERVATION MODEL -------------------------------------------------------
 
 K = 3
@@ -881,15 +884,15 @@ R = 2
 exCase1  <- hmm(
   K = K, R = R,
   observation =
-    MVGaussianCor(
+    MVGaussianCholeskyCor(
       mu    = Gaussian(mu = 0, sigma = 1),
       L     = LKJCor(eta = 2)
     ) +
-    MVGaussianCor(
+    MVGaussianCholeskyCor(
       mu    = Gaussian(mu = 0, sigma = 10),
       L     = LKJCor(eta = 3)
     ) +
-    MVGaussianCor(
+    MVGaussianCholeskyCor(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = LKJCor(eta = 4)
     ),
@@ -905,7 +908,7 @@ exCase1  <- hmm(
 exCase2  <- hmm(
   K = K, R = R,
   observation =
-    MVGaussianCor(
+    MVGaussianCholeskyCor(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = LKJCor(eta = 2)
     ),

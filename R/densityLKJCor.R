@@ -4,7 +4,7 @@
 #' @param eta   Either a fixed value or a prior density for the shape scalar parameter.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # As a prior for the correlation matrix

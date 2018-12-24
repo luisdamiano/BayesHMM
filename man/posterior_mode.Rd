@@ -11,6 +11,7 @@ posterior_mode(x)
 }
 \value{
 A scalar with same type as `x`.
+#'
 }
 \description{
 Return the posterior mode of a vector

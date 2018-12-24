@@ -5,7 +5,7 @@
 #' @param sigma Either a fixed value or a prior density for the covariance matrix.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

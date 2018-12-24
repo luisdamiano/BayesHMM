@@ -7,7 +7,7 @@
 classify_quantity(fit, reduce, chain, quantity)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 
 \item{reduce}{An optional function applied to the samples corresponding to one time step \emph{t}, one hidden state \emph{k}, and one chain \emph{m}. The observation at time step \emph{t} is then assigned to the hidden state with largest value. Note that the user needs to supply a function as an argument, and not a character string with the name of the function. This argument is not used for maximum a posteriori estimates returned by \code{\link{optimizing}} since there is only one scalar per quantity. It defaults to the \code{\link{mean}} function.}
 
@@ -17,6 +17,7 @@ classify_quantity(fit, reduce, chain, quantity)
 }
 \value{
 A numeric vector with size equal to the time series length \emph{T} with values from 1 to the number of hidden states \emph{K}.
+#'
 }
 \description{
 Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest quantity of interest.

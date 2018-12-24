@@ -8,7 +8,7 @@ select_parameters(fit, observation = TRUE, initial = TRUE,
   transition = TRUE)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 
 \item{observation}{An optional logical scalar indicating whether the names of the observation model parameters should be included. Defaults to TRUE.}
 

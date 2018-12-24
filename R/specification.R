@@ -8,7 +8,7 @@
 #' @param transition One density, or more than one density chained with the `+` operator, describing the transition model. See below and future vignette for detailed explanation.
 #' @param name An optional string with a name for a model.
 #' @return An specification object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
-#' @export
+#' #'
 #' @seealso \code{\link{compile}}, \code{\link{explain}}, \code{\link{fit}}, \code{\link{optimizing}}, \code{\link{sim}}, \code{\link{validate_calibration}}.
 #'
 #' @section Model specification:
@@ -237,7 +237,7 @@ specify <- function(K, R, observation = NULL, initial = NULL,
 #' @param transition An optional logical indicating whether the transition model should be included in the description. It defaults to TRUE.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character string with the model description.
-#' @export
+#' #'
 #' @examples
 #' explain(
 #'   hmm(
@@ -256,7 +256,7 @@ explain               <- function(spec, observation = TRUE, initial = TRUE,
   UseMethod("explain", spec)
 }
 
-#' @export
+#' #'
 explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
                                   transition = TRUE, print = TRUE) {
   strHeader      <- make_text_header(spec$name)
@@ -285,12 +285,12 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the observation model.
 #' @family explain
-#' @export
+#' #'
 #' @keywords internal
 #' @examples
 explain_observation <- function(spec) { UseMethod("explain_observation", spec) }
 
-#' @export
+#' #'
 explain_observation.Specification <- function(spec) {
   R <- spec$observation$R
 
@@ -325,12 +325,12 @@ explain_observation.Specification <- function(spec) {
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the initial model.
 #' @family explain
-#' @export
+#' #'
 #' @keywords internal
 #' @examples
 explain_initial     <- function(spec) { UseMethod("explain_initial", spec) }
 
-#' @export
+#' #'
 explain_initial.Specification <- function(spec) {
   l <- densityApply(spec$initial$density, explain_density)
 
@@ -355,12 +355,12 @@ explain_initial.Specification <- function(spec) {
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the transition model.
 #' @family explain
-#' @export
+#' #'
 #' @keywords internal
 #' @examples
 explain_transition  <- function(spec) { UseMethod("explain_transition", spec) }
 
-#' @export
+#' #'
 explain_transition.Specification <- function(spec) {
   l <- densityApply(spec$transition$density, explain_density)
 
@@ -390,14 +390,14 @@ explain_transition.Specification <- function(spec) {
 #' @param writeDir An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.
 #' @return An instance of S4 class stanmodel.
-#' @export
+#' #'
 #' @examples
 compile           <- function(spec, priorPredictive = FALSE,
                               writeDir = tempdir(), ...) {
   UseMethod("compile", spec)
 }
 
-#' @export
+#' #'
 compile.Specification <- function(spec, priorPredictive = FALSE,
                                   writeDir = tempdir(), ...) {
 
@@ -432,15 +432,15 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.
 #' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
 #' @seealso See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
-#' @export
+#' #'
 #' @examples
-sampling          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+drawSamples          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
                               v = NULL, writeDir = tempdir(), ...) {
-  UseMethod("sampling", spec)
+  UseMethod("drawSamples", spec)
 }
 
-#' @export
-sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+#' #'
+drawSamples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
                                    v = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
@@ -459,20 +459,19 @@ sampling.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL
 }
 
 setClass("Specification")
-setGeneric("sampling")
-setMethod("sampling", "Specification", sampling.Specification)
+setGeneric("drawSamples")
+setMethod("drawSamples", "Specification", drawSamples.Specification)
 
 #' Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
 #'
-#' @inherit sampling
+#' @inherit drawSamples
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
 #' @keywords internal
-#' @export
 run               <- function(spec, data = NULL, writeDir = tempdir(), ...) {
   UseMethod("run", spec)
 }
 
-#' @export
+#' #'
 run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
   stanData <- data
@@ -497,15 +496,14 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
 #' Fit a model by MCMC
 #'
-#' @inherit sampling
+#' @inherit drawSamples
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
-#' @export
 #' @examples
 fit               <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   UseMethod("fit", spec)
 }
 
-#' @export
+#' #'
 fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   run(spec, data = make_data(spec, y, x, u, v), ...)
 }
@@ -516,13 +514,12 @@ fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
 #'
 #' This function computes a maximum a posteriori estimate by running one or more instances of a numerical optimization procedure to maximize the joint posterior density. If no seed is given, one is automatically generated and stored as an attribute in the returned object. An error is printed if no convergence was achieved after all the runs.
 #'
-#' @inheritParams sampling
+#' @inheritParams drawSamples
 #' @param nRuns An optional integer with the number of initializations.
 #' @param keep An optional string specifying whether the function should return the converging instance with the maximum posterior log density (\emph{best}) or all the instances (\emph{all}). The latter may be useful for debugging. It defaults to \emph{best}.
 #' @param nCores An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{optimizing}}.
 #' @return An \emph{Optimization} object if \emph{keep} is set to \emph{best}, or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
-#' @export
 #' @seealso See \code{\link[rstan]{optimizing}} for further details on tunning the optimization procedure.
 #' @examples
 optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
@@ -531,7 +528,7 @@ optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
   UseMethod("optimizing", spec)
 }
 
-#' @export
+#' #'
 optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
                                      nRuns = 1, keep = "best", nCores = 1,
                                      writeDir = tempdir(), ...) {
@@ -558,7 +555,6 @@ optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NU
 #' @param stanDots The arguments to the passed to rstan's \code{\link[rstan]{optimizing}}.
 #' @param n An integer with the number of the instance (i.e. the n-th time the algorithm is run on this model).
 #' @return An \emph{Optimization} object.
-#' @export
 #' @keywords internal
 optimizing_run  <- function(stanDots, n) {
   # sink(tempfile())
@@ -587,7 +583,6 @@ optimizing_run  <- function(stanDots, n) {
 #' @param nRuns An optional integer with the number of initializations.
 #' @param nCores An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.
 #' @return An \emph{OptimizationList} object.
-#' @export
 #' @keywords internal
 optimizing_all  <- function(stanDots, nRuns, nCores) {
   l <- if (nCores == 1) {
@@ -610,7 +605,6 @@ optimizing_all  <- function(stanDots, nRuns, nCores) {
 #' Note that this function returns the results of the converging instance with highest log posterior density while \code{\link{optimizing_all}} returns all.
 #' @inherit optimizing_all
 #' @return An \emph{Optimization} object.
-#' @export
 #' @keywords internal
 optimizing_best <- function(stanDots, nRuns, nCores) {
   best <- optimizing_run(stanDots, n = 1)
@@ -635,18 +629,17 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 # Other methods -----------------------------------------------------------
 #' Simulate data from the prior predictive density.
 #'
-#' @inheritParams sampling
+#' @inheritParams drawSamples
 #' @param T An optional integer with the length of the time series. It defaults to 1000 observations.
 #' @param nSimulations An optional integer with the number of simulations. It defaults to 500 time series.
 #' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
-#' @export
 #' @examples
 sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,
                               nSimulations = 500, ...) {
   UseMethod("sim", spec)
 }
 
-#' @export
+#' #'
 sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
   dots <- list(...)
   dots[["spec"]] <- spec
@@ -660,7 +653,7 @@ sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSim
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @return No return value.
 #' @seealso \code{\link{browseURL}}.
-#' @export
+#' #'
 #' @examples
 browse_model.Specification <- function(spec) {
   browseURL(write_model(spec, noLogLike = FALSE, writeDir = tempdir()))

@@ -2,7 +2,7 @@
 #'
 #' When the observed random variable is multivariate, one individual plot per dimension will be drawn (i.e. the analysis will be carried out marginally). As with all visualizations from this package, colors are fully customizable via a \code{\link{theme}}. Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.
 #'
-#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{sampling}}.
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @param type An optional vector of strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.
 #' @param r An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.
 #' @param subset An optional boolean vector indicating with TRUE which elements of the observation vector should be included in the analysis (some plots may become slow with large datasets). It defaults to NULL, meaning all the sample units.
@@ -18,8 +18,7 @@
 #' @param fun2Control Arguments to be passed to `fun2` if the argument \emph{type} includes "scatterplot".
 #' @param ksControl Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".
 #' @param main An optional string with the overall title for the plot.
-#' @export
-#' @exportMethod plot_ppredictive
+#' #'
 #' @note If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
 #' @family visualization functions
 #' @examples

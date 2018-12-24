@@ -36,10 +36,11 @@ MVGaussianCholeskyCor(
 )
 }
 \seealso{
-Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
-  \code{\link{Binomial}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Density}},
+Other Density
+#': \code{\link{Bernoulli}},
+  \code{\link{Beta}}, \code{\link{Binomial}},
+  \code{\link{Categorical}}, \code{\link{Cauchy}},
+  \code{\link{CholeskyLKJCor}}, \code{\link{Default}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
   \code{\link{GammaDensity}}, \code{\link{Gaussian}},
   \code{\link{InverseWishart}}, \code{\link{MVGaussian}},
@@ -48,4 +49,5 @@ Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
   \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
   \code{\link{Student}}, \code{\link{Wishart}}
 }
-\concept{Density}
+\concept{Density
+#'}

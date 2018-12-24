@@ -20,10 +20,11 @@ validate_calibration(spec, N, T = 1000, x = NULL, seed = 9000,
 
 \item{nCores}{An optional integer with the number of cores to use to run the protocol in parallel. It defaults to half the number of available cores}
 
-\item{...}{Arguments to be passed to \code{\link{sampling}}.}
+\item{...}{Arguments to be passed to \code{\link{drawSamples}}.}
 }
 \value{
 A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
+#'
 }
 \description{
 Validation protocol inspired on Simulation Based Calibration (cite). Also known as fake data.

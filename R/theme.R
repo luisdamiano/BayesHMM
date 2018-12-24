@@ -52,7 +52,7 @@ load_theme <- function() {
 #' Return the default theme.
 #'
 #' @return A named list with the theme.
-#' @export
+#' #'
 #' @family visualization functions
 get_default_theme <- function() {
   list(
@@ -91,7 +91,7 @@ get_default_theme <- function() {
 #' Return the current theme.
 #'
 #' @return A named list with the theme.
-#' @export
+#' #'
 #' @family visualization functions
 get_current_theme <- function() {
   list(

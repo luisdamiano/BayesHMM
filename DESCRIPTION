@@ -20,10 +20,10 @@ Imports:
     rstan (>= 2.16),
     utils
 Suggests:
-    RUnit,
     matrixcalc,
     knitr,
-    rmarkdown
+    rmarkdown,
+    RUnit
 URL: https://github.com/luisdamiano/BayesHMM/, https://summerofcode.withgoogle.com/projects/#4681157036212224
 BugReports: https://github.com/luisdamiano/BayesHMM/issues
 RoxygenNote: 6.1.0

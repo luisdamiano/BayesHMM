@@ -1,7 +1,6 @@
 #' Specify a Hidden Markov Model
 #'
 #' @inherit specify
-#' @export
 #' @examples
 #' @family models
 hmm <- function(K, R, observation = NULL, initial = NULL,

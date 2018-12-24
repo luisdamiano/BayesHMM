@@ -15,7 +15,7 @@ y <- as.matrix(
 )
 
 myModel <- compile(mySpec)
-myFit   <- sampling(
+myFit   <- drawSamples(
   mySpec, stanModel = myModel, y = y,
   chains = 1, iter = 500, seed = 9000
 )

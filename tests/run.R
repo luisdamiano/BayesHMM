@@ -12,16 +12,53 @@ no_error_in_spec <- function(string) {
       )))
     })
 
-    tryCatch({
-      BayesHMM:::write_model.Specification(spec, noLogLike = FALSE, writeDir = tempdir())
-      BayesHMM:::write_model.Specification(spec, noLogLike = TRUE , writeDir = tempdir())
-    }, error = function(error) {
-      return(RUnit::checkTrue(FALSE, sprintf(
-        "The model cannot be translated to Stan: %s.", error$message
-      )))
-    })
+  tryCatch({
+    explain(spec)
+  }, error = function(error) {
+    return(RUnit::checkTrue(FALSE, sprintf(
+      "Could not explain specification: %s.", error$message
+    )))
+  })
+
+  tryCatch({
+    BayesHMM:::write_model.Specification(spec, noLogLike = FALSE, writeDir = tempdir())
+    BayesHMM:::write_model.Specification(spec, noLogLike = TRUE , writeDir = tempdir())
+  }, error = function(error) {
+    return(RUnit::checkTrue(FALSE, sprintf(
+      "The model cannot be translated to Stan: %s.", error$message
+    )))
+  })
 
   invisible()
+}
+
+no_error_in_expr <- function(expr) {
+  tryCatch({
+    eval(expr)
+  }, error = function(error) {
+    return(RUnit::checkTrue(FALSE, sprintf(
+      "The expr could not be evaluated: %s.", error$message
+    )))
+  })
+}
+
+load_safe <- function(filename) {
+  filename <- file.path(
+    system.file("tests", package = "BayesHMM"),
+    filename
+  )
+
+  myObj    <- if (file.exists(filename)) {
+    readRDS(filename)
+  } else {
+    NULL
+  }
+
+  if (is.null(myObj)) {
+    RUnit::checkTrue(FALSE, "Could not load sim.RDS")
+  } else {
+    return(myObj)
+  }
 }
 
 # Test suite --------------------------------------------------------------

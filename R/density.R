@@ -24,7 +24,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' @param param (optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
 #' @param ...  Other arguments for the density.
 #'
-#' @export
+#' #'
 #' @return A Density object.
 #' @family Density
 #' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
@@ -55,12 +55,11 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 #' @param x A Density object.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character vector.
-#' @export
 #' @examples
 #' explain_density(Gaussian(0, 1), print = TRUE)
 explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
 
-#' @export
+#' #'
 explain_density.Density <- function(x, print = FALSE) {
   freeParam  <- getFreeParameters(x)
   fixedParam <- getFixedParameters(x)
@@ -146,7 +145,6 @@ explain_density.Density <- function(x, print = FALSE) {
 #'
 #' @param x A Density object.
 #' @return A vector of character vectors.
-#' @export
 #' @examples
 #' getParameterNames(
 #'   Gaussian(
@@ -156,7 +154,7 @@ explain_density.Density <- function(x, print = FALSE) {
 #' )
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 
-#' @export
+#' #'
 getParameterNames.Density <- function(x) {
   warning(
     sprintf(
@@ -170,7 +168,6 @@ getParameterNames.Density <- function(x) {
 #'
 #' @param x A Density object.
 #' @return A vector of character vectors.
-#' @export
 #' @examples
 #' getFreeParameters(
 #'   Gaussian(
@@ -180,7 +177,7 @@ getParameterNames.Density <- function(x) {
 #' )
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 
-#' @export
+#' #'
 getFreeParameters.Density <- function(x) {
   l <-
     sapply(
@@ -213,7 +210,6 @@ getFreeParameters.Density <- function(x) {
 #'
 #' @param x A Density object.
 #' @return A vector of character vectors.
-#' @export
 #' @examples
 #' getFixedParameters(
 #'   Gaussian(
@@ -223,7 +219,7 @@ getFreeParameters.Density <- function(x) {
 #' )
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
 
-#' @export
+#' #'
 getFixedParameters.Density <- function(x) {
   l <-
     sapply(
@@ -243,21 +239,19 @@ getFixedParameters.Density <- function(x) {
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant for transition models, FALSE otherwise.
-#' @export
 #' @examples
 #' is.link(
 #'   TransitionSoftmax(uBeta = Gaussian(0, 10), P = 2)
 #' )
 is.link            <- function(x) { UseMethod("is.link", x) }
 
-#' @export
+#' #'
 is.link.Density                     <- function(x) { FALSE }
 
 #' Check if it is a Density object for discrete random variables.
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
-#' @export
 #' @examples
 #' is.discrete(
 #'   Gaussian(0, 1)
@@ -268,14 +262,13 @@ is.link.Density                     <- function(x) { FALSE }
 #' )
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 
-#' @export
+#' #'
 is.discrete.Density                 <- function(x) { FALSE }
 
 #' Check if it is a Density object for multivariate random variables.
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
-#' @export
 #' @examples
 #' is.multivariate(
 #'   Gaussian(0, 1)
@@ -286,14 +279,13 @@ is.discrete.Density                 <- function(x) { FALSE }
 #' )
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
-#' @export
+#' #'
 is.multivariate.Density             <- function(x) { FALSE }
 
 #' Check if it is a Density object.
 #'
 #' @param x An object.
 #' @return TRUE if the object is a Density objectm FALSE otherwise.
-#' @export
 #' @examples
 #' is.Density(
 #'   Gaussian(0, 1)
@@ -304,7 +296,7 @@ is.Density <- function(x) {
   "Density" %in% class(x)
 }
 
-#' @export
+#' #'
 block_data.Density <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
@@ -313,21 +305,21 @@ block_data.Density <- function(x, noLogLike) {
   }
 }
 
-#' @export
+#' #'
 noLogLike.Density <- function(x) {
   sprintf("loglike[%s][t] = 1;", x$k)
 }
 
-#' @export
+#' #'
 is.TVInitial.Density                <- function(x) { FALSE }
 
-#' @export
+#' #'
 is.TVTransition.Density             <- function(x) { FALSE }
 
-#' @export
+#' #'
 constants.Density                   <- function(x) { ""    }
 
-#' @export
+#' #'
 link.Density                        <- function(x) { ""    }
 
 #' Create a representation of a probability mass or density function for a
@@ -336,7 +328,6 @@ link.Density                        <- function(x) { ""    }
 #' observation model.
 #'
 #' @inherit Density
-#' @export
 #' @family MultivariateDensity
 MultivariateDensity <- function(name, ...) {
   x <- Density(name, ...)
@@ -350,7 +341,6 @@ MultivariateDensity <- function(name, ...) {
 #' observation model.
 #'
 #' @inherit Density
-#' @export
 #' @family DiscreteDensity
 DiscreteDensity <- function(name, ...) {
   x <- Density(name, ...)
@@ -358,10 +348,10 @@ DiscreteDensity <- function(name, ...) {
   x
 }
 
-#' @export
+#' #'
 is.discrete.DiscreteDensity         <- function(x) { TRUE  }
 
-#' @export
+#' #'
 block_data.DiscreteDensity <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
@@ -376,7 +366,6 @@ block_data.DiscreteDensity <- function(x, noLogLike) {
 #' observation model.
 #'
 #' @inherit Density
-#' @export
 #' @family MultivariateDiscreteDensity
 MultivariateDiscreteDensity <- function(name, ...) {
   x <- DiscreteDensity(name, ...)
@@ -384,7 +373,7 @@ MultivariateDiscreteDensity <- function(name, ...) {
   x
 }
 
-#' @export
+#' #'
 is.multivariate.MultivariateDensity <- function(x) { TRUE  }
 
 #' Create a representation of a probability mass or density function for a
@@ -392,7 +381,6 @@ is.multivariate.MultivariateDensity <- function(x) { TRUE  }
 #' distribution for a model parameter.
 #'
 #' @inherit Density
-#' @export
 #' @family PriorOnlyDensity
 PriorOnlyDensity <- function(name, ...) {
   x <- Density(name, ...)
@@ -405,7 +393,6 @@ PriorOnlyDensity <- function(name, ...) {
 #' distribution for a model parameter.
 #'
 #' @inherit Density
-#' @export
 #' @family PriorOnlyDensity
 PriorOnlyMultivariateDensity <- function(name, ...) {
   x <- MultivariateDensity(name, ...)
@@ -413,26 +400,25 @@ PriorOnlyMultivariateDensity <- function(name, ...) {
   x
 }
 
-#' @export
+#' #'
 freeParameters.PriorOnlyDensity     <- function(x) { ""    }
 
-#' @export
+#' #'
 fixedParameters.PriorOnlyDensity    <- function(x) { ""    }
 
-#' @export
+#' #'
 generated.PriorOnlyDensity          <- function(x) { ""    }
 
-#' @export
+#' #'
 getFreeParameters.PriorOnlyDensity  <- function(x) { ""    }
 
-#' @export
+#' #'
 logLike.PriorOnlyDensity            <- function(x) { ""    }
 
 #' Create a representation of a link function that may be used only to specify
 #' a transition model.
 #'
 #' @inherit Density
-#' @export
 #' @family LinkDensity
 LinkDensity <- function(name, ...) {
   x <- Density(name, ...)
@@ -440,7 +426,7 @@ LinkDensity <- function(name, ...) {
   x
 }
 
-#' @export
+#' #'
 is.link.LinkDensity                 <- function(x) { TRUE  }
 
 # DensityList -------------------------------------------------------------
@@ -451,7 +437,7 @@ is.link.LinkDensity                 <- function(x) { TRUE  }
 #' @param x A Density object (e.g. \code{\link{Gaussian}})
 #' @param y A Density object (e.g. \code{\link{Gaussian}})
 #' @return A DensityList object.
-#' @export
+#' #'
 #' @examples Gaussian(0, 1) + Gaussian(0, 1)
 `+.Density` <- function(x, y = NULL) {
   if (!is.null(y) & !is.Density(y)) {
@@ -467,23 +453,19 @@ is.link.LinkDensity                 <- function(x) { TRUE  }
   structure(l, class = c("DensityList"))
 }
 
-#' @export
+#' #'
 explain_density.DensityList <- function(x, print = FALSE){
   lapply(x, explain_density, print = print)
 }
 
-#' @inherit is.Density
-#' @export
 is.DensityList <- function(x) {
   all(sapply(x, is.Density))
 }
 
-#' @export
 is.discrete.DensityList <- function(x) {
   all(sapply(x, is.discrete))
 }
 
-#' @export
 is.multivariate.DensityList <- function(x) {
   all(sapply(x, is.multivariate))
 }

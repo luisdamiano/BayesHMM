@@ -5,7 +5,7 @@
 #' @param sigma AEither a fixed value or a prior density for the shape parameter.
 #'
 #' @family Density
-#' @export
+#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters

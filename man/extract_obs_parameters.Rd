@@ -7,9 +7,9 @@
 extract_obs_parameters(fit, ...)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{sampling}}.}
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.}
 }
 \value{
 A named list with as many elements as model parameters. Each element is a numeric array with dimensions [N, M, ...]: number of iterations \emph{N}, number of chains \emph{M}, and one or more dimensions related to the characteristics of the parameter. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a numeric array with dimensions [N, ...]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, ...]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, ...].
@@ -18,15 +18,6 @@ A named list with as many elements as model parameters. Each element is a numeri
 Extract the estimates of the observation model parameters.
 }
 \seealso{
-Other extract: \code{\link{extract_K}},
-  \code{\link{extract_R}}, \code{\link{extract_T}},
-  \code{\link{extract_alpha}}, \code{\link{extract_data}},
-  \code{\link{extract_filename}},
-  \code{\link{extract_gamma}},
-  \code{\link{extract_parameters}},
-  \code{\link{extract_spec}}, \code{\link{extract_ypred}},
-  \code{\link{extract_ysim}}, \code{\link{extract_y}},
-  \code{\link{extract_zpred}}, \code{\link{extract_zsim}},
-  \code{\link{extract_zstar}}, \code{\link{extract}}
+Other extract: \code{\link{extract}}
 }
 \concept{extract}

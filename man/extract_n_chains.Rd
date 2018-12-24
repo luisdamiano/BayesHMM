@@ -11,10 +11,11 @@ extract_n_chains(stanfit)
 \S4method{extract_n_chains}{stanfit}(stanfit)
 }
 \arguments{
-\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{sampling}}.}
+\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
 }
 \value{
 The number of chains (M) used to fit the model.
+#'Method extract_n_chains
 }
 \description{
 Extract the number of chains (M).

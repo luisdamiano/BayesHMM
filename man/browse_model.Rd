@@ -11,12 +11,14 @@ browse_model(fit, ...)
 
 ## S3 method for signature 'Optimization'
 browse_model(fit, ...)
+#'
 
 ## S4 method for signature 'stanfit'
 browse_model(fit, ...)
+#'
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 
 \item{...}{(optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).}
 }
@@ -28,4 +30,5 @@ Load the underlying Stan code into an IDE or browser (platform dependent).
 }
 \seealso{
 \code{\link{browseURL}}.
+#'
 }

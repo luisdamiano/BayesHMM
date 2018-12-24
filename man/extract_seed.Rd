@@ -11,15 +11,18 @@ extract_seed(fit)
 
 ## S3 method for signature 'Optimization'
 extract_seed(fit)
+#'
 
 ## S4 method for signature 'stanfit'
 extract_seed(fit)
+#'
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{sampling}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 }
 \value{
 An integer with the seed used to fit the model.
+#'
 }
 \description{
 Extract the time elapsed when fitting the model.

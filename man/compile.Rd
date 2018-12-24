@@ -17,6 +17,7 @@ compile(spec, priorPredictive = FALSE, writeDir = tempdir(), ...)
 }
 \value{
 An instance of S4 class stanmodel.
+#'
 }
 \description{
 This function turns the model specification into Stan code and compiles the program via rstan.
