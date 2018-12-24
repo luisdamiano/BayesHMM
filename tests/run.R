@@ -13,7 +13,7 @@ no_error_in_spec <- function(string) {
     })
 
   tryCatch({
-    explain(spec)
+    explain(spec, print = FALSE)
   }, error = function(error) {
     return(RUnit::checkTrue(FALSE, sprintf(
       "Could not explain specification: %s.", error$message
@@ -34,7 +34,9 @@ no_error_in_spec <- function(string) {
 
 no_error_in_expr <- function(expr) {
   tryCatch({
+    sink(tempfile())
     eval(expr)
+    sink()
   }, error = function(error) {
     return(RUnit::checkTrue(FALSE, sprintf(
       "The expr could not be evaluated: %s.", error$message

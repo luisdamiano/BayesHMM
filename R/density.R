@@ -55,8 +55,6 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 #' @param x A Density object.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character vector.
-#' @examples
-#' explain_density(Gaussian(0, 1), print = TRUE)
 explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
 
 #' #'
@@ -146,12 +144,14 @@ explain_density.Density <- function(x, print = FALSE) {
 #' @param x A Density object.
 #' @return A vector of character vectors.
 #' @examples
+#' \dontrun{
 #' getParameterNames(
 #'   Gaussian(
 #'     mu    = Gaussian(mu = 0, sigma = 10),
 #'     sigma = 1
 #'   )
 #' )
+#' }
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 
 #' #'
@@ -169,12 +169,14 @@ getParameterNames.Density <- function(x) {
 #' @param x A Density object.
 #' @return A vector of character vectors.
 #' @examples
+#' \dontrun{
 #' getFreeParameters(
 #'   Gaussian(
 #'     mu    = Gaussian(mu = 0, sigma = 10),
 #'     sigma = 1
 #'   )
 #' )
+#' }
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 
 #' #'
@@ -211,12 +213,14 @@ getFreeParameters.Density <- function(x) {
 #' @param x A Density object.
 #' @return A vector of character vectors.
 #' @examples
+#' \dontrun{
 #' getFixedParameters(
 #'   Gaussian(
 #'     mu    = Gaussian(mu = 0, sigma = 10),
 #'     sigma = 1
 #'   )
 #' )
+#' }
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
 
 #' #'
@@ -239,10 +243,6 @@ getFixedParameters.Density <- function(x) {
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant for transition models, FALSE otherwise.
-#' @examples
-#' is.link(
-#'   TransitionSoftmax(uBeta = Gaussian(0, 10), P = 2)
-#' )
 is.link            <- function(x) { UseMethod("is.link", x) }
 
 #' #'
@@ -252,14 +252,6 @@ is.link.Density                     <- function(x) { FALSE }
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
-#' @examples
-#' is.discrete(
-#'   Gaussian(0, 1)
-#' )
-#'
-#' is.discrete(
-#'   Poisson(lambda = GammaDensity(1, 1))
-#' )
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 
 #' #'
@@ -269,14 +261,6 @@ is.discrete.Density                 <- function(x) { FALSE }
 #'
 #' @param x a Density object.
 #' @return TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
-#' @examples
-#' is.multivariate(
-#'   Gaussian(0, 1)
-#' )
-#'
-#' is.multivariate(
-#'   MVGaussian(c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2))
-#' )
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
 #' #'
@@ -286,12 +270,6 @@ is.multivariate.Density             <- function(x) { FALSE }
 #'
 #' @param x An object.
 #' @return TRUE if the object is a Density objectm FALSE otherwise.
-#' @examples
-#' is.Density(
-#'   Gaussian(0, 1)
-#' )
-#'
-#' is.Density(1 + 1)
 is.Density <- function(x) {
   "Density" %in% class(x)
 }
