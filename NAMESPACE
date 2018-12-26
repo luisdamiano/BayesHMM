@@ -1,15 +1,14 @@
-# importFrom("Rcpp", cpp_object_initializer)
-# importFrom("rstan", cpp_object_initializer)
+importFrom(Rcpp, evalCpp)
 
 importClassesFrom(rstan,stanfit)
 
-importFrom("grDevices", "col2rgb", "dev.off", "n2mfrow", "rgb")
-importFrom("graphics", "abline", "axis", "boxplot", "hist", "legend",
-           "lines", "par", "plot", "points", "polygon", "rect",
-           "segments", "title")
-importFrom("methods", "setMethod")
-importFrom("stats", "density", "ks.test", "median", "quantile")
-importFrom("utils", "browseURL", "glob2rx", "head", "tail")
+importFrom(grDevices, col2rgb, dev.off, n2mfrow, rgb)
+importFrom(graphics, abline, axis, boxplot, hist, legend,
+           lines, par, plot, points, polygon, rect,
+           segments, title)
+importFrom(methods, setMethod)
+importFrom(stats, density, ks.test, median, quantile)
+importFrom(utils, browseURL, glob2rx, head, tail)
 
 S3method(`+`, Density)
 export(Bernoulli)

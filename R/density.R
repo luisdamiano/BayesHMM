@@ -68,9 +68,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' @param r (optional) The dimension of the observation vector dimension for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
 #' @param param (optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
 #' @param ...  Other arguments for the density.
-#'
-#' #'
-#' @return #' @param x A \code{\link{Density}} object.
+#' @return A \code{\link{Density}} object.
 #' @family Density
 #' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
 Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
@@ -97,7 +95,7 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 
 #' Explain a Density object in human readable format.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character vector.
 explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
@@ -186,7 +184,7 @@ explain_density.Density <- function(x, print = FALSE) {
 
 #' Return the names of both free and fixed parameters in the Density object.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -211,7 +209,7 @@ getParameterNames.Density <- function(x) {
 
 #' Return the names of the free parameters in the Density object.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -255,7 +253,7 @@ getFreeParameters.Density <- function(x) {
 
 #' Return the names of the fixed parameters in the Density object.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -286,7 +284,7 @@ getFixedParameters.Density <- function(x) {
 
 #' Check if it is a Density object for the transition model.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant for transition models, FALSE otherwise.
 is.link            <- function(x) { UseMethod("is.link", x) }
 
@@ -295,7 +293,7 @@ is.link.Density                     <- function(x) { FALSE }
 
 #' Check if it is a Density object for discrete random variables.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 
@@ -304,7 +302,7 @@ is.discrete.Density                 <- function(x) { FALSE }
 
 #' Check if it is a Density object for multivariate random variables.
 #'
-#' @param x #' @param x A \code{\link{Density}} object.
+#' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 

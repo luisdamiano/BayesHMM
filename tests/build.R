@@ -90,5 +90,6 @@ build_objects <- function(pathOut) {
 }
 
 # Build tests
-# build_tests("density.txt", "tests", "inst/tests")
-# build_tests("specification.txt", "tests", "inst/tests")
+build_tests("density.txt", "tests", "inst/tests")
+build_tests("specification.txt", "tests", "inst/tests")
+build_objects("inst/tests")
