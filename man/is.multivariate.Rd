@@ -7,20 +7,11 @@
 is.multivariate(x)
 }
 \arguments{
-\item{x}{a Density object.}
+\item{x}{#' @param x A \code{\link{Density}} object.}
 }
 \value{
 TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
 }
 \description{
 Check if it is a Density object for multivariate random variables.
-}
-\examples{
-is.multivariate(
-  Gaussian(0, 1)
-)
-
-is.multivariate(
-  MVGaussian(c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2))
-)
 }

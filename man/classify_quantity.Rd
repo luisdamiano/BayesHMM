@@ -17,7 +17,6 @@ classify_quantity(fit, reduce, chain, quantity)
 }
 \value{
 A numeric vector with size equal to the time series length \emph{T} with values from 1 to the number of hidden states \emph{K}.
-#'
 }
 \description{
 Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest quantity of interest.

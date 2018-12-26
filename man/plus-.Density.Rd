@@ -3,6 +3,7 @@
 \name{+.Density}
 \alias{+.Density}
 \alias{+}
+\alias{DensityList}
 \title{Append two Density objects.}
 \usage{
 x + y
@@ -14,7 +15,6 @@ x + y
 }
 \value{
 A DensityList object.
-#'
 }
 \description{
 Append two Density objects.

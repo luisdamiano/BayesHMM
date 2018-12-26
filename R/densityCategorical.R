@@ -3,10 +3,7 @@
 #' @inherit Density
 #' @param theta Either a fixed value or a prior density for the success proportion vector parameter.
 #' @param N     An integer with the number of trials (fixed quantity).
-#'
 #' @family Density
-#' #'
-#'
 #' @examples
 #' # With fixed values for the parameters
 #' Categorical(
@@ -24,6 +21,7 @@ Categorical <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Categorical", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @inherit constants
 constants.Categorical <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of possible outcomes (discrete categories)",
@@ -31,6 +29,7 @@ constants.Categorical <- function(x) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.Categorical <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -45,6 +44,7 @@ freeParameters.Categorical <- function(x) {
   thetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.Categorical <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -64,6 +64,7 @@ fixedParameters.Categorical <- function(x) {
   thetaStr
 }
 
+#' @inherit generated
 generated.Categorical <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = categorical_rng(theta%s%s);",
@@ -72,10 +73,12 @@ generated.Categorical <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Categorical <- function(x) {
   return("theta")
 }
 
+#' @inherit logLike
 logLike.Categorical <- function(x) {
   sprintf(
     "loglike[%s][t] = categorical_lpmf(y[t] | theta%s%s);",
@@ -84,6 +87,7 @@ logLike.Categorical <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Categorical <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

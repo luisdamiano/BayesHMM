@@ -2,10 +2,20 @@
 % Please edit documentation in R/write.R
 \name{write_model.Specification}
 \alias{write_model.Specification}
-\title{#'}
+\title{Write a ready-to-compile Stan file to disk}
 \usage{
 \method{write_model}{Specification}(spec, noLogLike, writeDir)
 }
+\arguments{
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+
+\item{noLogLike}{A logical stating whether the log-likelihood should be excluded from the program. If TRUE, the Stan code will draw samples from the prior predictive density. If FALSE, the Stan code will draw samples from the posterior predictive density.}
+
+\item{writeDir}{A character vector with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually.}
+}
+\value{
+A character vector with the path to the filename.
+}
 \description{
-#'
+Write a ready-to-compile Stan file to disk
 }

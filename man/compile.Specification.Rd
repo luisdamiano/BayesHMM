@@ -2,11 +2,43 @@
 % Please edit documentation in R/specification.R
 \name{compile.Specification}
 \alias{compile.Specification}
-\title{#'}
+\title{Compile a specified model.}
 \usage{
 \method{compile}{Specification}(spec, priorPredictive = FALSE,
   writeDir = tempdir(), ...)
 }
+\arguments{
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+
+\item{priorPredictive}{An optional logical stating whether the log-likelihood should be excluded from the program. If TRUE, the returned object can only be used to draw samples from the prior predictive density. If FALSE, the returned object can only be used to draw samples from the posterior predictive density. It defaults to FALSE.}
+
+\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.}
+}
+\value{
+An instance of S4 class stanmodel.
+}
 \description{
-#'
+This function turns the model specification into Stan code and compiles the program via rstan.
+}
+\examples{
+\dontrun{
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+# Setting writeDir to store the Stan code file is useful
+# if you plan to read and/or edit the automatically generated code
+myModel <- compile(mySpec, writeDir = "stan_model.stan")
+}
 }

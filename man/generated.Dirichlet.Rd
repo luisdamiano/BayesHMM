@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityDirichlet.R
 \name{generated.Dirichlet}
 \alias{generated.Dirichlet}
-\title{#'}
+\title{Write the Stan code lines related with Density generated quantities.}
 \usage{
 \method{generated}{Dirichlet}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density generated quantities.
 }

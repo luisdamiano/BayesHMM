@@ -7,16 +7,11 @@
 is.link(x)
 }
 \arguments{
-\item{x}{a Density object.}
+\item{x}{#' @param x A \code{\link{Density}} object.}
 }
 \value{
 TRUE if the object is meant for transition models, FALSE otherwise.
 }
 \description{
 Check if it is a Density object for the transition model.
-}
-\examples{
-is.link(
-  TransitionSoftmax(uBeta = Gaussian(0, 10), P = 2)
-)
 }

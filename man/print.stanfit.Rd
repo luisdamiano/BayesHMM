@@ -4,12 +4,12 @@
 \alias{print.stanfit}
 \title{Prints the result of the model in a human friendly format.}
 \usage{
-\method{print}{stanfit}(stanfit, posteriorInterval = c(0.025, 0.25, 0.5,
-  0.75, 0.975), observation = TRUE, initial = TRUE,
-  transition = TRUE, fixed = TRUE, print = TRUE)
+\method{print}{stanfit}(x, posteriorInterval = c(0.025, 0.25, 0.5, 0.75,
+  0.975), observation = TRUE, initial = TRUE, transition = TRUE,
+  fixed = TRUE, print = TRUE, ...)
 }
 \arguments{
-\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
+\item{x}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
 
 \item{posteriorInterval}{An optional numeric vector with the quantilies of the posterior marginal distributions.}
 
@@ -23,11 +23,10 @@
 
 \item{print}{An optional logical indicating whether the description should be printing out.}
 
-\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+\item{...}{Further arguments passed to \code{\link{cat}}.}
 }
 \value{
 A character string with the model description.
-#'
 }
 \description{
 Prints the result of the model in a human friendly format.

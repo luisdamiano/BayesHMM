@@ -40,6 +40,15 @@ plot_state_probability(fit, stateProbability = "smoothed",
 \description{
 Plot the estimated hidden path along with many other customizable options.
 }
+\examples{
+\dontrun{
+plot_state_probability(
+  myFit, stateProbability = "filtered",
+  features = c("stateShade", "probabilityFan", "bottomColoredMarks"),
+  chain = 2
+)
+}
+}
 \seealso{
 Other visualization functions: \code{\link{get_current_theme}},
   \code{\link{get_default_theme}},

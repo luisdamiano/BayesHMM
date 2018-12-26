@@ -27,7 +27,7 @@ Gaussian(mu, sigma, bounds = list(NULL, NULL), trunc = list(NULL,
 #'}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Gaussian density (univariate, continuous, unbounded space)
@@ -45,8 +45,7 @@ Gaussian(
 \seealso{
 Other Density
 #': \code{\link{Bernoulli}},
-  \code{\link{Beta}}, \code{\link{Binomial}},
-  \code{\link{Categorical}}, \code{\link{Cauchy}},
+  \code{\link{Beta}}, \code{\link{Cauchy}},
   \code{\link{CholeskyLKJCor}}, \code{\link{Default}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
   \code{\link{GammaDensity}}, \code{\link{InverseWishart}},

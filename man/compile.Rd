@@ -17,8 +17,27 @@ compile(spec, priorPredictive = FALSE, writeDir = tempdir(), ...)
 }
 \value{
 An instance of S4 class stanmodel.
-#'
 }
 \description{
 This function turns the model specification into Stan code and compiles the program via rstan.
+}
+\examples{
+\dontrun{
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+# Setting writeDir to store the Stan code file is useful
+# if you plan to read and/or edit the automatically generated code
+myModel <- compile(mySpec, writeDir = "stan_model.stan")
+}
 }

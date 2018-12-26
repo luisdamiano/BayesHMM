@@ -2,10 +2,20 @@
 % Please edit documentation in R/specification.R
 \name{explain_initial.Specification}
 \alias{explain_initial.Specification}
-\title{#'}
+\title{Create an outline of the initial distribution model.}
 \usage{
 \method{explain_initial}{Specification}(spec)
 }
+\arguments{
+\item{spec}{An object returned by the \code{\link{specify}}) function.}
+}
+\value{
+A character vector with an outline of the initial model.
+}
 \description{
-#'
+Create an outline of the initial distribution model.
+}
+\seealso{
+Other explain: \code{\link{explain_observation}},
+  \code{\link{explain_transition}}
 }

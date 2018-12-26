@@ -1,11 +1,20 @@
+#' Softmax initial probability density
+#'
+#' @inherit Density
+#' @param vBeta Either a fixed value or a prior density for the parameter of the softmax regression.
+#' @param Q     An integer with the number of covariates in the initial distribution model.
+#' @family Density
+#' @examples
+#' InitialSoftmax(
+#'   vBeta = Gaussian(0, 10),
+#'   Q     = 3
+#' )
 InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  LinkDensity(
-    "InitialSoftmax",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("InitialSoftmax", bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
 }
 
+#' @inherit freeParameters
 freeParameters.InitialSoftmax <- function(x) {
   vBetaStr <-
     if (is.Density(x$vBeta)) {
@@ -24,32 +33,21 @@ freeParameters.InitialSoftmax <- function(x) {
   vBetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.InitialSoftmax <- function(x) {
   warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
   return("")
 }
 
-generated.InitialSoftmax <- function(x) {
-  ""
-}
-
+#' @inherit getParameterNames
 getParameterNames.InitialSoftmax <- function(x) {
   return("vBeta")
 }
 
-logLike.InitialSoftmax <- function(x) {
-  "
-  "
-}
-
+#' @inherit link
 link.InitialSoftmax <- function(x) {
   sprintf(
     "pi = softmax((v%s' * vBeta%s)');",
     x$k, x$k
   )
-}
-
-prior.InitialSoftmax <- function(x) {
-  warning("prior.Softmax: TO BE IMPLEMENTED.")
-  return("")
 }

@@ -3,12 +3,6 @@
 # may add to many of the plots available in these package. We regret to
 # say that these functions are currently undocumented :(.
 
-#' @importFrom grDevices col2rgb dev.off n2mfrow rgb
-#' @importFrom graphics abline axis boxplot hist legend lines par plot points polygon rect segments title
-#' @importFrom stats density ks.test median quantile
-#' @importFrom utils browseURL glob2rx head tail
-NULL
-
 add_colored_lines <- function(x, y, col, ...) {
   segments(
     x0  = head(x, -1), # First T-1 obs

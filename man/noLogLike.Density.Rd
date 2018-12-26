@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{noLogLike.Density}
 \alias{noLogLike.Density}
-\title{#'}
+\title{Write the Stan code lines related with Density no log likelihood.}
 \usage{
 \method{noLogLike}{Density}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density no log likelihood.
 }

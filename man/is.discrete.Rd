@@ -7,20 +7,11 @@
 is.discrete(x)
 }
 \arguments{
-\item{x}{a Density object.}
+\item{x}{#' @param x A \code{\link{Density}} object.}
 }
 \value{
 TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
 }
 \description{
 Check if it is a Density object for discrete random variables.
-}
-\examples{
-is.discrete(
-  Gaussian(0, 1)
-)
-
-is.discrete(
-  Poisson(lambda = GammaDensity(1, 1))
-)
 }

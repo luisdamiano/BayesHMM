@@ -19,7 +19,6 @@ extract_grid(stanoptim, pars)
 }
 \value{
 A named matrix with one row for each time the optimization procedure was run. Columns include the seed, the estimated log posterior evaluated at the maximum, the code returned by the optimization algorithm, the time elapsed (user, system and total) in seconds, and the estimated value of the parameters selected in
-#'
 }
 \description{
 Extract summary results from the optimization procedure.
@@ -27,10 +26,8 @@ Extract summary results from the optimization procedure.
 \section{Methods (by class)}{
 \itemize{
 \item \code{Optimization}: For Optimization objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{best}.
-#'
 
 \item \code{OptimizationList}: For OptimizationList objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{all}.
-#'
 }}
 
 \keyword{internal}

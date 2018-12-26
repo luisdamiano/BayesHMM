@@ -17,12 +17,22 @@ DiscreteDensity(name, ...)
 #'}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Create a representation of a probability mass or density function for a
 discrete univariate random variable. It can be used to specify either a
 prior distribution for a model parameter or a likelihood function for an
 observation model.
+}
+\seealso{
+Other Density: \code{\link{Binomial}},
+  \code{\link{Categorical}}, \code{\link{InitialSoftmax}},
+  \code{\link{RegBernoulliLogit}},
+  \code{\link{RegBinomialLogit}},
+  \code{\link{RegBinomialProbit}},
+  \code{\link{RegCategoricalSoftmax}},
+  \code{\link{RegGaussian}}, \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}
 }
 \concept{DiscreteDensity}

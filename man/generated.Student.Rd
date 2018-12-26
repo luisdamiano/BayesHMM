@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityStudent.R
 \name{generated.Student}
 \alias{generated.Student}
-\title{#'}
+\title{Write the Stan code lines related with Density generated quantities.}
 \usage{
 \method{generated}{Student}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density generated quantities.
 }

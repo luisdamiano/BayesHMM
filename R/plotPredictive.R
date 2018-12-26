@@ -22,16 +22,24 @@
 #' @note If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
 #' @family visualization functions
 #' @examples
+#' \dontrun{
+#' plot_ppredictive(
+#'   myFit,
+#'   type = c("density", "cumulative", "boxplot",
+#'            "histogram", "scatterplot", "ks"),
+#'   fun = mean, fun1 = mean, fun2 = sd
+#' )
+#' }
 setGeneric(
   "plot_ppredictive",
   function(stanfit, type = "", r = NULL, subset = NULL, chain = 1,
-    fun = NULL, fun1 = NULL, fun2 = NULL,
-    boxplotControl = NULL, cumulativeControl = NULL, densityControl = NULL,
-    funControl = NULL, fun1Control = NULL, fun2Control = NULL, ksControl = NULL,
-    main = NULL)
-    {
-      standardGeneric("plot_ppredictive")
-    }
+           fun = NULL, fun1 = NULL, fun2 = NULL,
+           boxplotControl = NULL, cumulativeControl = NULL, densityControl = NULL,
+           funControl = NULL, fun1Control = NULL, fun2Control = NULL, ksControl = NULL,
+           main = NULL)
+  {
+    standardGeneric("plot_ppredictive")
+  }
 )
 
 #' @rdname plot_ppredictive

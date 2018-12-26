@@ -2,10 +2,26 @@
 % Please edit documentation in R/density.R
 \name{getFixedParameters.Density}
 \alias{getFixedParameters.Density}
-\title{#'}
+\title{Return the names of the fixed parameters in the Density object.}
 \usage{
 \method{getFixedParameters}{Density}(x)
 }
+\arguments{
+\item{x}{#' @param x A \code{\link{Density}} object.}
+}
+\value{
+A vector of character vectors.
+}
 \description{
-#'
+Return the names of the fixed parameters in the Density object.
+}
+\examples{
+\dontrun{
+getFixedParameters(
+  Gaussian(
+    mu    = Gaussian(mu = 0, sigma = 10),
+    sigma = 1
+  )
+)
+}
 }

@@ -23,7 +23,7 @@ Binomial(theta = NULL, N = NULL, bounds = list(NULL, NULL),
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Binomial mass (univariate, discrete, bounded space)
@@ -38,19 +38,13 @@ Binomial(
 )
 }
 \seealso{
-Other Density
-#': \code{\link{Bernoulli}},
-  \code{\link{Beta}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{GammaDensity}},
-  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
-  \code{\link{MVGaussianCholeskyCor}},
-  \code{\link{MVGaussian}}, \code{\link{MVStudent}},
-  \code{\link{Multinomial}},
-  \code{\link{NegativeBinomialLocation}},
-  \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
-  \code{\link{Student}}, \code{\link{Wishart}}
+Other Density: \code{\link{Categorical}},
+  \code{\link{Density}}, \code{\link{InitialSoftmax}},
+  \code{\link{RegBernoulliLogit}},
+  \code{\link{RegBinomialLogit}},
+  \code{\link{RegBinomialProbit}},
+  \code{\link{RegCategoricalSoftmax}},
+  \code{\link{RegGaussian}}, \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}
 }
-\concept{Density
-#'}
+\concept{Density}

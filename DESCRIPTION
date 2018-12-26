@@ -11,13 +11,13 @@ Copyright: (c) 2018
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.0.0),
+    R (>= 3.4.0),
     Rcpp (>= 0.12.0)
 Imports:
     doParallel,
     foreach,
     methods,
-    rstan (>= 2.16),
+    rstan (>= 2.17),
     utils
 Suggests:
     matrixcalc,

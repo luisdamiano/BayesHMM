@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityGaussian.R
 \name{generated.Gaussian}
 \alias{generated.Gaussian}
-\title{#'}
+\title{Write the Stan code lines related with Density generated quantities.}
 \usage{
 \method{generated}{Gaussian}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density generated quantities.
 }

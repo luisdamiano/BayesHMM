@@ -1,8 +1,20 @@
 #' Specify a Hidden Markov Model
 #'
 #' @inherit specify
-#' @examples
 #' @family models
+#' @examples
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
 hmm <- function(K, R, observation = NULL, initial = NULL,
                 transition = NULL, name = "") {
   x <- specify(K, R, observation, initial, transition, name)

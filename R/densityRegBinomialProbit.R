@@ -1,11 +1,22 @@
+#' Binomial regression with probit link density (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param xBeta Either a fixed value or a prior density for the parameter of the regression.
+#' @param M     An integer with the number of covariates in the observation regression model.
+#' @param N     An integer with the number of trials (fixed quantity).
+#' @family Density
+#' @examples
+#' RegBinomialProbit(
+#'   xBeta = Gaussian(0, 10),
+#'   M     = 3,
+#'   N     = 10
+#' )
 RegBinomialProbit <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
                              trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "RegBinomialProbit",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("RegBinomialProbit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
+#' @inherit constants
 constants.RegBinomialProbit <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of trials",
@@ -13,6 +24,7 @@ constants.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @inherit block_data
 block_data.RegBinomialProbit <- function(x, noLogLike) {
   collapse(
     c(
@@ -23,6 +35,7 @@ block_data.RegBinomialProbit <- function(x, noLogLike) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.RegBinomialProbit <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -38,6 +51,7 @@ freeParameters.RegBinomialProbit <- function(x) {
   xBetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.RegBinomialProbit <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -56,6 +70,7 @@ fixedParameters.RegBinomialProbit <- function(x) {
   xBetaStr
 }
 
+#' @inherit generated
 generated.RegBinomialProbit <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, Phi(x[t] * xBeta%s%s));",
@@ -64,10 +79,12 @@ generated.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.RegBinomialProbit <- function(x) {
   return(c("xBeta"))
 }
 
+#' @inherit logLike
 logLike.RegBinomialProbit <- function(x) {
   sprintf(
     "loglike[%s][t] = binomial_lpmf(y[t] | N, Phi(x[t] * xBeta%s%s));",
@@ -76,6 +93,7 @@ logLike.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.RegBinomialProbit <- function(x) {
   stop("Not to be used as a prior :)")
 }

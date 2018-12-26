@@ -14,6 +14,7 @@ CholeskyLKJCor <- function(eta = NULL, bounds = list(NULL, NULL),
   PriorOnlyMultivariateDensity("CholeskyLKJCor", bounds, trunc, k, r, param, eta = eta)
 }
 
+#' @inherit prior
 prior.CholeskyLKJCor <- function(x) {
   truncStr <- make_trunc(x, "")
   sprintf(

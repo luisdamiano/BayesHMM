@@ -36,6 +36,30 @@ An \emph{Optimization} object if \emph{keep} is set to \emph{best}, or an \emph{
 \description{
 This function computes a maximum a posteriori estimate by running one or more instances of a numerical optimization procedure to maximize the joint posterior density. If no seed is given, one is automatically generated and stored as an attribute in the returned object. An error is printed if no convergence was achieved after all the runs.
 }
+\examples{
+\dontrun{
+y <- rnorm(1000) # Assume this is your dataset
+
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+myModel <- compile(mySpec)
+
+myOpt   <- optimizing(
+  mySpec, myModel, y = y, nRuns = 50, nCores = 10, keep = "best"
+)
+}
+}
 \seealso{
 See \code{\link[rstan]{optimizing}} for further details on tunning the optimization procedure.
 }

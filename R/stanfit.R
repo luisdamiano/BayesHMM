@@ -4,7 +4,6 @@
 #' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @return The number of chains (M) used to fit the model.
 #' #'Method extract_n_chains
-#' @examples
 setGeneric("extract_n_chains", function(stanfit) {standardGeneric("extract_n_chains")} )
 
 #' @rdname extract_n_chains
@@ -18,7 +17,6 @@ setMethod("extract_n_chains", "stanfit", function(stanfit) {
 #' @keywords internal
 #' @param x An object.
 #' @return TRUE if it is an object created by \code{\link{drawSamples}}.
-#' @examples
 is.stanfit <- function(x) {
   class(x) == "stanfit"
 }

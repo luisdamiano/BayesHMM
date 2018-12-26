@@ -373,7 +373,6 @@ get_time_info    <- function() {
   sprintf("Printed on %s at %s.", format(t, "%Y-%m-%d"), format(t, "%T"))
 }
 
-#' @importFrom utils sessionInfo
 get_session_info <- function() {
   session     <- utils::sessionInfo()
   strPlatform <- sprintf("%s %s", session$running, session$platform)
@@ -382,7 +381,6 @@ get_session_info <- function() {
   sprintf("%s\n%s", strPlatform, strR)
 }
 
-#' @importFrom utils sessionInfo
 get_other_packages_info <- function() {
   # Based on utils:::print.sessionInfo
   make_label <- function(L, n) {

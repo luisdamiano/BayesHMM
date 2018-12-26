@@ -20,6 +20,7 @@ NegativeBinomialLocation <- function(mu = NULL, phi = NULL, bounds = list(NULL, 
   DiscreteDensity("NegativeBinomialLocation", bounds, trunc, k, r, param, mu = mu, phi = phi)
 }
 
+#' @inherit freeParameters
 freeParameters.NegativeBinomialLocation <- function(x) {
   muStr <- if (is.Density(x$mu)) {
     muBoundsStr <- make_bounds(x, "mu")
@@ -44,6 +45,7 @@ freeParameters.NegativeBinomialLocation <- function(x) {
   collapse(muStr, phiStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.NegativeBinomialLocation <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -76,6 +78,7 @@ fixedParameters.NegativeBinomialLocation <- function(x) {
   collapse(muStr, phiStr)
 }
 
+#' @inherit generated
 generated.NegativeBinomialLocation <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = neg_binomial_2_rng(mu%s%s, phi%s%s);",
@@ -85,10 +88,12 @@ generated.NegativeBinomialLocation <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.NegativeBinomialLocation <- function(x) {
   return(c("mu", "phi"))
 }
 
+#' @inherit logLike
 logLike.NegativeBinomialLocation <- function(x) {
   sprintf(
     "loglike[%s][t] = neg_binomial_2_lpmf(y[t] | mu%s%s, phi%s%s);",
@@ -98,6 +103,7 @@ logLike.NegativeBinomialLocation <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.NegativeBinomialLocation <- function(x) {
   sprintf(
     "%s%s%s ~ neg_binomial_2(%s, %s);",

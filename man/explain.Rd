@@ -19,22 +19,23 @@ explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRU
 }
 \value{
 A character string with the model description.
-#'
 }
 \description{
 The function creates a user-friendly text describing any of the three elements of the model. It includes the hidden states, variables, densities, bounds, priors, and fixed parameters. It also records environment details for easier reproducibility (package version, R version, time, OS).
 }
 \examples{
-explain(
-  hmm(
-    K = 3, R = 1,
-    observation = Gaussian(
-      mu    = Gaussian(0, 10),
-      sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
-    ),
-    initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-    transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-    name = "Univariate Gaussian Hidden Markov Model"
-  )
+mySpec <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
 )
+
+explain(mySpec)
 }

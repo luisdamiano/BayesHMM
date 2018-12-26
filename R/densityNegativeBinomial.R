@@ -20,6 +20,7 @@ NegativeBinomial <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL
   DiscreteDensity("NegativeBinomial", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
+#' @inherit freeParameters
 freeParameters.NegativeBinomial <- function(x) {
   alphaStr <- if (is.Density(x$alpha)) {
     alphaBoundsStr <- make_bounds(x, "alpha")
@@ -44,6 +45,7 @@ freeParameters.NegativeBinomial <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.NegativeBinomial <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
@@ -76,6 +78,7 @@ fixedParameters.NegativeBinomial <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit generated
 generated.NegativeBinomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = neg_binomial_rng(alpha%s%s, beta%s%s);",
@@ -85,10 +88,12 @@ generated.NegativeBinomial <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.NegativeBinomial <- function(x) {
   return(c("alpha", "beta"))
 }
 
+#' @inherit logLike
 logLike.NegativeBinomial <- function(x) {
   sprintf(
     "loglike[%s][t] = neg_binomial_lpmf(y[t] | alpha%s%s, beta%s%s);",
@@ -98,6 +103,7 @@ logLike.NegativeBinomial <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.NegativeBinomial <- function(x) {
   sprintf(
     "%s%s%s ~ neg_binomial(%s, %s);",

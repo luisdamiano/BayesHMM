@@ -21,7 +21,7 @@ Gaussian <- function(mu, sigma, bounds = list(NULL, NULL), trunc  = list(NULL, N
   Density("Gaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
-#' #'
+#' @inherit freeParameters
 freeParameters.Gaussian <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -48,7 +48,7 @@ freeParameters.Gaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
-#' #'
+#' @inherit fixedParameters
 fixedParameters.Gaussian <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -81,7 +81,7 @@ fixedParameters.Gaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
-#' #'
+#' @inherit generated
 generated.Gaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = normal_rng(mu%s%s, sigma%s%s);",
@@ -91,12 +91,12 @@ generated.Gaussian <- function(x) {
   )
 }
 
-#' #'
+#' @inherit getParameterNames
 getParameterNames.Gaussian <- function(x) {
   return(c("mu", "sigma"))
 }
 
-#' #'
+#' @inherit logLike
 logLike.Gaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);",
@@ -106,7 +106,7 @@ logLike.Gaussian <- function(x) {
   )
 }
 
-#' #'
+#' @inherit prior
 prior.Gaussian <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

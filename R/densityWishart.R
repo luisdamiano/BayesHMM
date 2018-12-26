@@ -15,6 +15,7 @@ Wishart <- function(nu = NULL, sigma = NULL, bounds = list(NULL, NULL),
   PriorOnlyMultivariateDensity("Wishart", bounds, trunc, k, r, param, nu = nu, sigma = sigma)
 }
 
+#' @inherit prior
 prior.Wishart <- function(x) {
   check_psd(x$sigma)
 

@@ -25,7 +25,7 @@ An specification object that may be used to validate calibration (\code{\link{va
 #'
 }
 \description{
-Note: not exported as it needs to be tested.
+See below for details on model specification.
 }
 \section{Model specification}{
 
@@ -214,6 +214,22 @@ Note that fixed parameters may be specified following this example:
 }
 }
 
+\examples{
+mySpec <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+explain(mySpec)
+}
 \seealso{
 Other models: \code{\link{hmm}}, \code{\link{specify}}
 }

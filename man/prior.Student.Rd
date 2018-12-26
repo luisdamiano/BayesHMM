@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityStudent.R
 \name{prior.Student}
 \alias{prior.Student}
-\title{#'}
+\title{Write the Stan code lines related with Density priors.}
 \usage{
 \method{prior}{Student}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density priors.
 }

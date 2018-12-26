@@ -15,6 +15,7 @@ InverseWishart <- function(nu = NULL, sigma = NULL, bounds = list(NULL, NULL),
   PriorOnlyMultivariateDensity("InverseWishart", bounds, trunc, k, r, param, nu = nu, sigma = sigma)
 }
 
+#' @inherit prior
 prior.InverseWishart <- function(x) {
   check_psd(x$sigma)
 

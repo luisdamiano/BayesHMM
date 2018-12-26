@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{is.link.Density}
 \alias{is.link.Density}
-\title{#'}
+\title{Check if it is a Density object for the transition model.}
 \usage{
 \method{is.link}{Density}(x)
 }
+\arguments{
+\item{x}{#' @param x A \code{\link{Density}} object.}
+}
+\value{
+TRUE if the object is meant for transition models, FALSE otherwise.
+}
 \description{
-#'
+Check if it is a Density object for the transition model.
 }

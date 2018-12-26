@@ -61,30 +61,30 @@ build_objects <- function(pathOut) {
   saveRDS(mySims, file.path(pathOut, "sim.RDS"))
 
   # 2. validate_calibration
-  myCal  <- validate_calibration(
+  myVal  <- validate_calibration(
     myFitSpec, N = 1, T = tLength, seed = seed, nCores = 12, iter = nIter
   )
-  saveRDS(mySims, file.path(pathOut, "sim.RDS"))
+  saveRDS(myVal, file.path(pathOut, "val.RDS"))
 
   # 3. compile
-  myComp <- compile(myFitSpec)
-  saveRDS(myComp, file.path(pathOut, "compile.RDS"))
+  myMod  <- compile(myFitSpec)
+  saveRDS(myMod, file.path(pathOut, "compile.RDS"))
 
   # 4. drawSamples
   ySim   <- extract_ysim(mySims, chain = 1)
   zSim   <- extract_zsim(mySims, chain = 1)
-  myFit  <- drawSamples(myFitSpec, myComp, y = ySim, chains = 2, iter = nIter)
+  myFit  <- drawSamples(myFitSpec, myMod, y = ySim, chains = 2, iter = nIter)
   saveRDS(myFit, file.path(pathOut, "drawSamples.RDS"))
 
   # 5. optimizating keep all
   myOpt  <- optimizing(
-    myFitSpec, myComp, y = ySim, nRuns = 10, nCores = 10, keep = "all"
+    myFitSpec, myMod, y = ySim, nRuns = 10, nCores = 10, keep = "all"
   )
   saveRDS(myOpt, file.path(pathOut, "optimizingAll.RDS"))
 
   # 5. optimizating keep best
   myOpt  <- optimizing(
-    myFitSpec, myComp, y = ySim, nRuns = 10, nCores = 10, keep = "best"
+    myFitSpec, myMod, y = ySim, nRuns = 10, nCores = 10, keep = "best"
   )
   saveRDS(myOpt, file.path(pathOut, "optimizingBest.RDS"))
 }

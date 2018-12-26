@@ -17,6 +17,7 @@ Exponential <- function(beta = NULL, bounds = list(NULL, NULL),
   Density("Exponential", bounds, trunc, k, r, param, beta = beta)
 }
 
+#' @inherit freeParameters
 freeParameters.Exponential <- function(x) {
   betaStr <-
     if (is.Density(x$beta)) {
@@ -32,6 +33,7 @@ freeParameters.Exponential <- function(x) {
   betaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.Exponential <- function(x) {
   betaStr <-
     if (is.Density(x$beta)) {
@@ -50,6 +52,7 @@ fixedParameters.Exponential <- function(x) {
   betaStr
 }
 
+#' @inherit generated
 generated.Exponential <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = exponential_rng(beta%s%s);",
@@ -58,10 +61,12 @@ generated.Exponential <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Exponential <- function(x) {
   return("beta")
 }
 
+#' @inherit logLike
 logLike.Exponential <- function(x) {
   sprintf(
     "loglike[%s][t] = exponential_lpdf(y[t] | beta%s%s);",
@@ -70,6 +75,7 @@ logLike.Exponential <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Exponential <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

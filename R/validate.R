@@ -9,7 +9,7 @@
 #'   \item For all \eqn{n \in 1, \dots, N}:
 #'   \enumerate{
 #'     \item Feed \eqn{\strong{y}_t^{(n)}} to the full model.
-#'     \item Draw one posterior sample of the observation variable \eqn{\strong{y_t}^{(n)}_{\text{new}}}.
+#'     \item Draw one posterior sample of the observation variable \eqn{\strong{y_t}^{(n)}_{new}}.
 #'     \item Collect Hamiltonian Monte Carlo diagnostics: number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sample times.
 #'     \item Collect posterior sampling diagnostics: posterior summary measures (mean, sd, quantiles), comparison against the true value (rank), MCMC convergence measures (Monte Carlo SE, ESS, R Hat).
 #'     \item Collect posterior predictive diagnostics: observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples.
@@ -24,8 +24,25 @@
 #' @param nCores An optional integer with the number of cores to use to run the protocol in parallel. It defaults to half the number of available cores
 #' @param ... Arguments to be passed to \code{\link{drawSamples}}.
 #' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
-#' #'
 #' @examples
+#' \dontrun{
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' myVal <- validate_calibration(
+#'   myFit, N = 50, T = 300, seed = 90, nCores = 10, iter = 500
+#' )
+#' }
 validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCores = NULL, ...) {
   dots <- list(...)
 
@@ -47,6 +64,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   cl <- parallel::makeCluster(nCores, outfile = "")
   doParallel::registerDoParallel(cl)
   `%dopar%` <- foreach::`%dopar%`
+  n <- NULL
   l <- foreach::foreach(n = 1:N, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, , ]  # Chain 1
     paramTrue  <- paramSim[n, ]   # paramSim[n, , ]
@@ -76,8 +94,12 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   )
 }
 
-# Undocumented internal methods -------------------------------------------
-
+#' Compute the convergence and posterior predictive diagnostics.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
+#' @param pars A vector of characters with the name of the quantities to be extracted. The characters strings may include regular expressions. Further, wildcards are automatically translated into regex: \emph{?} matches a single character, while \emph{*} matches any string including an empty one. For example, \emph{?pred} will match both ypred and zpred, and \emph{z*} will match zstar and zpred. It defaults to all the observation model parameters.
+#' @param trueParameters An optional numeric vector with the true value of the parameter vector.
+#' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
 validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
   d       <- get_diagnose_parameters(stanfit, trueParameters, pars)
   nChains <- extract_n_chains(stanfit)
@@ -102,6 +124,8 @@ validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParamet
     )
   )
 }
+
+# Undocumented internal methods -------------------------------------------
 
 get_diagnose_chain_convergence <- function(stanfit) {
   fun <- function(nChain, stanfit) {

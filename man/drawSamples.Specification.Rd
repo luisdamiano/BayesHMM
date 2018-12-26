@@ -2,11 +2,56 @@
 % Please edit documentation in R/specification.R
 \name{drawSamples.Specification}
 \alias{drawSamples.Specification}
-\title{#'}
+\title{Draw samples from a specification.}
 \usage{
-drawSamples.Specification(spec, stanModel = NULL, y, x = NULL,
-  u = NULL, v = NULL, writeDir = tempdir(), ...)
+\method{drawSamples}{Specification}(spec, stanModel = NULL, y,
+  x = NULL, u = NULL, v = NULL, writeDir = tempdir(), ...)
+}
+\arguments{
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+
+\item{stanModel}{An optional instance of S4 class stanmodel returned by \code{\link{compile}}. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.}
+
+\item{y}{A numeric matrix with the observation sample. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the observation vector \emph{R}. If not a matrix, the function tries to cast the object to a \eqn{T\times R} matrix.}
+
+\item{x}{An optional numeric matrix with the covariates for the observation model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the covariate vector \emph{M}. If not a matrix, the function tries to cast the object to a \eqn{T\times M} matrix. Useful for Hidden Markov Regression Model (also known as Markov-switching regressions).}
+
+\item{u}{An optional numeric matrix with the covariates for the transition model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the transition covariate vector \emph{P}. If not a matrix, the function tries to cast the object to a \eqn{T\times P} matrix. Useful for Hidden Markov Models with time-varying transition probabilities.}
+
+\item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
+
+\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
+}
+\value{
+An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
 }
 \description{
-#'
+Draw samples from a specification.
+}
+\examples{
+\dontrun{
+y <- rnorm(1000) # Assume this is your dataset
+
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+myModel <- compile(mySpec)
+
+myFit   <- drawSamples(mySpec, myModel, y = y, chains = 2, iter = 500)
+}
+}
+\seealso{
+See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }

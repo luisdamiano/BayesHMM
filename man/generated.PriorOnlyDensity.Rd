@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{generated.PriorOnlyDensity}
 \alias{generated.PriorOnlyDensity}
-\title{#'}
+\title{Write the Stan code lines related with Density generated quantities.}
 \usage{
 \method{generated}{PriorOnlyDensity}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density generated quantities.
 }

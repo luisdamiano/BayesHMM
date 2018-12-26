@@ -21,6 +21,7 @@ Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
   Density("Cauchy", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
+#' @inherit freeParameters
 freeParameters.Cauchy <- function(x) {
   muStr <- if (is.Density(x$mu)) {
     muBoundsStr <- make_bounds(x, "mu")
@@ -45,6 +46,7 @@ freeParameters.Cauchy <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.Cauchy <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -77,6 +79,7 @@ fixedParameters.Cauchy <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @inherit generated
 generated.Cauchy <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = cauchy_rng(mu%s%s, sigma%s%s);",
@@ -86,10 +89,12 @@ generated.Cauchy <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Cauchy <- function(x) {
   return(c("mu", "sigma"))
 }
 
+#' @inherit logLike
 logLike.Cauchy <- function(x) {
   sprintf(
     "loglike[%s][t] = cauchy_lpdf(y[t] | mu%s%s, sigma%s%s);",
@@ -99,6 +104,7 @@ logLike.Cauchy <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Cauchy <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

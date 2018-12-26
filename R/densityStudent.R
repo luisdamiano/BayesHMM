@@ -24,7 +24,7 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
   Density("Student", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
-#' #'
+#' @inherit freeParameters
 freeParameters.Student <- function(x) {
   muStr <- if (is.Density(x$mu)) {
     muBoundsStr <- make_bounds(x, "mu")
@@ -59,7 +59,7 @@ freeParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
-#' #'
+#' @inherit fixedParameters
 fixedParameters.Student <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -106,7 +106,7 @@ fixedParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
-#' #'
+#' @inherit generated
 generated.Student <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);",
@@ -117,12 +117,12 @@ generated.Student <- function(x) {
   )
 }
 
-#' #'
+#' @inherit getParameterNames
 getParameterNames.Student <- function(x) {
   return(c("mu", "sigma", "nu"))
 }
 
-#' #'
+#' @inherit logLike
 logLike.Student <- function(x) {
   sprintf(
     "loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
@@ -133,10 +133,9 @@ logLike.Student <- function(x) {
   )
 }
 
-#' #'
+#' @inherit prior
 prior.Student <- function(x) {
   truncStr    <- make_trunc(x, "")
-  # rStr        <- sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
   rStr        <- make_rsubindex(x)
   sprintf(
     "%s%s%s ~ student_t(%s, %s, %s) %s;",

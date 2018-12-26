@@ -15,10 +15,20 @@ LinkDensity(name, ...)
 #'}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Create a representation of a link function that may be used only to specify
 a transition model.
+}
+\seealso{
+Other Density: \code{\link{Binomial}},
+  \code{\link{Categorical}}, \code{\link{InitialSoftmax}},
+  \code{\link{RegBernoulliLogit}},
+  \code{\link{RegBinomialLogit}},
+  \code{\link{RegBinomialProbit}},
+  \code{\link{RegCategoricalSoftmax}},
+  \code{\link{RegGaussian}}, \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}
 }
 \concept{LinkDensity}

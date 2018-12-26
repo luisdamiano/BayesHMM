@@ -7,7 +7,7 @@
 explain_density(x, print = FALSE)
 }
 \arguments{
-\item{x}{A Density object.}
+\item{x}{#' @param x A \code{\link{Density}} object.}
 
 \item{print}{An optional logical indicating whether the description should be printing out.}
 }
@@ -16,7 +16,4 @@ A character vector.
 }
 \description{
 Explain a Density object in human readable format.
-}
-\examples{
-explain_density(Gaussian(0, 1), print = TRUE)
 }

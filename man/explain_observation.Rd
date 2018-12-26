@@ -16,10 +16,8 @@ A character vector with an outline of the observation model.
 Create an outline of the observation model.
 }
 \seealso{
-Other explain
-#': \code{\link{explain_initial}},
+Other explain: \code{\link{explain_initial}},
   \code{\link{explain_transition}}
 }
-\concept{explain
-#'}
+\concept{explain}
 \keyword{internal}

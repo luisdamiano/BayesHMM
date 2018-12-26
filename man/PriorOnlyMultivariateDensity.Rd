@@ -16,7 +16,7 @@ PriorOnlyMultivariateDensity(name, ...)
 #'}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Create a representation of a probability mass or density function for a

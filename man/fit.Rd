@@ -25,7 +25,28 @@ An object of S4 class stanfit with some additional attributes (the dataset \emph
 \description{
 Fit a model by MCMC
 }
+\examples{
+\dontrun{
+y <- rnorm(1000) # Assume this is your dataset
+
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+# We suggest storing the compiled model if it
+# will be run more than once (see ?compile)
+myFit   <- fit(mySpec, y = y, chains = 2, iter = 500)
+}
+}
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
-#'
 }

@@ -195,7 +195,7 @@ write_ypredictive <- function(spec, writeDir) {
   )
 }
 
-#' #'
+#' @inherit write_chunks
 write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   write_functions(spec, writeDir)
   write_data(spec, noLogLike, writeDir)
@@ -212,7 +212,7 @@ write_chunks.Specification <- function(spec, noLogLike, writeDir) {
   write_ypredictive(spec, writeDir)
 }
 
-#' #'
+#' @inherit write_model
 write_model.Specification <- function(spec, noLogLike, writeDir) {
   # Select best template
   base  <- system.file(

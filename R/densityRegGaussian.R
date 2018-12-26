@@ -1,11 +1,22 @@
+#' Regression with Gaussian link density (univariate, continuous, unbounded space)
+#'
+#' @inherit Density
+#' @param sigma Either a fixed value or a prior density for the shape parameter.
+#' @param xBeta Either a fixed value or a prior density for the parameter of the regression.
+#' @param M     An integer with the number of covariates in the observation regression model.
+#' @family Density
+#' @examples
+#' RegGaussian(
+#'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
+#'   xBeta = Gaussian(0, 10),
+#'   M     = 3
+#' )
 RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density(
-    "RegGaussian",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("RegGaussian", bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
 }
 
+#' @inherit block_data
 block_data.RegGaussian <- function(x, noLogLike) {
   collapse(
     c(
@@ -16,6 +27,7 @@ block_data.RegGaussian <- function(x, noLogLike) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.RegGaussian <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -42,6 +54,7 @@ freeParameters.RegGaussian <- function(x) {
   collapse(xBetaStr, sigmaStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.RegGaussian <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -74,6 +87,7 @@ fixedParameters.RegGaussian <- function(x) {
   collapse(xBetaStr, sigmaStr)
 }
 
+#' @inherit generated
 generated.RegGaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = normal_rng(x[t] * xBeta%s%s, sigma%s%s);",
@@ -83,10 +97,12 @@ generated.RegGaussian <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.RegGaussian <- function(x) {
   return(c("xBeta", "sigma"))
 }
 
+#' @inherit logLike
 logLike.RegGaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = normal_lpdf(y[t] | x[t] * xBeta%s%s, sigma%s%s);",
@@ -96,6 +112,7 @@ logLike.RegGaussian <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.RegGaussian <- function(x) {
   stop("Not to be used as a prior :)")
 }

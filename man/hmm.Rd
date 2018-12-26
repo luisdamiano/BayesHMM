@@ -214,6 +214,20 @@ Note that fixed parameters may be specified following this example:
 }
 }
 
+\examples{
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+}
 \seealso{
 Other models: \code{\link{mixture}}, \code{\link{specify}}
 }

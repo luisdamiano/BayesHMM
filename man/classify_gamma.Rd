@@ -11,11 +11,9 @@ classify_gamma(fit, reduce = mean, chain = "all")
 
 ## S3 method for signature 'Optimization'
 classify_gamma(fit, reduce = mean, chain = "all")
-#'
 
 ## S4 method for signature 'stanfit'
 classify_gamma(fit, reduce = mean, chain = "all")
-#'
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
@@ -26,7 +24,6 @@ classify_gamma(fit, reduce = mean, chain = "all")
 }
 \value{
 A numeric vector with size equal to the time series length \emph{T} with values from 1 to the number of hidden states \emph{K}.
-#'
 }
 \description{
 This function assigns the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest estimated smoothed probability (\emph{gamma}).

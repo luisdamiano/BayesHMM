@@ -2,10 +2,26 @@
 % Please edit documentation in R/densityGaussian.R
 \name{getParameterNames.Gaussian}
 \alias{getParameterNames.Gaussian}
-\title{#'}
+\title{Return the names of both free and fixed parameters in the Density object.}
 \usage{
 \method{getParameterNames}{Gaussian}(x)
 }
+\arguments{
+\item{x}{#' @param x A \code{\link{Density}} object.}
+}
+\value{
+A vector of character vectors.
+}
 \description{
-#'
+Return the names of both free and fixed parameters in the Density object.
+}
+\examples{
+\dontrun{
+getParameterNames(
+  Gaussian(
+    mu    = Gaussian(mu = 0, sigma = 10),
+    sigma = 1
+  )
+)
+}
 }

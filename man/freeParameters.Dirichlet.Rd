@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityDirichlet.R
 \name{freeParameters.Dirichlet}
 \alias{freeParameters.Dirichlet}
-\title{#'}
+\title{Write the Stan code lines related with Density free parameters.}
 \usage{
 \method{freeParameters}{Dirichlet}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density free parameters.
 }

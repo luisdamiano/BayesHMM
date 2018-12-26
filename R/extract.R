@@ -89,7 +89,6 @@ select_all_parameters <- function(fit) {
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @family extract
 #' @seealso The arguments \emph{reduce}, \emph{combine}, and \emph{chain} are very convenient tools to minimize the amount of data management in your code. See \code{\link{extract_quantity}} for an in-depth explanation on how these work.
-#' @examples
 NULL
 
 #' Extract the estimates of the model parameters (observation, transition, and initial models).

@@ -17,34 +17,34 @@ Dirichlet <- function(alpha = NULL, bounds = list(NULL, NULL),
   MultivariateDensity("Dirichlet", bounds, trunc, k, r, param, alpha = alpha)
 }
 
-#' #'
+#' @inherit freeParameters
 freeParameters.Dirichlet <- function(x) {
   ""
   # stop("TO BE IMPLEMENTED.")
 }
 
-#' #'
+#' @inherit fixedParameters
 fixedParameters.Dirichlet <- function(x) {
   ""
   # stop("TO BE IMPLEMENTED.")
 }
 
-#' #'
+#' @inherit generated
 generated.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-#' #'
+#' @inherit getParameterNames
 getParameterNames.Dirichlet <- function(x) {
   return(c("alpha"))
 }
 
-#' #'
+#' @inherit logLike
 logLike.Dirichlet <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }
 
-#' #'
+#' @inherit prior
 prior.Dirichlet <- function(x) {
   sprintf("%s%s%s ~ dirichlet(%s);", x$param, x$k, x$r,
           sprintf("[%s]'", paste(eval(x$alpha), collapse = ", ")))

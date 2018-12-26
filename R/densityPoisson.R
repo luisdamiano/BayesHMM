@@ -17,6 +17,7 @@ Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Poisson", bounds, trunc, k, r, param, lambda = lambda)
 }
 
+#' @inherit freeParameters
 freeParameters.Poisson <- function(x) {
   lambdaStr <-
     if (is.Density(x$lambda)) {
@@ -32,6 +33,7 @@ freeParameters.Poisson <- function(x) {
   lambdaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.Poisson <- function(x) {
   lambdaStr <-
     if (is.Density(x$lambda)) {
@@ -50,6 +52,7 @@ fixedParameters.Poisson <- function(x) {
   lambdaStr
 }
 
+#' @inherit generated
 generated.Poisson <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = poisson_rng(lambda%s%s);",
@@ -58,10 +61,12 @@ generated.Poisson <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Poisson <- function(x) {
   return("lambda")
 }
 
+#' @inherit logLike
 logLike.Poisson <- function(x) {
   sprintf(
     "loglike[%s][t] = poisson_lpmf(y[t] | lambda%s%s);",
@@ -70,6 +75,7 @@ logLike.Poisson <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Poisson <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

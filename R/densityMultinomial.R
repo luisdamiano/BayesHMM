@@ -20,6 +20,7 @@ Multinomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   MultivariateDiscreteDensity("Multinomial", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @inherit constants
 constants.Multinomial <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of trials",
@@ -27,6 +28,7 @@ constants.Multinomial <- function(x) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.Multinomial <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -41,6 +43,7 @@ freeParameters.Multinomial <- function(x) {
   thetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.Multinomial <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -58,6 +61,8 @@ fixedParameters.Multinomial <- function(x) {
 
   thetaStr
 }
+
+#' @inherit generated
 generated.Multinomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = to_row_vector(multinomial_rng(theta%s%s, N));",
@@ -66,10 +71,12 @@ generated.Multinomial <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Multinomial <- function(x) {
   return("theta")
 }
 
+#' @inherit logLike
 logLike.Multinomial <- function(x) {
   sprintf(
     "loglike[%s][t] = multinomial_lpmf(y[t] | theta%s%s);",
@@ -78,6 +85,7 @@ logLike.Multinomial <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Multinomial <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

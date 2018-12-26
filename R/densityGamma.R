@@ -20,6 +20,7 @@ GammaDensity <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
   Density("GammaDensity", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
+#' @inherit freeParameters
 freeParameters.GammaDensity <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
@@ -46,6 +47,7 @@ freeParameters.GammaDensity <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.GammaDensity <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
@@ -78,18 +80,22 @@ fixedParameters.GammaDensity <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit generated
 generated.GammaDensity <- function(x) {
   sprintf("if(zpred[t] == %s) ypred[t][%s] = gamma_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
+#' @inherit getParameterNames
 getParameterNames.GammaDensity <- function(x) {
   return(c("alpha", "beta"))
 }
 
+#' @inherit logLike
 logLike.GammaDensity <- function(x) {
   sprintf("loglike[%s][t] = gamma_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
+#' @inherit prior
 prior.GammaDensity <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

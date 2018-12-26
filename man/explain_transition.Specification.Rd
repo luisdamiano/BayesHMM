@@ -2,10 +2,20 @@
 % Please edit documentation in R/specification.R
 \name{explain_transition.Specification}
 \alias{explain_transition.Specification}
-\title{#'}
+\title{Create an outline of the transition model.}
 \usage{
 \method{explain_transition}{Specification}(spec)
 }
+\arguments{
+\item{spec}{An object returned by the \code{\link{specify}}) function.}
+}
+\value{
+A character vector with an outline of the transition model.
+}
 \description{
-#'
+Create an outline of the transition model.
+}
+\seealso{
+Other explain: \code{\link{explain_initial}},
+  \code{\link{explain_observation}}
 }

@@ -196,8 +196,23 @@
 #'   )
 #' }
 #'
+#' @aliases Specification
 #' @family models
 #' @examples
+#' mySpec <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' explain(mySpec)
 specify <- function(K, R, observation = NULL, initial = NULL,
                     transition = NULL, name = "") {
   check_natural(K, "K")
@@ -237,26 +252,27 @@ specify <- function(K, R, observation = NULL, initial = NULL,
 #' @param transition An optional logical indicating whether the transition model should be included in the description. It defaults to TRUE.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character string with the model description.
-#' #'
 #' @examples
-#' explain(
-#'   hmm(
-#'     K = 3, R = 1,
-#'     observation = Gaussian(
-#'       mu    = Gaussian(0, 10),
-#'       sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
-#'     ),
-#'     initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-#'     transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-#'     name = "Univariate Gaussian Hidden Markov Model"
-#'   )
+#' mySpec <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
 #' )
+#'
+#' explain(mySpec)
 explain               <- function(spec, observation = TRUE, initial = TRUE,
                                   transition = TRUE, print = TRUE) {
   UseMethod("explain", spec)
 }
 
-#' #'
+#' @inherit explain
 explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
                                   transition = TRUE, print = TRUE) {
   strHeader      <- make_text_header(spec$name)
@@ -275,7 +291,7 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
   )
 
   if (print)
-      cat(strOut)
+    cat(strOut)
 
   invisible(strOut)
 }
@@ -285,12 +301,10 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the observation model.
 #' @family explain
-#' #'
 #' @keywords internal
-#' @examples
 explain_observation <- function(spec) { UseMethod("explain_observation", spec) }
 
-#' #'
+#' @inherit explain_observation
 explain_observation.Specification <- function(spec) {
   R <- spec$observation$R
 
@@ -325,12 +339,10 @@ explain_observation.Specification <- function(spec) {
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the initial model.
 #' @family explain
-#' #'
 #' @keywords internal
-#' @examples
 explain_initial     <- function(spec) { UseMethod("explain_initial", spec) }
 
-#' #'
+#' @inherit explain_initial
 explain_initial.Specification <- function(spec) {
   l <- densityApply(spec$initial$density, explain_density)
 
@@ -355,12 +367,10 @@ explain_initial.Specification <- function(spec) {
 #' @param spec An object returned by the \code{\link{specify}}) function.
 #' @return A character vector with an outline of the transition model.
 #' @family explain
-#' #'
 #' @keywords internal
-#' @examples
 explain_transition  <- function(spec) { UseMethod("explain_transition", spec) }
 
-#' #'
+#' @inherit explain_transition
 explain_transition.Specification <- function(spec) {
   l <- densityApply(spec$transition$density, explain_density)
 
@@ -390,14 +400,31 @@ explain_transition.Specification <- function(spec) {
 #' @param writeDir An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.
 #' @return An instance of S4 class stanmodel.
-#' #'
 #' @examples
+#' \dontrun{
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' # Setting writeDir to store the Stan code file is useful
+#' # if you plan to read and/or edit the automatically generated code
+#' myModel <- compile(mySpec, writeDir = "stan_model.stan")
+#' }
 compile           <- function(spec, priorPredictive = FALSE,
                               writeDir = tempdir(), ...) {
   UseMethod("compile", spec)
 }
 
-#' #'
+#' @inherit compile
 compile.Specification <- function(spec, priorPredictive = FALSE,
                                   writeDir = tempdir(), ...) {
 
@@ -432,16 +459,35 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.
 #' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
 #' @seealso See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
-#' #'
 #' @examples
+#' \dontrun{
+#' y <- rnorm(1000) # Assume this is your dataset
+#'
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' myModel <- compile(mySpec)
+#'
+#' myFit   <- drawSamples(mySpec, myModel, y = y, chains = 2, iter = 500)
+#' }
 drawSamples          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
-                              v = NULL, writeDir = tempdir(), ...) {
+                                 v = NULL, writeDir = tempdir(), ...) {
   UseMethod("drawSamples", spec)
 }
 
-#' #'
+#' @inherit drawSamples
 drawSamples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
-                                   v = NULL, writeDir = tempdir(), ...) {
+                                      v = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
     stanModel <- compile(spec, priorPredictive = FALSE, writeDir)
@@ -458,20 +504,17 @@ drawSamples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = N
   return(stanSampling)
 }
 
-setClass("Specification")
-setGeneric("drawSamples")
-setMethod("drawSamples", "Specification", drawSamples.Specification)
-
 #' Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
 #'
 #' @inherit drawSamples
+#' @param data A named list with the dataset.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
 #' @keywords internal
 run               <- function(spec, data = NULL, writeDir = tempdir(), ...) {
   UseMethod("run", spec)
 }
 
-#' #'
+#' @inherit run
 run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
   stanData <- data
@@ -499,11 +542,31 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 #' @inherit drawSamples
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
 #' @examples
+#' \dontrun{
+#' y <- rnorm(1000) # Assume this is your dataset
+#'
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' # We suggest storing the compiled model if it
+#' # will be run more than once (see ?compile)
+#' myFit   <- fit(mySpec, y = y, chains = 2, iter = 500)
+#' }
 fit               <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   UseMethod("fit", spec)
 }
 
-#' #'
+#' @inherit fit
 fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   run(spec, data = make_data(spec, y, x, u, v), ...)
 }
@@ -522,13 +585,35 @@ fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
 #' @return An \emph{Optimization} object if \emph{keep} is set to \emph{best}, or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
 #' @seealso See \code{\link[rstan]{optimizing}} for further details on tunning the optimization procedure.
 #' @examples
+#' \dontrun{
+#' y <- rnorm(1000) # Assume this is your dataset
+#'
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' myModel <- compile(mySpec)
+#'
+#' myOpt   <- optimizing(
+#'   mySpec, myModel, y = y, nRuns = 50, nCores = 10, keep = "best"
+#' )
+#' }
 optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
                               v = NULL, nRuns = 1, keep = "best", nCores = 1,
                               writeDir = tempdir(), ...) {
   UseMethod("optimizing", spec)
 }
 
-#' #'
+#' @inherit optimizing
 optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
                                      nRuns = 1, keep = "best", nCores = 1,
                                      writeDir = tempdir(), ...) {
@@ -592,6 +677,7 @@ optimizing_all  <- function(stanDots, nRuns, nCores) {
     doParallel::registerDoParallel(cl)
     on.exit({parallel::stopCluster(cl)})
     `%dopar%` <- foreach::`%dopar%`
+    n <- NULL
     foreach::foreach(n = seq_len(nRuns), .combine = c, .packages = c("rstan")) %dopar% {
       optimizing_run(stanDots, n)
     }
@@ -634,12 +720,28 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 #' @param nSimulations An optional integer with the number of simulations. It defaults to 500 time series.
 #' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
 #' @examples
+#' \dontrun{
+#' mySpec   <- hmm(
+#'   K = 2, R = 1,
+#'   observation = Gaussian(
+#'     mu    = Gaussian(0, 10),
+#'     sigma = Student(
+#'       mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+#'     )
+#'   ),
+#'   initial     = Dirichlet(alpha = c(1, 1)),
+#'   transition  = Dirichlet(alpha = c(1, 1)),
+#'   name = "Univariate Gaussian Hidden Markov Model"
+#' )
+#'
+#' mySims <- sim(mySpec, T = 500, nSimulations = 200, seed = 9000)
+#' }
 sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,
                               nSimulations = 500, ...) {
   UseMethod("sim", spec)
 }
 
-#' #'
+#' @inherit sim
 sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
   dots <- list(...)
   dots[["spec"]] <- spec
@@ -653,9 +755,6 @@ sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSim
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @return No return value.
 #' @seealso \code{\link{browseURL}}.
-#' #'
-#' @examples
 browse_model.Specification <- function(spec) {
   browseURL(write_model(spec, noLogLike = FALSE, writeDir = tempdir()))
 }
-

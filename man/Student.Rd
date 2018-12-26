@@ -26,7 +26,7 @@ Student(mu = NULL, sigma = NULL, nu = NULL, bounds = list(NULL,
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
 Student density (univariate, continuous, unbounded space)
@@ -45,8 +45,7 @@ Student(
 \seealso{
 Other Density
 #': \code{\link{Bernoulli}},
-  \code{\link{Beta}}, \code{\link{Binomial}},
-  \code{\link{Categorical}}, \code{\link{Cauchy}},
+  \code{\link{Beta}}, \code{\link{Cauchy}},
   \code{\link{CholeskyLKJCor}}, \code{\link{Default}},
   \code{\link{Dirichlet}}, \code{\link{Exponential}},
   \code{\link{GammaDensity}}, \code{\link{Gaussian}},

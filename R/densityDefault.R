@@ -15,6 +15,7 @@ Default <- function(bounds = list(NULL, NULL),
   PriorOnlyDensity("Default", bounds, trunc, k, r, param)
 }
 
+#' @inherit prior
 prior.Default <- function(x) {
   sprintf("// %s%s%s ~ Improper Uniform Prior;", x$param, x$k, x$r)
 }

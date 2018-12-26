@@ -2,10 +2,18 @@
 % Please edit documentation in R/density.R
 \name{explain_density.Density}
 \alias{explain_density.Density}
-\title{#'}
+\title{Explain a Density object in human readable format.}
 \usage{
 \method{explain_density}{Density}(x, print = FALSE)
 }
+\arguments{
+\item{x}{#' @param x A \code{\link{Density}} object.}
+
+\item{print}{An optional logical indicating whether the description should be printing out.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Explain a Density object in human readable format.
 }

@@ -1,18 +1,17 @@
 #' Prints the result of the model in a human friendly format.
 #'
-#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
+#' @param x An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
 #' @param posteriorInterval An optional numeric vector with the quantilies of the posterior marginal distributions.
-#' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @param observation An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.
 #' @param initial An optional logical indicating whether the initial distribution model should be included in the description. It defaults to TRUE.
 #' @param transition An optional logical indicating whether the transition model should be included in the description. It defaults to TRUE.
 #' @param fixed An optional logical indicating whether the fixed parameters should be included in the description. It defaults to TRUE.
 #' @param print An optional logical indicating whether the description should be printing out.
+#' @param ... Further arguments passed to \code{\link{cat}}.
 #' @return A character string with the model description.
-#' #'
-#' @examples
-print.stanfit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
-                      observation = TRUE, initial = TRUE, transition = TRUE, fixed = TRUE, print = TRUE) {
+print.stanfit <- function(x, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
+                      observation = TRUE, initial = TRUE, transition = TRUE, fixed = TRUE, print = TRUE, ...) {
+  stanfit        <- x
   spec           <- extract_spec(stanfit)
   strHeader      <- make_text_header(spec$name)
   strObservation <- if (observation) {
@@ -49,7 +48,7 @@ print.stanfit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75,
   )
 
   if (print)
-    cat(out)
+    cat(out, ...)
 
   invisible(out)
   # Seeds, rstan, time, etc, fixed parameters
@@ -59,7 +58,7 @@ print.stanfit <- function(stanfit, posteriorInterval = c(0.025, 0.25, 0.5, 0.75,
 # I know this may be controversial but sorry rstan =/
 setMethod("show", "stanfit",
           function(object) {
-            print.stanfit(stanfit = object)
+            print.stanfit(x = object)
           })
 
 # Internal undocumented print functions -----------------------------------

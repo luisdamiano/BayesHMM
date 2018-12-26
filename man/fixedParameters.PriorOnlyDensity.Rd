@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{fixedParameters.PriorOnlyDensity}
 \alias{fixedParameters.PriorOnlyDensity}
-\title{#'}
+\title{Write the Stan code lines related with Density fixed parameters.}
 \usage{
 \method{fixedParameters}{PriorOnlyDensity}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density fixed parameters.
 }

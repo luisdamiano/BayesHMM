@@ -20,6 +20,7 @@ Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
   Density("Beta", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
+#' @inherit freeParameters
 freeParameters.Beta <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
@@ -46,6 +47,7 @@ freeParameters.Beta <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.Beta <- function(x) {
   alphaStr <-
     if (is.Density(x$alpha)) {
@@ -78,18 +80,22 @@ fixedParameters.Beta <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @inherit generated
 generated.Beta <- function(x) {
   sprintf("if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
+#' @inherit getParameterNames
 getParameterNames.Beta <- function(x) {
   return(c("alpha", "beta"))
 }
 
+#' @inherit logLike
 logLike.Beta <- function(x) {
   sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
+#' @inherit prior
 prior.Beta <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

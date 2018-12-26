@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{is.TVTransition.Density}
 \alias{is.TVTransition.Density}
-\title{#'}
+\title{Check if it is a time-varying transition probability object.}
 \usage{
 \method{is.TVTransition}{Density}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} or a \code{\link{Specification}} object.}
+}
+\value{
+TRUE if the object is a time-varying transition probability object, FALSE otherwise.
+}
 \description{
-#'
+Check if it is a time-varying transition probability object.
 }

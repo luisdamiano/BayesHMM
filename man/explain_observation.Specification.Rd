@@ -2,10 +2,20 @@
 % Please edit documentation in R/specification.R
 \name{explain_observation.Specification}
 \alias{explain_observation.Specification}
-\title{#'}
+\title{Create an outline of the observation model.}
 \usage{
 \method{explain_observation}{Specification}(spec)
 }
+\arguments{
+\item{spec}{An object returned by the \code{\link{specify}}) function.}
+}
+\value{
+A character vector with an outline of the observation model.
+}
 \description{
-#'
+Create an outline of the observation model.
+}
+\seealso{
+Other explain: \code{\link{explain_initial}},
+  \code{\link{explain_transition}}
 }

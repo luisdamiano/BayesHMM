@@ -58,6 +58,16 @@ When the observed random variable is multivariate, one individual plot per dimen
 \note{
 If the user was surprised to find the Kolmogorov-Smirnov statistic in a Bayesian software, simply note that we use it as a measure of similarity between two samples from continuous distributions. Data analysis and modeling decissions do not rely on hypothesis testing.
 }
+\examples{
+\dontrun{
+plot_ppredictive(
+  myFit,
+  type = c("density", "cumulative", "boxplot",
+           "histogram", "scatterplot", "ks"),
+  fun = mean, fun1 = mean, fun2 = sd
+)
+}
+}
 \seealso{
 Other visualization functions: \code{\link{get_current_theme}},
   \code{\link{get_default_theme}},

@@ -3,10 +3,7 @@
 #' @inherit Density
 #' @param theta Either a fixed value or a prior density for the success proportion parameter.
 #' @param N     An integer with the number of trials (fixed quantity).
-#'
 #' @family Density
-#' #'
-#'
 #' @examples
 #' # With fixed values for the parameters
 #' Binomial(0.5, 10)
@@ -20,6 +17,7 @@ Binomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Binomial", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @inherit constants
 constants.Binomial <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of trials",
@@ -27,6 +25,7 @@ constants.Binomial <- function(x) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.Binomial <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -42,6 +41,7 @@ freeParameters.Binomial <- function(x) {
   thetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.Binomial <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
@@ -60,6 +60,7 @@ fixedParameters.Binomial <- function(x) {
   thetaStr
 }
 
+#' @inherit generated
 generated.Binomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, theta%s%s);",
@@ -68,10 +69,12 @@ generated.Binomial <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.Binomial <- function(x) {
   return("theta")
 }
 
+#' @inherit logLike
 logLike.Binomial <- function(x) {
   sprintf(
     "loglike[%s][t] = binomial_lpmf(y[t] | N, theta%s%s);",
@@ -80,6 +83,7 @@ logLike.Binomial <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.Binomial <- function(x) {
   truncStr <- make_trunc(x, "")
   rStr     <- make_rsubindex(x)

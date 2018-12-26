@@ -2,11 +2,48 @@
 % Please edit documentation in R/specification.R
 \name{run.Specification}
 \alias{run.Specification}
-\title{#'}
+\title{Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.}
 \usage{
 \method{run}{Specification}(spec, data = NULL, writeDir = tempdir(),
   ...)
 }
+\arguments{
+\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+
+\item{data}{A named list with the dataset.}
+
+\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
+}
+\value{
+An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+}
 \description{
-#'
+Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
+}
+\examples{
+\dontrun{
+y <- rnorm(1000) # Assume this is your dataset
+
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+myModel <- compile(mySpec)
+
+myFit   <- drawSamples(mySpec, myModel, y = y, chains = 2, iter = 500)
+}
+}
+\seealso{
+See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }

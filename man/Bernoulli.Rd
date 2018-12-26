@@ -2,7 +2,7 @@
 % Please edit documentation in R/densityBernoulli.R
 \name{Bernoulli}
 \alias{Bernoulli}
-\title{Bernoulli mass (univariate, discrete, binary space)}
+\title{Bernoulli mass (univariate, discrete, bounded space)}
 \usage{
 Bernoulli(theta = NULL, bounds = list(NULL, NULL), trunc = list(NULL,
   NULL), k = NULL, r = NULL, param = NULL)
@@ -21,10 +21,10 @@ Bernoulli(theta = NULL, bounds = list(NULL, NULL), trunc = list(NULL,
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 }
 \value{
-A Density object.
+#' @param x A \code{\link{Density}} object.
 }
 \description{
-Bernoulli mass (univariate, discrete, binary space)
+Bernoulli mass (univariate, discrete, bounded space)
 }
 \examples{
 # With fixed values for the parameters
@@ -37,12 +37,11 @@ Bernoulli(
 }
 \seealso{
 Other Density
-#': \code{\link{Beta}},
-  \code{\link{Binomial}}, \code{\link{Categorical}},
-  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
-  \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{GammaDensity}},
-  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
+#': \code{\link{Beta}}, \code{\link{Cauchy}},
+  \code{\link{CholeskyLKJCor}}, \code{\link{Default}},
+  \code{\link{Dirichlet}}, \code{\link{Exponential}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
+  \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},
   \code{\link{Multinomial}},

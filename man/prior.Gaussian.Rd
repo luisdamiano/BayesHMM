@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityGaussian.R
 \name{prior.Gaussian}
 \alias{prior.Gaussian}
-\title{#'}
+\title{Write the Stan code lines related with Density priors.}
 \usage{
 \method{prior}{Gaussian}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density priors.
 }

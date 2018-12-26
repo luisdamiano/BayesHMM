@@ -28,3 +28,21 @@ An object of S4 class stanfit with some additional attributes (the dataset \emph
 \description{
 Simulate data from the prior predictive density.
 }
+\examples{
+\dontrun{
+mySpec   <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+mySims <- sim(mySpec, T = 500, nSimulations = 200, seed = 9000)
+}
+}

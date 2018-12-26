@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityGaussian.R
 \name{fixedParameters.Gaussian}
 \alias{fixedParameters.Gaussian}
-\title{#'}
+\title{Write the Stan code lines related with Density fixed parameters.}
 \usage{
 \method{fixedParameters}{Gaussian}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density fixed parameters.
 }

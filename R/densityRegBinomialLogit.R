@@ -1,11 +1,22 @@
+#' Binomial regression with logistic link density (univariate, discrete, binary space)
+#'
+#' @inherit Density
+#' @param xBeta Either a fixed value or a prior density for the parameter of the regression.
+#' @param M     An integer with the number of covariates in the observation regression model.
+#' @param N     An integer with the number of trials (fixed quantity).
+#' @family Density
+#' @examples
+#' RegBinomialLogit(
+#'   xBeta = Gaussian(0, 10),
+#'   M     = 3,
+#'   N     = 10
+#' )
 RegBinomialLogit <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
                               trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "RegBinomialLogit",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("RegBinomialLogit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
+#' @inherit constants
 constants.RegBinomialLogit <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of trials",
@@ -13,6 +24,7 @@ constants.RegBinomialLogit <- function(x) {
   )
 }
 
+#' @inherit block_data
 block_data.RegBinomialLogit <- function(x, noLogLike) {
   collapse(
     c(
@@ -23,6 +35,7 @@ block_data.RegBinomialLogit <- function(x, noLogLike) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.RegBinomialLogit <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -38,6 +51,7 @@ freeParameters.RegBinomialLogit <- function(x) {
   xBetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.RegBinomialLogit <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -56,6 +70,7 @@ fixedParameters.RegBinomialLogit <- function(x) {
   xBetaStr
 }
 
+#' @inherit generated
 generated.RegBinomialLogit <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, inv_logit(x[t] * xBeta%s%s));",
@@ -64,10 +79,12 @@ generated.RegBinomialLogit <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.RegBinomialLogit <- function(x) {
   return(c("xBeta"))
 }
 
+#' @inherit logLike
 logLike.RegBinomialLogit <- function(x) {
   sprintf(
     "loglike[%s][t] = binomial_logit_lpmf(y[t] | N, x[t] * xBeta%s%s);",
@@ -76,6 +93,7 @@ logLike.RegBinomialLogit <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.RegBinomialLogit <- function(x) {
   stop("Not to be used as a prior :)")
 }

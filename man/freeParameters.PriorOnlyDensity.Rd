@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{freeParameters.PriorOnlyDensity}
 \alias{freeParameters.PriorOnlyDensity}
-\title{#'}
+\title{Write the Stan code lines related with Density free parameters.}
 \usage{
 \method{freeParameters}{PriorOnlyDensity}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density free parameters.
 }

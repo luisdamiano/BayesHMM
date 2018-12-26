@@ -1,11 +1,22 @@
+#' Categorical regression with softmax link density (univariate, discrete, bounded space)
+#'
+#' @inherit Density
+#' @param xBeta Either a fixed value or a prior density for the parameter of the regression.
+#' @param M     An integer with the number of covariates in the observation regression model.
+#' @param N     An integer with the number of trials (fixed quantity).
+#' @family Density
+#' @examples
+#' RegCategoricalSoftmax(
+#'   xBeta = Gaussian(0, 10),
+#'   M     = 3,
+#'   N     = 10
+#' )
 RegCategoricalSoftmax <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
                              trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity(
-    "RegCategoricalSoftmax",
-    mget(names(formals()), sys.frame(sys.nframe()))
-  )
+  Density("RegCategoricalSoftmax", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
+#' @inherit constants
 constants.RegCategoricalSoftmax <- function(x) {
   sprintf(
     "int<lower = 1> N = %s; // number of categories",
@@ -13,6 +24,7 @@ constants.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @inherit block_data
 block_data.RegCategoricalSoftmax <- function(x, noLogLike) {
   collapse(
     c(
@@ -23,6 +35,7 @@ block_data.RegCategoricalSoftmax <- function(x, noLogLike) {
   )
 }
 
+#' @inherit freeParameters
 freeParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -43,6 +56,7 @@ freeParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr
 }
 
+#' @inherit fixedParameters
 fixedParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr <-
     if (is.Density(x$xBeta)) {
@@ -61,6 +75,7 @@ fixedParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr
 }
 
+#' @inherit generated
 generated.RegCategoricalSoftmax <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = categorical_logit_rng((x[t] * xBeta%s%s')');",
@@ -69,10 +84,12 @@ generated.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.RegCategoricalSoftmax <- function(x) {
   return(c("xBeta"))
 }
 
+#' @inherit logLike
 logLike.RegCategoricalSoftmax <- function(x) {
   sprintf(
     "loglike[%s][t] = categorical_logit_lpmf(y[t] | (x[t] * xBeta%s%s')');",
@@ -81,6 +98,7 @@ logLike.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.RegCategoricalSoftmax <- function(x) {
   stop("Not to be used as a prior :)")
 }

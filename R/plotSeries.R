@@ -15,6 +15,12 @@
 #' #'
 #' @family visualization functions
 #' @examples
+#' \dontrun{
+#' plot_series(
+#'   myFit,
+#'   features = c("stateShade", "yColoredLine", "bottomColoredMarks")
+#' )
+#' }
 plot_series <- function(fit, r = NULL,
                         features = NULL, stateProbability = "smoothed",
                         stateProbabilityFunction = median, chain = 1,
@@ -96,6 +102,13 @@ plot_series <- function(fit, r = NULL,
 #' #'
 #' @family visualization functions
 #' @examples
+#' \dontrun{
+#' plot_state_probability(
+#'   myFit, stateProbability = "filtered",
+#'   features = c("stateShade", "probabilityFan", "bottomColoredMarks"),
+#'   chain = 2
+#' )
+#' }
 plot_state_probability <- function(fit, stateProbability = "smoothed",
                                    features = NULL, stateProbabilityFunction = median,
                                    stateProbabilityInterval = posterior_intervals(c(0.1, 0.9)),

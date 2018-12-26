@@ -11,18 +11,15 @@ extract_time(fit)
 
 ## S3 method for signature 'Optimization'
 extract_time(fit)
-#'
 
 ## S4 method for signature 'stanfit'
 extract_time(fit)
-#'
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
 }
 \value{
 For objects fit via \code{\link{drawSamples}}, a named numeric matrix with two columns (warm-up and sample time) and one row per chain. For objects fit via \code{\link{optimizing}}, the system time elapsed.
-#'
 }
 \description{
 Extract the time elapsed when fitting the model.

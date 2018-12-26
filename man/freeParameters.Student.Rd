@@ -2,10 +2,16 @@
 % Please edit documentation in R/densityStudent.R
 \name{freeParameters.Student}
 \alias{freeParameters.Student}
-\title{#'}
+\title{Write the Stan code lines related with Density free parameters.}
 \usage{
 \method{freeParameters}{Student}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density free parameters.
 }

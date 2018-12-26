@@ -38,6 +38,14 @@ plot_series(fit, r = NULL, features = NULL,
 \description{
 Plot the observation series along with many other customizable options.
 }
+\examples{
+\dontrun{
+plot_series(
+  myFit,
+  features = c("stateShade", "yColoredLine", "bottomColoredMarks")
+)
+}
+}
 \seealso{
 Other visualization functions: \code{\link{get_current_theme}},
   \code{\link{get_default_theme}},

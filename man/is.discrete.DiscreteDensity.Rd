@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{is.discrete.DiscreteDensity}
 \alias{is.discrete.DiscreteDensity}
-\title{#'}
+\title{Check if it is a Density object for discrete random variables.}
 \usage{
 \method{is.discrete}{DiscreteDensity}(x)
 }
+\arguments{
+\item{x}{#' @param x A \code{\link{Density}} object.}
+}
+\value{
+TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
+}
 \description{
-#'
+Check if it is a Density object for discrete random variables.
 }

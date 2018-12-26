@@ -2,6 +2,7 @@
 % Please edit documentation in R/specification.R
 \name{specify}
 \alias{specify}
+\alias{Specification}
 \title{Specify a model.}
 \usage{
 specify(K, R, observation = NULL, initial = NULL, transition = NULL,
@@ -214,6 +215,22 @@ Note that fixed parameters may be specified following this example:
 }
 }
 
+\examples{
+mySpec <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(
+      mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)
+    )
+  ),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
+  name = "Univariate Gaussian Hidden Markov Model"
+)
+
+explain(mySpec)
+}
 \seealso{
 \code{\link{compile}}, \code{\link{explain}}, \code{\link{fit}}, \code{\link{optimizing}}, \code{\link{sim}}, \code{\link{validate_calibration}}.
 

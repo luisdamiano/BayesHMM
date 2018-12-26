@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{constants.Density}
 \alias{constants.Density}
-\title{#'}
+\title{Write the Stan code lines related with Density constants.}
 \usage{
 \method{constants}{Density}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density constants.
 }

@@ -18,6 +18,7 @@ MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL
   MultivariateDensity("MVGaussianCholeskyCor", bounds, trunc, k, r, param, mu = mu, L = L)
 }
 
+#' @inherit freeParameters
 freeParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -42,6 +43,7 @@ freeParameters.MVGaussianCholeskyCor <- function(x) {
   collapse(muStr, LStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -74,6 +76,7 @@ fixedParameters.MVGaussianCholeskyCor <- function(x) {
   collapse(muStr, LStr)
 }
 
+#' @inherit generated
 generated.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = multi_normal_cholesky_rng(mu%s, L%s)';",
@@ -81,10 +84,12 @@ generated.MVGaussianCholeskyCor <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.MVGaussianCholeskyCor <- function(x) {
   return(c("mu", "L"))
 }
 
+#' @inherit logLike
 logLike.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "loglike[%s][t] = multi_normal_cholesky_lpdf(y[t] | mu%s, L%s);",
@@ -92,6 +97,7 @@ logLike.MVGaussianCholeskyCor <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.MVGaussianCholeskyCor <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }

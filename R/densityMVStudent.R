@@ -27,6 +27,7 @@ MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, N
   MultivariateDensity("MVStudent", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
+#' @inherit freeParameters
 freeParameters.MVStudent <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -62,6 +63,7 @@ freeParameters.MVStudent <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @inherit fixedParameters
 fixedParameters.MVStudent <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
@@ -110,6 +112,7 @@ fixedParameters.MVStudent <- function(x) {
   collapse(muStr, sigmaStr, nuStr )
 }
 
+#' @inherit generated
 generated.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
@@ -118,10 +121,12 @@ generated.MVStudent <- function(x) {
   )
 }
 
+#' @inherit getParameterNames
 getParameterNames.MVStudent <- function(x) {
   return(c("mu", "sigma", "nu"))
 }
 
+#' @inherit logLike
 logLike.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
@@ -130,6 +135,7 @@ logLike.MVStudent <- function(x) {
   )
 }
 
+#' @inherit prior
 prior.MVStudent <- function(x) {
   stop("TO BE IMPLEMENTED.")
 }

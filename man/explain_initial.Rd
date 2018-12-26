@@ -16,10 +16,8 @@ A character vector with an outline of the initial model.
 Create an outline of the initial distribution model.
 }
 \seealso{
-Other explain
-#': \code{\link{explain_observation}},
+Other explain: \code{\link{explain_observation}},
   \code{\link{explain_transition}}
 }
-\concept{explain
-#'}
+\concept{explain}
 \keyword{internal}

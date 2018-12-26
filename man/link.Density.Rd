@@ -2,10 +2,16 @@
 % Please edit documentation in R/density.R
 \name{link.Density}
 \alias{link.Density}
-\title{#'}
+\title{Write the Stan code lines related with Density link function.}
 \usage{
 \method{link}{Density}(x)
 }
+\arguments{
+\item{x}{A \code{\link{Density}} object.}
+}
+\value{
+A character vector.
+}
 \description{
-#'
+Write the Stan code lines related with Density link function.
 }

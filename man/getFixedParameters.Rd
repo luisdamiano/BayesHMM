@@ -7,7 +7,7 @@
 getFixedParameters(x)
 }
 \arguments{
-\item{x}{A Density object.}
+\item{x}{#' @param x A \code{\link{Density}} object.}
 }
 \value{
 A vector of character vectors.
@@ -16,10 +16,12 @@ A vector of character vectors.
 Return the names of the fixed parameters in the Density object.
 }
 \examples{
+\dontrun{
 getFixedParameters(
   Gaussian(
     mu    = Gaussian(mu = 0, sigma = 10),
     sigma = 1
   )
 )
+}
 }

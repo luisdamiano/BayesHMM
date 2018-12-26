@@ -2,7 +2,7 @@
 % Please edit documentation in R/density.R
 \name{is.Density}
 \alias{is.Density}
-\title{Check if it is a Density object.}
+\title{Check if it is a \code{\link{Density}} object.}
 \usage{
 is.Density(x)
 }
@@ -10,15 +10,8 @@ is.Density(x)
 \item{x}{An object.}
 }
 \value{
-TRUE if the object is a Density objectm FALSE otherwise.
+TRUE if the object is a Density object, FALSE otherwise.
 }
 \description{
-Check if it is a Density object.
-}
-\examples{
-is.Density(
-  Gaussian(0, 1)
-)
-
-is.Density(1 + 1)
+Check if it is a \code{\link{Density}} object.
 }

@@ -11,11 +11,9 @@ extract_parameter_names(fit)
 
 ## S3 method for signature 'Optimization'
 extract_parameter_names(fit)
-#'
 
 ## S4 method for signature 'stanfit'
 extract_parameter_names(fit)
-#'
 }
 \arguments{
 \item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
@@ -28,5 +26,4 @@ Extract the names of all the model parameters in the fit object.
 }
 \seealso{
 See \code{\link{select_parameters}} for extracting the names of part of the model.
-#'
 }

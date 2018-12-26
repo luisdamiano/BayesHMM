@@ -17,5 +17,4 @@ Load the underlying Stan code into an IDE or browser (platform dependent).
 }
 \seealso{
 \code{\link{browseURL}}.
-#'
 }

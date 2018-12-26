@@ -1,12 +1,57 @@
 # Stan blocks & included chunks
+
+#' Write the Stan code lines related with Density constants.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 constants          <- function(x) { UseMethod("constants", x) }
+
+#' Write the Stan code lines related with Density generated quantities.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 generated          <- function(x) { UseMethod("generated", x) }
+
+#' Write the Stan code lines related with Density parameters.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 parameters         <- function(x) { UseMethod("parameters", x) }
+
+#' Write the Stan code lines related with Density log likelihood.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 logLike            <- function(x) { UseMethod("logLike", x) }
+
+#' Write the Stan code lines related with Density no log likelihood.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 noLogLike          <- function(x) { UseMethod("noLogLike", x) }
+
+#' Write the Stan code lines related with Density link function.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 link               <- function(x) { UseMethod("link", x) }
+
+#' Write the Stan code lines related with Density free parameters.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 freeParameters     <- function(x) { UseMethod("freeParameters", x) }
+
+#' Write the Stan code lines related with Density fixed parameters.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 fixedParameters    <- function(x) { UseMethod("fixedParameters", x) }
+
+#' Write the Stan code lines related with Density priors.
+#'
+#' @param x A \code{\link{Density}} object.
+#' @return A character vector.
 prior              <- function(x) { UseMethod("prior", x) }
 
 # Other (not directly related to Stan code)
@@ -25,7 +70,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' @param ...  Other arguments for the density.
 #'
 #' #'
-#' @return A Density object.
+#' @return #' @param x A \code{\link{Density}} object.
 #' @family Density
 #' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
 Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
@@ -52,12 +97,12 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 
 #' Explain a Density object in human readable format.
 #'
-#' @param x A Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character vector.
 explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
 
-#' #'
+#' @inherit explain_density
 explain_density.Density <- function(x, print = FALSE) {
   freeParam  <- getFreeParameters(x)
   fixedParam <- getFixedParameters(x)
@@ -141,7 +186,7 @@ explain_density.Density <- function(x, print = FALSE) {
 
 #' Return the names of both free and fixed parameters in the Density object.
 #'
-#' @param x A Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -154,7 +199,7 @@ explain_density.Density <- function(x, print = FALSE) {
 #' }
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 
-#' #'
+#' @inherit getParameterNames
 getParameterNames.Density <- function(x) {
   warning(
     sprintf(
@@ -166,7 +211,7 @@ getParameterNames.Density <- function(x) {
 
 #' Return the names of the free parameters in the Density object.
 #'
-#' @param x A Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -179,7 +224,7 @@ getParameterNames.Density <- function(x) {
 #' }
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 
-#' #'
+#' @inherit getFreeParameters
 getFreeParameters.Density <- function(x) {
   l <-
     sapply(
@@ -210,7 +255,7 @@ getFreeParameters.Density <- function(x) {
 
 #' Return the names of the fixed parameters in the Density object.
 #'
-#' @param x A Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return A vector of character vectors.
 #' @examples
 #' \dontrun{
@@ -223,7 +268,7 @@ getFreeParameters.Density <- function(x) {
 #' }
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
 
-#' #'
+#' @inherit getFixedParameters
 getFixedParameters.Density <- function(x) {
   l <-
     sapply(
@@ -241,40 +286,40 @@ getFixedParameters.Density <- function(x) {
 
 #' Check if it is a Density object for the transition model.
 #'
-#' @param x a Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant for transition models, FALSE otherwise.
 is.link            <- function(x) { UseMethod("is.link", x) }
 
-#' #'
+#' @inherit is.link
 is.link.Density                     <- function(x) { FALSE }
 
 #' Check if it is a Density object for discrete random variables.
 #'
-#' @param x a Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 
-#' #'
+#' @inherit is.discrete
 is.discrete.Density                 <- function(x) { FALSE }
 
 #' Check if it is a Density object for multivariate random variables.
 #'
-#' @param x a Density object.
+#' @param x #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
-#' #'
+#' @inherit is.multivariate
 is.multivariate.Density             <- function(x) { FALSE }
 
-#' Check if it is a Density object.
+#' Check if it is a \code{\link{Density}} object.
 #'
 #' @param x An object.
-#' @return TRUE if the object is a Density objectm FALSE otherwise.
+#' @return TRUE if the object is a Density object, FALSE otherwise.
 is.Density <- function(x) {
   "Density" %in% class(x)
 }
 
-#' #'
+#' @inherit block_data
 block_data.Density <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
@@ -283,21 +328,21 @@ block_data.Density <- function(x, noLogLike) {
   }
 }
 
-#' #'
+#' @inherit noLogLike
 noLogLike.Density <- function(x) {
   sprintf("loglike[%s][t] = 1;", x$k)
 }
 
-#' #'
+#' @inherit is.TVInitial
 is.TVInitial.Density                <- function(x) { FALSE }
 
-#' #'
+#' @inherit is.TVTransition
 is.TVTransition.Density             <- function(x) { FALSE }
 
-#' #'
+#' @inherit constants
 constants.Density                   <- function(x) { ""    }
 
-#' #'
+#' @inherit link
 link.Density                        <- function(x) { ""    }
 
 #' Create a representation of a probability mass or density function for a
@@ -326,10 +371,10 @@ DiscreteDensity <- function(name, ...) {
   x
 }
 
-#' #'
+#' @inherit is.discrete
 is.discrete.DiscreteDensity         <- function(x) { TRUE  }
 
-#' #'
+#' @inherit block_data
 block_data.DiscreteDensity <- function(x, noLogLike) {
   if (noLogLike) {
     "// No observation vector"
@@ -351,7 +396,7 @@ MultivariateDiscreteDensity <- function(name, ...) {
   x
 }
 
-#' #'
+#' @inherit is.multivariate
 is.multivariate.MultivariateDensity <- function(x) { TRUE  }
 
 #' Create a representation of a probability mass or density function for a
@@ -378,19 +423,19 @@ PriorOnlyMultivariateDensity <- function(name, ...) {
   x
 }
 
-#' #'
+#' @inherit freeParameters
 freeParameters.PriorOnlyDensity     <- function(x) { ""    }
 
-#' #'
+#' @inherit fixedParameters
 fixedParameters.PriorOnlyDensity    <- function(x) { ""    }
 
-#' #'
+#' @inherit generated
 generated.PriorOnlyDensity          <- function(x) { ""    }
 
-#' #'
+#' @inherit getFreeParameters
 getFreeParameters.PriorOnlyDensity  <- function(x) { ""    }
 
-#' #'
+#' @inherit logLike
 logLike.PriorOnlyDensity            <- function(x) { ""    }
 
 #' Create a representation of a link function that may be used only to specify
@@ -404,18 +449,17 @@ LinkDensity <- function(name, ...) {
   x
 }
 
-#' #'
+#' @inherit is.link
 is.link.LinkDensity                 <- function(x) { TRUE  }
 
 # DensityList -------------------------------------------------------------
 #' Append two Density objects.
 #'
-#' @aliases +
+#' @aliases + DensityList
 #' @usage x + y
 #' @param x A Density object (e.g. \code{\link{Gaussian}})
 #' @param y A Density object (e.g. \code{\link{Gaussian}})
 #' @return A DensityList object.
-#' #'
 #' @examples Gaussian(0, 1) + Gaussian(0, 1)
 `+.Density` <- function(x, y = NULL) {
   if (!is.null(y) & !is.Density(y)) {
@@ -431,19 +475,25 @@ is.link.LinkDensity                 <- function(x) { TRUE  }
   structure(l, class = c("DensityList"))
 }
 
-#' #'
-explain_density.DensityList <- function(x, print = FALSE){
-  lapply(x, explain_density, print = print)
-}
-
+#' Check if it is a \code{\link{DensityList}} object.
+#'
+#' @param x An object.
+#' @return TRUE if the object is a DensityList object, FALSE otherwise.
 is.DensityList <- function(x) {
   all(sapply(x, is.Density))
 }
 
+#' @inherit explain_density
+explain_density.DensityList <- function(x, print = FALSE){
+  lapply(x, explain_density, print = print)
+}
+
+#' @inherit is.discrete
 is.discrete.DensityList <- function(x) {
   all(sapply(x, is.discrete))
 }
 
+#' @inherit is.multivariate
 is.multivariate.DensityList <- function(x) {
   all(sapply(x, is.multivariate))
 }
