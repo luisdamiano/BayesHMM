@@ -24,7 +24,7 @@ Suggests:
     knitr,
     rmarkdown,
     RUnit
-URL: https://github.com/luisdamiano/BayesHMM/
+URL: https://github.com/luisdamiano/BayesHMM/, https://summerofcode.withgoogle.com/projects/#4681157036212224
 BugReports: https://github.com/luisdamiano/BayesHMM/issues
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
