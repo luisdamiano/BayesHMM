@@ -19,9 +19,9 @@ plot_ppredictive.stanfit(stanfit, type = "", r = NULL, subset = NULL,
   fun2Control = NULL, ksControl = NULL, main = NULL)
 }
 \arguments{
-\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
+\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.}
 
-\item{type}{An optional vector of strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.}
+\item{type}{An optional vector of character strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.}
 
 \item{r}{An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.}
 
@@ -49,8 +49,7 @@ plot_ppredictive.stanfit(stanfit, type = "", r = NULL, subset = NULL,
 
 \item{ksControl}{Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".}
 
-\item{main}{An optional string with the overall title for the plot.
-#'}
+\item{main}{An optional character string with the overall title for the plot.}
 }
 \description{
 When the observed random variable is multivariate, one individual plot per dimension will be drawn (i.e. the analysis will be carried out marginally). As with all visualizations from this package, colors are fully customizable via a \code{\link{theme}}. Note that this method is only available for full Bayesian estimation run via Markov-chain Monte Carlo.

@@ -1,21 +1,21 @@
-#' Default prior density (prior only)
+#' Improper uniform prior density (prior only)
 #'
 #' Improper uniform prior.
 #'
 #' @inherit Density
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # As a prior
-#' Beta(Default(), Default())
-Default <- function(bounds = list(NULL, NULL),
+#' Beta(ImproperUniform(), ImproperUniform())
+ImproperUniform <- function(bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  PriorOnlyDensity("Default", bounds, trunc, k, r, param)
+  PriorOnlyDensity("ImproperUniform", bounds, trunc, k, r, param)
 }
 
+#' @keywords internal
 #' @inherit prior
-prior.Default <- function(x) {
+prior.ImproperUniform <- function(x) {
   sprintf("// %s%s%s ~ Improper Uniform Prior;", x$param, x$k, x$r)
 }

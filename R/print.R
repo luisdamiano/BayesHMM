@@ -1,6 +1,6 @@
 #' Prints the result of the model in a human friendly format.
 #'
-#' @param x An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
+#' @param x An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.
 #' @param posteriorInterval An optional numeric vector with the quantilies of the posterior marginal distributions.
 #' @param observation An optional logical indicating whether the observation model should be included in the description. It defaults to TRUE.
 #' @param initial An optional logical indicating whether the initial distribution model should be included in the description. It defaults to TRUE.

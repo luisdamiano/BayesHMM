@@ -14,6 +14,7 @@ TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
   Density("TransitionSoftmax", bounds, trunc, k, r, param, uBeta = uBeta, P = P)
 }
 
+#' @keywords internal
 #' @inherit explain_density
 explain_density.TransitionSoftmax <- function(x) {
   collapse(
@@ -22,6 +23,7 @@ explain_density.TransitionSoftmax <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.TransitionSoftmax <- function(x, noLogLike) {
   c(
@@ -30,6 +32,7 @@ block_data.TransitionSoftmax <- function(x, noLogLike) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.TransitionSoftmax <- function(x) {
   uBetaStr <-
@@ -49,17 +52,20 @@ freeParameters.TransitionSoftmax <- function(x) {
   uBetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.TransitionSoftmax <- function(x) {
   warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
   return("")
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.TransitionSoftmax <- function(x) {
   return("uBeta")
 }
 
+#' @keywords internal
 #' @inherit link
 link.TransitionSoftmax <- function(x) {
   sprintf(
@@ -68,6 +74,7 @@ link.TransitionSoftmax <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.TransitionSoftmax <- function(x) {
   warning("prior.Softmax: TO BE IMPLEMENTED.")

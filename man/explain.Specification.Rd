@@ -2,7 +2,7 @@
 % Please edit documentation in R/specification.R
 \name{explain.Specification}
 \alias{explain.Specification}
-\title{Create an user-friendly text describing the model.}
+\title{Create a user-friendly text describing the model.}
 \usage{
 \method{explain}{Specification}(spec, observation = TRUE,
   initial = TRUE, transition = TRUE, print = TRUE)
@@ -40,3 +40,4 @@ mySpec <- hmm(
 
 explain(mySpec)
 }
+\keyword{internal}

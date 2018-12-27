@@ -7,10 +7,10 @@
 \method{getParameterNames}{Dirichlet}(x)
 }
 \arguments{
-\item{x}{#' @param x A \code{\link{Density}} object.}
+\item{x}{A \code{\link{Density}} object.}
 }
 \value{
-A vector of character vectors.
+A vector of character strings.
 }
 \description{
 Return the names of both free and fixed parameters in the Density object.
@@ -25,3 +25,4 @@ getParameterNames(
 )
 }
 }
+\keyword{internal}

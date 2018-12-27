@@ -15,7 +15,7 @@ extract_grid(stanoptim, pars)
 \arguments{
 \item{stanoptim}{An object returned by \code{\link{optimizing}}.}
 
-\item{pars}{An optional vector of characters with the name of the quantities to be extracted. The characters strings may include regular expressions. Further, wildcards are automatically translated into regex: \emph{?} matches a single character, while \emph{*} matches any string including an empty one. For example, \emph{?pred} will match both ypred and zpred, and \emph{z*} will match zstar and zpred. It defaults to all the parameters.}
+\item{pars}{An optional vector of characters with the name of the quantities to be extracted. The characters strings may include regular expressions. Further, wildcards are automatically translated into regex: \emph{?} matches a single character, while \emph{*} matches any character string including an empty one. For example, \emph{?pred} will match both ypred and zpred, and \emph{z*} will match zstar and zpred. It defaults to all the parameters.}
 }
 \value{
 A named matrix with one row for each time the optimization procedure was run. Columns include the seed, the estimated log posterior evaluated at the maximum, the code returned by the optimization algorithm, the time elapsed (user, system and total) in seconds, and the estimated value of the parameters selected in
@@ -25,7 +25,7 @@ Extract summary results from the optimization procedure.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{Optimization}: For Optimization objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{best}.
+\item \code{Optimization}: For \code{\link{Optimization}} objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{best}.
 
 \item \code{OptimizationList}: For OptimizationList objects, which are returned by \code{\link{optimizing}} with \emph{keep} set to \emph{all}.
 }}

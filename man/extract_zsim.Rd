@@ -2,13 +2,13 @@
 % Please edit documentation in R/extract.R
 \name{extract_zsim}
 \alias{extract_zsim}
-\title{Extract the simulated sample of the state variable (ysim).}
+\title{Extract the simulated sample of the state variable (zsim).}
 \usage{
 extract_zsim(fit, n = NULL, reduce = NULL, combine = NULL,
   chain = "all", ...)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 
 \item{n}{(optional) An integer number indicating the number of the iteration that should be returned.}
 
@@ -18,7 +18,7 @@ extract_zsim(fit, n = NULL, reduce = NULL, combine = NULL,
 
 \item{chain}{Either "all" or any integer number between 1 and the number of chains M.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.}
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{draw_samples}}.}
 }
 \value{
 A numeric array with three dimensions [N, M, T]: number of iterations \emph{N}, number of chains \emph{M}, length of the time series {T}, the dimension of the observation vector \emph{R}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a two-dimensional numeric array [N, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a two-dimensional numeric array [M, T].
@@ -27,16 +27,16 @@ A numeric array with three dimensions [N, M, T]: number of iterations \emph{N}, 
 If the \emph{fit} object was created via the \code{\link{sim}} method, this function returns a sample of the state variable from the prior predictive densitiy (i.e. using random values of the parameters). If a dataset was provided when fitting the model instead, the sample is simulated from the posterior predictive density. In the latter case, calling either \code{\link{extract_zsim}} and \code{\link{extract_zpred}} are equivalent.
 }
 \seealso{
-Other extract
-#': \code{\link{extract_K}},
+Other extract: \code{\link{extract_K}},
   \code{\link{extract_R}}, \code{\link{extract_T}},
   \code{\link{extract_alpha}}, \code{\link{extract_data}},
   \code{\link{extract_filename}},
   \code{\link{extract_gamma}},
+  \code{\link{extract_obs_parameters}},
   \code{\link{extract_parameters}},
   \code{\link{extract_spec}}, \code{\link{extract_ypred}},
   \code{\link{extract_ysim}}, \code{\link{extract_y}},
-  \code{\link{extract_zpred}}, \code{\link{extract_zstar}}
+  \code{\link{extract_zpred}}, \code{\link{extract_zstar}},
+  \code{\link{extract}}
 }
-\concept{extract
-#'}
+\concept{extract}

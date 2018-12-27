@@ -4,22 +4,22 @@
 #'
 #' \strong{BayesHMM.theme}: settings for visualizations.
 #' \describe{
-#'   \item{boxY}{A string with the color of the lines of the box corresponding to the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{boxplot}.}
-#'   \item{boxYPred}{A string with the color of the lines of the many boxes corresponding to the samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{boxplot}.}
-#'   \item{cumulativeY}{A string with the color of the cumulative density line for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{cumulative}.}
-#'   \item{cumulativeYPred}{A string with the color of the cumulative density lines for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{cumulative}.}
-#'   \item{densityY}{A string with the color of the density line for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{density}.}
-#'   \item{densityYPred}{A string with the color of the density lines for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{density}.}
-#'   \item{histBorder}{A string with the color of the border of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
-#'   \item{histCol}{A string with the color of the area of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
-#'   \item{histLine}{A string with the color of the vertical line related to the \emph{fun} argument of the \code{\link{plot_ppredictive}}) function. The line is located at the value returned by \emph{fun} applied to the actual sample. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
-#'   \item{ksBorder}{A string with the color of the border of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{ks}.}
-#'   \item{ksCol}{A string with the color of the area of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{ks}.}
-#'   \item{scatterY}{A string with the color of the point for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{scatterplot}.}
-#'   \item{scatterYPred}{A string with the color of the points for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{scatterplot}.}
-#'   \item{seriesY}{A string with the color of the observation time series. Applies to \code{\link{plot_series}} and \code{\link{plot_state_probability}}.}
+#'   \item{boxY}{A character string with the color of the lines of the box corresponding to the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{boxplot}.}
+#'   \item{boxYPred}{A character string with the color of the lines of the many boxes corresponding to the samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{boxplot}.}
+#'   \item{cumulativeY}{A character string with the color of the cumulative density line for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{cumulative}.}
+#'   \item{cumulativeYPred}{A character string with the color of the cumulative density lines for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{cumulative}.}
+#'   \item{densityY}{A character string with the color of the density line for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{density}.}
+#'   \item{densityYPred}{A character string with the color of the density lines for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{density}.}
+#'   \item{histBorder}{A character string with the color of the border of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
+#'   \item{histCol}{A character string with the color of the area of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
+#'   \item{histLine}{A character string with the color of the vertical line related to the \emph{fun} argument of the \code{\link{plot_ppredictive}}) function. The line is located at the value returned by \emph{fun} applied to the actual sample. Applies to \code{\link{plot_ppredictive}} with features \emph{histogram}.}
+#'   \item{ksBorder}{A character string with the color of the border of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{ks}.}
+#'   \item{ksCol}{A character string with the color of the area of the histogram bars. Applies to \code{\link{plot_ppredictive}} with features \emph{ks}.}
+#'   \item{scatterY}{A character string with the color of the point for the observed sample. Applies to \code{\link{plot_ppredictive}} with features \emph{scatterplot}.}
+#'   \item{scatterYPred}{A character string with the color of the points for the many samples drawn from the posterior predictive density. Applies to \code{\link{plot_ppredictive}} with features \emph{scatterplot}.}
+#'   \item{seriesY}{A character string with the color of the observation time series. Applies to \code{\link{plot_series}} and \code{\link{plot_state_probability}}.}
 #'   \item{shadeAlpha}{A numeric value between zero and one with the transparency setting for the shaded features, where lower values lead to more transparent shading. Applies to \code{\link{plot_series}} and \code{\link{plot_state_probability}}.}
-#'   \item{states}{A vector of strings with the colors of each latent state. Applies to \code{\link{plot_series}} and \code{\link{plot_state_probability}}.}
+#'   \item{states}{A vector of character strings with the colors of each latent state. Applies to \code{\link{plot_series}} and \code{\link{plot_state_probability}}.}
 #' }
 #'
 #' Note that the overall legend uses the colors \emph{densityY} and \emph{densityYPred} for the actual sample and the posterior predictive samples respectively.
@@ -27,7 +27,7 @@
 #' \strong{BayesHMM.print}: settings for text printouts.
 #' \describe{
 #'   \item{char}{A character to use to print text lines and boxes. It defaults to an underscore.}
-#'   \item{tab}{A string to be used for indentation. It defaults to two spaces.}
+#'   \item{tab}{A character string to be used for indentation. It defaults to two spaces.}
 #'   \item{textWidth}{An integer with the width of the text lines and boxes. It defaults to 80 characters.}
 #' }
 #' @name theme
@@ -52,7 +52,6 @@ load_theme <- function() {
 #' Return the default theme.
 #'
 #' @return A named list with the theme.
-#' #'
 #' @family visualization functions
 get_default_theme <- function() {
   list(
@@ -91,7 +90,6 @@ get_default_theme <- function() {
 #' Return the current theme.
 #'
 #' @return A named list with the theme.
-#' #'
 #' @family visualization functions
 get_current_theme <- function() {
   list(

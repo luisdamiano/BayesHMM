@@ -17,6 +17,7 @@ Binomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Binomial", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @keywords internal
 #' @inherit constants
 constants.Binomial <- function(x) {
   sprintf(
@@ -25,6 +26,7 @@ constants.Binomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Binomial <- function(x) {
   thetaStr <-
@@ -41,6 +43,7 @@ freeParameters.Binomial <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Binomial <- function(x) {
   thetaStr <-
@@ -60,6 +63,7 @@ fixedParameters.Binomial <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Binomial <- function(x) {
   sprintf(
@@ -69,11 +73,13 @@ generated.Binomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Binomial <- function(x) {
   return("theta")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Binomial <- function(x) {
   sprintf(
@@ -83,6 +89,7 @@ logLike.Binomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Binomial <- function(x) {
   truncStr <- make_trunc(x, "")

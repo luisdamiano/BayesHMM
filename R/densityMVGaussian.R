@@ -5,7 +5,6 @@
 #' @param sigma Either a fixed value or a prior density for the covariance matrix.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -24,6 +23,7 @@ MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
   MultivariateDensity("MVGaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.MVGaussian <- function(x) {
   muStr <-
@@ -49,6 +49,7 @@ freeParameters.MVGaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.MVGaussian <- function(x) {
   muStr <-
@@ -82,6 +83,7 @@ fixedParameters.MVGaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.MVGaussian <- function(x) {
   sprintf(
@@ -90,11 +92,13 @@ generated.MVGaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.MVGaussian <- function(x) {
   return(c("mu", "sigma"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.MVGaussian <- function(x) {
   sprintf(
@@ -103,6 +107,7 @@ logLike.MVGaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.MVGaussian <- function(x) {
   truncStr <- make_trunc(x, "")

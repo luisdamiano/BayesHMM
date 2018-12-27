@@ -5,7 +5,6 @@
 #' @param sigma Either a fixed value or a prior density for the shape parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -21,6 +20,7 @@ Gaussian <- function(mu, sigma, bounds = list(NULL, NULL), trunc  = list(NULL, N
   Density("Gaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Gaussian <- function(x) {
   muStr <-
@@ -48,6 +48,7 @@ freeParameters.Gaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Gaussian <- function(x) {
   muStr <-
@@ -81,6 +82,7 @@ fixedParameters.Gaussian <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Gaussian <- function(x) {
   sprintf(
@@ -91,11 +93,13 @@ generated.Gaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Gaussian <- function(x) {
   return(c("mu", "sigma"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Gaussian <- function(x) {
   sprintf(
@@ -106,6 +110,7 @@ logLike.Gaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Gaussian <- function(x) {
   truncStr <- make_trunc(x, "")

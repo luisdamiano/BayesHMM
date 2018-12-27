@@ -7,11 +7,12 @@
 \method{explain_density}{TransitionSoftmax}(x)
 }
 \arguments{
-\item{x}{#' @param x A \code{\link{Density}} object.}
+\item{x}{A \code{\link{Density}} object.}
 }
 \value{
-A character vector.
+A character string.
 }
 \description{
 Explain a Density object in human readable format.
 }
+\keyword{internal}

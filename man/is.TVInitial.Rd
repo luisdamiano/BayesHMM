@@ -15,3 +15,4 @@ TRUE if the object is a time-varying initial distribution object, FALSE otherwis
 \description{
 Check if it is a time-varying initial distribution object.
 }
+\keyword{internal}

@@ -8,7 +8,7 @@ select_parameters(fit, observation = TRUE, initial = TRUE,
   transition = TRUE)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 
 \item{observation}{An optional logical scalar indicating whether the names of the observation model parameters should be included. Defaults to TRUE.}
 
@@ -17,7 +17,7 @@ select_parameters(fit, observation = TRUE, initial = TRUE,
 \item{transition}{An optional logical scalar indicating whether the names of the transition model parameters should be included. Defaults to TRUE.}
 }
 \value{
-A character vector with the selected model parameter names.
+A character string with the selected model parameter names.
 }
 \description{
 Return the name of the model parameters.

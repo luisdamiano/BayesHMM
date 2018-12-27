@@ -22,8 +22,8 @@ exCase1  <- hmm(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = LKJCor(eta = 4)
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "A different multivariate density for each each state"
 )
 
@@ -38,8 +38,8 @@ exCase2  <- hmm(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = LKJCor(eta = 2)
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Same multivariate density for every state"
 )
 
@@ -54,8 +54,8 @@ exCase3  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Same univariate density for every state and every output variable"
 )
 
@@ -74,8 +74,8 @@ exCase4  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Same R univariate densities for every state"
 )
 
@@ -98,8 +98,8 @@ exCase5  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Same univariate density for every output variable"
 )
 
@@ -134,8 +134,8 @@ exCase6  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Different univariate densities for every pair of state and output variable"
 )
 
@@ -163,8 +163,8 @@ exCase7  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "A different univariate density for each each state"
 )
 
@@ -179,8 +179,8 @@ exCase8  <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default(),
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform(),
   name = "Same multivariate density for every state"
 )
 
@@ -203,7 +203,7 @@ exCase9  <- hmm(
       alpha = Gaussian(0, 1),
       beta  = Gaussian(1, 10)
     ),
-  transition  = Default(),
+  transition  = ImproperUniform(),
   name = "Same univariate density for every initial state"
 )
 
@@ -221,9 +221,9 @@ exCase10  <- hmm(
     ),
   initial =
     Dirichlet(
-      alpha = Default()
+      alpha = ImproperUniform()
     ),
-  transition  = Default(),
+  transition  = ImproperUniform(),
   name = "One multivariate density for the whole initial vector"
 )
 
@@ -252,7 +252,7 @@ exCase11 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  transition  = Default(),
+  transition  = ImproperUniform(),
   name = "A different univariate density for each initial state"
 )
 
@@ -270,9 +270,9 @@ exCase12 <- hmm(
     ),
   initial =
     InitialSoftmax(
-      vBeta = Default()
+      vBeta = ImproperUniform()
     ),
-  transition  = Default(),
+  transition  = ImproperUniform(),
   name = "TV Initial distribution"
 )
 

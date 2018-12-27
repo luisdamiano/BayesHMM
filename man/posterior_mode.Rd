@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{posterior_mode}
 \alias{posterior_mode}
-\title{Return the posterior mode of a vector}
+\title{Return the posterior mode of a vector.}
 \usage{
 posterior_mode(x)
 }
@@ -11,10 +11,9 @@ posterior_mode(x)
 }
 \value{
 A scalar with same type as `x`.
-#'
 }
 \description{
-Return the posterior mode of a vector
+Return the posterior mode of a vector.
 }
 \examples{
 posterior_mode(sample(1:3, 20, replace = TRUE))

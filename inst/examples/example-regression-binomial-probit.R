@@ -3,7 +3,7 @@ library(rstan)
 mySpec <- hmm(
   K = 2, R = 1,
   observation = RegBinomialProbit(
-    xBeta = Default(),
+    xBeta = ImproperUniform(),
     M     = 3,
     N     = 100
   ),

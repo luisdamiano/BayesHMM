@@ -16,6 +16,7 @@ RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, bounds = list(NULL
   Density("RegGaussian", bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.RegGaussian <- function(x, noLogLike) {
   collapse(
@@ -27,6 +28,7 @@ block_data.RegGaussian <- function(x, noLogLike) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.RegGaussian <- function(x) {
   xBetaStr <-
@@ -54,6 +56,7 @@ freeParameters.RegGaussian <- function(x) {
   collapse(xBetaStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.RegGaussian <- function(x) {
   xBetaStr <-
@@ -87,6 +90,7 @@ fixedParameters.RegGaussian <- function(x) {
   collapse(xBetaStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.RegGaussian <- function(x) {
   sprintf(
@@ -97,11 +101,13 @@ generated.RegGaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.RegGaussian <- function(x) {
   return(c("xBeta", "sigma"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.RegGaussian <- function(x) {
   sprintf(
@@ -112,6 +118,7 @@ logLike.RegGaussian <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.RegGaussian <- function(x) {
   stop("Not to be used as a prior :)")

@@ -6,7 +6,6 @@
 #' @param nu    Either a fixed value or a prior density for the degree-of-freedom scalar parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -27,6 +26,7 @@ MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, N
   MultivariateDensity("MVStudent", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.MVStudent <- function(x) {
   muStr <-
@@ -63,6 +63,7 @@ freeParameters.MVStudent <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.MVStudent <- function(x) {
   muStr <-
@@ -112,6 +113,7 @@ fixedParameters.MVStudent <- function(x) {
   collapse(muStr, sigmaStr, nuStr )
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
@@ -121,11 +123,13 @@ generated.MVStudent <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.MVStudent <- function(x) {
   return(c("mu", "sigma", "nu"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
@@ -135,6 +139,7 @@ logLike.MVStudent <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.MVStudent <- function(x) {
   stop("TO BE IMPLEMENTED.")

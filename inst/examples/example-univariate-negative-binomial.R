@@ -1,8 +1,8 @@
 mySpec <- hmm(
   K = 3, R = 1,
   observation = NegativeBinomial(
-    alpha  = Default(bounds = list(0, NULL)),
-    beta   = Default(bounds = list(0, NULL))
+    alpha  = ImproperUniform(bounds = list(0, NULL)),
+    beta   = ImproperUniform(bounds = list(0, NULL))
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

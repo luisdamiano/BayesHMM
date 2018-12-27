@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{make_text_subheader}
 \alias{make_text_subheader}
-\title{Make a string with a subheader.}
+\title{Make a character string with a subheader.}
 \usage{
 make_text_subheader(text)
 }
 \value{
-A string with a subheader.
+A character string with a subheader.
 }
 \description{
 This function formats the text into a subheader.

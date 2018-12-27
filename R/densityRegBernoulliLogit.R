@@ -14,6 +14,7 @@ RegBernoulliLogit <- function(xBeta = NULL, M = NULL, bounds = list(NULL, NULL),
   Density("RegBernoulliLogit", bounds, trunc, k, r, param, xBeta = xBeta, M = M)
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.RegBernoulliLogit <- function(x, noLogLike) {
   c(
@@ -23,6 +24,7 @@ block_data.RegBernoulliLogit <- function(x, noLogLike) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.RegBernoulliLogit <- function(x) {
   xBetaStr <-
@@ -39,6 +41,7 @@ freeParameters.RegBernoulliLogit <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.RegBernoulliLogit <- function(x) {
   xBetaStr <-
@@ -58,6 +61,7 @@ fixedParameters.RegBernoulliLogit <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.RegBernoulliLogit <- function(x) {
   sprintf(
@@ -67,11 +71,13 @@ generated.RegBernoulliLogit <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.RegBernoulliLogit <- function(x) {
   return(c("xBeta"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.RegBernoulliLogit <- function(x) {
   sprintf(
@@ -81,6 +87,7 @@ logLike.RegBernoulliLogit <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.RegBernoulliLogit <- function(x) {
   stop("Not to be used as a prior :)")

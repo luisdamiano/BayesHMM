@@ -4,7 +4,7 @@
 #   K = 3, R = 2,
 #   observation = MVGaussian(
 #     mu    = Gaussian(mu = 0, sigma = 100) + Student(mu = 0, sigma = 100, nu = 10),
-#     sigma = Default()
+#     sigma = ImproperUniform()
 #   ),
 #   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
 #   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

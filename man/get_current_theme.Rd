@@ -8,7 +8,6 @@ get_current_theme()
 }
 \value{
 A named list with the theme.
-#'
 }
 \description{
 Return the current theme.

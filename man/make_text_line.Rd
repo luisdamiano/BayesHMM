@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{make_text_line}
 \alias{make_text_line}
-\title{Make a string with a line (horizontal rule).}
+\title{Make a character string with a line (horizontal rule).}
 \usage{
 make_text_line()
 }
 \value{
-A string with a line.
+A character string with a line.
 }
 \description{
 This function creates a horizontal line using the character and text width set in the \emph{char} and \emph{textWidth} theme fields respectively.

@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{make_text_header}
 \alias{make_text_header}
-\title{Make a string with a header.}
+\title{Make a character string with a header.}
 \usage{
 make_text_header(text)
 }
 \value{
-A string with a header.
+A character string with a header.
 }
 \description{
 This function formats the text into a header.

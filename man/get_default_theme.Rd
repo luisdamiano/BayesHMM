@@ -8,7 +8,6 @@ get_default_theme()
 }
 \value{
 A named list with the theme.
-#'
 }
 \description{
 Return the default theme.

@@ -10,29 +10,39 @@ observation model.}
 DiscreteDensity(name, ...)
 }
 \arguments{
-\item{name}{A character vector with the name of the density.}
+\item{name}{A character string with the name of the density.}
 
-\item{...}{Other arguments for the density.
-
-#'}
+\item{...}{Other arguments for the density.}
 }
 \value{
-#' @param x A \code{\link{Density}} object.
+A \code{\link{Density}} object.
 }
 \description{
-Create a representation of a probability mass or density function for a
-discrete univariate random variable. It can be used to specify either a
+It can be used to specify either a
 prior distribution for a model parameter or a likelihood function for an
 observation model.
 }
 \seealso{
-Other Density: \code{\link{Binomial}},
-  \code{\link{Categorical}}, \code{\link{InitialSoftmax}},
+Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
+  \code{\link{Binomial}}, \code{\link{Categorical}},
+  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
+  \code{\link{Dirichlet}}, \code{\link{Exponential}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
+  \code{\link{ImproperUniform}},
+  \code{\link{InitialSoftmax}},
+  \code{\link{InverseWishart}},
+  \code{\link{MVGaussianCholeskyCor}},
+  \code{\link{MVGaussian}}, \code{\link{MVStudent}},
+  \code{\link{Multinomial}},
+  \code{\link{NegativeBinomialLocation}},
+  \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
   \code{\link{RegBernoulliLogit}},
   \code{\link{RegBinomialLogit}},
   \code{\link{RegBinomialProbit}},
   \code{\link{RegCategoricalSoftmax}},
-  \code{\link{RegGaussian}}, \code{\link{TransitionFixed}},
-  \code{\link{TransitionSoftmax}}
+  \code{\link{RegGaussian}}, \code{\link{Student}},
+  \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}, \code{\link{Wishart}}
 }
 \concept{DiscreteDensity}
+\keyword{internal}

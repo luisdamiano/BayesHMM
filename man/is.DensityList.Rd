@@ -15,3 +15,4 @@ TRUE if the object is a DensityList object, FALSE otherwise.
 \description{
 Check if it is a \code{\link{DensityList}} object.
 }
+\keyword{internal}

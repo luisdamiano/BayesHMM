@@ -1,8 +1,9 @@
-#' Write RUnit test files based on specifications stored in text files. Please, DO NOT USE double quotation marks (i.e. avoid the name field).
+#' Write RUnit test files based on specifications stored in text files.
 #'
-#' @param filename A character vector with the filename where the specifications are stored.
-#' @param pathIn   A character vector with the path where the specification files are stored.
-#' @param pathOut  A character vector with the path where the tests should be written.
+#' Please, DO NOT USE double quotation marks (i.e. avoid the name field).
+#' @param filename A character string with the filename where the specifications are stored.
+#' @param pathIn   A character string with the path where the specification files are stored.
+#' @param pathOut  A character string with the path where the tests should be written.
 #' @return Nothing. It will write the tests to a file named `tests/test_%s.R`, where `%s` is the filename passed as argument without extension.
 #' @examples
 #' build_tests("density.txt", "tests", "inst/tests")
@@ -27,7 +28,7 @@ build_tests <- function(filename, pathIn, pathOut) {
 
 #' Write RDS objects with precomputed computations used by unit tests.
 #'
-#' @param pathOut  A character vector with the path where the objects should be written.
+#' @param pathOut  A character string with the path where the objects should be written.
 #' @return Nothing. It will write RDS files in the `pathOut` folder.
 #' @examples
 #' build_objects("inst/tests")
@@ -39,7 +40,7 @@ build_objects <- function(pathOut) {
   # Specs
   mySimSpec <- hmm(
     K = 2, R = 1,
-    observation = Gaussian(-5, 1) + Gaussian(5, 2),
+    observation = Gaussian(-5, 1) + Gaussian(5, 1),
     initial     = Dirichlet(alpha = c(1, 1)),
     transition  = Dirichlet(alpha = c(1, 1)),
     name = "Univariate Gaussian Hidden Markov Model for unit tests"
@@ -64,32 +65,31 @@ build_objects <- function(pathOut) {
   myVal  <- validate_calibration(
     myFitSpec, N = 1, T = tLength, seed = seed, nCores = 12, iter = nIter
   )
-  saveRDS(myVal, file.path(pathOut, "val.RDS"))
+  saveRDS(myVal, file.path(pathOut, "validate_calibration.RDS"))
 
   # 3. compile
   myMod  <- compile(myFitSpec)
   saveRDS(myMod, file.path(pathOut, "compile.RDS"))
 
-  # 4. drawSamples
+  # 4. draw_samples
   ySim   <- extract_ysim(mySims, chain = 1)
-  zSim   <- extract_zsim(mySims, chain = 1)
-  myFit  <- drawSamples(myFitSpec, myMod, y = ySim, chains = 2, iter = nIter)
-  saveRDS(myFit, file.path(pathOut, "drawSamples.RDS"))
+  myFit  <- draw_samples(myFitSpec, myMod, y = ySim, chains = 2, iter = nIter)
+  saveRDS(myFit, file.path(pathOut, "draw_samples.RDS"))
 
   # 5. optimizating keep all
   myOpt  <- optimizing(
     myFitSpec, myMod, y = ySim, nRuns = 10, nCores = 10, keep = "all"
   )
-  saveRDS(myOpt, file.path(pathOut, "optimizingAll.RDS"))
+  saveRDS(myOpt, file.path(pathOut, "optimizing_all.RDS"))
 
   # 5. optimizating keep best
   myOpt  <- optimizing(
     myFitSpec, myMod, y = ySim, nRuns = 10, nCores = 10, keep = "best"
   )
-  saveRDS(myOpt, file.path(pathOut, "optimizingBest.RDS"))
+  saveRDS(myOpt, file.path(pathOut, "optimizing_best.RDS"))
 }
 
 # Build tests
-build_tests("density.txt", "tests", "inst/tests")
-build_tests("specification.txt", "tests", "inst/tests")
-build_objects("inst/tests")
+# build_tests("density.txt", "tests", "inst/tests")
+# build_tests("specification.txt", "tests", "inst/tests")
+# build_objects("inst/tests")

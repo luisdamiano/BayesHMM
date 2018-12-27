@@ -10,8 +10,9 @@ prior(x)
 \item{x}{A \code{\link{Density}} object.}
 }
 \value{
-A character vector.
+A character string.
 }
 \description{
 Write the Stan code lines related with Density priors.
 }
+\keyword{internal}

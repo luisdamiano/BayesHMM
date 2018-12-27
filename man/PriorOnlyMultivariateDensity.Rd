@@ -9,21 +9,20 @@ distribution for a model parameter.}
 PriorOnlyMultivariateDensity(name, ...)
 }
 \arguments{
-\item{name}{A character vector with the name of the density.}
+\item{name}{A character string with the name of the density.}
 
-\item{...}{Other arguments for the density.
-
-#'}
+\item{...}{Other arguments for the density.}
 }
 \value{
-#' @param x A \code{\link{Density}} object.
+A \code{\link{Density}} object.
 }
 \description{
-Create a representation of a probability mass or density function for a
-multivariate random variable that may be used only to specify a prior
-distribution for a model parameter.
+It can be used to specify either a
+prior distribution for a model parameter or a likelihood function for an
+observation model.
 }
 \seealso{
 Other PriorOnlyDensity: \code{\link{PriorOnlyDensity}}
 }
 \concept{PriorOnlyDensity}
+\keyword{internal}

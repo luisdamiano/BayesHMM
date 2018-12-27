@@ -38,7 +38,7 @@ y = rbind(
 myModel <- compile(mySpec)
 myOptim <- optimizing(mySpec, myModel, y = y, nRun = 50, nCores = 4, keep = "best", as_vector = FALSE)
 
-# Fitted via drawSamples -----------------------------------------------------
+# Fitted via draw_samples -----------------------------------------------------
 str(
   extract_quantity(myFit, pars = "mu11")
 )

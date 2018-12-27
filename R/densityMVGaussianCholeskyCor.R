@@ -5,7 +5,6 @@
 #' @param L     Either a fixed value or a prior density for the Cholesky factor of the correlation matrix.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With priors for the parameters
@@ -18,6 +17,7 @@ MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL
   MultivariateDensity("MVGaussianCholeskyCor", bounds, trunc, k, r, param, mu = mu, L = L)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
@@ -43,6 +43,7 @@ freeParameters.MVGaussianCholeskyCor <- function(x) {
   collapse(muStr, LStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.MVGaussianCholeskyCor <- function(x) {
   muStr <-
@@ -76,6 +77,7 @@ fixedParameters.MVGaussianCholeskyCor <- function(x) {
   collapse(muStr, LStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.MVGaussianCholeskyCor <- function(x) {
   sprintf(
@@ -84,11 +86,13 @@ generated.MVGaussianCholeskyCor <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.MVGaussianCholeskyCor <- function(x) {
   return(c("mu", "L"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.MVGaussianCholeskyCor <- function(x) {
   sprintf(
@@ -97,6 +101,7 @@ logLike.MVGaussianCholeskyCor <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.MVGaussianCholeskyCor <- function(x) {
   stop("TO BE IMPLEMENTED.")

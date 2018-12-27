@@ -337,7 +337,6 @@ prank <- function(x, y, ...) {
 #' @param ... Arguments to be passed to \code{\link{quantile}}.
 #'
 #' @return A scalar with same type as `x`.
-#' #'
 #'
 #' @examples
 #' f <- posterior_intervals(probs = c(0.05, 0.95))
@@ -348,12 +347,11 @@ posterior_intervals <- function(...) {
   }
 }
 
-#' Return the posterior mode of a vector
+#' Return the posterior mode of a vector.
 #'
 #' @param x A vector
 #'
 #' @return A scalar with same type as `x`.
-#' #'
 #'
 #' @examples posterior_mode(sample(1:3, 20, replace = TRUE))
 posterior_mode <- function(x) {
@@ -411,10 +409,10 @@ get_rstan_info <- function() {
   )
 }
 
-#' Make a string with a line (horizontal rule).
+#' Make a character string with a line (horizontal rule).
 #'
 #' This function creates a horizontal line using the character and text width set in the \emph{char} and \emph{textWidth} theme fields respectively.
-#' @return A string with a line.
+#' @return A character string with a line.
 #' @keywords internal
 make_text_line <- function() {
   theme      <- getOption("BayesHMM.print")
@@ -423,10 +421,10 @@ make_text_line <- function() {
   paste(rep(char, textWidth), collapse = "")
 }
 
-#' Make a string with a header.
+#' Make a character string with a header.
 #'
 #' This function formats the text into a header.
-#' @return A string with a header.
+#' @return A character string with a header.
 #' @keywords internal
 make_text_header <- function(text) {
   textLine   <- make_text_line()
@@ -437,10 +435,10 @@ make_text_header <- function(text) {
   )
 }
 
-#' Make a string with a subheader.
+#' Make a character string with a subheader.
 #'
 #' This function formats the text into a subheader.
-#' @return A string with a subheader.
+#' @return A character string with a subheader.
 #' @keywords internal
 make_text_subheader <- function(text) {
   textLine   <- make_text_line()

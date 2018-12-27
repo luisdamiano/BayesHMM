@@ -10,7 +10,7 @@
 \item{spec}{An object returned by the \code{\link{specify}}) function.}
 }
 \value{
-A character vector with an outline of the transition model.
+A character string with an outline of the transition model.
 }
 \description{
 Create an outline of the transition model.
@@ -19,3 +19,4 @@ Create an outline of the transition model.
 Other explain: \code{\link{explain_initial}},
   \code{\link{explain_observation}}
 }
+\keyword{internal}

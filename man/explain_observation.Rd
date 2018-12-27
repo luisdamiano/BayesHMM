@@ -10,7 +10,7 @@ explain_observation(spec)
 \item{spec}{An object returned by the \code{\link{specify}}) function.}
 }
 \value{
-A character vector with an outline of the observation model.
+A character string with an outline of the observation model.
 }
 \description{
 Create an outline of the observation model.

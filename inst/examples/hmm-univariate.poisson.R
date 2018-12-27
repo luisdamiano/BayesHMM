@@ -1,7 +1,7 @@
 mySpec <- hmm(
   K = 3, R = 1,
   observation = Poisson(
-    lambda = Default(bounds = list(0, NULL))
+    lambda = ImproperUniform(bounds = list(0, NULL))
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

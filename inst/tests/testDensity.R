@@ -11,9 +11,10 @@ test_density.txt_3 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observati
 test_density.txt_4 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Beta(1, 1), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
 
-test_density.txt_5 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Beta(alpha = Default(bounds = list(0, 
-    NULL)), beta = Default(bounds = list(0, NULL))), initial = Dirichlet(alpha = c(0.5, 
-    0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
+test_density.txt_5 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Beta(alpha = ImproperUniform(bounds = list(0, 
+    NULL)), beta = ImproperUniform(bounds = list(0, NULL))), 
+    initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
+        0.5, 0.5)))") } 
 
 test_density.txt_6 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Binomial(theta = 0.5, N = 100), 
     initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
@@ -62,7 +63,7 @@ test_density.txt_16 <- function() { no_error_in_spec("hmm(K = 3, R = 4, observat
     0.25, 0.25), N = 10), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
 
-test_density.txt_17 <- function() { no_error_in_spec("hmm(K = 3, R = 4, observation = Multinomial(theta = Default(), 
+test_density.txt_17 <- function() { no_error_in_spec("hmm(K = 3, R = 4, observation = Multinomial(theta = ImproperUniform(), 
     N = 10), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)))") } 
 
@@ -99,9 +100,10 @@ test_density.txt_24 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observat
     initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
         0.5, 0.5)))") } 
 
-test_density.txt_25 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomial(alpha = Default(bounds = list(0, 
-    NULL)), beta = Default(bounds = list(0, NULL))), initial = Dirichlet(alpha = c(0.5, 
-    0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.5)))") } 
+test_density.txt_25 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomial(alpha = ImproperUniform(bounds = list(0, 
+    NULL)), beta = ImproperUniform(bounds = list(0, NULL))), 
+    initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
+        0.5, 0.5)))") } 
 
 test_density.txt_26 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = NegativeBinomialLocation(mu = 1, 
     phi = 2), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), 

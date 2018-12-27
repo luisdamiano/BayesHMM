@@ -5,7 +5,7 @@
 \alias{browse_model}
 \alias{browse_model.Optimization}
 \alias{browse_model,stanfit-method}
-\title{Load the underlying Stan code into an IDE or browser (platform dependent).}
+\title{Load the underlying Stan code into an IDE or browser.}
 \usage{
 browse_model(fit, ...)
 
@@ -16,7 +16,7 @@ browse_model(fit, ...)
 browse_model(fit, ...)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 
 \item{...}{(optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).}
 }
@@ -24,7 +24,7 @@ browse_model(fit, ...)
 No return value.
 }
 \description{
-Load the underlying Stan code into an IDE or browser (platform dependent).
+The behavior is platform dependent.
 }
 \seealso{
 \code{\link{browseURL}}.

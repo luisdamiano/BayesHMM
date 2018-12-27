@@ -2,12 +2,12 @@
 % Please edit documentation in R/extract.R
 \name{extract_filename}
 \alias{extract_filename}
-\title{Extract the path to file with the underlying Stan code \emph{filename}.}
+\title{Extract the path to file with the underlying Stan code.}
 \usage{
 extract_filename(fit)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 }
 \value{
 A character string with the path to file with the underlying Stan code.
@@ -16,7 +16,7 @@ A character string with the path to file with the underlying Stan code.
 The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object).
 }
 \details{
-The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, specification object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{drawSamples}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
+The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, \code{\link{Specification}} object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{draw_samples}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
 }
 \note{
 This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
@@ -24,16 +24,15 @@ This function does not allow the arguments \emph{combine}, \emph{reduce}, and \e
 \seealso{
 \code{\link{browse_model}} for viewing the code using your IDE.
 
-Other extract
-#': \code{\link{extract_K}},
+Other extract: \code{\link{extract_K}},
   \code{\link{extract_R}}, \code{\link{extract_T}},
   \code{\link{extract_alpha}}, \code{\link{extract_data}},
   \code{\link{extract_gamma}},
+  \code{\link{extract_obs_parameters}},
   \code{\link{extract_parameters}},
   \code{\link{extract_spec}}, \code{\link{extract_ypred}},
   \code{\link{extract_ysim}}, \code{\link{extract_y}},
   \code{\link{extract_zpred}}, \code{\link{extract_zsim}},
-  \code{\link{extract_zstar}}
+  \code{\link{extract_zstar}}, \code{\link{extract}}
 }
-\concept{extract
-#'}
+\concept{extract}

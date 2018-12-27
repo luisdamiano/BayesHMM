@@ -4,19 +4,18 @@
 \name{extract_n_chains}
 \alias{extract_n_chains}
 \alias{extract_n_chains,stanfit-method}
-\title{Extract the number of chains (M).}
+\title{Extract the number of chains \emph{M}.}
 \usage{
 extract_n_chains(stanfit)
 
 \S4method{extract_n_chains}{stanfit}(stanfit)
 }
 \arguments{
-\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
+\item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.}
 }
 \value{
-The number of chains (M) used to fit the model.
-#'Method extract_n_chains
+The number of chains \emph{M} used to fit the model.
 }
 \description{
-Extract the number of chains (M).
+Extract the number of chains \emph{M}.
 }

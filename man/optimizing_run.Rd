@@ -12,7 +12,7 @@ optimizing_run(stanDots, n)
 \item{n}{An integer with the number of the instance (i.e. the n-th time the algorithm is run on this model).}
 }
 \value{
-An \emph{Optimization} object.
+An \code{\link{Optimization}} object.
 }
 \description{
 Run one instance of the

@@ -2,7 +2,7 @@
 % Please edit documentation in R/specification.R
 \name{browse_model.Specification}
 \alias{browse_model.Specification}
-\title{Load the underlying Stan code into an IDE or browser (platform dependent).}
+\title{Load the underlying Stan code into an IDE or browser.}
 \usage{
 browse_model.Specification(spec)
 }
@@ -13,7 +13,7 @@ browse_model.Specification(spec)
 No return value.
 }
 \description{
-Load the underlying Stan code into an IDE or browser (platform dependent).
+The behavior is platform dependent.
 }
 \seealso{
 \code{\link{browseURL}}.

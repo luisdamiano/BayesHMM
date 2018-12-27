@@ -3,9 +3,9 @@ library(rstan)
 mySpec <- hmm(
   K = 3, R = 2,
   observation = MVStudent(
-    nu    = Default(),
+    nu    = ImproperUniform(),
     mu    = Gaussian(0, 100),
-    sigma = Default()
+    sigma = ImproperUniform()
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

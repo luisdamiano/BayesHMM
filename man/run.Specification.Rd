@@ -12,12 +12,12 @@
 
 \item{data}{A named list with the dataset.}
 
-\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+\item{writeDir}{An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
 
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
 }
 \value{
-An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
 }
 \description{
 Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
@@ -41,9 +41,10 @@ mySpec   <- hmm(
 
 myModel <- compile(mySpec)
 
-myFit   <- drawSamples(mySpec, myModel, y = y, chains = 2, iter = 500)
+myFit   <- draw_samples(mySpec, myModel, y = y, chains = 2, iter = 500)
 }
 }
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }
+\keyword{internal}

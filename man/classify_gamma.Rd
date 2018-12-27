@@ -16,7 +16,7 @@ classify_gamma(fit, reduce = mean, chain = "all")
 classify_gamma(fit, reduce = mean, chain = "all")
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 
 \item{reduce}{An optional function applied to the samples corresponding to one time step \emph{t}, one hidden state \emph{k}, and one chain \emph{m}. The observation at time step \emph{t} is then assigned to the hidden state with largest value. Note that the user needs to supply a function as an argument, and not a character string with the name of the function. This argument is not used for maximum a posteriori estimates returned by \code{\link{optimizing}} since there is only one scalar per quantity. It defaults to the \code{\link{mean}} function.}
 

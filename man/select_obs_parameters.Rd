@@ -7,7 +7,7 @@
 select_obs_parameters(fit)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 }
 \value{
 A character vector with the names of the observation model parameters.

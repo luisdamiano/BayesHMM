@@ -4,7 +4,7 @@ mySpec <- mixture(
     mu    = Gaussian(0, 10),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = Default()),
+  initial     = Dirichlet(alpha = ImproperUniform()),
   name = "Univariate Gaussian Mixture"
 )
 
@@ -14,7 +14,7 @@ y <- as.matrix(
 )
 
 myModel <- compile(mySpec)
-myFit   <- drawSamples(mySpec, myModel, y = y, chains = 1, iter = 500)
+myFit   <- draw_samples(mySpec, myModel, y = y, chains = 1, iter = 500)
 myOpt   <- optimizing(mySpec, myModel, y = y, nRun = 20, keep = "all", nCores = 4)
 # myFit   <- fit(mySpec, myModel, y = y, chains = 1, iter = 500)
 

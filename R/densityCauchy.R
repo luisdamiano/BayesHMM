@@ -5,7 +5,6 @@
 #' @param sigma AEither a fixed value or a prior density for the shape parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -21,6 +20,7 @@ Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
   Density("Cauchy", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Cauchy <- function(x) {
   muStr <- if (is.Density(x$mu)) {
@@ -46,6 +46,7 @@ freeParameters.Cauchy <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Cauchy <- function(x) {
   muStr <-
@@ -79,6 +80,7 @@ fixedParameters.Cauchy <- function(x) {
   collapse(muStr, sigmaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Cauchy <- function(x) {
   sprintf(
@@ -89,11 +91,13 @@ generated.Cauchy <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Cauchy <- function(x) {
   return(c("mu", "sigma"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Cauchy <- function(x) {
   sprintf(
@@ -104,6 +108,7 @@ logLike.Cauchy <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Cauchy <- function(x) {
   truncStr <- make_trunc(x, "")

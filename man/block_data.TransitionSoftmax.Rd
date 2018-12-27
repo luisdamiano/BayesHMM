@@ -12,8 +12,9 @@
 \item{noLogLike}{A logical stating whether the log-likelihood should be excluded from the program. If TRUE, the Stan code will draw samples from the prior predictive density. If FALSE, the Stan code will draw samples from the posterior predictive density.}
 }
 \value{
-A character vector with the Stan code.
+A character string with the Stan code.
 }
 \description{
 Write the data block of the Stan code.
 }
+\keyword{internal}

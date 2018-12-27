@@ -16,6 +16,7 @@ RegCategoricalSoftmax <- function(xBeta = NULL, M = NULL, N = NULL, bounds = lis
   Density("RegCategoricalSoftmax", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
+#' @keywords internal
 #' @inherit constants
 constants.RegCategoricalSoftmax <- function(x) {
   sprintf(
@@ -24,6 +25,7 @@ constants.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.RegCategoricalSoftmax <- function(x, noLogLike) {
   collapse(
@@ -35,6 +37,7 @@ block_data.RegCategoricalSoftmax <- function(x, noLogLike) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr <-
@@ -56,6 +59,7 @@ freeParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr <-
@@ -75,6 +79,7 @@ fixedParameters.RegCategoricalSoftmax <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.RegCategoricalSoftmax <- function(x) {
   sprintf(
@@ -84,11 +89,13 @@ generated.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.RegCategoricalSoftmax <- function(x) {
   return(c("xBeta"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.RegCategoricalSoftmax <- function(x) {
   sprintf(
@@ -98,6 +105,7 @@ logLike.RegCategoricalSoftmax <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.RegCategoricalSoftmax <- function(x) {
   stop("Not to be used as a prior :)")

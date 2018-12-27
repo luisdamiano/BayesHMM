@@ -3,7 +3,7 @@ library(rstan)
 mySpec <- hmm(
   K = 3, R = 4,
   observation = Multinomial(
-    theta = Default(),
+    theta = ImproperUniform(),
     N = 10
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),

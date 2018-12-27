@@ -1,3 +1,9 @@
+#' @details
+#' See the Introduction vignette: vignette("introduction", package = "BayesHMM")
+#' Additionally, you may start with the manual help for ?specify and ?fit.
+#' @keywords internal
+"_PACKAGE"
+
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     sprintf(

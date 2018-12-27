@@ -6,7 +6,6 @@
 #' @param nu    Either a fixed value or a prior density for the degree-of-freedom parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -24,6 +23,7 @@ Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
   Density("Student", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Student <- function(x) {
   muStr <- if (is.Density(x$mu)) {
@@ -59,6 +59,7 @@ freeParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Student <- function(x) {
   muStr <-
@@ -106,6 +107,7 @@ fixedParameters.Student <- function(x) {
   collapse(muStr, sigmaStr, nuStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Student <- function(x) {
   sprintf(
@@ -117,11 +119,13 @@ generated.Student <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Student <- function(x) {
   return(c("mu", "sigma", "nu"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Student <- function(x) {
   sprintf(
@@ -133,6 +137,7 @@ logLike.Student <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Student <- function(x) {
   truncStr    <- make_trunc(x, "")

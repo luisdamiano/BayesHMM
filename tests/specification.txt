@@ -32,8 +32,8 @@ hmm(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = CholeskyLKJCor(eta = 4)
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 2. Same multivariate density for every state
@@ -47,8 +47,8 @@ hmm(
       mu    = Gaussian(mu = 0, sigma = 100),
       L     = CholeskyLKJCor(eta = 2)
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 3. Same univariate density for every state and every output variable
@@ -62,8 +62,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 4. Same R univariate densities for every state
@@ -81,8 +81,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 5. Same univariate density for every output variable
@@ -104,8 +104,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 6. Different univariate densities for every pair of state and output variable
@@ -139,8 +139,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # UNIVARIATE Observation model --------------------------------------------
@@ -164,8 +164,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # Case 8. Same univariate density for every state
@@ -179,8 +179,8 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial     = Default(),
-  transition  = Default()
+  initial     = ImproperUniform(),
+  transition  = ImproperUniform()
 )
 
 # INITIAL MODEL -----------------------------------------------------------
@@ -200,7 +200,7 @@ hmm(
       alpha = Gaussian(0, 1),
       beta  = Gaussian(1, 10)
     ),
-  transition  = Default()
+  transition  = ImproperUniform()
 )
 
 # Case 10. One multivariate density for the whole initial vector
@@ -215,9 +215,9 @@ hmm(
     ),
   initial =
     Dirichlet(
-      alpha = Default()
+      alpha = ImproperUniform()
     ),
-  transition  = Default()
+  transition  = ImproperUniform()
 )
 
 # Case 11. A different univariate density for each initial state
@@ -243,7 +243,7 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  transition  = Default()
+  transition  = ImproperUniform()
 )
 
 # Case 12. A link
@@ -258,9 +258,9 @@ hmm(
 #     ),
 #   initial =
 #     InitialSoftmax(
-#       vBeta = Default()
+#       vBeta = ImproperUniform()
 #     ),
-#   transition  = Default()
+#   transition  = ImproperUniform()
 # )
 
 # TRANSITION MODEL --------------------------------------------------------

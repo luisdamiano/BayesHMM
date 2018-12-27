@@ -2,7 +2,7 @@
 % Please edit documentation in R/stanfit.R
 \name{is.stanfit}
 \alias{is.stanfit}
-\title{Check if it is an object created by \code{\link{drawSamples}}.}
+\title{Check if it is an object created by \code{\link{draw_samples}}.}
 \usage{
 is.stanfit(x)
 }
@@ -10,9 +10,9 @@ is.stanfit(x)
 \item{x}{An object.}
 }
 \value{
-TRUE if it is an object created by \code{\link{drawSamples}}.
+TRUE if it is an object created by \code{\link{draw_samples}}.
 }
 \description{
-Check if it is an object created by \code{\link{drawSamples}}.
+Check if it is an object created by \code{\link{draw_samples}}.
 }
 \keyword{internal}

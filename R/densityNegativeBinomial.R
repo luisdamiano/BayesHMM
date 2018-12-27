@@ -5,7 +5,6 @@
 #' @param beta  Either a fixed value or a prior density for the second shape parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -20,6 +19,7 @@ NegativeBinomial <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL
   DiscreteDensity("NegativeBinomial", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.NegativeBinomial <- function(x) {
   alphaStr <- if (is.Density(x$alpha)) {
@@ -45,6 +45,7 @@ freeParameters.NegativeBinomial <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.NegativeBinomial <- function(x) {
   alphaStr <-
@@ -78,6 +79,7 @@ fixedParameters.NegativeBinomial <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.NegativeBinomial <- function(x) {
   sprintf(
@@ -88,11 +90,13 @@ generated.NegativeBinomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.NegativeBinomial <- function(x) {
   return(c("alpha", "beta"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.NegativeBinomial <- function(x) {
   sprintf(
@@ -103,6 +107,7 @@ logLike.NegativeBinomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.NegativeBinomial <- function(x) {
   sprintf(

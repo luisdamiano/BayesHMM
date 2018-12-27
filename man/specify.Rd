@@ -19,11 +19,10 @@ specify(K, R, observation = NULL, initial = NULL, transition = NULL,
 
 \item{transition}{One density, or more than one density chained with the `+` operator, describing the transition model. See below and future vignette for detailed explanation.}
 
-\item{name}{An optional string with a name for a model.}
+\item{name}{An optional character string with a name for a model.}
 }
 \value{
-An specification object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
-#'
+A \code{\link{Specification}} object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
 }
 \description{
 See below for details on model specification.
@@ -32,7 +31,7 @@ See below for details on model specification.
 
 A Hidden Markov Model may be seen as three submodels that jointly specify the dinamics of the observed random variable. To specify the observation, initial distribution, and transition models, we designed S3 objects called \code{\link{Density}} that define density form, parameter priors, and fixed values for parameters. These are flexible enough to include bounds in the parameter space as well as truncation in prior densities.
 
-Internally, a Specification object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
+Internally, a \code{\link{Specification}} object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
 
 \strong{Univariate observation model} (i.e. \emph{R} = 1):
 \enumerate{

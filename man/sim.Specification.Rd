@@ -23,7 +23,7 @@
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 }
 \value{
-An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
 }
 \description{
 Simulate data from the prior predictive density.
@@ -46,3 +46,4 @@ mySpec   <- hmm(
 mySims <- sim(mySpec, T = 500, nSimulations = 200, seed = 9000)
 }
 }
+\keyword{internal}

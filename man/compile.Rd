@@ -11,7 +11,7 @@ compile(spec, priorPredictive = FALSE, writeDir = tempdir(), ...)
 
 \item{priorPredictive}{An optional logical stating whether the log-likelihood should be excluded from the program. If TRUE, the returned object can only be used to draw samples from the prior predictive density. If FALSE, the returned object can only be used to draw samples from the posterior predictive density. It defaults to FALSE.}
 
-\item{writeDir}{An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+\item{writeDir}{An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
 
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.}
 }

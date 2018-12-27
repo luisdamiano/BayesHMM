@@ -4,7 +4,7 @@ mySpec <- mixture(
     mu    = Gaussian(0, 10),
     sigma = 1
   ),
-  initial     = Dirichlet(alpha = Default()),
+  initial     = Dirichlet(alpha = ImproperUniform()),
   name = "Univariate Gaussian Mixture"
 )
 

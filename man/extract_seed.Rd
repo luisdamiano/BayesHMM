@@ -16,7 +16,7 @@ extract_seed(fit)
 extract_seed(fit)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.}
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 }
 \value{
 An integer with the seed used to fit the model.

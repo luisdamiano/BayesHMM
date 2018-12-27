@@ -1,7 +1,7 @@
 mySpec <- hmm(
   K = 2, R = 1,
   observation = RegCategoricalSoftmax(
-    xBeta = MVGaussian(mu = c(0, 0, 0), sigma = Default()),
+    xBeta = MVGaussian(mu = c(0, 0, 0), sigma = ImproperUniform()),
     M     = 3,
     N     = 5 # different categories
   ),

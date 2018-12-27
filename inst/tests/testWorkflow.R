@@ -8,12 +8,13 @@ test_sim <- function() {
 }
 
 test_fit <- function() {
-  myFit <- load_safe("drawSamples.RDS")
+  myFit <- load_safe("draw_samples.RDS")
 
   no_error_in_expr({ print(myFit) })
   no_error_in_expr({ show(myFit) })
   no_error_in_expr({ extract_alpha(myFit) })
   no_error_in_expr({ extract_data(myFit) })
+  no_error_in_expr({ extract_diagnostics(myFit) })
   no_error_in_expr({ extract_filename(myFit) })
   no_error_in_expr({ extract_gamma(myFit) })
   no_error_in_expr({ extract_K(myFit) })
@@ -34,13 +35,11 @@ test_fit <- function() {
   no_error_in_expr({ extract_zsim(myFit) })
   no_error_in_expr({ extract_zstar(myFit) })
 
-  no_error_in_expr({ validate(myFit) })
-
   invisible()
 }
 
 test_plots <- function() {
-  myFit <- load_safe("drawSamples.RDS")
+  myFit <- load_safe("draw_samples.RDS")
 
   no_error_in_expr({ plot_series(myFit) })
   no_error_in_expr({ plot_state_probability(myFit) })
@@ -57,7 +56,7 @@ test_plots <- function() {
 }
 
 test_optimizing <- function() {
-  myOpt <- load_safe("optimizingAll.RDS")
+  myOpt <- load_safe("optimizing_all.RDS")
   no_error_in_expr({ extract_grid(myOpt, pars = "mu") })
   no_error_in_expr({ extract_best(myOpt) })
 
@@ -86,7 +85,7 @@ test_optimizing <- function() {
 }
 
 testExtractors <- function() {
-  myFit <- load_safe("drawSamples.RDS")
+  myFit <- load_safe("draw_samples.RDS")
 
   no_error_in_expr({ extract_alpha(myFit, reduce = NULL, combine = NULL, chain = "all") })
   no_error_in_expr({ extract_alpha(myFit, reduce = NULL, combine = NULL, chain = 3) })

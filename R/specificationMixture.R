@@ -1,5 +1,5 @@
-#' Specify a mixture model
-#'
+#' Specify a mixture model.
+#' @keywords internal
 #' @inherit specify
 #' @family models
 mixture <- function(K, R, observation = NULL, initial = NULL,

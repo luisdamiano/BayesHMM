@@ -9,7 +9,7 @@
   fixed = TRUE, print = TRUE, ...)
 }
 \arguments{
-\item{x}{An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.}
+\item{x}{An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.}
 
 \item{posteriorInterval}{An optional numeric vector with the quantilies of the posterior marginal distributions.}
 

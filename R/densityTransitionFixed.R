@@ -12,6 +12,7 @@ TransitionFixed   <- function(A = NULL, bounds = list(NULL, NULL),
   Density("TransitionFixed", bounds, trunc, k, r, param, A = A)
 }
 
+#' @keywords internal
 #' @inherit link
 link.TransitionFixed <- function(x) {
   if (!(check_transition_matrix(x$A) || dim(x$A)[1] != x$K) ) {

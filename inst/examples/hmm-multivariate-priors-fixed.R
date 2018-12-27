@@ -21,7 +21,7 @@ y = rbind(
 colnames(y) <- c("Height", "Width")
 
 myModel <- compile(mySpec)
-myFit   <- drawSamples(mySpec, stanModel = myModel, y = y, chains = 1, iter = 500, seed = 9000)
+myFit   <- draw_samples(mySpec, stanModel = myModel, y = y, chains = 1, iter = 500, seed = 9000)
 print_obs(myFit)
 
 myOptim <- optimizing(mySpec, stanModel = myModel, y = y, nRuns = 10, nCores = 4, keep = "all")

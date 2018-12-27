@@ -16,6 +16,7 @@ RegBinomialProbit <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NU
   Density("RegBinomialProbit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
+#' @keywords internal
 #' @inherit constants
 constants.RegBinomialProbit <- function(x) {
   sprintf(
@@ -24,6 +25,7 @@ constants.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.RegBinomialProbit <- function(x, noLogLike) {
   collapse(
@@ -35,6 +37,7 @@ block_data.RegBinomialProbit <- function(x, noLogLike) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.RegBinomialProbit <- function(x) {
   xBetaStr <-
@@ -51,6 +54,7 @@ freeParameters.RegBinomialProbit <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.RegBinomialProbit <- function(x) {
   xBetaStr <-
@@ -70,6 +74,7 @@ fixedParameters.RegBinomialProbit <- function(x) {
   xBetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.RegBinomialProbit <- function(x) {
   sprintf(
@@ -79,11 +84,13 @@ generated.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.RegBinomialProbit <- function(x) {
   return(c("xBeta"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.RegBinomialProbit <- function(x) {
   sprintf(
@@ -93,6 +100,7 @@ logLike.RegBinomialProbit <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.RegBinomialProbit <- function(x) {
   stop("Not to be used as a prior :)")

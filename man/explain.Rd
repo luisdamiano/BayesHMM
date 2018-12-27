@@ -2,7 +2,7 @@
 % Please edit documentation in R/specification.R
 \name{explain}
 \alias{explain}
-\title{Create an user-friendly text describing the model.}
+\title{Create a user-friendly text describing the model.}
 \usage{
 explain(spec, observation = TRUE, initial = TRUE, transition = TRUE, print = TRUE)
 }

@@ -11,7 +11,7 @@ write_chunks(spec, noLogLike, writeDir)
 
 \item{noLogLike}{A logical stating whether the log-likelihood should be excluded from the program. If TRUE, the Stan code will draw samples from the prior predictive density. If FALSE, the Stan code will draw samples from the posterior predictive density.}
 
-\item{writeDir}{A character vector with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually.}
+\item{writeDir}{A character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually.}
 }
 \value{
 Nothing.
@@ -19,3 +19,4 @@ Nothing.
 \description{
 Write Stan code chunks to disk
 }
+\keyword{internal}

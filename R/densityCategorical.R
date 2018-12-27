@@ -21,6 +21,7 @@ Categorical <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Categorical", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @keywords internal
 #' @inherit constants
 constants.Categorical <- function(x) {
   sprintf(
@@ -29,6 +30,7 @@ constants.Categorical <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Categorical <- function(x) {
   thetaStr <-
@@ -44,6 +46,7 @@ freeParameters.Categorical <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Categorical <- function(x) {
   thetaStr <-
@@ -64,6 +67,7 @@ fixedParameters.Categorical <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Categorical <- function(x) {
   sprintf(
@@ -73,11 +77,13 @@ generated.Categorical <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Categorical <- function(x) {
   return("theta")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Categorical <- function(x) {
   sprintf(
@@ -87,6 +93,7 @@ logLike.Categorical <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Categorical <- function(x) {
   truncStr <- make_trunc(x, "")

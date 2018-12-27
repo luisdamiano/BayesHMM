@@ -15,3 +15,4 @@ TRUE if the object is a time-varying transition probability object, FALSE otherw
 \description{
 Check if it is a time-varying transition probability object.
 }
+\keyword{internal}

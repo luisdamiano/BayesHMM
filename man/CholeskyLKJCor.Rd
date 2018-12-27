@@ -21,28 +21,37 @@ CholeskyLKJCor(eta = NULL, bounds = list(NULL, NULL),
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 }
 \value{
-#' @param x A \code{\link{Density}} object.
+A \code{\link{Density}} object.
 }
 \description{
-Cholesky LKJ Correlation density (multivariate, continuous, bounded space, prior only)
+It can be used to specify either a
+prior distribution for a model parameter or a likelihood function for an
+observation model.
 }
 \examples{
 # As a prior for the correlation matrix
 CholeskyLKJCor(1)
 }
 \seealso{
-Other Density
-#': \code{\link{Bernoulli}},
-  \code{\link{Beta}}, \code{\link{Cauchy}},
-  \code{\link{Default}}, \code{\link{Dirichlet}},
-  \code{\link{Exponential}}, \code{\link{GammaDensity}},
-  \code{\link{Gaussian}}, \code{\link{InverseWishart}},
+Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
+  \code{\link{Binomial}}, \code{\link{Categorical}},
+  \code{\link{Cauchy}}, \code{\link{Density}},
+  \code{\link{Dirichlet}}, \code{\link{Exponential}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
+  \code{\link{ImproperUniform}},
+  \code{\link{InitialSoftmax}},
+  \code{\link{InverseWishart}},
   \code{\link{MVGaussianCholeskyCor}},
   \code{\link{MVGaussian}}, \code{\link{MVStudent}},
   \code{\link{Multinomial}},
   \code{\link{NegativeBinomialLocation}},
   \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
-  \code{\link{Student}}, \code{\link{Wishart}}
+  \code{\link{RegBernoulliLogit}},
+  \code{\link{RegBinomialLogit}},
+  \code{\link{RegBinomialProbit}},
+  \code{\link{RegCategoricalSoftmax}},
+  \code{\link{RegGaussian}}, \code{\link{Student}},
+  \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}, \code{\link{Wishart}}
 }
-\concept{Density
-#'}
+\concept{Density}

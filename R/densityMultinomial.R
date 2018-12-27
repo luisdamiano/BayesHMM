@@ -5,7 +5,6 @@
 #' @param N     An integer with the number of trials (fixed quantity).
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -20,6 +19,7 @@ Multinomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
   MultivariateDiscreteDensity("Multinomial", bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
+#' @keywords internal
 #' @inherit constants
 constants.Multinomial <- function(x) {
   sprintf(
@@ -28,6 +28,7 @@ constants.Multinomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Multinomial <- function(x) {
   thetaStr <-
@@ -43,6 +44,7 @@ freeParameters.Multinomial <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Multinomial <- function(x) {
   thetaStr <-
@@ -62,6 +64,7 @@ fixedParameters.Multinomial <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Multinomial <- function(x) {
   sprintf(
@@ -71,11 +74,13 @@ generated.Multinomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Multinomial <- function(x) {
   return("theta")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Multinomial <- function(x) {
   sprintf(
@@ -85,6 +90,7 @@ logLike.Multinomial <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Multinomial <- function(x) {
   truncStr <- make_trunc(x, "")

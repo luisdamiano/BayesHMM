@@ -10,8 +10,9 @@
 \item{x}{A \code{\link{Density}} or a \code{\link{Specification}} object.}
 }
 \value{
-A character vector with the Stan code.
+A character string with the Stan code.
 }
 \description{
 Write the transformed parameters block of the Stan code.
 }
+\keyword{internal}

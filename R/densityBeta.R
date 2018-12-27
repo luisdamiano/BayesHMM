@@ -3,9 +3,7 @@
 #' @inherit Density
 #' @param alpha Either a fixed value or a prior density for the first shape parameter.
 #' @param beta  Either a fixed value or a prior density for the second shape parameter.
-#'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -20,6 +18,7 @@ Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
   Density("Beta", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Beta <- function(x) {
   alphaStr <-
@@ -47,6 +46,7 @@ freeParameters.Beta <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Beta <- function(x) {
   alphaStr <-
@@ -80,21 +80,25 @@ fixedParameters.Beta <- function(x) {
   collapse(alphaStr, betaStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Beta <- function(x) {
   sprintf("if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Beta <- function(x) {
   return(c("alpha", "beta"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Beta <- function(x) {
   sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Beta <- function(x) {
   truncStr <- make_trunc(x, "")

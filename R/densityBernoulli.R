@@ -4,7 +4,6 @@
 #' @param theta Either a fixed value or a prior density for the success proportion parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -19,6 +18,7 @@ Bernoulli <- function(theta = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Bernoulli", bounds, trunc, k, r, param, theta = theta)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Bernoulli <- function(x) {
   thetaStr <-
@@ -35,6 +35,7 @@ freeParameters.Bernoulli <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Bernoulli <- function(x) {
   thetaStr <-
@@ -54,6 +55,7 @@ fixedParameters.Bernoulli <- function(x) {
   thetaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Bernoulli <- function(x) {
   sprintf(
@@ -63,11 +65,13 @@ generated.Bernoulli <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Bernoulli <- function(x) {
   return("theta")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Bernoulli <- function(x) {
   sprintf(
@@ -77,6 +81,7 @@ logLike.Bernoulli <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Bernoulli <- function(x) {
   truncStr <- make_trunc(x, "")

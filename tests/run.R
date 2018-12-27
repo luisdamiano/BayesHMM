@@ -1,12 +1,12 @@
 #' Checks if there is no error in a model specification
-#' @param string A character vector with a specification.
-#' @return TRUE is the string is a valid specification, FALSE if the string cannot be parsed or cannot be translated into a valid Stan model.
+#' @param string A character string with a specification.
+#' @return TRUE is the character string is a valid specification, FALSE if the character string cannot be parsed or cannot be translated into a valid Stan model.
 no_error_in_spec <- function(string) {
   spec <-
     tryCatch({
       eval(parse(text = string))
     }, error = function(error) {
-      # Early stop if the string cannot be parsed.
+      # Early stop if the character string cannot be parsed.
       return(RUnit::checkTrue(FALSE, sprintf(
         "The model string cannot be parsed: %s.", error$message
       )))
@@ -57,7 +57,7 @@ load_safe <- function(filename) {
   }
 
   if (is.null(myObj)) {
-    RUnit::checkTrue(FALSE, "Could not load sim.RDS")
+    RUnit::checkTrue(FALSE, sprintf("Could not load %s", filename))
   } else {
     return(myObj)
   }

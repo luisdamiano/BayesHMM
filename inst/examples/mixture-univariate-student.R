@@ -1,11 +1,11 @@
 mySpec <- mixture(
   K = 3, R = 1,
   observation = Student(
-    mu    = Default(),
+    mu    = ImproperUniform(),
     sigma = Gaussian(0,  10, bounds = list(0, NULL)),
     nu    = Gaussian(0, 100, bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = Default()),
+  initial     = Dirichlet(alpha = ImproperUniform()),
   name = "Univariate Student t Mixture"
 )
 

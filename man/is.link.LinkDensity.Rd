@@ -7,7 +7,7 @@
 \method{is.link}{LinkDensity}(x)
 }
 \arguments{
-\item{x}{#' @param x A \code{\link{Density}} object.}
+\item{x}{A \code{\link{Density}} object.}
 }
 \value{
 TRUE if the object is meant for transition models, FALSE otherwise.
@@ -15,3 +15,4 @@ TRUE if the object is meant for transition models, FALSE otherwise.
 \description{
 Check if it is a Density object for the transition model.
 }
+\keyword{internal}

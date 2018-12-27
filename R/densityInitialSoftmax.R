@@ -14,6 +14,7 @@ InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
   Density("InitialSoftmax", bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.InitialSoftmax <- function(x) {
   vBetaStr <-
@@ -33,17 +34,20 @@ freeParameters.InitialSoftmax <- function(x) {
   vBetaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.InitialSoftmax <- function(x) {
   warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
   return("")
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.InitialSoftmax <- function(x) {
   return("vBeta")
 }
 
+#' @keywords internal
 #' @inherit link
 link.InitialSoftmax <- function(x) {
   sprintf(

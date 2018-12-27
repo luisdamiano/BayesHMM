@@ -5,7 +5,6 @@
 #' @param phi Either a fixed value or a prior density for the dispersion parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -20,6 +19,7 @@ NegativeBinomialLocation <- function(mu = NULL, phi = NULL, bounds = list(NULL, 
   DiscreteDensity("NegativeBinomialLocation", bounds, trunc, k, r, param, mu = mu, phi = phi)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.NegativeBinomialLocation <- function(x) {
   muStr <- if (is.Density(x$mu)) {
@@ -45,6 +45,7 @@ freeParameters.NegativeBinomialLocation <- function(x) {
   collapse(muStr, phiStr)
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.NegativeBinomialLocation <- function(x) {
   muStr <-
@@ -78,6 +79,7 @@ fixedParameters.NegativeBinomialLocation <- function(x) {
   collapse(muStr, phiStr)
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.NegativeBinomialLocation <- function(x) {
   sprintf(
@@ -88,11 +90,13 @@ generated.NegativeBinomialLocation <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.NegativeBinomialLocation <- function(x) {
   return(c("mu", "phi"))
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.NegativeBinomialLocation <- function(x) {
   sprintf(
@@ -103,6 +107,7 @@ logLike.NegativeBinomialLocation <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.NegativeBinomialLocation <- function(x) {
   sprintf(

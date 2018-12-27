@@ -3,15 +3,13 @@
 \name{Density}
 \alias{Density}
 \title{Create a representation of a probability mass or density function for a
-continuous univariate random variable. It can be used to specify either a
-prior distribution for a model parameter or a likelihood function for an
-observation model.}
+continuous univariate random variable.}
 \usage{
 Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
   k = NULL, r = NULL, param = NULL, ...)
 }
 \arguments{
-\item{name}{A character vector with the name of the density.}
+\item{name}{A character string with the name of the density.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -23,16 +21,13 @@ Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
 
 \item{param}{(optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.}
 
-\item{...}{Other arguments for the density.
-
-#'}
+\item{...}{Other arguments for the density.}
 }
 \value{
-#' @param x A \code{\link{Density}} object.
+A \code{\link{Density}} object.
 }
 \description{
-Create a representation of a probability mass or density function for a
-continuous univariate random variable. It can be used to specify either a
+It can be used to specify either a
 prior distribution for a model parameter or a likelihood function for an
 observation model.
 }
@@ -40,13 +35,25 @@ observation model.
 The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
 }
 \seealso{
-Other Density: \code{\link{Binomial}},
-  \code{\link{Categorical}}, \code{\link{InitialSoftmax}},
+Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},
+  \code{\link{Binomial}}, \code{\link{Categorical}},
+  \code{\link{Cauchy}}, \code{\link{CholeskyLKJCor}},
+  \code{\link{Dirichlet}}, \code{\link{Exponential}},
+  \code{\link{GammaDensity}}, \code{\link{Gaussian}},
+  \code{\link{ImproperUniform}},
+  \code{\link{InitialSoftmax}},
+  \code{\link{InverseWishart}},
+  \code{\link{MVGaussianCholeskyCor}},
+  \code{\link{MVGaussian}}, \code{\link{MVStudent}},
+  \code{\link{Multinomial}},
+  \code{\link{NegativeBinomialLocation}},
+  \code{\link{NegativeBinomial}}, \code{\link{Poisson}},
   \code{\link{RegBernoulliLogit}},
   \code{\link{RegBinomialLogit}},
   \code{\link{RegBinomialProbit}},
   \code{\link{RegCategoricalSoftmax}},
-  \code{\link{RegGaussian}}, \code{\link{TransitionFixed}},
-  \code{\link{TransitionSoftmax}}
+  \code{\link{RegGaussian}}, \code{\link{Student}},
+  \code{\link{TransitionFixed}},
+  \code{\link{TransitionSoftmax}}, \code{\link{Wishart}}
 }
 \concept{Density}

@@ -1,11 +1,11 @@
 #' Return the name of the model parameters.
 #'
 #' @keywords internal
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @param observation An optional logical scalar indicating whether the names of the observation model parameters should be included. Defaults to TRUE.
 #' @param initial An optional logical scalar indicating whether the names of the initial model parameters should be included. Defaults to TRUE.
 #' @param transition An optional logical scalar indicating whether the names of the transition model parameters should be included. Defaults to TRUE.
-#' @return A character vector with the selected model parameter names.
+#' @return A character string with the selected model parameter names.
 select_parameters <- function(fit, observation = TRUE,
                               initial = TRUE, transition = TRUE) {
   spec <- extract_spec(fit)
@@ -38,7 +38,7 @@ select_parameters <- function(fit, observation = TRUE,
 #' Return the name of the observation model parameters.
 #'
 #' @keywords internal
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return A character vector with the names of the observation model parameters.
 #' @seealso \code{\link{select_parameters}}.
 select_obs_parameters <- function(fit) {
@@ -48,7 +48,7 @@ select_obs_parameters <- function(fit) {
 #' Return the name of the initial model parameters.
 #'
 #' @keywords internal
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return A character vector with the names of the initial model parameters.
 #' @seealso See \code{\link{select_parameters}}.
 select_initial_parameters <- function(fit) {
@@ -58,7 +58,7 @@ select_initial_parameters <- function(fit) {
 #' Return the name of the transition model parameters.
 #'
 #' @keywords internal
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return A character vector with the names of the transition model parameters.
 #' @seealso \code{\link{select_parameters}}.
 select_transition_parameters <- function(fit) {
@@ -68,7 +68,7 @@ select_transition_parameters <- function(fit) {
 #' Return the name of all model parameters.
 #'
 #' @keywords internal
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return A character vector with the names of all model parameters.
 #' @seealso \code{\link{select_parameters}}.
 select_all_parameters <- function(fit) {
@@ -79,28 +79,27 @@ select_all_parameters <- function(fit) {
 #'
 #' The extract_* family of methods returns elements from a fit object (including fixed and estimated quantities, as well as internal elements of the fit object).
 #'
-#' The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, specification object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{drawSamples}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
+#' The extract_family is the safest way to access the generated samples (filtered probability \emph{alpha}, smoothed probability \emph{gamma}, most likely hidden path \emph{zstar}, observation samples from the posterior predictive density \emph{ypred}, hidden path samples from the posterior predictive density \emph{zpred}, simulated observations \emph{ysim}), the fixed pre-specified quantities (observations \emph{y}, time series length \emph{T}, number of hidden states \emph{K}, dimension of the observation vector \emph{R}), and other internal elements stored in a fit object (dataset in list format \emph{data}, \code{\link{Specification}} object \emph{spec}, path to the underlying Stan file \emph{filename}). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by \code{\link{draw_samples}} and maximum a posteriori estimates returned by \code{\link{optimizing}}.
 #'
 #' @name extract
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @param reduce A function to be applied to all the samples generated by one chain for each parameters (i.e. "within chain"). Useful if only one or more summary measures of the generated samples is needed (e.g. the median of the generated sample). The function may return one of more elements. In the former case, the dimension is dropped in the returned object (read the \emph{Value} section below). Note that the user needs to supply a function as an argument, and not a character string with the name of the function.
 #' @param combine A function applied to all the extracted quantities as an ensemble. In other words, instead of returning a named list where each element is one quantity, it returns the value returned by the function applied to the whole list (\code{\link{do.call}}). Useful when all the elements of the list have the same dimension, possibly because it is used in conjunction with the \emph{chain} and \emph{reduce} arguments.
 #' @param chain Either "all" or any integer number between 1 and the number of chains M.
-#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.
+#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{draw_samples}}.
 #' @family extract
 #' @seealso The arguments \emph{reduce}, \emph{combine}, and \emph{chain} are very convenient tools to minimize the amount of data management in your code. See \code{\link{extract_quantity}} for an in-depth explanation on how these work.
 NULL
 
 #' Extract the estimates of the model parameters (observation, transition, and initial models).
 #'
-#' @param fit An object returned by either \code{\link{drawSamples}} or \code{\link{optimizing}}.
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @param observation A boolean indicating whether the observation model parameters should be returned.
 #' @param initial A boolean indicating whether the initial model parameters should be returned.
 #' @param transition A boolean indicating whether the transition model parameters should be returned.
-#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{drawSamples}}.
+#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{extract}} if the object \emph{fit} was returned by \code{\link{fit}} or \code{\link{draw_samples}}.
 #' @return A named list with as many elements as model parameters. Each element is a numeric array with dimensions [N, M, ...]: number of iterations \emph{N}, number of chains \emph{M}, and one or more dimensions related to the characteristics of the parameter. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a numeric array with dimensions [N, ...]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, ...]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, ...].
 #' @family extract
-#' #'
 extract_parameters <- function(fit, observation = TRUE,
                                initial = TRUE, transition = TRUE, ...) {
   pars <- select_parameters(fit, observation, initial, transition)
@@ -121,7 +120,6 @@ extract_obs_parameters <- function(fit, ...) {
 #' @inheritParams extract
 #' @return A numeric array with four dimensions [N, M, K, T]: number of iterations \emph{N}, number of chains \emph{M}, number of hidden states \emph{K}, length of the time series {T}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a three-dimensional numeric array [N, K, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, K, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, K, T].
 #' @family extract
-#' #'
 extract_alpha <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...) {
   extract_quantity(fit, "alpha", reduce, combine, chain, ...)[[1]]
 }
@@ -130,7 +128,6 @@ extract_alpha <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...
 #'
 #' @inherit extract_alpha
 #' @family extract
-#' #'
 extract_gamma <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...) {
   extract_quantity(fit, "gamma", reduce, combine, chain, ...)[[1]]
 }
@@ -139,7 +136,6 @@ extract_gamma <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...
 #'
 #' @inherit extract_alpha
 #' @family extract
-#' #'
 extract_zstar <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...) {
   extract_quantity(fit, "zstar", reduce, combine, chain, ...)[[1]]
 }
@@ -150,7 +146,6 @@ extract_zstar <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...
 #' @return A numeric array with four dimensions [N, M, T, R]: number of iterations \emph{N}, number of chains \emph{M}, length of the time series {T}, the dimension of the observation vector \emph{R}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a three-dimensional numeric array [N, T, R]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, T, R]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a three-dimensional numeric array [M, T, R].
 #'
 #' @family extract
-#' #'
 extract_ypred <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...) {
   extract_quantity(fit, "ypred", reduce, combine, chain, ...)[[1]]
 }
@@ -162,7 +157,6 @@ extract_ypred <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...
 #' @param n (optional) An integer number indicating the number of the iteration that should be returned.
 #' @inherit extract_ypred
 #' @family extract
-#' #'
 extract_ysim  <- function(fit, n = NULL, reduce = NULL, combine = NULL, chain = "all", ...) {
   ysim <- extract_quantity(fit, "ypred", reduce, combine, chain, ...)[[1]]
 
@@ -174,14 +168,13 @@ extract_ysim  <- function(fit, n = NULL, reduce = NULL, combine = NULL, chain = 
   out
 }
 
-#' Extract the simulated sample of the state variable (ysim).
+#' Extract the simulated sample of the state variable (zsim).
 #'
 #' If the \emph{fit} object was created via the \code{\link{sim}} method, this function returns a sample of the state variable from the prior predictive densitiy (i.e. using random values of the parameters). If a dataset was provided when fitting the model instead, the sample is simulated from the posterior predictive density. In the latter case, calling either \code{\link{extract_zsim}} and \code{\link{extract_zpred}} are equivalent.
 #'
 #' @param n (optional) An integer number indicating the number of the iteration that should be returned.
 #' @inherit extract_zpred
 #' @family extract
-#' #'
 extract_zsim  <- function(fit, n = NULL, reduce = NULL, combine = NULL, chain = "all", ...) {
   zsim <- extract_quantity(fit, "zpred", reduce, combine, chain, ...)[[1]]
 
@@ -199,7 +192,6 @@ extract_zsim  <- function(fit, n = NULL, reduce = NULL, combine = NULL, chain = 
 #' @return A numeric array with three dimensions [N, M, T]: number of iterations \emph{N}, number of chains \emph{M}, length of the time series {T}, the dimension of the observation vector \emph{R}. If the argument \emph{chain} was set, the chain dimension is dropped and the function returns a two-dimensional numeric array [N, T]. If the argument \emph{reduce} was set to a function returning a vector of size \emph{n}, the returned array has dimension [n, M, T]. When \emph{n} is simply one (e.g. \code{\link{median}}), the number-of-iterations dimension is dropped and the function returns a two-dimensional numeric array [M, T].
 #'
 #' @family extract
-#' #'
 extract_zpred <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...) {
   extract_quantity(fit, "zpred", reduce, combine, chain, ...)[[1]]
 }
@@ -210,18 +202,16 @@ extract_zpred <- function(fit, reduce = NULL, combine = NULL, chain = "all", ...
 #' @return A named list with four elements: a numeric value with the number of hidden states \emph{K}, a numeric value with the dimension of the observation vector \emph{R}, a numeric value with the length of the time series {T}, the observation matrix \emph{y} with named dimensions [\emph{T}, \emph{R}].
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_data <- function(fit) {
   attr(fit, "data")
 }
 
-#' Extract the obsevation matrix used to fit the model \emph{y}.
+#' Extract the obsevation matrix used to fit the model \emph{y}
 #'
 #' @inherit extract
 #' @return A numeric matrix with named dimensions [\emph{T}, \emph{R}].
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_y <- function(fit) {
   extract_data(fit)$y
 }
@@ -232,7 +222,6 @@ extract_y <- function(fit) {
 #' @return An integer with the length of the time series \emph{T}.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_T <- function(fit) {
   extract_data(fit)$T
 }
@@ -242,7 +231,6 @@ extract_T <- function(fit) {
 #' @return An integer with the number of hidden states \emph{K}.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_K <- function(fit) {
   extract_data(fit)$K
 }
@@ -253,30 +241,27 @@ extract_K <- function(fit) {
 #' @return An integer with the dimension of the observation vector \emph{R}.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_R <- function(fit) {
   extract_data(fit)$R
 }
 
-#' Extract the specification object used to fit the model \emph{spec}.
+#' Extract the \code{\link{Specification}} object used to fit the model.
 #'
 #' @inherit extract
-#' @return A specification object (see \code{\link{specify}} for more information).
+#' @return A \code{\link{Specification}} object.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-#' #'
 extract_spec <- function(fit) {
   attr(fit, "spec")
 }
 
-#' Extract the path to file with the underlying Stan code \emph{filename}.
+#' Extract the path to file with the underlying Stan code.
 #'
 #' @inherit extract
 #' @return A character string with the path to file with the underlying Stan code.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @seealso \code{\link{browse_model}} for viewing the code using your IDE.
 #' @family extract
-#' #'
 extract_filename <- function(fit) {
   attr(fit, "filename")
 }

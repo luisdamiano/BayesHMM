@@ -1,7 +1,7 @@
 mySpec <- hmm(
   K = 2, R = 1,
   observation = RegGaussian(
-    xBeta = Default(),
+    xBeta = ImproperUniform(),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)),
     M     = 3
   ),

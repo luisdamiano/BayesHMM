@@ -6,15 +6,14 @@
 #' @param observation One density, or more than one density chained with the `+` operator, describing the observation model. See below and future vignette for detailed explanation.
 #' @param initial One density, or more than one density chained with the `+` operator, describing the initial distribution model. See below and future vignette for detailed explanation.
 #' @param transition One density, or more than one density chained with the `+` operator, describing the transition model. See below and future vignette for detailed explanation.
-#' @param name An optional string with a name for a model.
-#' @return An specification object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
-#' #'
+#' @param name An optional character string with a name for a model.
+#' @return A \code{\link{Specification}} object that may be used to validate calibration (\code{\link{validate_calibration}}), compiled (\code{\link{compile}}), generate data from \code{\link{sim}}, or fit a model to data to obtain a point estimate (\code{\link{optimizing}}) or run full-bayesian inference via Markov-chain Monte Carlo (\code{\link{fit}}).
 #' @seealso \code{\link{compile}}, \code{\link{explain}}, \code{\link{fit}}, \code{\link{optimizing}}, \code{\link{sim}}, \code{\link{validate_calibration}}.
 #'
 #' @section Model specification:
 #' A Hidden Markov Model may be seen as three submodels that jointly specify the dinamics of the observed random variable. To specify the observation, initial distribution, and transition models, we designed S3 objects called \code{\link{Density}} that define density form, parameter priors, and fixed values for parameters. These are flexible enough to include bounds in the parameter space as well as truncation in prior densities.
 #'
-#' Internally, a Specification object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
+#' Internally, a \code{\link{Specification}} object is a nested list storing either \emph{K} multivariate densities (i.e. one multivariate density for state) or \emph{K x R} univariate densities (i.e. one univariate density for each dimension in the observation variable and each state). (what does this depend on?) However, the user is not expected to known the internal details of the implementation. Instead, user-input will be interpreted based on three things: the dimension of the observation vector \emph{R}, the number of densities given by the user, and the type of density given by the user.
 #'
 #' \strong{Univariate observation model} (i.e. \emph{R} = 1):
 #' \enumerate{
@@ -241,7 +240,7 @@ specify <- function(K, R, observation = NULL, initial = NULL,
   structure(l, class = "Specification")
 }
 
-#' Create an user-friendly text describing the model.
+#' Create a user-friendly text describing the model.
 #'
 #' The function creates a user-friendly text describing any of the three elements of the model. It includes the hidden states, variables, densities, bounds, priors, and fixed parameters. It also records environment details for easier reproducibility (package version, R version, time, OS).
 #'
@@ -272,6 +271,7 @@ explain               <- function(spec, observation = TRUE, initial = TRUE,
   UseMethod("explain", spec)
 }
 
+#' @keywords internal
 #' @inherit explain
 explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
                                   transition = TRUE, print = TRUE) {
@@ -299,11 +299,12 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
 #' Create an outline of the observation model.
 #'
 #' @param spec An object returned by the \code{\link{specify}}) function.
-#' @return A character vector with an outline of the observation model.
+#' @return A character string with an outline of the observation model.
 #' @family explain
 #' @keywords internal
 explain_observation <- function(spec) { UseMethod("explain_observation", spec) }
 
+#' @keywords internal
 #' @inherit explain_observation
 explain_observation.Specification <- function(spec) {
   R <- spec$observation$R
@@ -337,11 +338,12 @@ explain_observation.Specification <- function(spec) {
 #' Create an outline of the initial distribution model.
 #'
 #' @param spec An object returned by the \code{\link{specify}}) function.
-#' @return A character vector with an outline of the initial model.
+#' @return A character string with an outline of the initial model.
 #' @family explain
 #' @keywords internal
 explain_initial     <- function(spec) { UseMethod("explain_initial", spec) }
 
+#' @keywords internal
 #' @inherit explain_initial
 explain_initial.Specification <- function(spec) {
   l <- densityApply(spec$initial$density, explain_density)
@@ -365,11 +367,12 @@ explain_initial.Specification <- function(spec) {
 #' Create an outline of the transition model.
 #'
 #' @param spec An object returned by the \code{\link{specify}}) function.
-#' @return A character vector with an outline of the transition model.
+#' @return A character string with an outline of the transition model.
 #' @family explain
 #' @keywords internal
 explain_transition  <- function(spec) { UseMethod("explain_transition", spec) }
 
+#' @keywords internal
 #' @inherit explain_transition
 explain_transition.Specification <- function(spec) {
   l <- densityApply(spec$transition$density, explain_density)
@@ -397,7 +400,7 @@ explain_transition.Specification <- function(spec) {
 #'
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @param priorPredictive An optional logical stating whether the log-likelihood should be excluded from the program. If TRUE, the returned object can only be used to draw samples from the prior predictive density. If FALSE, the returned object can only be used to draw samples from the posterior predictive density. It defaults to FALSE.
-#' @param writeDir An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
+#' @param writeDir An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan_model}}.
 #' @return An instance of S4 class stanmodel.
 #' @examples
@@ -424,6 +427,7 @@ compile           <- function(spec, priorPredictive = FALSE,
   UseMethod("compile", spec)
 }
 
+#' @keywords internal
 #' @inherit compile
 compile.Specification <- function(spec, priorPredictive = FALSE,
                                   writeDir = tempdir(), ...) {
@@ -455,9 +459,9 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #' @param x An optional numeric matrix with the covariates for the observation model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the covariate vector \emph{M}. If not a matrix, the function tries to cast the object to a \eqn{T\times M} matrix. Useful for Hidden Markov Regression Model (also known as Markov-switching regressions).
 #' @param u An optional numeric matrix with the covariates for the transition model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the transition covariate vector \emph{P}. If not a matrix, the function tries to cast the object to a \eqn{T\times P} matrix. Useful for Hidden Markov Models with time-varying transition probabilities.
 #' @param v An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.
-#' @param writeDir An optional string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
+#' @param writeDir An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.
-#' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+#' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
 #' @seealso See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 #' @examples
 #' \dontrun{
@@ -478,15 +482,16 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #'
 #' myModel <- compile(mySpec)
 #'
-#' myFit   <- drawSamples(mySpec, myModel, y = y, chains = 2, iter = 500)
+#' myFit   <- draw_samples(mySpec, myModel, y = y, chains = 2, iter = 500)
 #' }
-drawSamples          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+draw_samples          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
                                  v = NULL, writeDir = tempdir(), ...) {
-  UseMethod("drawSamples", spec)
+  UseMethod("draw_samples", spec)
 }
 
-#' @inherit drawSamples
-drawSamples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+#' @keywords internal
+#' @inherit draw_samples
+draw_samples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
                                       v = NULL, writeDir = tempdir(), ...) {
 
   if (is.null(stanModel)) {
@@ -506,7 +511,7 @@ drawSamples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = N
 
 #' Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
 #'
-#' @inherit drawSamples
+#' @inherit draw_samples
 #' @param data A named list with the dataset.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
 #' @keywords internal
@@ -514,6 +519,7 @@ run               <- function(spec, data = NULL, writeDir = tempdir(), ...) {
   UseMethod("run", spec)
 }
 
+#' @keywords internal
 #' @inherit run
 run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
@@ -539,7 +545,7 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 
 #' Fit a model by MCMC
 #'
-#' @inherit drawSamples
+#' @inherit draw_samples
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
 #' @examples
 #' \dontrun{
@@ -566,6 +572,7 @@ fit               <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   UseMethod("fit", spec)
 }
 
+#' @keywords internal
 #' @inherit fit
 fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
   run(spec, data = make_data(spec, y, x, u, v), ...)
@@ -573,16 +580,17 @@ fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
 
 # Maximum a posteriori estimation -----------------------------------------
 
-#' Fit a model by MAP
+#' Fit a model by MAP.
 #'
 #' This function computes a maximum a posteriori estimate by running one or more instances of a numerical optimization procedure to maximize the joint posterior density. If no seed is given, one is automatically generated and stored as an attribute in the returned object. An error is printed if no convergence was achieved after all the runs.
 #'
-#' @inheritParams drawSamples
+#' @inheritParams draw_samples
 #' @param nRuns An optional integer with the number of initializations.
-#' @param keep An optional string specifying whether the function should return the converging instance with the maximum posterior log density (\emph{best}) or all the instances (\emph{all}). The latter may be useful for debugging. It defaults to \emph{best}.
+#' @param keep An optional character string specifying whether the function should return the converging instance with the maximum posterior log density (\emph{best}) or all the instances (\emph{all}). The latter may be useful for debugging. It defaults to \emph{best}.
 #' @param nCores An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{optimizing}}.
-#' @return An \emph{Optimization} object if \emph{keep} is set to \emph{best}, or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
+#' @return An \code{\link{Optimization}} object if \emph{keep} is set to \emph{best}, or an \emph{OptimizationList} otherwise. In the latter case, the best instance can be obtained with \code{\link{extract_best}}.
+#' @aliases Optimization
 #' @seealso See \code{\link[rstan]{optimizing}} for further details on tunning the optimization procedure.
 #' @examples
 #' \dontrun{
@@ -613,6 +621,7 @@ optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
   UseMethod("optimizing", spec)
 }
 
+#' @keywords internal
 #' @inherit optimizing
 optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
                                      nRuns = 1, keep = "best", nCores = 1,
@@ -637,9 +646,10 @@ optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NU
 
 #' Run one instance of the
 #'
+#' @keywords internal
 #' @param stanDots The arguments to the passed to rstan's \code{\link[rstan]{optimizing}}.
 #' @param n An integer with the number of the instance (i.e. the n-th time the algorithm is run on this model).
-#' @return An \emph{Optimization} object.
+#' @return An \code{\link{Optimization}} object.
 #' @keywords internal
 optimizing_run  <- function(stanDots, n) {
   # sink(tempfile())
@@ -664,6 +674,7 @@ optimizing_run  <- function(stanDots, n) {
 #' Run several instances of the optimization algorithm.
 #'
 #' Note that this function returns the results of all the instances while \code{\link{optimizing_best}} only returns the converging instance with highest log posterior density.
+#' @keywords internal
 #' @param stanDots The arguments to the passed to rstan's \code{\link[rstan]{optimizing}}.
 #' @param nRuns An optional integer with the number of initializations.
 #' @param nCores An optional integer with the number of cores to be used. If equal to one, the instances are run sequentially. Otherwise, doParallel's backend is used for parallel computing. It defaults to one.
@@ -689,6 +700,7 @@ optimizing_all  <- function(stanDots, nRuns, nCores) {
 #' Run several instances of the optimization algorithm.
 #'
 #' Note that this function returns the results of the converging instance with highest log posterior density while \code{\link{optimizing_all}} returns all.
+#' @keywords internal
 #' @inherit optimizing_all
 #' @return An \emph{Optimization} object.
 #' @keywords internal
@@ -715,10 +727,10 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 # Other methods -----------------------------------------------------------
 #' Simulate data from the prior predictive density.
 #'
-#' @inheritParams drawSamples
+#' @inheritParams draw_samples
 #' @param T An optional integer with the length of the time series. It defaults to 1000 observations.
 #' @param nSimulations An optional integer with the number of simulations. It defaults to 500 time series.
-#' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+#' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
 #' @examples
 #' \dontrun{
 #' mySpec   <- hmm(
@@ -741,6 +753,7 @@ sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,
   UseMethod("sim", spec)
 }
 
+#' @keywords internal
 #' @inherit sim
 sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
   dots <- list(...)
@@ -750,7 +763,9 @@ sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSim
   do.call(run, dots)
 }
 
-#' Load the underlying Stan code into an IDE or browser (platform dependent).
+#' Load the underlying Stan code into an IDE or browser.
+#'
+#' The behavior is platform dependent.
 #'
 #' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
 #' @return No return value.

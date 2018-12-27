@@ -1,4 +1,4 @@
-#' Specify a Hidden Markov Model
+#' Specify a Hidden Markov Model.
 #'
 #' @inherit specify
 #' @family models

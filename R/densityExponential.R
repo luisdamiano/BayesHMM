@@ -4,7 +4,6 @@
 #' @param beta Either a fixed value or a prior density for the inverse scale parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -17,6 +16,7 @@ Exponential <- function(beta = NULL, bounds = list(NULL, NULL),
   Density("Exponential", bounds, trunc, k, r, param, beta = beta)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Exponential <- function(x) {
   betaStr <-
@@ -33,6 +33,7 @@ freeParameters.Exponential <- function(x) {
   betaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Exponential <- function(x) {
   betaStr <-
@@ -52,6 +53,7 @@ fixedParameters.Exponential <- function(x) {
   betaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Exponential <- function(x) {
   sprintf(
@@ -61,11 +63,13 @@ generated.Exponential <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Exponential <- function(x) {
   return("beta")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Exponential <- function(x) {
   sprintf(
@@ -75,6 +79,7 @@ logLike.Exponential <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Exponential <- function(x) {
   truncStr <- make_trunc(x, "")

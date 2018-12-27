@@ -16,13 +16,13 @@
 #'   }
 #' }
 #'
-#' @param spec A specification object returned by \code{\link{specify}}.
+#' @param spec A \code{\link{Specification}} object.
 #' @param N An integer with the number of repetitions of the validation protocol.
 #' @param T An optional integer with the length of the time series to be simulated. It defaults to 1000 observations.
 #' @param x An optional numeric matrix with covariates for Markov-switching regression. It defaults to NULL (no covariates).
 #' @param seed An optional integer with the seed used for the simulations. It defaults to 9000.
 #' @param nCores An optional integer with the number of cores to use to run the protocol in parallel. It defaults to half the number of available cores
-#' @param ... Arguments to be passed to \code{\link{drawSamples}}.
+#' @param ... Arguments to be passed to \code{\link{draw_samples}}.
 #' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
 #' @examples
 #' \dontrun{
@@ -67,9 +67,9 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   n <- NULL
   l <- foreach::foreach(n = 1:N, .packages = c("BayesHMM", "rstan")) %dopar% {
     y          <- ySim[n, 1, , ]  # Chain 1
-    paramTrue  <- paramSim[n, ]   # paramSim[n, , ]
+    paramTrue  <- paramSim[n, ]
     myFit      <- do.call(
-      drawSamples              ,     # drawSamples
+      draw_samples,
       c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
     )
 
@@ -79,7 +79,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
       spec$K
     )
 
-    myDiag     <- validate(myFit, trueParameters = paramTrue)
+    myDiag              <- extract_diagnostics(myFit, trueParameters = paramTrue)
     myDiag$chains$seed  <- seed
     myDiag$chains$n     <- n
     myDiag$parameters$n <- n
@@ -91,37 +91,6 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
   list(
     chains     = do.call(rbind.data.frame, lapply(l, `[[`, 1)),
     parameters = do.call(rbind.data.frame, lapply(l, `[[`, 2))
-  )
-}
-
-#' Compute the convergence and posterior predictive diagnostics.
-#'
-#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{drawSamples}}.
-#' @param pars A vector of characters with the name of the quantities to be extracted. The characters strings may include regular expressions. Further, wildcards are automatically translated into regex: \emph{?} matches a single character, while \emph{*} matches any string including an empty one. For example, \emph{?pred} will match both ypred and zpred, and \emph{z*} will match zstar and zpred. It defaults to all the observation model parameters.
-#' @param trueParameters An optional numeric vector with the true value of the parameter vector.
-#' @return A named list with two elements. The first element \emph{chains} is a data.frame with Markov-chain Monte Carlo convergence diagnostics (number of divergences, number of times max tree depth is reached, maximum leapfrogs, warm up and sampling times) and posterior predictive checks (observation ranks, Kolmogorov-Smirnov statistic for observed sample vs posterior predictive samples). The second element, \emph{parameters}, compare true versus estimated values for the unknown quantities (mean, sd, quantiles and other posterior measures, Monte Carlo standard error, estimated sample size, R Hat, and rank).
-validate <- function(stanfit, pars = select_obs_parameters(stanfit), trueParameters = NULL) {
-  d       <- get_diagnose_parameters(stanfit, trueParameters, pars)
-  nChains <- extract_n_chains(stanfit)
-  spec    <- extract_spec(stanfit)
-
-  list(
-    chains = data.frame(
-      model = spec$name,
-      chain = 1:nChains,
-      get_diagnose_chain_convergence(stanfit),
-      get_diagnose_ppredictive(stanfit),
-      row.names = NULL,
-      stringsAsFactors = FALSE
-    ),
-    parameters = data.frame(
-      model = spec$name,
-      chain     = rep(1:nChains, each = length(unique(rownames(d)))),
-      parameter = rownames(d),
-      d,
-      row.names = NULL,
-      stringsAsFactors = FALSE
-    )
   )
 }
 

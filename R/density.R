@@ -2,66 +2,77 @@
 
 #' Write the Stan code lines related with Density constants.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 constants          <- function(x) { UseMethod("constants", x) }
 
 #' Write the Stan code lines related with Density generated quantities.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 generated          <- function(x) { UseMethod("generated", x) }
 
 #' Write the Stan code lines related with Density parameters.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 parameters         <- function(x) { UseMethod("parameters", x) }
 
 #' Write the Stan code lines related with Density log likelihood.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 logLike            <- function(x) { UseMethod("logLike", x) }
 
 #' Write the Stan code lines related with Density no log likelihood.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 noLogLike          <- function(x) { UseMethod("noLogLike", x) }
 
 #' Write the Stan code lines related with Density link function.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 link               <- function(x) { UseMethod("link", x) }
 
 #' Write the Stan code lines related with Density free parameters.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 freeParameters     <- function(x) { UseMethod("freeParameters", x) }
 
 #' Write the Stan code lines related with Density fixed parameters.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 fixedParameters    <- function(x) { UseMethod("fixedParameters", x) }
 
 #' Write the Stan code lines related with Density priors.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A character vector.
+#' @return A character string.
 prior              <- function(x) { UseMethod("prior", x) }
 
 # Other (not directly related to Stan code)
 
 #' Create a representation of a probability mass or density function for a
-#' continuous univariate random variable. It can be used to specify either a
+#' continuous univariate random variable.
+#'
+#' It can be used to specify either a
 #' prior distribution for a model parameter or a likelihood function for an
 #' observation model.
 #'
-#' @param name A character vector with the name of the density.
+#' @param name A character string with the name of the density.
 #' @param bounds (optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.
 #' @param trunc (optional) A list with two elements specifying the lower and upper bound for the domain of the density function. Use either a fixed value for a finite bound or NULL for no truncation. It defaults to an unbounded domain.
 #' @param k (optional) The number of the hidden state for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
@@ -95,11 +106,13 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 
 #' Explain a Density object in human readable format.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
 #' @param print An optional logical indicating whether the description should be printing out.
-#' @return A character vector.
+#' @return A character string.
 explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
 
+#' @keywords internal
 #' @inherit explain_density
 explain_density.Density <- function(x, print = FALSE) {
   freeParam  <- getFreeParameters(x)
@@ -184,8 +197,9 @@ explain_density.Density <- function(x, print = FALSE) {
 
 #' Return the names of both free and fixed parameters in the Density object.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A vector of character vectors.
+#' @return A vector of character strings.
 #' @examples
 #' \dontrun{
 #' getParameterNames(
@@ -197,6 +211,7 @@ explain_density.Density <- function(x, print = FALSE) {
 #' }
 getParameterNames  <- function(x) { UseMethod("getParameterNames", x) }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Density <- function(x) {
   warning(
@@ -209,8 +224,9 @@ getParameterNames.Density <- function(x) {
 
 #' Return the names of the free parameters in the Density object.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A vector of character vectors.
+#' @return A vector of character strings.
 #' @examples
 #' \dontrun{
 #' getFreeParameters(
@@ -222,6 +238,7 @@ getParameterNames.Density <- function(x) {
 #' }
 getFreeParameters  <- function(x) { UseMethod("getFreeParameters", x) }
 
+#' @keywords internal
 #' @inherit getFreeParameters
 getFreeParameters.Density <- function(x) {
   l <-
@@ -253,8 +270,9 @@ getFreeParameters.Density <- function(x) {
 
 #' Return the names of the fixed parameters in the Density object.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
-#' @return A vector of character vectors.
+#' @return A vector of character strings.
 #' @examples
 #' \dontrun{
 #' getFixedParameters(
@@ -266,6 +284,7 @@ getFreeParameters.Density <- function(x) {
 #' }
 getFixedParameters <- function(x) { UseMethod("getFixedParameters", x) }
 
+#' @keywords internal
 #' @inherit getFixedParameters
 getFixedParameters.Density <- function(x) {
   l <-
@@ -284,39 +303,47 @@ getFixedParameters.Density <- function(x) {
 
 #' Check if it is a Density object for the transition model.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant for transition models, FALSE otherwise.
 is.link            <- function(x) { UseMethod("is.link", x) }
 
+#' @keywords internal
 #' @inherit is.link
 is.link.Density                     <- function(x) { FALSE }
 
 #' Check if it is a Density object for discrete random variables.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a discrete random variables, FALSE otherwise.
 is.discrete        <- function(x) { UseMethod("is.discrete", x) }
 
+#' @keywords internal
 #' @inherit is.discrete
 is.discrete.Density                 <- function(x) { FALSE }
 
 #' Check if it is a Density object for multivariate random variables.
 #'
+#' @keywords internal
 #' @param x A \code{\link{Density}} object.
 #' @return TRUE if the object is meant to represent a multivariate random variables, FALSE otherwise.
 is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 
+#' @keywords internal
 #' @inherit is.multivariate
 is.multivariate.Density             <- function(x) { FALSE }
 
 #' Check if it is a \code{\link{Density}} object.
 #'
+#' @keywords internal
 #' @param x An object.
 #' @return TRUE if the object is a Density object, FALSE otherwise.
 is.Density <- function(x) {
   "Density" %in% class(x)
 }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.Density <- function(x, noLogLike) {
   if (noLogLike) {
@@ -326,20 +353,25 @@ block_data.Density <- function(x, noLogLike) {
   }
 }
 
+#' @keywords internal
 #' @inherit noLogLike
 noLogLike.Density <- function(x) {
   sprintf("loglike[%s][t] = 1;", x$k)
 }
 
+#' @keywords internal
 #' @inherit is.TVInitial
 is.TVInitial.Density                <- function(x) { FALSE }
 
+#' @keywords internal
 #' @inherit is.TVTransition
 is.TVTransition.Density             <- function(x) { FALSE }
 
+#' @keywords internal
 #' @inherit constants
 constants.Density                   <- function(x) { ""    }
 
+#' @keywords internal
 #' @inherit link
 link.Density                        <- function(x) { ""    }
 
@@ -348,6 +380,7 @@ link.Density                        <- function(x) { ""    }
 #' prior distribution for a model parameter or a likelihood function for an
 #' observation model.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family MultivariateDensity
 MultivariateDensity <- function(name, ...) {
@@ -361,6 +394,7 @@ MultivariateDensity <- function(name, ...) {
 #' prior distribution for a model parameter or a likelihood function for an
 #' observation model.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family DiscreteDensity
 DiscreteDensity <- function(name, ...) {
@@ -369,9 +403,11 @@ DiscreteDensity <- function(name, ...) {
   x
 }
 
+#' @keywords internal
 #' @inherit is.discrete
 is.discrete.DiscreteDensity         <- function(x) { TRUE  }
 
+#' @keywords internal
 #' @inherit block_data
 block_data.DiscreteDensity <- function(x, noLogLike) {
   if (noLogLike) {
@@ -386,6 +422,7 @@ block_data.DiscreteDensity <- function(x, noLogLike) {
 #' prior distribution for a model parameter or a likelihood function for an
 #' observation model.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family MultivariateDiscreteDensity
 MultivariateDiscreteDensity <- function(name, ...) {
@@ -394,6 +431,7 @@ MultivariateDiscreteDensity <- function(name, ...) {
   x
 }
 
+#' @keywords internal
 #' @inherit is.multivariate
 is.multivariate.MultivariateDensity <- function(x) { TRUE  }
 
@@ -401,6 +439,7 @@ is.multivariate.MultivariateDensity <- function(x) { TRUE  }
 #' univariate random variable that may be used only to specify a prior
 #' distribution for a model parameter.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family PriorOnlyDensity
 PriorOnlyDensity <- function(name, ...) {
@@ -413,6 +452,7 @@ PriorOnlyDensity <- function(name, ...) {
 #' multivariate random variable that may be used only to specify a prior
 #' distribution for a model parameter.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family PriorOnlyDensity
 PriorOnlyMultivariateDensity <- function(name, ...) {
@@ -421,24 +461,34 @@ PriorOnlyMultivariateDensity <- function(name, ...) {
   x
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.PriorOnlyDensity     <- function(x) { ""    }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.PriorOnlyDensity    <- function(x) { ""    }
 
+#' @keywords internal
 #' @inherit generated
 generated.PriorOnlyDensity          <- function(x) { ""    }
 
+#' @keywords internal
 #' @inherit getFreeParameters
 getFreeParameters.PriorOnlyDensity  <- function(x) { ""    }
 
+#' @keywords internal
+#' @inherit getFreeParameters
+getParameterNames.PriorOnlyDensity  <- function(x) { ""    }
+
+#' @keywords internal
 #' @inherit logLike
 logLike.PriorOnlyDensity            <- function(x) { ""    }
 
 #' Create a representation of a link function that may be used only to specify
 #' a transition model.
 #'
+#' @keywords internal
 #' @inherit Density
 #' @family LinkDensity
 LinkDensity <- function(name, ...) {
@@ -447,6 +497,7 @@ LinkDensity <- function(name, ...) {
   x
 }
 
+#' @keywords internal
 #' @inherit is.link
 is.link.LinkDensity                 <- function(x) { TRUE  }
 
@@ -475,22 +526,26 @@ is.link.LinkDensity                 <- function(x) { TRUE  }
 
 #' Check if it is a \code{\link{DensityList}} object.
 #'
+#' @keywords internal
 #' @param x An object.
 #' @return TRUE if the object is a DensityList object, FALSE otherwise.
 is.DensityList <- function(x) {
   all(sapply(x, is.Density))
 }
 
+#' @keywords internal
 #' @inherit explain_density
 explain_density.DensityList <- function(x, print = FALSE){
   lapply(x, explain_density, print = print)
 }
 
+#' @keywords internal
 #' @inherit is.discrete
 is.discrete.DensityList <- function(x) {
   all(sapply(x, is.discrete))
 }
 
+#' @keywords internal
 #' @inherit is.multivariate
 is.multivariate.DensityList <- function(x) {
   all(sapply(x, is.multivariate))

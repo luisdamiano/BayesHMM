@@ -5,7 +5,6 @@
 #' @param sigma Either a fixed value or a prior density for the scale matrix parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # As a prior for the covariance matrix
@@ -15,6 +14,7 @@ InverseWishart <- function(nu = NULL, sigma = NULL, bounds = list(NULL, NULL),
   PriorOnlyMultivariateDensity("InverseWishart", bounds, trunc, k, r, param, nu = nu, sigma = sigma)
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.InverseWishart <- function(x) {
   check_psd(x$sigma)

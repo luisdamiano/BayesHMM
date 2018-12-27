@@ -4,7 +4,6 @@
 #' @param lambda Either a fixed value or a prior density for the rate parameter.
 #'
 #' @family Density
-#' #'
 #'
 #' @examples
 #' # With fixed values for the parameters
@@ -17,6 +16,7 @@ Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
   DiscreteDensity("Poisson", bounds, trunc, k, r, param, lambda = lambda)
 }
 
+#' @keywords internal
 #' @inherit freeParameters
 freeParameters.Poisson <- function(x) {
   lambdaStr <-
@@ -33,6 +33,7 @@ freeParameters.Poisson <- function(x) {
   lambdaStr
 }
 
+#' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.Poisson <- function(x) {
   lambdaStr <-
@@ -52,6 +53,7 @@ fixedParameters.Poisson <- function(x) {
   lambdaStr
 }
 
+#' @keywords internal
 #' @inherit generated
 generated.Poisson <- function(x) {
   sprintf(
@@ -61,11 +63,13 @@ generated.Poisson <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.Poisson <- function(x) {
   return("lambda")
 }
 
+#' @keywords internal
 #' @inherit logLike
 logLike.Poisson <- function(x) {
   sprintf(
@@ -75,6 +79,7 @@ logLike.Poisson <- function(x) {
   )
 }
 
+#' @keywords internal
 #' @inherit prior
 prior.Poisson <- function(x) {
   truncStr <- make_trunc(x, "")

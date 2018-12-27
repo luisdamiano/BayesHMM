@@ -7,13 +7,14 @@
 \method{explain_density}{Density}(x, print = FALSE)
 }
 \arguments{
-\item{x}{#' @param x A \code{\link{Density}} object.}
+\item{x}{A \code{\link{Density}} object.}
 
 \item{print}{An optional logical indicating whether the description should be printing out.}
 }
 \value{
-A character vector.
+A character string.
 }
 \description{
 Explain a Density object in human readable format.
 }
+\keyword{internal}

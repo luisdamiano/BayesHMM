@@ -21,7 +21,7 @@
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
 }
 \value{
-An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the specification object \emph{spec}). This object is completely compatible with all other functions.
+An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
 }
 \description{
 Fit a model by MCMC
@@ -51,3 +51,4 @@ myFit   <- fit(mySpec, y = y, chains = 2, iter = 500)
 \seealso{
 See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }
+\keyword{internal}

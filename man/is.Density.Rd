@@ -15,3 +15,4 @@ TRUE if the object is a Density object, FALSE otherwise.
 \description{
 Check if it is a \code{\link{Density}} object.
 }
+\keyword{internal}
