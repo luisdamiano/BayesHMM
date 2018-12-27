@@ -16,6 +16,7 @@ Additionally, you may start with the manual help for ?specify and ?fit.
 Useful links:
 \itemize{
   \item \url{https://github.com/luisdamiano/BayesHMM/}
+  \item \url{https://summerofcode.withgoogle.com/projects/#4681157036212224}
   \item Report bugs at \url{https://github.com/luisdamiano/BayesHMM/issues}
 }
 
