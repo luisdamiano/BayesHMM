@@ -61,11 +61,10 @@ block_data.HMMSpecification <- function(spec) {
 
   strTransition <-
     if (is.TVTransition(spec)) {
-      ""
-      # "
-      # int<lower = 1> P;     // number of transition model predictors
-      # matrix[T, P] u;       // transition model predictors
-      # "
+      "
+      int<lower = 1> P;     // number of transition model predictors
+      matrix[T, P] u;       // transition model predictors
+      "
     } else {
       ""
     }
@@ -85,6 +84,8 @@ block_parameters.HMMSpecification <- function(spec) {
 
   strTransition <-
     if (is.TVTransition(spec)) {
+      ""
+    } else if (is.FixedTransition(spec)) {
       ""
     } else {
       "
@@ -131,6 +132,22 @@ block_tparameters.HMMSpecification <- function(spec) {
           }
           logA[t] = log(A[t]);
         }
+      "
+    } else if (is.FixedTransition(spec)) {
+      strAll <- paste0(
+        strAll,
+        "\n",
+        "simplex[K] A[K];\t\t\t\t\t\t\t\t\t\t// transition probabilities\n",
+        "\t\t\t\t\t\t\t\t\t\t// A[i][j] = p(z_t = j | z_{t-1} = i)\n",
+        "\n",
+        "\t\tvector[K] logA[K];\t\t\t\t\t\t // transition logA[from, to]"
+      )
+
+      "
+      for (i in 1:K) { // i = previous (t-1)
+        #include transitionLink.stan
+      }
+      logA = log(A);
       "
     } else {
       strAll <- paste0(

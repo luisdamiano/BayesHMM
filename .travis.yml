@@ -4,6 +4,9 @@ language: R
 sudo: true
 cache: packages
 
+r_build_args: '--no-build-vignettes'
+r_check_args: '--ignore-vignettes'
+
 matrix:
   include:
     - os: linux
@@ -46,3 +49,4 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "CXX14FLAGS = -O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function  -Wno-unknown-pragmas" >> ~/.R/Makevars; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "CC = clang" >> ~/.R/Makevars; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo tlmgr install inconsolata; fi
+

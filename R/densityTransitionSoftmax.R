@@ -11,7 +11,7 @@
 #' )
 TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
                            trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("TransitionSoftmax", bounds, trunc, k, r, param, uBeta = uBeta, P = P)
+  LinkDensity("TransitionSoftmax", bounds, trunc, k, r, param, uBeta = uBeta, P = P)
 }
 
 #' @keywords internal

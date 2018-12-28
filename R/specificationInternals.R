@@ -86,12 +86,12 @@ write_model       <- function(spec, noLogLike, writeDir) {
 
 make_data         <- function(spec, ...) { UseMethod("make_data", spec) }
 
-#' Check if it is a time-varying transition probability object.
+#' Check if it is a fixed transition probability object.
 #'
 #' @keywords internal
 #' @param x A \code{\link{Density}} or a \code{\link{Specification}} object.
-#' @return TRUE if the object is a time-varying transition probability object, FALSE otherwise.
-is.TVTransition   <- function(x) { UseMethod("is.TVTransition", x) }
+#' @return TRUE if the object is a fixed transition probability object, FALSE otherwise.
+is.FixedTransition   <- function(x) { UseMethod("is.FixedTransition", x) }
 
 #' Check if it is a time-varying initial distribution object.
 #'
@@ -99,6 +99,13 @@ is.TVTransition   <- function(x) { UseMethod("is.TVTransition", x) }
 #' @param x A \code{\link{Density}} or a \code{\link{Specification}} object.
 #' @return TRUE if the object is a time-varying initial distribution object, FALSE otherwise.
 is.TVInitial      <- function(x) { UseMethod("is.TVInitial", x) }
+
+#' Check if it is a time-varying transition probability object.
+#'
+#' @keywords internal
+#' @param x A \code{\link{Density}} or a \code{\link{Specification}} object.
+#' @return TRUE if the object is a time-varying transition probability object, FALSE otherwise.
+is.TVTransition   <- function(x) { UseMethod("is.TVTransition", x) }
 
 # Default methods for an empty Specification
 #' @keywords internal
@@ -147,15 +154,21 @@ is.multivariate.Specification <- function(x) {
 }
 
 #' @keywords internal
-#' @inherit is.TVTransition
-is.TVTransition.Specification <- function(x) {
-  all(densityApply(x$transition$density, is.link))
+#' @inherit is.FixedTransition
+is.FixedTransition.Specification <- function(x) {
+  all(densityApply(x$transition$density, is.FixedTransition))
 }
 
 #' @keywords internal
 #' @inherit is.TVInitial
 is.TVInitial.Specification <- function(x) {
-  all(densityApply(x$initial$density, is.link))
+  all(densityApply(x$initial$density, is.TVInitial))
+}
+
+#' @keywords internal
+#' @inherit is.TVTransition
+is.TVTransition.Specification <- function(x) {
+  all(densityApply(x$transition$density, is.TVTransition))
 }
 
 make_data.Specification <- function(spec, y = NULL, x = NULL, u = NULL,

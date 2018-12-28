@@ -368,6 +368,10 @@ is.TVInitial.Density                <- function(x) { FALSE }
 is.TVTransition.Density             <- function(x) { FALSE }
 
 #' @keywords internal
+#' @inherit is.FixedTransition
+is.FixedTransition.Density          <- function(x) { FALSE }
+
+#' @keywords internal
 #' @inherit constants
 constants.Density                   <- function(x) { ""    }
 
