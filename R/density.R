@@ -364,6 +364,10 @@ noLogLike.Density <- function(x) {
 is.TVInitial.Density                <- function(x) { FALSE }
 
 #' @keywords internal
+#' @inherit is.FixedInitial
+is.FixedInitial.Density             <- function(x) { FALSE }
+
+#' @keywords internal
 #' @inherit is.TVTransition
 is.TVTransition.Density             <- function(x) { FALSE }
 

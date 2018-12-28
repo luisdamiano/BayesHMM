@@ -132,6 +132,11 @@ test_density.txt_31 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observat
 
 test_density.txt_32 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
+        NULL))), initial = InitialFixed(pi = c(0.2, 0.2, 0.6)), 
+    transition = Dirichlet(alpha = c(1, 1, 1)))") } 
+
+test_density.txt_33 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
         NULL))), initial = Dirichlet(alpha = c(1, 1, 1)), transition = TransitionFixed(A = matrix(c(0.5, 
     0.2, 0.3), ncol = 3, nrow = 3, byrow = TRUE)))") } 
 

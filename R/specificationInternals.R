@@ -86,6 +86,13 @@ write_model       <- function(spec, noLogLike, writeDir) {
 
 make_data         <- function(spec, ...) { UseMethod("make_data", spec) }
 
+#' Check if it is a fixed initial probability object.
+#'
+#' @keywords internal
+#' @param x A \code{\link{Density}} or a \code{\link{Specification}} object.
+#' @return TRUE if the object is a fixed initial probability object, FALSE otherwise.
+is.FixedInitial      <- function(x) { UseMethod("is.FixedInitial", x) }
+
 #' Check if it is a fixed transition probability object.
 #'
 #' @keywords internal
@@ -151,6 +158,12 @@ is.discrete.Specification <- function(x) {
 #' @inherit is.multivariate
 is.multivariate.Specification <- function(x) {
   all(densityApply(x$observation$density, is.multivariate))
+}
+
+#' @keywords internal
+#' @inherit is.FixedInitial
+is.FixedInitial.Specification <- function(x) {
+  all(densityApply(x$initial$density, is.FixedInitial))
 }
 
 #' @keywords internal

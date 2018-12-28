@@ -12,7 +12,6 @@ TransitionFixed   <- function(A = NULL, bounds = list(NULL, NULL),
   LinkDensity("TransitionFixed", bounds, trunc, k, r, param, A = A)
 }
 
-
 #' @keywords internal
 #' @inherit explain_density
 explain_density.TransitionFixed   <- function(x) {

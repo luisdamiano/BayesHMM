@@ -76,6 +76,8 @@ block_parameters.HMMSpecification <- function(spec) {
   strInitial <-
     if (is.TVInitial(spec)) {
       ""
+    } else if (is.FixedInitial(spec)) {
+      ""
     } else {
       "
       simplex[K] pi;                    // initial state probabilities
@@ -106,10 +108,21 @@ block_tparameters.HMMSpecification <- function(spec) {
 
   strInitial <-
     if (is.TVInitial(spec)) {
-      strAll <- paste0(strAll, "\n", "vector[K] pi;")
+      strAll <- paste0(strAll, "\n", "simplex[K] pi;")
 
       "
       #include initialLink.stan
+      "
+    } else if (is.FixedInitial(spec)) {
+      strAll <- paste0(
+        strAll,
+        "\n",
+        "simplex[K] pi;\t\t\t\t\t\t\t\t\t\t\t// initial state probabilities",
+        "\n"
+      )
+      "
+      #include initialLink.stan
+      logpi = log(pi);
       "
     } else {
       "logpi = log(pi);"
