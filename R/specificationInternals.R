@@ -229,7 +229,7 @@ make_data.Specification <- function(spec, y = NULL, x = NULL, u = NULL,
     stanData[["Q"]] <- Q
 
     if (!is.null(v))
-      stanData[["v"]] <- cast_to_matrix(v, stanData[["T"]], Q)
+      stanData[["v"]] <- cast_to_vector(v, Q)
   }
 
   stanData

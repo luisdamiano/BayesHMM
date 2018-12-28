@@ -120,23 +120,45 @@ test_density.txt_29 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observat
     1)), initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)))") } 
 
-test_density.txt_30 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Student(mu = 0, sigma = 1, nu = 1), 
+test_density.txt_30 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = RegBernoulliLogit(xBeta = Gaussian(mu = 0, 
+    sigma = 10), M = 3), initial = Dirichlet(alpha = c(0.5, 0.5)), 
+    transition = Dirichlet(alpha = c(0.5, 0.5)))") } 
+
+test_density.txt_31 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = RegBinomialLogit(xBeta = Gaussian(mu = 0, 
+    sigma = 10), M = 3, N = 10), initial = Dirichlet(alpha = c(0.5, 
+    0.5)), transition = Dirichlet(alpha = c(0.5, 0.5)))") } 
+
+test_density.txt_32 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = RegBinomialProbit(xBeta = Gaussian(mu = 0, 
+    sigma = 10), M = 3, N = 10), initial = Dirichlet(alpha = c(0.5, 
+    0.5)), transition = Dirichlet(alpha = c(0.5, 0.5)))") } 
+
+test_density.txt_33 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = RegGaussian(xBeta = Gaussian(mu = 0, 
+    sigma = 10), sigma = Student(mu = 0, sigma = 10, nu = 1, 
+    bounds = list(0, NULL)), M = 3), initial = Dirichlet(alpha = c(0.5, 
+    0.5)), transition = Dirichlet(alpha = c(0.5, 0.5)))") } 
+
+test_density.txt_34 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Student(mu = 0, sigma = 1, nu = 1), 
     initial = Dirichlet(alpha = c(0.1, 0.5, 1)), transition = Dirichlet(alpha = c(0.1, 
         0.5, 1)))") } 
 
-test_density.txt_31 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Student(mu = Gaussian(0, 10), 
+test_density.txt_35 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Student(mu = Gaussian(0, 10), 
     sigma = Student(mu = 0, sigma = 10, nu = 2, bounds = list(0, 
         NULL)), nu = Cauchy(mu = 0, sigma = 10, bounds = list(0, 
         NULL))), initial = Dirichlet(alpha = c(0.1, 0.5, 1)), 
     transition = Dirichlet(alpha = c(0.1, 0.5, 1)))") } 
 
-test_density.txt_32 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
+test_density.txt_36 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
         NULL))), initial = InitialFixed(pi = c(0.2, 0.2, 0.6)), 
     transition = Dirichlet(alpha = c(1, 1, 1)))") } 
 
-test_density.txt_33 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
+test_density.txt_37 <- function() { no_error_in_spec("hmm(K = 3, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
         NULL))), initial = Dirichlet(alpha = c(1, 1, 1)), transition = TransitionFixed(A = matrix(c(0.5, 
     0.2, 0.3), ncol = 3, nrow = 3, byrow = TRUE)))") } 
+
+test_density.txt_38 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
+        NULL))), initial = Dirichlet(alpha = c(0.5, 0.5)), transition = TransitionSoftmax(uBeta = Gaussian(0, 
+    10), P = 2))") } 
 

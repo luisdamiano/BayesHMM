@@ -294,6 +294,10 @@ cast_to_matrix <- function(x, nRow, nCol, name = deparse(substitute(x))) {
   matrix(as.numeric(xVector), nrow = nRow, ncol = nCol, byrow = FALSE)
 }
 
+cast_to_vector <- function(x, length, name = deparse(substitute(x))) {
+  drop(cast_to_matrix(x = x, nRow = 1, nCol = length, name = name))
+}
+
 is.empty <- function(x) {
   is.null(x) | length(x) == 0
 }

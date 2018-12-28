@@ -11,7 +11,16 @@
 #' )
 InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("InitialSoftmax", bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
+  LinkDensity("InitialSoftmax", bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
+}
+
+#' @keywords internal
+#' @inherit explain_density
+explain_density.InitialSoftmax <- function(x) {
+  collapse(
+    "Initial probabilities with covariates via softmax mapping.",
+    NextMethod()
+  )
 }
 
 #' @keywords internal
@@ -38,14 +47,18 @@ freeParameters.InitialSoftmax <- function(x) {
 #' @inherit fixedParameters
 fixedParameters.InitialSoftmax <- function(x) {
   warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
-  return("")
+  ""
 }
 
 #' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.InitialSoftmax <- function(x) {
-  return("vBeta")
+  "vBeta"
 }
+
+#' @keywords internal
+#' @inherit is.TVInitial
+is.TVInitial.InitialSoftmax <- function(x) { TRUE }
 
 #' @keywords internal
 #' @inherit link
@@ -55,3 +68,7 @@ link.InitialSoftmax <- function(x) {
     x$k, x$k
   )
 }
+
+#' @keywords internal
+#' @inherit prior
+prior.InitialSoftmax <- function(x) { "" }

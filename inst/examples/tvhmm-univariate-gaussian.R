@@ -1,5 +1,17 @@
-library(BayesHMM)
+mySpec <- hmm(
+  K = 2, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10),
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5)),
+  transition  = TransitionSoftmax(
+    uBeta = Gaussian(0, 10), P = 2
+  ),
+  name = "TVHMM Univariate Gaussian"
+)
 
+# Simulate dataset --------------------------------------------------------
 logsumexp <- function(x) {
   y = max(x)
   y + log(sum(exp(x - y)))
@@ -10,13 +22,8 @@ softmax <- function(x) {
 }
 
 tvhmm_sim <- function(T, K, u, w, p.init) {
-  # m <- ncol(u)
-
   if (dim(u)[1] != T)
     stop("The input matrix must have T rows.")
-
-  # if (any(dim(w) != c(K, m)))
-  #   stop("The transition weight matrix must be of size Kxm, where m is the size of the input vector.")
 
   if (length(p.init) != K)
     stop("The vector p.init must have length K.")
@@ -31,33 +38,20 @@ tvhmm_sim <- function(T, K, u, w, p.init) {
     z[t] <- sample(x = 1:K, size = 1, replace = FALSE, prob = p.mat[t, ])
   }
 
-  x <- vector("numeric", T)
+  y <- vector("numeric", T)
   for (t in 1:T) {
-    x[t] <- rnorm(1, 10 * z[t], 1)
+    y[t] <- rnorm(1, 10 * z[t], 1)
   }
 
   list(
     u = u,
     z = z,
-    x = x,
+    y = y,
     p.mat = p.mat
   )
 }
 
-mySpec <- hmm(
-  K = 2, R = 1,
-  observation = Gaussian(
-    mu    = Gaussian(0, 10),
-    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
-  ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
-  transition  = TransitionSoftmax(
-    uBeta = Gaussian(0, 3), P = 2
-  ),
-  name = "TVHMM Univariate Gaussian"
-)
-
-set.seed(9000)
+set.seed(8000)
 u <- cbind(
   rep(1, 300),
   rnorm(300)
@@ -74,38 +68,16 @@ uBeta <- list(
   )
 )
 
+# Fit model ---------------------------------------------------------------
 dataset <- tvhmm_sim(300, 2, u, uBeta, p.init = c(0.5, 0.5))
 myModel <- compile(mySpec)
-myAll   <- optimizing(mySpec, myModel, y = dataset$x, u = dataset$u, nRun = 10, keep = "all", nCores = 4, as_vector = FALSE)
+myAll   <- optimizing(
+  mySpec, myModel, y = dataset$y, u = dataset$u,
+  nRun = 20, keep = "all", nCores = 10
+)
 myBest  <- extract_best(myAll)
 
-extract_grid(myBest, pars = "mu")
+# Since mu_k = 10 * k (see line # 43)
+# then mu1 ~ 10, mu2 ~ 20 is the correct answer
 extract_grid(myAll, pars = "mu")
-
-extract_quantity(myBest, pars = "mu")
-extract_quantity(myBest, pars = "alpha")
-extract_alpha(myBest)
 extract_obs_parameters(myBest)
-
-sapply(myAll, extract_quantity, pars = "mu")
-
-plot(extract_zstar(myBest))
-
-table(real = dataset$z, viterbi = classify_zstar(myBest))
-
-table(real = dataset$z, filtered = classify_alpha(myBest))
-
-plot_series(myBest)
-
-plot_state_probability(myBest, stateProbabilityFun = identity, features = "stateShade")
-
-plot_state_probability(myBest, features = "stateShade")
-
-myBest$par$A[300, , ]
-
-extract_quantity(myBest, pars = "A")[[1]][300, , ]
-
-explain(mySpec)
-
-# print_observation(myBest)
-# ^ missing feature: print_observation not implemented for Optimization

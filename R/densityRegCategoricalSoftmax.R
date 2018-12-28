@@ -13,7 +13,7 @@
 #' )
 RegCategoricalSoftmax <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
                              trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("RegCategoricalSoftmax", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
+  DiscreteDensity("RegCategoricalSoftmax", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
 #' @keywords internal

@@ -112,29 +112,24 @@ block_tparameters.HMMSpecification <- function(spec) {
 
       "
       #include initialLink.stan
+      logpi = log(pi);
       "
     } else if (is.FixedInitial(spec)) {
-      strAll <- paste0(
-        strAll,
-        "\n",
-        "simplex[K] pi;\t\t\t\t\t\t\t\t\t\t\t// initial state probabilities",
-        "\n"
-      )
+      strAll <- paste0(strAll, "\n", "simplex[K] pi;")
+
       "
       #include initialLink.stan
       logpi = log(pi);
       "
     } else {
-      "logpi = log(pi);"
+      "
+      logpi = log(pi);
+      "
     }
 
   strTransition <-
     if (is.TVTransition(spec)) {
-      strAll <- paste0(
-        strAll,
-        "\n",
-        "vector[K] A[T, K];",
-        "\n",
+      strAll <- paste0(strAll, "\n", "vector[K] A[T, K];", "\n",
         "\t\tvector[K] logA[T, K];\t\t\t\t\t\t // transition logA[t, from, to]"
       )
 
@@ -168,6 +163,7 @@ block_tparameters.HMMSpecification <- function(spec) {
         "\n",
         "\t\tvector[K] logA[K];\t\t\t\t\t\t // transition logA[from, to]"
       )
+
       "
       logA = log(A);
       "
@@ -177,31 +173,17 @@ block_tparameters.HMMSpecification <- function(spec) {
 }
 
 block_generated.HMMSpecification <- function(spec) {
-  if (is.TVTransition(spec)) {
-    "
-    vector[T] alpha[K];
-    vector[T] gamma[K];
-    int<lower=1, upper=K> zstar[T];
+  "
+  vector[T] alpha[K];
+  vector[T] gamma[K];
+  int<lower=1, upper=K> zstar[T];
 
-    for (t in 1:T)
+  for (t in 1:T)
     alpha[, t] = to_array_1d(softmax(to_vector(logalpha[, t])));
 
-    gamma = forwardbackward(K, T, logpi, logA, loglike, alpha);
-    zstar = MAPpath(K, T, logpi, logA, loglike);
-    "
-  } else {
-    "
-    vector[T] alpha[K];
-    vector[T] gamma[K];
-    int<lower=1, upper=K> zstar[T];
-
-    for (t in 1:T)
-      alpha[, t] = to_array_1d(softmax(to_vector(logalpha[, t])));
-
-    gamma = forwardbackward(K, T, logpi, logA, loglike, alpha);
-    zstar = MAPpath(K, T, logpi, logA, loglike);
-    "
-  }
+  gamma = forwardbackward(K, T, logpi, logA, loglike, alpha);
+  zstar = MAPpath(K, T, logpi, logA, loglike);
+  "
 }
 
 chunk_calculate_target.HMMSpecification <- function(spec) {

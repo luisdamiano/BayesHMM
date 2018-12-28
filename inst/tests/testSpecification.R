@@ -61,11 +61,16 @@ test_specification.txt_12 <- function() { no_error_in_spec("hmm(K = 3, R = 2, ob
     10), sigma = Gaussian(0, 10, bounds = list(0, NULL))) + Gaussian(mu = Gaussian(0, 
     10), sigma = Gaussian(0, 10, bounds = list(0, NULL))), transition = ImproperUniform())") } 
 
-test_specification.txt_13 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observation = Gaussian(mu = Gaussian(0, 10), 
+test_specification.txt_13 <- function() { no_error_in_spec("hmm(K = 2, R = 1, observation = Gaussian(mu = Gaussian(0, 10), 
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, 
+        NULL))), initial = Dirichlet(alpha = c(0.5, 0.5)), transition = TransitionSoftmax(uBeta = Gaussian(0, 
+    10), P = 2))") } 
+
+test_specification.txt_14 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observation = Gaussian(mu = Gaussian(0, 10), 
     sigma = Gaussian(0, 10, bounds = list(0, NULL))), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.5, 0.5, 0.7)))") } 
 
-test_specification.txt_14 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observation = Gaussian(mu = Gaussian(0, 10), 
+test_specification.txt_15 <- function() { no_error_in_spec("hmm(K = 3, R = 2, observation = Gaussian(mu = Gaussian(0, 10), 
     sigma = Gaussian(0, 10, bounds = list(0, NULL))), initial = Dirichlet(alpha = c(0.5, 
     0.5, 0.5)), transition = Dirichlet(alpha = c(0.1, 0.1, 0.1)) + 
     Dirichlet(alpha = c(0.5, 0.5, 0.5)) + Dirichlet(alpha = c(0.9, 

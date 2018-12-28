@@ -24,15 +24,6 @@ explain_density.TransitionSoftmax <- function(x) {
 }
 
 #' @keywords internal
-#' @inherit block_data
-block_data.TransitionSoftmax <- function(x, noLogLike) {
-  c(
-    "int<lower = 1> P;     // number of transition model predictors",
-    "matrix[T, P] u;       // transition model predictors"
-  )
-}
-
-#' @keywords internal
 #' @inherit freeParameters
 freeParameters.TransitionSoftmax <- function(x) {
   uBetaStr <-
@@ -41,7 +32,7 @@ freeParameters.TransitionSoftmax <- function(x) {
       sprintf(
         "
         matrix%s[K, P] uBeta[K];        // transition model regressors
-                                        // uBeta[to, from, p regressors]
+                                        // uBeta[to, from, p-th regressor]
         ",
         uBetaBoundsStr
       )
@@ -56,14 +47,18 @@ freeParameters.TransitionSoftmax <- function(x) {
 #' @inherit fixedParameters
 fixedParameters.TransitionSoftmax <- function(x) {
   warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
-  return("")
+  ""
 }
 
 #' @keywords internal
 #' @inherit getParameterNames
 getParameterNames.TransitionSoftmax <- function(x) {
-  return("uBeta")
+  "uBeta"
 }
+
+#' @keywords internal
+#' @inherit is.TVTransition
+is.TVTransition.TransitionSoftmax <- function(x) { TRUE }
 
 #' @keywords internal
 #' @inherit link
@@ -76,7 +71,4 @@ link.TransitionSoftmax <- function(x) {
 
 #' @keywords internal
 #' @inherit prior
-prior.TransitionSoftmax <- function(x) {
-  warning("prior.Softmax: TO BE IMPLEMENTED.")
-  return("")
-}
+prior.TransitionSoftmax <- function(x) { "" }

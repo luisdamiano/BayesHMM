@@ -24,7 +24,8 @@ y <- as.matrix(
   )
 )
 
-myFit <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
+myModel <- compile(mySpec)
+myFit   <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
 
 plot_series(myFit)
 

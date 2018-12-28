@@ -13,16 +13,7 @@
 #' )
 RegBinomialLogit <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
                               trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("RegBinomialLogit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
-}
-
-#' @keywords internal
-#' @inherit constants
-constants.RegBinomialLogit <- function(x) {
-  sprintf(
-    "int<lower = 1> N = %s; // number of trials",
-    x$N
-  )
+  DiscreteDensity("RegBinomialLogit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
 #' @keywords internal
@@ -34,6 +25,15 @@ block_data.RegBinomialLogit <- function(x, noLogLike) {
       "matrix[T, M] x;   // predictors",
       NextMethod()
     )
+  )
+}
+
+#' @keywords internal
+#' @inherit constants
+constants.RegBinomialLogit <- function(x) {
+  sprintf(
+    "int<lower = 1> N = %s; // number of trials",
+    x$N
   )
 }
 

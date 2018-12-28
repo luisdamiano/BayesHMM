@@ -1,13 +1,13 @@
 mySpec <- hmm(
   K = 2, R = 1,
-  observation = RegGaussian(
+  observation = RegBinomialLogit(
     xBeta = Gaussian(mu = 0, sigma = 10),
-    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL)),
-    M     = 3
+    M     = 3,
+    N     = 10
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5)),
-  name = "Univariate Gaussian Regression"
+  name = "Univariate Binomial Logistic Regression"
 )
 
 set.seed(9000)
@@ -20,8 +20,8 @@ x <- as.matrix(
 )
 y <- as.matrix(
   c(
-    x[  1:150, ] %*% c(-1, -0.7,  1.5) + rnorm(150),
-    x[151:300, ] %*% c( 2,  3.8, -4.5) + rnorm(150)
+    rbinom(150, 10, prob = exp(x[  1:150, ] %*% c(-1, -0.7,  1.5)) / (1 + exp(x[  1:150, ] %*% c(-1, -0.7,  1.5)))),
+    rbinom(150, 10, prob = exp(x[151:300, ] %*% c( 2,  3.8, -4.5)) / (1 + exp(x[151:300, ] %*% c( 2,  3.8, -4.5))))
   )
 )
 

@@ -1,7 +1,10 @@
 mySpec <- hmm(
   K = 2, R = 1,
   observation = RegCategoricalSoftmax(
-    xBeta = MVGaussian(mu = c(0, 0, 0), sigma = ImproperUniform()),
+    xBeta = MVGaussian(
+      mu = c(0, 0, 0),
+      sigma = 10 * diag(3)
+    ),
     M     = 3,
     N     = 5 # different categories
   ),
@@ -9,6 +12,8 @@ mySpec <- hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5)),
   name = "Univariate Categorical Softmax Regression"
 )
+
+myModel <- compile(mySpec)
 
 set.seed(9000)
 x <- as.matrix(
@@ -18,6 +23,7 @@ x <- as.matrix(
     rnorm(300)
   )
 )
+
 b1 <- matrix(
   c(-1, 0, 1, -3, 0, 3, -5, 0, 5, -7, 0, 7, -9, 0, 9),
   ncol = 3, nrow = 5, byrow = TRUE
@@ -43,7 +49,8 @@ y <- as.matrix(
   )
 )
 
-myFit <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
+myModel <- compile(mySpec)
+myFit   <- fit(mySpec, y = y, x = x, chains = 1, iter = 500, seed = 9000)
 
 plot_series(myFit)
 
