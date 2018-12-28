@@ -2,7 +2,7 @@
 % Please edit documentation in R/densityTransitionFixed.R
 \name{TransitionFixed}
 \alias{TransitionFixed}
-\title{Fixed transition matrix}
+\title{Fixed transition probability matrix}
 \usage{
 TransitionFixed(A = NULL, bounds = list(NULL, NULL),
   trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL)
@@ -30,7 +30,7 @@ observation model.
 }
 \examples{
 TransitionFixed(
-  A = matrix(c(0.2, 0.8, 0.9, 0.1), 2, 2)
+  A = matrix(c(0.2, 0.9, 0.8, 0.1), 2, 2)
 )
 }
 \seealso{

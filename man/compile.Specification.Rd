@@ -39,7 +39,7 @@ mySpec   <- hmm(
 
 # Setting writeDir to store the Stan code file is useful
 # if you plan to read and/or edit the automatically generated code
-myModel <- compile(mySpec, writeDir = "stan_model.stan")
+myModel <- compile(mySpec, writeDir = "stan_code")
 }
 }
 \keyword{internal}
