@@ -279,15 +279,12 @@ explain.Specification <- function(spec, observation = TRUE, initial = TRUE,
   strObservation <- if (observation) { explain_observation(spec) }
   strInitial     <- if (initial)     { explain_initial(spec) }
   strTransition  <- if (transition)  { explain_transition(spec) }
-  strFooter      <- sprintf(
-    "Note for reproducibility: \n%s.\n",
-    get_package_info()
-  )
+  strFooter      <- print_reproducibility(print = FALSE)
 
   strOut <- gsub(
     "\\t",
     get_print_settings()$tab,
-    collapse(strHeader, strObservation, strInitial, strTransition, strFooter)
+    collapse(strHeader, strObservation, "", strInitial, strTransition, "", strFooter)
   )
 
   if (print)
@@ -311,25 +308,26 @@ explain_observation.Specification <- function(spec) {
 
   block1 <-
     sprintf(
-      "%s observations (R = %d): %s.\n",
+      "%s observations (R = %d).",
       if (R > 1) { "Multivariate" } else { "Univariate" },
-      R, "Variable names"
+      R
     )
 
-  l <- densityApply(spec$observation$density, explain_density)
+  l <- densityApply(spec$observation$density, explain_density, print = FALSE)
 
   block2 <-
     if (all(sapply(l, identical, l[[1]]))) {
       sprintf(
-        "Observation model for all states\n%s\n", l[[1]]
+        "Same observation model for every state\n%s\n", l[[1]]
       )
     } else {
-      k <- sub("k[[:digit:]].k([[:digit:]])r[[:digit:]]", "\\1", names(l))
-      r <- sub("k[[:digit:]].k[[:digit:]]r([[:digit:]])", "\\1", names(l))
+      k <- sub("k[[:digit:]]\\.k([[:digit:]])r[[:digit:]]?", "\\1", names(l))
+      r <- sub("k[[:digit:]]\\.k[[:digit:]]r([[:digit:]]?)", "\\1", names(l))
+      r <- ifelse(r == "", "1", r)
       sprintf(
-        "\nObservation model for State %s and Variable %s\n%s\n",
-        k, r, l
-      )
+        "\nObservation model for Variable %s in State %s\n%s",
+        r, k, l
+     )
     }
 
   collapse(c(block1, block2))
@@ -346,7 +344,7 @@ explain_initial     <- function(spec) { UseMethod("explain_initial", spec) }
 #' @keywords internal
 #' @inherit explain_initial
 explain_initial.Specification <- function(spec) {
-  l <- densityApply(spec$initial$density, explain_density)
+  l <- densityApply(spec$initial$density, explain_density, print = FALSE)
 
   block1 <-
     if (all(sapply(l, identical, l[[1]]))) {
@@ -375,7 +373,7 @@ explain_transition  <- function(spec) { UseMethod("explain_transition", spec) }
 #' @keywords internal
 #' @inherit explain_transition
 explain_transition.Specification <- function(spec) {
-  l <- densityApply(spec$transition$density, explain_density)
+  l <- densityApply(spec$transition$density, explain_density, print = FALSE)
 
   block1 <-
     if (all(sapply(l, identical, l[[1]]))) {
@@ -444,6 +442,7 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 
   stanModel <- do.call(rstan::stan_model, stanDots)
   attr(stanModel, "filename") <- stanFile
+  attr(stanModel, "stanCode") <- stanModel@model_code
   attr(stanModel, "spec") <- spec
 
   return(stanModel)
@@ -504,6 +503,7 @@ draw_samples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = 
   stanSampling <- do.call(rstan::sampling, stanDots)
   attr(stanSampling, "data")     <- stanData
   attr(stanSampling, "filename") <- attr(stanModel, "filename")
+  attr(stanSampling, "stanCode") <- stanModel@model_code
   attr(stanSampling, "spec")     <- spec
 
   return(stanSampling)
@@ -538,6 +538,7 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
   stanFit <- do.call(rstan::stan, stanDots)
   attr(stanFit, "data")     <- stanData
   attr(stanFit, "filename") <- stanFile
+  attr(stanFit, "stanCode") <- stanFit@stanmodel@model_code
   attr(stanFit, "spec")     <- spec
 
   return(stanFit)
@@ -639,6 +640,7 @@ optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NU
   stanOptimizing <- do.call(fun, list(stanDots = stanDots, nRuns = nRuns, nCores = nCores))
   attr(stanOptimizing, "data")     <- stanData
   attr(stanOptimizing, "filename") <- attr(stanModel, "filename")
+  attr(stanOptimizing, "stanCode") <- stanModel@model_code
   attr(stanOptimizing, "spec")     <- spec
 
   return(stanOptimizing)
@@ -654,6 +656,9 @@ optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NU
 optimizing_run  <- function(stanDots, n) {
   # sink(tempfile())
 
+  if (!("hessian" %in% names(stanDots)))
+    stanDots[["hessian"]] <- TRUE
+
   stanDots[["seed"]] <-
     if ("seed" %in% names(stanDots)) {
       as.integer(stanDots[["seed"]] + n)
@@ -662,10 +667,20 @@ optimizing_run  <- function(stanDots, n) {
     }
 
   sysTime <- system.time({
+    # stanoptim <- tryCatch({
+    #   setTimeLimit(0.1)
+    #   do.call(rstan::optimizing, stanDots)
+    # }, error = function(e) {
+    #   warning("Timeout! Optimization procedure killed after 30 seconds.")
+    #   print("Timeout! Optimization procedure killed after 30 seconds.")
+    #   return(list(error = rnorm(100)))
+    # })
     stanoptim <- do.call(rstan::optimizing, stanDots)
   })
-  attr(stanoptim, "systemTime") <- sysTime
+
+  attr(stanoptim, "date")       <- strptime(date(), "%a %b %d %H:%M:%S %Y")
   attr(stanoptim, "seed")       <- stanDots[["seed"]]
+  attr(stanoptim, "systemTime") <- t(as.matrix(sysTime)) / 60 # Now in minutes
   structure(stanoptim, class = c("Optimization", "list"))
 
   # sink()
@@ -716,7 +731,7 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
   if (best$return_code) # from ?optimizing: Anything != 0 is problematic.
     stop(
       sprintf(
-        "After %d runs, none returned a code == 0. First iteration returned %d",
+        "After %d runs, none returned a code == 0. The iteration with highest posterior density returned %d.",
         nRuns, best$return_code
       )
     )

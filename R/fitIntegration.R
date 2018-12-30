@@ -128,6 +128,31 @@ extract_parameter_names.stanfit <- function(fit) {
 #' @rdname extract_parameter_names
 setMethod("extract_parameter_names", "stanfit", extract_parameter_names.stanfit)
 
+# extract_date ------------------------------------------------------------
+#' Extract the date when the model was run.
+#'
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
+#' @return An integer with the date used to fit the model.
+extract_date     <- function(fit) { UseMethod("extract_date", fit) }
+
+#' @usage
+#' ## S3 method for signature 'Optimization'
+#' extract_date(fit)
+#' @rdname extract_date
+extract_date.Optimization <- function(fit) {
+  attr(fit, "date")
+}
+
+extract_date.stanfit <- function(fit) {
+  strptime(fit@date, "%a %b %d %H:%M:%S %Y")
+}
+
+#' @usage
+#' ## S4 method for signature 'stanfit'
+#' extract_date(fit)
+#' @rdname extract_date
+setMethod("extract_date", "stanfit", extract_date.stanfit)
+
 # extract_time ------------------------------------------------------------
 #' Extract the time elapsed when fitting the model.
 #'
@@ -289,31 +314,31 @@ classify_zstar.stanfit <- function(fit, reduce = posterior_mode, chain = "all") 
 #' @rdname classify_zstar
 setMethod("classify_zstar", "stanfit", classify_zstar.stanfit)
 
-# browse_model ------------------------------------------------------------
-#' Load the underlying Stan code into an IDE or browser.
+#' # browse_model ------------------------------------------------------------
+#' #' Load the underlying Stan code into an IDE or browser.
+#' #'
+#' #' The behavior is platform dependent.
+#' #'
+#' #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
+#' #' @param ... (optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).
+#' #' @return No return value.
+#' #' @seealso \code{\link{browseURL}}.
+#' browse_model <- function(fit, ...) { UseMethod("browse_model", fit) }
 #'
-#' The behavior is platform dependent.
+#' #' @usage
+#' #' ## S3 method for signature 'Optimization'
+#' #' browse_model(fit, ...)
+#' #' @rdname browse_model
+#' browse_model.Optimization <- function(fit, ...) {
+#'   browseURL(extract_filename(fit, ...))
+#' }
 #'
-#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
-#' @param ... (optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).
-#' @return No return value.
-#' @seealso \code{\link{browseURL}}.
-browse_model <- function(fit, ...) { UseMethod("browse_model", fit) }
-
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' browse_model(fit, ...)
-#' @rdname browse_model
-browse_model.Optimization <- function(fit, ...) {
-  browseURL(extract_filename(fit, ...))
-}
-
-browse_model.stanfit <- function(fit, ...) {
-  browseURL(extract_filename(fit, ...))
-}
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' browse_model(fit, ...)
-#' @rdname browse_model
-setMethod("browse_model", "stanfit", browse_model.stanfit)
+#' browse_model.stanfit <- function(fit, ...) {
+#'   browseURL(extract_filename(fit, ...))
+#' }
+#'
+#' #' @usage
+#' #' ## S4 method for signature 'stanfit'
+#' #' browse_model(fit, ...)
+#' #' @rdname browse_model
+#' setMethod("browse_model", "stanfit", browse_model.stanfit)

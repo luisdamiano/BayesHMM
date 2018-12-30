@@ -16,7 +16,9 @@ y <- as.matrix(
 
 explain(mySpec)
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500, seed = 9000)
+myModel <- compile(mySpec)
+myFit   <- draw_samples(mySpec, myModel, y = y, chains = 1, iter = 500, seed = 9000)
+myOpt   <- optimizing(mySpec, myModel, y = y, nRun = 50, nCores = 10, seed = 9000)
 
 print(myFit)
 

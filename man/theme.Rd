@@ -39,6 +39,7 @@ Note that the overall legend uses the colors \emph{densityY} and \emph{densityYP
 \seealso{
 Other visualization functions: \code{\link{get_current_theme}},
   \code{\link{get_default_theme}},
+  \code{\link{modify_theme_entry}},
   \code{\link{plot_ppredictive}},
   \code{\link{plot_series}},
   \code{\link{plot_state_probability}}

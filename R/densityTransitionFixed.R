@@ -14,7 +14,7 @@ TransitionFixed   <- function(A = NULL, bounds = list(NULL, NULL),
 
 #' @keywords internal
 #' @inherit explain_density
-explain_density.TransitionFixed   <- function(x) {
+explain_density.TransitionFixed   <- function(x, print = TRUE) {
   sprintf(
     "Fixed matrix: %s.",
     matrix_to_stan(x$A)

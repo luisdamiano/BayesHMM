@@ -4,7 +4,7 @@
 \alias{explain_density}
 \title{Explain a Density object in human readable format.}
 \usage{
-explain_density(x, print = FALSE)
+explain_density(x, print = TRUE)
 }
 \arguments{
 \item{x}{A \code{\link{Density}} object.}

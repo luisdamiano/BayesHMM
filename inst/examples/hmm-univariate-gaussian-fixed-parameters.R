@@ -9,10 +9,12 @@ mySpec <- hmm(
   name = "Univariate Gaussian Generative"
 )
 
-myFit <- sim(mySpec, chains = 1, iter = 500, seed = 9000)
-# Alternatively, you can set the number of generated quantities T
-# run(mySpec, T = 200, chains = 1, iter = 500)
+set.seed(9000)
+y <- as.matrix(
+  c(rnorm(100, 5, 1), rnorm(100, 0, 1), rnorm(100, -5, 1))
+)
 
-plot(extract_ypred(myFit, permuted = FALSE)[1, 1, ], type = "l")
+myModel <- compile(mySpec)
+myFit   <- draw_samples(mySpec, myModel, y = y, chains = 1, iter = 500, seed = 9000)
 
-print_fit(myFit)
+print(myFit)

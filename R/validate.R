@@ -144,10 +144,12 @@ get_diagnose_parameters <- function(stanfit, trueParameters = NULL, pars = NULL,
 }
 
 get_diagnose_ppredictive <- function(stanfit) {
-  y     <- extract_y(stanfit)
-  yPred <- extract_ypred(stanfit)
-  dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
+  y          <- extract_y(stanfit)
+  yPred      <- extract_ypred(stanfit)
+  nChains    <- extract_n_chains(stanfit)
+  dim(yPred) <- c(dim(yPred)[1], nChains, stanfit@par_dims$ypred)
   # ^ Extract flattens yPred[iters, chains, T, R] into yPred[iters, chains, T*R]
+  # dim(yPred) <- c(dim(yPred)[1:2], stanfit@par_dims$ypred)
 
   innerFun <- function(y, yPred) {
     yPredKS <- suppressWarnings(

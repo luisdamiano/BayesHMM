@@ -11,6 +11,58 @@ setMethod("extract_n_chains", "stanfit", function(stanfit) {
   stanfit@sim$chains
 })
 
+# extract_n_iterations ---------------------------------------------------------
+#' Extract the number of total iterations.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.
+#' @return The number of total iterations.
+setGeneric("extract_n_iterations", function(stanfit) {standardGeneric("extract_n_iterations")} )
+
+#' @rdname extract_n_iterations
+#' @aliases extract_n_iterations,stanfit-method
+setMethod("extract_n_iterations", "stanfit", function(stanfit) {
+  sum(sapply(stanfit@stan_args, `[[`, "iter"))
+})
+
+# extract_n_thin ---------------------------------------------------------
+#' Extract the thinning periodicity.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.
+#' @return The the thinning periodicity.
+setGeneric("extract_n_thin", function(stanfit) {standardGeneric("extract_n_thin")} )
+
+#' @rdname extract_n_thin
+#' @aliases extract_n_thin,stanfit-method
+setMethod("extract_n_thin", "stanfit", function(stanfit) {
+  sapply(stanfit@stan_args, `[[`, "thin")
+})
+
+# extract_n_warmup ---------------------------------------------------------
+#' Extract the number of warmup iterations.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.
+#' @return The number of warmup iterations.
+setGeneric("extract_n_warmup", function(stanfit) {standardGeneric("extract_n_warmup")} )
+
+#' @rdname extract_n_warmup
+#' @aliases extract_n_warmup,stanfit-method
+setMethod("extract_n_warmup", "stanfit", function(stanfit) {
+  sum(sapply(stanfit@stan_args, `[[`, "warmup"))
+})
+
+# extract_sample_size ---------------------------------------------------------
+#' Extract the number of iterations kept after warmup.
+#'
+#' @param stanfit An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.
+#' @return The number of iterations kept after warmup.
+setGeneric("extract_sample_size", function(stanfit) {standardGeneric("extract_sample_size")} )
+
+#' @rdname extract_sample_size
+#' @aliases extract_sample_size,stanfit-method
+setMethod("extract_sample_size", "stanfit", function(stanfit) {
+  sum(stanfit@sim$n_save - stanfit@sim$warmup2)
+})
+
 #' Check if it is an object created by \code{\link{draw_samples}}.
 #'
 #' @keywords internal

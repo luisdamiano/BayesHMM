@@ -14,6 +14,7 @@ Return the current theme.
 }
 \seealso{
 Other visualization functions: \code{\link{get_default_theme}},
+  \code{\link{modify_theme_entry}},
   \code{\link{plot_ppredictive}},
   \code{\link{plot_series}},
   \code{\link{plot_state_probability}}, \code{\link{theme}}

@@ -8,11 +8,11 @@
 #'
 #' @examples
 #' # With fixed values for the parameters
-#' NegativeBinomial(1, 2, 10)
+#' NegativeBinomial(1, 2)
 #'
 #' # With priors for the parameters
 #' NegativeBinomial(
-#'   Exponential(1), Exponential(1), 10
+#'   Exponential(1), Exponential(1)
 #' )
 NegativeBinomial <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
                              trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {

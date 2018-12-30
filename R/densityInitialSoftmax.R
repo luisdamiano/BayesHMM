@@ -16,7 +16,7 @@ InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
 
 #' @keywords internal
 #' @inherit explain_density
-explain_density.InitialSoftmax <- function(x) {
+explain_density.InitialSoftmax <- function(x, print = TRUE) {
   collapse(
     "Initial probabilities with covariates via softmax mapping.",
     NextMethod()

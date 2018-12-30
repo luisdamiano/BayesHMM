@@ -38,13 +38,16 @@ NULL
 #' Loads a theme into the R session.
 #'
 #' @keywords internal
-load_theme <- function() {
+load_theme <- function(theme = NULL) {
   # Look for config file in a few reasonable paths. If not found, load default.
-  newOps <- get_default_theme()
+  if (is.null(theme))
+    theme <- get_default_theme()
 
-  op    <- options()
-  toset <- !(names(newOps) %in% names(op))
-  if (any(toset)) options(newOps[toset])
+  options(theme)
+
+  # op     <- options()
+  # toset  <- !(names(theme) %in% names(op))
+  # if (any(toset)) options(theme[toset])
 
   invisible()
 }
@@ -59,7 +62,8 @@ get_default_theme <- function() {
     BayesHMM.print = list(
       char         = "_",
       tab          = "  ",
-      textWidth    = 80
+      textWidth    = 80,
+      figures      = "%6.3f"
     ),
     BayesHMM.theme = list(
       boxY            = "black",
@@ -96,6 +100,26 @@ get_current_theme <- function() {
     BayesHMM.theme = getOption("BayesHMM.theme"),
     BayesHMM.print = getOption("BayesHMM.print")
   )
+}
+
+#' Modifies an entry in the current theme.
+#'
+#' @param section A character string with the name of the section (either theme or print).
+#' @param key A character string with the key.
+#' @param value A character string with the value.
+#' @return A named list with the theme.
+#' @family visualization functions
+modify_theme_entry <- function(section, key, value) {
+  if (!any(section %in% c("print", "theme"))) {
+    warning(
+      sprintf("Section %s not valid. Theme not modified.", section)
+    )
+    return(invisible())
+  }
+
+  l <- get_current_theme()
+  l[[paste0("BayesHMM.", section)]][[key]] <- value
+  load_theme(l)
 }
 
 #' Return the current theme for visualizations.

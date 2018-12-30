@@ -110,11 +110,11 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
 #' @param x A \code{\link{Density}} object.
 #' @param print An optional logical indicating whether the description should be printing out.
 #' @return A character string.
-explain_density            <- function(x, print = FALSE) { UseMethod("explain_density", x) }
+explain_density            <- function(x, print = TRUE) { UseMethod("explain_density", x) }
 
 #' @keywords internal
 #' @inherit explain_density
-explain_density.Density <- function(x, print = FALSE) {
+explain_density.Density <- function(x, print = TRUE) {
   freeParam  <- getFreeParameters(x)
   fixedParam <- getFixedParameters(x)
 
@@ -131,13 +131,21 @@ explain_density.Density <- function(x, print = FALSE) {
   )
 
   strFreeParam <-
-    if (is.null(freeParam) || length(freeParam) == 0) {
+    if (is.null(freeParam) || length(freeParam) == 0 || unique(freeParam) == "") {
       NULL
     } else {
       l <- lapply(names(freeParam), function(paramName) {
+        # e <- sprintf(
+        #   "\n\t\t%-5s = %s",
+        #   paramName, explain_density(freeParam[[paramName]])
+        # )
+
+        strStructure <- trimws(gsub("(.+);(.+)", "\\1", freeParameters(x)))
+        strExplain   <- explain_density(freeParam[[paramName]], print = FALSE)
+
         e <- sprintf(
-          "\n\t\t%-5s = %s",
-          paramName, explain_density(freeParam[[paramName]])
+          "\n\t\t%-5s : %s\n\t\t%s",
+          paramName, strStructure, strExplain
         )
 
         e <- gsub("\t", "\t\t\t", e)
@@ -149,13 +157,13 @@ explain_density.Density <- function(x, print = FALSE) {
     }
 
   strFixedParam <-
-    if (is.null(fixedParam) || length(fixedParam) == 0) {
+    if (is.null(fixedParam) || length(fixedParam) == 0 || unique(fixedParam) == "") {
       NULL
     } else {
       l <- lapply(names(fixedParam), function(paramName) {
         sprintf(
           "%s = %s",
-          paramName, paste(fixedParam[[paramName]], collapse = "")
+          paramName, numeric_to_stan(fixedParam[[paramName]])
         )
       })
 
@@ -182,7 +190,8 @@ explain_density.Density <- function(x, print = FALSE) {
   block3 <-
     if (!is.null(fixedParam) && length(fixedParam) != 0)
       sprintf(
-        "\tFixed parameters: %d (%s)",
+        # "\tFixed parameters: %d (%s)",
+        "\t\t\tFixed parameters: %d (%s)",
         length(fixedParam),
         strFixedParam
       )
@@ -255,7 +264,7 @@ getFreeParameters.Density <- function(x) {
   l <- l[!sapply(l, is.null)]
 
   if (is.empty(l)) {
-    return(NULL)
+    return(list())
   } else {
     dl <-
       if (length(l) == 1 ) {
@@ -543,7 +552,7 @@ is.DensityList <- function(x) {
 
 #' @keywords internal
 #' @inherit explain_density
-explain_density.DensityList <- function(x, print = FALSE){
+explain_density.DensityList <- function(x, print = TRUE){
   lapply(x, explain_density, print = print)
 }
 

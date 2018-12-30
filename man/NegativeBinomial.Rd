@@ -33,11 +33,11 @@ observation model.
 }
 \examples{
 # With fixed values for the parameters
-NegativeBinomial(1, 2, 10)
+NegativeBinomial(1, 2)
 
 # With priors for the parameters
 NegativeBinomial(
-  Exponential(1), Exponential(1), 10
+  Exponential(1), Exponential(1)
 )
 }
 \seealso{

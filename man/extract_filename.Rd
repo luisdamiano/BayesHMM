@@ -27,7 +27,7 @@ This function does not allow the arguments \emph{combine}, \emph{reduce}, and \e
 Other extract: \code{\link{extract_K}},
   \code{\link{extract_R}}, \code{\link{extract_T}},
   \code{\link{extract_alpha}}, \code{\link{extract_data}},
-  \code{\link{extract_gamma}},
+  \code{\link{extract_gamma}}, \code{\link{extract_model}},
   \code{\link{extract_obs_parameters}},
   \code{\link{extract_parameters}},
   \code{\link{extract_spec}}, \code{\link{extract_ypred}},

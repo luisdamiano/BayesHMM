@@ -14,7 +14,7 @@ InitialFixed   <- function(pi = NULL, bounds = list(NULL, NULL),
 
 #' @keywords internal
 #' @inherit explain_density
-explain_density.InitialFixed     <- function(x) {
+explain_density.InitialFixed     <- function(x, print = TRUE) {
   sprintf(
     "Fixed vector: %s.",
     vector_to_stan(x$pi)

@@ -1,5 +1,5 @@
 mySpec <- hmm(
-  K = 3, R = 1,
+  K = 2, R = 1,
   observation = Poisson(
     lambda = ImproperUniform(bounds = list(0, NULL))
   ),
@@ -10,11 +10,17 @@ mySpec <- hmm(
 
 set.seed(9000)
 y = as.matrix(
-  c(rpois(100, 5), rpois(100, 10), rpois(100, 1))
+  c(rpois(150, 10), rpois(150, 1))
 )
 
-myFit <- fit(mySpec, y = y, chains = 1, iter = 500)
+myModel <- compile(mySpec)
+myFit   <- draw_samples(
+  mySpec, stanModel = myModel, y = y,
+  chains = 3, iter = 600, seed = 9000
+)
+myAll   <- optimizing(mySpec, myModel, y = y, nRuns = 5, nCores = 10, seed = 9000, keep = "all")
+myOpt   <- extract_best(myAll)
 
-plot_series(myFit)
+plot(myFit)
 
-print_fit(myFit)
+plot(myOpt)

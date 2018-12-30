@@ -8,24 +8,32 @@
 #' @return A character string with the selected model parameter names.
 select_parameters <- function(fit, observation = TRUE,
                               initial = TRUE, transition = TRUE) {
-  spec <- extract_spec(fit)
-  paramNames   <- ""
+  spec            <- extract_spec(fit)
+  paramNames      <- ""
 
   if (observation) {
-    paramNames  <- c(paramNames, densityApply(spec$observation$density, getParameterNames))
+    paramNames    <- c(paramNames, densityApply(spec$observation$density, getParameterNames))
   }
 
   if (initial) {
-    paramNames  <- c(paramNames, densityCollect(spec$initial$density, `[[`, "param"))
+    if (is.TVInitial(spec)) {
+      paramNames  <- c(paramNames, densityApply(spec$initial$density, getParameterNames))
+    } else {
+      paramNames  <- c(paramNames, densityCollect(spec$initial$density, `[[`, "param"))
+    }
   }
 
   if (transition) {
-    paramNames  <- c(paramNames, densityCollect(spec$transition$density, `[[`, "param"))
+    if (is.TVTransition(spec)) {
+      paramNames  <- c(paramNames, densityApply(spec$transition$density, getParameterNames))
+    } else {
+      paramNames  <- c(paramNames, densityCollect(spec$transition$density, `[[`, "param"))
+    }
   }
 
-  paramPatterns <- glob2rx(sprintf("%s*", unique(paramNames)[-1]))
-  fitNames      <- extract_parameter_names(fit)
-  paramInd <- Reduce(
+  paramPatterns   <- glob2rx(sprintf("%s*", unique(paramNames)[-1]))
+  fitNames        <- extract_parameter_names(fit)
+  paramInd        <- Reduce(
     `|`,
     lapply(paramPatterns, function(pattern) {
       grepl(pattern, fitNames)
@@ -73,6 +81,24 @@ select_transition_parameters <- function(fit) {
 #' @seealso \code{\link{select_parameters}}.
 select_all_parameters <- function(fit) {
   select_parameters(fit, TRUE, TRUE, TRUE)
+}
+
+#' Return the name of the parameters matching the pattern.
+#'
+#' @keywords internal
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
+#' @param pars Regular expressions against which parameter names should be matched.
+#' @return A character vector with the names of matching model parameters.
+match_parameter_names <- function(fit, pars) {
+  parNames <- select_parameters(fit)
+  ind      <- do.call(c, lapply(unique(pars), function(par) {
+    grep(
+      pattern = glob2rx(sprintf("%s*", par)),
+      x       = parNames
+    )})
+  )
+
+  parNames[ind]
 }
 
 #' Extract quantities from a model fitted with BayesHMM.
@@ -264,4 +290,41 @@ extract_spec <- function(fit) {
 #' @family extract
 extract_filename <- function(fit) {
   attr(fit, "filename")
+}
+
+#' Extract the underlying Stan code.
+#'
+#' @inherit extract
+#' @return A character string with the underlying Stan code.
+#' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
+#' @seealso \code{\link{browse_model}} for viewing the code using your IDE.
+#' @family extract
+extract_model <- function(fit) {
+  attr(fit, "stanCode")
+}
+
+# browse_model ------------------------------------------------------------
+#' Load the underlying Stan code into an IDE or browser.
+#'
+#' The behavior is platform dependent.
+#'
+#' @param fit An object returned by \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.
+#' @param ... (optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).
+#' @return No return value.
+#' @seealso \code{\link{browseURL}}.
+browse_model <- function(fit, ...) {
+  filename <- extract_filename(fit)
+  if (!file.exists(filename)) {
+    filename <- tempfile()
+    string   <- extract_model(fit)
+
+    if (is.null(string))
+      stop("There's no Stan code associated with this model.")
+
+    fileConn <- file(filename)
+    writeLines(string, con = fileConn)
+    close(fileConn)
+  }
+
+  browseURL(filename)
 }

@@ -4,7 +4,7 @@
 \alias{load_theme}
 \title{Loads a theme into the R session.}
 \usage{
-load_theme()
+load_theme(theme = NULL)
 }
 \description{
 Loads a theme into the R session.

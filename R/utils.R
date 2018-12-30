@@ -141,6 +141,11 @@ check_list <- function(x, len, name = deparse(substitute(x))) {
 
 # Text printouts ----------------------------------------------------------
 
+#' Make a character string with a line (horizontal rule).
+#'
+#' This function creates a horizontal line using the character and text width set in the \emph{char} and \emph{textWidth} theme fields respectively.
+#' @return A character string with a line.
+#' @keywords internal
 make_text_line <- function() {
   theme      <- getOption("BayesHMM.print")
   char       <- theme$char
@@ -148,15 +153,25 @@ make_text_line <- function() {
   paste(rep(char, textWidth), collapse = "")
 }
 
+#' Make a character string with a header.
+#'
+#' This function formats the text into a header.
+#' @return A character string with a header.
+#' @keywords internal
 make_text_header <- function(text) {
   textLine   <- make_text_line()
 
   sprintf(
-    "%-80s\n%s\n",
-    toupper(text), textLine
+    "%s\n%-80s\n%s\n",
+    textLine, toupper(text), textLine
   )
 }
 
+#' Make a character string with a subheader.
+#'
+#' This function formats the text into a subheader.
+#' @return A character string with a subheader.
+#' @keywords internal
 make_text_subheader <- function(text) {
   textLine   <- make_text_line()
 
@@ -167,6 +182,14 @@ make_text_subheader <- function(text) {
 }
 
 # Parser and writer -------------------------------------------------------
+
+wrap     <- function(string, width = 80, ...) {
+  collapse(strwrap(string, width, ...))
+}
+
+clean    <- function(string) {
+  gsub("\n{2,}", "\n\n", string)
+}
 
 collapse <- function(...) {
   paste(..., sep = "\n", collapse = "\n")
@@ -248,6 +271,33 @@ make_fixed_parameters <- function(density, string, check = NULL, errorStr = "") 
   make_parameters(density, string, stringNot = "", isDensity = FALSE, check, errorStr)
 }
 
+is.empty <- function(x) {
+  is.null(x) | length(x) == 0
+}
+
+# Thanks to dww: https://stackoverflow.com/a/38088874/2860744
+is.scalar <- function(x) {
+  is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x)==0
+}
+
+numeric_to_stan <- function(x) {
+  ret <- if(is.scalar(x)) {
+    scalar_to_stan(x)
+  } else if (is.vector(x)) {
+    vector_to_stan(x)
+  } else if (is.matrix(x)) {
+    matrix_to_stan(x)
+  } else {
+    stop("Not a valid numeric.")
+  }
+
+  ret
+}
+
+scalar_to_stan <- function(x) {
+  sprintf("%s", x)
+}
+
 vector_to_stan <- function(x) {
   sprintf("[%s]", paste(x, collapse = ", "))
 }
@@ -296,10 +346,6 @@ cast_to_matrix <- function(x, nRow, nCol, name = deparse(substitute(x))) {
 
 cast_to_vector <- function(x, length, name = deparse(substitute(x))) {
   drop(cast_to_matrix(x = x, nRow = 1, nCol = length, name = name))
-}
-
-is.empty <- function(x) {
-  is.null(x) | length(x) == 0
 }
 
 findGeneric <- function(fname, envir) {
@@ -365,6 +411,14 @@ posterior_mode <- function(x) {
 
 # Print and text ----------------------------------------------------------
 
+#' Remove non-alphabetic characters and modify to lowercase.
+#'
+#' @param string A character string, or a vector of character strings
+#' @return A character string, or a vector of character strings.
+string_simplify <- function(string) {
+  gsub("[^A-Za-z0-9]", "", tolower(string))
+}
+
 toproper <- function(string) {
   # Credits to Matthew Plourde https://stackoverflow.com/a/24957143/2860744
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(string), perl = TRUE)
@@ -375,13 +429,27 @@ get_time_info    <- function() {
   sprintf("Printed on %s at %s.", format(t, "%Y-%m-%d"), format(t, "%T"))
 }
 
-get_session_info <- function() {
+get_platform_info <- function() {
   session     <- utils::sessionInfo()
   strPlatform <- sprintf("%s %s", session$running, session$platform)
+
+  sprintf("%s", strPlatform)
+}
+
+get_R_info <- function() {
+  session     <- utils::sessionInfo()
   strR        <- session$R.version$version.string
 
-  sprintf("%s\n%s", strPlatform, strR)
+  sprintf("%s", strR)
 }
+
+# get_session_info <- function() {
+#   session     <- utils::sessionInfo()
+#   strPlatform <- sprintf("%s %s", session$running, session$platform)
+#   strR        <- session$R.version$version.string
+#
+#   sprintf("%s\n - %s", strPlatform, strR)
+# }
 
 get_other_packages_info <- function() {
   # Based on utils:::print.sessionInfo
@@ -410,46 +478,6 @@ get_rstan_info <- function() {
     utils::packageDescription("rstan")$Package,
     utils::packageDescription("rstan")$Version,
     utils::packageDescription("rstan")$Built
-  )
-}
-
-#' Make a character string with a line (horizontal rule).
-#'
-#' This function creates a horizontal line using the character and text width set in the \emph{char} and \emph{textWidth} theme fields respectively.
-#' @return A character string with a line.
-#' @keywords internal
-make_text_line <- function() {
-  theme      <- getOption("BayesHMM.print")
-  char       <- theme$char
-  textWidth  <- theme$textWidth
-  paste(rep(char, textWidth), collapse = "")
-}
-
-#' Make a character string with a header.
-#'
-#' This function formats the text into a header.
-#' @return A character string with a header.
-#' @keywords internal
-make_text_header <- function(text) {
-  textLine   <- make_text_line()
-
-  sprintf(
-    "%-80s\n%s\n",
-    toupper(text), textLine
-  )
-}
-
-#' Make a character string with a subheader.
-#'
-#' This function formats the text into a subheader.
-#' @return A character string with a subheader.
-#' @keywords internal
-make_text_subheader <- function(text) {
-  textLine   <- make_text_line()
-
-  sprintf(
-    "%s\n%s\n",
-    textLine, text
   )
 }
 
