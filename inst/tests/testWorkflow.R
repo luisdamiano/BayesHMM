@@ -155,3 +155,41 @@ testExtractors <- function() {
 
   invisible()
 }
+
+testPlots <- function() {
+  myFit <- load_safe("draw_samples.RDS")
+
+  no_error_in_expr({
+    for (s in c("filtered", "smoothed", "viterbi")) {
+      plot_series(
+        myFit, r = 1,
+        features = c(
+          "stateShade", "yColoredLine", "yColoredDots",
+          "bottomColoredMarks", "topColoredMarks"
+        ),
+        stateProbability = s
+      )
+    }
+
+    for (s in c("filtered", "smoothed")) {
+      plot_state_probability(
+        myFit, r = 1,
+        features = c(
+          "stateShade", "probabilityColoredLine", "probabilityColoredDots",
+          "probabilityFan", "bottomColoredMarks", "topColoredMarks"
+        ),
+        stateProbability = s
+      )
+    }
+
+    plot_ppredictive(
+      myFit,
+      type       = c(
+        "density", "cumulative", "boxplot", "histogram", "scatterplot",
+        "ks", "kl"
+      ),
+      fun = mean, fun1 = mean, fun2 = sd,
+      klControl = list(yNBins = 20, yPredNBins = 20)
+    )
+  })
+}

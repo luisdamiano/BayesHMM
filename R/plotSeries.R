@@ -96,6 +96,7 @@ plot_series <- function(fit, r = NULL,
 #' Plot the estimated hidden path along with many other customizable options.
 #'
 #' @inherit plot_series
+#' @param stateProbability An optional character string with the name of the quantity used to classify the observations (either filtered or smoothed). It allows for partial matching. It defaults to the smoothed probability.
 #' @param features An optional vector of character strings with the names of the features to include in the plot. These may be \emph{stateShade} (shaded background), \emph{probabilityColoredLine} (colored probability line), \emph{probabilityColoredDots} (colored probability dots), \emph{probabilityFan} (shaded probability fan for posterior intervals), \emph{bottomColoredMarks} (colored marks on the lower axis), \emph{topColoredMarks} (colored marks on the top axis). All colors are based on the hidden state assigned to each time step using the \emph{stateProbability} quantity. Note that more than one feature may be plotted at the same time. It allows for partial matching. It defaults to none.
 #' @param stateProbabilityInterval An optional function returning the upper and lower bound of the posterior intervals, such as \code{\link{posterior_intervals}}. It defaults to `posterior_intervals(c(0.1, 0.9))`.
 #' @family visualization functions
@@ -117,7 +118,7 @@ plot_state_probability <- function(fit, stateProbability = "smoothed",
 
   stateProbability <- match.arg(
     stateProbability,
-    choices = c("filtered", "smoothed", "viterbi"),
+    choices = c("filtered", "smoothed"),
     several.ok	= FALSE
   )
 

@@ -69,7 +69,7 @@ get_default_theme <- function() {
       boxY            = "black",
       boxYPred        = "gray80",
       cumulativeY     = "black",
-      cumulativeYpred = "gray80",
+      cumulativeYPred = "gray80",
       densityY        = "black",
       densityYPred    = "gray80",
       histBorder      = "gray",
