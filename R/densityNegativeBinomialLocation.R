@@ -14,9 +14,9 @@
 #' NegativeBinomialLocation(
 #'   Beta(0, 1), Exponential(1)
 #' )
-NegativeBinomialLocation <- function(mu = NULL, phi = NULL, ordered = NULL, bounds = list(NULL, NULL),
+NegativeBinomialLocation <- function(mu = NULL, phi = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                                      trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("NegativeBinomialLocation", ordered, bounds, trunc, k, r, param, mu = mu, phi = phi)
+  DiscreteDensity("NegativeBinomialLocation", ordered, equal, bounds, trunc, k, r, param, mu = mu, phi = phi)
 }
 
 #' @keywords internal
@@ -26,7 +26,7 @@ freeParameters.NegativeBinomialLocation <- function(x) {
     muBoundsStr <- make_bounds(x, "mu")
     sprintf(
       "real%s mu%s%s;",
-      muBoundsStr, x$k, x$r
+      muBoundsStr, get_k(x, "mu"), get_r(x, "mu")
     )
   } else {
     ""
@@ -36,7 +36,7 @@ freeParameters.NegativeBinomialLocation <- function(x) {
     phiBoundsStr <- make_bounds(x, "phi")
     sprintf(
       "real%s phi%s%s;",
-      phiBoundsStr, x$k, x$r
+      phiBoundsStr, get_k(x, "phi"), get_r(x, "phi")
     )
   } else {
     ""
@@ -58,7 +58,7 @@ fixedParameters.NegativeBinomialLocation <- function(x) {
 
       sprintf(
         "real mu%s%s = %s;",
-        x$k, x$r, x$mu
+        get_k(x, "mu"), get_r(x, "mu"), x$mu
       )
     }
 
@@ -72,7 +72,7 @@ fixedParameters.NegativeBinomialLocation <- function(x) {
 
       sprintf(
         "real phi%s%s = %s;",
-        x$k, x$r, x$phi
+        get_k(x, "phi"), get_r(x, "phi"), x$phi
       )
     }
 
@@ -85,8 +85,8 @@ generated.NegativeBinomialLocation <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = neg_binomial_2_rng(mu%s%s, phi%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "phi"), get_r(x, "phi")
   )
 }
 
@@ -102,8 +102,8 @@ logLike.NegativeBinomialLocation <- function(x) {
   sprintf(
     "loglike[%s][t] = neg_binomial_2_lpmf(y[t] | mu%s%s, phi%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "phi"), get_r(x, "phi")
   )
 }
 

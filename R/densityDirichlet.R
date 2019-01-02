@@ -11,9 +11,9 @@
 #'
 #' # With priors for the parameters
 #' Dirichlet(alpha = Beta(1, 1))
-Dirichlet <- function(alpha = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Dirichlet <- function(alpha = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                       trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("Dirichlet", ordered, bounds, trunc, k, r, param, alpha = alpha)
+  MultivariateDensity("Dirichlet", ordered, equal, bounds, trunc, k, r, param, alpha = alpha)
 }
 
 #' @keywords internal

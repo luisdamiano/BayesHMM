@@ -4,8 +4,15 @@
 # We regret to say that these functions are currently undocumented :(.
 
 write_stanfile <- function(code, dir, filename, ...) {
+  # Remove possibly duplicated lines
+  strOut <- unique(
+    unlist(
+      lapply(code, split_return_line)
+    )
+  )
+
   write(
-    collapse(code, ...),
+    collapse(strOut, ...),
     file = file.path(dir, filename)
   )
 }
@@ -56,13 +63,7 @@ write_parameters <- function(spec, writeDir) {
   write_stanfile(
     c(
       densityApply(spec$observation$density, fixedParameters),
-      densityCollect(spec$transition$density, fixedParameters)#,
-      # densityApply(spec$initial$density, fixedParameters),
-      # densityApply(spec$transition$density, fixedParameters)
-      # pseudo-code to have fixed parameters in the transition:
-      # hmm(..., transition = matrix(c(0.1, 0.2, 0.3, ...)))
-      # pseudo-code to have fixed parameters in the initial:
-      # hmm(..., initial = c(0.1, 0.2, 0.7))
+      densityCollect(spec$transition$density, fixedParameters)
     ),
     writeDir,
     "fixedParameters.stan"

@@ -16,6 +16,7 @@ parse_observation_build_priors <- function(observation, K, R) {
         for (p in 1:length(lParam)) {
           nameParam <- names(lParam)[p]
 
+          # Order is relevant -- do not change carelessly
           # Adjust lower bounds if parameter is ordered
           if (is.ordered(lParam[[p]]) && lDensity$k > 1) {
             obsList[[k]][[r]][[nameParam]]$bounds[[1]] <- sprintf(
@@ -33,6 +34,11 @@ parse_observation_build_priors <- function(observation, K, R) {
           obsList[[k]][[r]][[nameParam]][["r"]]     <- lDensity$r
           obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
           obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
+
+          # Adjust density if parameter is shared
+          if (is.equal(lParam[[p]]) && lDensity$k > 1) {
+            obsList[[k]][[r]][[nameParam]] <- obsList[[1]][[r]][[nameParam]]
+          }
 
           # Move up elements from parameter density to observation density
           if ("bounds" %in% names(obsList[[k]][[r]][[nameParam]])) {

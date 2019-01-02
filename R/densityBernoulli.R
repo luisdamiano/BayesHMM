@@ -13,9 +13,9 @@
 #' Bernoulli(
 #'   Beta(1, 1)
 #' )
-Bernoulli <- function(theta = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Bernoulli <- function(theta = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Bernoulli", ordered, bounds, trunc, k, r, param, theta = theta)
+  DiscreteDensity("Bernoulli", ordered, equal, bounds, trunc, k, r, param, theta = theta)
 }
 
 #' @keywords internal
@@ -26,7 +26,7 @@ freeParameters.Bernoulli <- function(x) {
       thetaBoundsStr <- make_bounds(x, "theta")
       sprintf(
         "real%s theta%s%s;",
-        thetaBoundsStr, x$k, x$r
+        thetaBoundsStr, get_k(x, "theta"), get_r(x, "theta")
       )
     } else {
       ""
@@ -48,7 +48,7 @@ fixedParameters.Bernoulli <- function(x) {
 
       sprintf(
         "real theta%s%s = %s;",
-        x$k, x$r, x$theta
+        get_k(x, "theta"), get_r(x, "theta"), x$theta
       )
     }
 
@@ -61,7 +61,7 @@ generated.Bernoulli <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = bernoulli_rng(theta%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 
@@ -77,7 +77,7 @@ logLike.Bernoulli <- function(x) {
   sprintf(
     "loglike[%s][t] = bernoulli_lpmf(y[t] | theta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 

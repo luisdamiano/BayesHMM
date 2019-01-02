@@ -9,9 +9,9 @@
 #' @examples
 #' # As a prior for the precision matrix
 #' Wishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
-Wishart <- function(nu = NULL, sigma = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Wishart <- function(nu = NULL, sigma = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  PriorOnlyMultivariateDensity("Wishart", ordered, bounds, trunc, k, r, param, nu = nu, sigma = sigma)
+  PriorOnlyMultivariateDensity("Wishart", ordered, equal, bounds, trunc, k, r, param, nu = nu, sigma = sigma)
 }
 
 #' @keywords internal

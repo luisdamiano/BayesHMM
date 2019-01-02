@@ -12,9 +12,9 @@
 #' Binomial(
 #'   Beta(1, 1), 10
 #' )
-Binomial <- function(theta = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Binomial <- function(theta = NULL, N = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Binomial", ordered, bounds, trunc, k, r, param, theta = theta, N = N)
+  DiscreteDensity("Binomial", ordered, equal, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal
@@ -34,7 +34,7 @@ freeParameters.Binomial <- function(x) {
       thetaBoundsStr <- make_bounds(x, "theta")
       sprintf(
         "real%s theta%s%s;",
-        thetaBoundsStr, x$k, x$r
+        thetaBoundsStr, get_k(x, "theta"), get_r(x, "theta")
       )
     } else {
       ""
@@ -56,7 +56,7 @@ fixedParameters.Binomial <- function(x) {
 
       sprintf(
         "real theta%s%s = %s;",
-        x$k, x$r, x$theta
+        get_k(x, "theta"), get_r(x, "theta"), x$theta
       )
     }
 
@@ -69,7 +69,7 @@ generated.Binomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = binomial_rng(N, theta%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 
@@ -85,7 +85,7 @@ logLike.Binomial <- function(x) {
   sprintf(
     "loglike[%s][t] = binomial_lpmf(y[t] | N, theta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 

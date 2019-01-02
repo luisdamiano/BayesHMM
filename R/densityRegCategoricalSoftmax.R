@@ -11,9 +11,9 @@
 #'   M     = 3,
 #'   N     = 10
 #' )
-RegCategoricalSoftmax <- function(xBeta = NULL, M = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
+RegCategoricalSoftmax <- function(xBeta = NULL, M = NULL, N = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                              trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("RegCategoricalSoftmax", ordered, bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
+  DiscreteDensity("RegCategoricalSoftmax", ordered, equal, bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
 #' @keywords internal
@@ -50,7 +50,7 @@ freeParameters.RegCategoricalSoftmax <- function(x) {
       xBetaBoundsStr <- make_bounds(x, "xBeta")
       sprintf(
         "matrix%s[N, M] xBeta%s%s;",
-        xBetaBoundsStr, x$k, x$r
+        xBetaBoundsStr, get_k(x, "xBeta"), get_r(x, "xBeta")
       )
     } else {
       ""
@@ -72,7 +72,7 @@ fixedParameters.RegCategoricalSoftmax <- function(x) {
 
       sprintf(
         "matrix[N, M] xBeta%s%s = %s;",
-        x$k, x$r, x$xBeta
+        get_k(x, "xBeta"), get_r(x, "xBeta"), x$xBeta
       )
     }
 
@@ -85,7 +85,7 @@ generated.RegCategoricalSoftmax <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = categorical_logit_rng((x[t] * xBeta%s%s')');",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta")
   )
 }
 
@@ -101,7 +101,7 @@ logLike.RegCategoricalSoftmax <- function(x) {
   sprintf(
     "loglike[%s][t] = categorical_logit_lpmf(y[t] | (x[t] * xBeta%s%s')');",
     x$k,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta")
   )
 }
 

@@ -17,10 +17,10 @@
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
 #'   nu    = GammaDensity(2, 0.1)
 #' )
-Student <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL,
+Student <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL, equal = NULL,
                     bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                     k = NULL, r = NULL, param = NULL) {
-  Density("Student", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
+  Density("Student", ordered, equal, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 #' @keywords internal
@@ -30,7 +30,7 @@ freeParameters.Student <- function(x) {
     muBoundsStr <- make_bounds(x, "mu")
     sprintf(
       "real%s mu%s%s;",
-      muBoundsStr, x$k, x$r
+      muBoundsStr, get_k(x, "mu"), get_r(x, "mu")
     )
   } else {
     ""
@@ -40,7 +40,7 @@ freeParameters.Student <- function(x) {
     sigmaBoundsStr <- make_bounds(x, "sigma")
     sprintf(
       "real%s sigma%s%s;",
-      sigmaBoundsStr, x$k, x$r
+      sigmaBoundsStr, get_k(x, "sigma"), get_r(x, "sigma")
     )
   } else {
     ""
@@ -50,7 +50,7 @@ freeParameters.Student <- function(x) {
     nuBoundsStr <- make_bounds(x, "nu")
     sprintf(
       "real%s nu%s%s;",
-      nuBoundsStr, x$k, x$r
+      nuBoundsStr, get_k(x, "nu"), get_r(x, "nu")
     )
   } else {
     ""
@@ -72,7 +72,7 @@ fixedParameters.Student <- function(x) {
 
       sprintf(
         "real mu%s%s = %s;",
-        x$k, x$r, x$mu
+        get_k(x, "mu"), get_r(x, "mu"), x$mu
       )
     }
 
@@ -86,7 +86,7 @@ fixedParameters.Student <- function(x) {
 
       sprintf(
         "real sigma%s%s = %s;",
-        x$k, x$r, x$sigma
+        get_k(x, "sigma"), get_r(x, "sigma"), x$sigma
       )
     }
 
@@ -100,7 +100,7 @@ fixedParameters.Student <- function(x) {
 
       sprintf(
         "real nu%s%s = %s;",
-        x$k, x$r, x$nu
+        get_k(x, "nu"), get_r(x, "nu"), x$nu
       )
     }
 
@@ -113,9 +113,9 @@ generated.Student <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = student_t_rng(nu%s%s, mu%s%s, sigma%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "nu"), get_r(x, "nu"),
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 
@@ -131,9 +131,9 @@ logLike.Student <- function(x) {
   sprintf(
     "loglike[%s][t] = student_t_lpdf(y[t] | nu%s%s, mu%s%s, sigma%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "nu"), get_r(x, "nu"),
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 

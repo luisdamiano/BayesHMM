@@ -11,9 +11,9 @@
 #'
 #' # With priors for the parameters
 #' Exponential(Exponential(1))
-Exponential <- function(beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Exponential <- function(beta = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Exponential", ordered, bounds, trunc, k, r, param, beta = beta)
+  Density("Exponential", ordered, equal, bounds, trunc, k, r, param, beta = beta)
 }
 
 #' @keywords internal
@@ -24,7 +24,7 @@ freeParameters.Exponential <- function(x) {
       betaBoundsStr <- make_bounds(x, "beta")
       sprintf(
         "real%s beta%s%s;",
-        betaBoundsStr, x$k, x$r
+        betaBoundsStr, get_k(x, "beta"), get_r(x, "beta")
       )
     } else {
       ""
@@ -46,7 +46,7 @@ fixedParameters.Exponential <- function(x) {
 
       sprintf(
         "real beta%s%s = %s;",
-        x$k, x$r, x$beta
+        get_k(x, "beta"), get_r(x, "beta"), x$beta
       )
     }
 
@@ -59,7 +59,7 @@ generated.Exponential <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = exponential_rng(beta%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "beta"), get_r(x, "beta")
   )
 }
 
@@ -75,7 +75,7 @@ logLike.Exponential <- function(x) {
   sprintf(
     "loglike[%s][t] = exponential_lpdf(y[t] | beta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "beta"), get_r(x, "beta")
   )
 }
 

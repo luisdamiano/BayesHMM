@@ -11,9 +11,9 @@
 #'
 #' # With priors for the parameters
 #' Poisson(GammaDensity(1, 1))
-Poisson <- function(lambda = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Poisson <- function(lambda = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Poisson", ordered, bounds, trunc, k, r, param, lambda = lambda)
+  DiscreteDensity("Poisson", ordered, equal, bounds, trunc, k, r, param, lambda = lambda)
 }
 
 #' @keywords internal
@@ -24,7 +24,7 @@ freeParameters.Poisson <- function(x) {
       lambdaBoundsStr <- make_bounds(x, "lambda")
       sprintf(
         "real%s lambda%s%s;",
-        lambdaBoundsStr, x$k, x$r
+        lambdaBoundsStr, get_k(x, "lambda"), get_r(x, "lambda")
       )
     } else {
       ""
@@ -46,7 +46,7 @@ fixedParameters.Poisson <- function(x) {
 
       sprintf(
         "real lambda%s%s = %s;",
-        x$k, x$r, x$lambda
+        get_k(x, "lambda"), get_r(x, "lambda"), x$lambda
       )
     }
 
@@ -59,7 +59,7 @@ generated.Poisson <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = poisson_rng(lambda%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "lambda"), get_r(x, "lambda")
   )
 }
 
@@ -75,7 +75,7 @@ logLike.Poisson <- function(x) {
   sprintf(
     "loglike[%s][t] = poisson_lpmf(y[t] | lambda%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "lambda"), get_r(x, "lambda")
   )
 }
 

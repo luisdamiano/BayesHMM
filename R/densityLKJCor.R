@@ -8,9 +8,9 @@
 #' @examples
 #' # As a prior for the correlation matrix
 #' CholeskyLKJCor(1)
-CholeskyLKJCor <- function(eta = NULL, ordered = NULL, bounds = list(NULL, NULL),
+CholeskyLKJCor <- function(eta = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                            trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  PriorOnlyMultivariateDensity("CholeskyLKJCor", ordered, bounds, trunc, k, r, param, eta = eta)
+  PriorOnlyMultivariateDensity("CholeskyLKJCor", ordered, equal, bounds, trunc, k, r, param, eta = eta)
 }
 
 #' @keywords internal

@@ -252,29 +252,6 @@ print_convergence <- function(stanfit, print) {
     strDiver, strDepth, strLeaps, strESS, strMCSE, strRhat
   )
 
-    # diag_chain(diags, "divergences" , "divergent iterations"),
-    # diag_chain(diags, "maxTreeDepth", "iterations hitting max tree depth"),
-    # diag_chain(diags, "maxNLeapfrog", "iterations hitting max number of leapfrogs"),
-    # diag_param(
-    #   diags,
-    #   indESS,
-    #   (mon[, "ESS"] / sampleSize)[indESS],
-    #   "effective sample size < 10% of kept iterations"
-    # ),
-    # diag_param(
-    #   diags,
-    #   indMCSE,
-    #   (mon[, "MCSE"] / mon[, "P SD"])[indMCSE],
-    #   "Monte Carlo error > 15% of posterior standard deviation"
-    # ),
-    # diag_param(
-    #   diags,
-    #   indRhat,
-    #   mon[, "Rhat"][indRhat],
-    #   "potential scale reduction factor > 1.1"
-    # )
-  # )
-
   if (print)
     cat(strOut)
 
@@ -303,7 +280,7 @@ monitor <- function(stanfit, pars, posteriorInterval, diagnostics) {
 monitor_observation <- function(stanfit, posteriorInterval, diagnostics) {
   monitor(
     stanfit           = stanfit,
-    pars              = select_obs_parameters(stanfit),
+    pars              = sort(select_obs_parameters(stanfit)),
     posteriorInterval = posteriorInterval,
     diagnostics       = diagnostics
   )
@@ -312,7 +289,7 @@ monitor_observation <- function(stanfit, posteriorInterval, diagnostics) {
 monitor_initial     <- function(stanfit, posteriorInterval, diagnostics) {
   monitor(
     stanfit           = stanfit,
-    pars              = select_initial_parameters(stanfit),
+    pars              = sort(select_initial_parameters(stanfit)),
     posteriorInterval = posteriorInterval,
     diagnostics       = diagnostics
   )
@@ -321,7 +298,7 @@ monitor_initial     <- function(stanfit, posteriorInterval, diagnostics) {
 monitor_transition  <- function(stanfit, posteriorInterval, diagnostics) {
   monitor(
     stanfit           = stanfit,
-    pars              = select_transition_parameters(stanfit),
+    pars              = sort(select_transition_parameters(stanfit)),
     posteriorInterval = posteriorInterval,
     diagnostics       = diagnostics
   )
@@ -330,6 +307,8 @@ monitor_transition  <- function(stanfit, posteriorInterval, diagnostics) {
 print_monitor <- function(mon, print) {
   fmt           <- get_print_settings()$figures
   mat           <- apply(mon, 2, sprintf, fmt = fmt)
+  if (is.vector(mat)) # apply drops matrix to vector when nrow = 1
+    mat <- t(as.matrix(mat))
   rownames(mat) <- rownames(mon)
   out           <- collapse(
     capture.output(format(as.data.frame(mat)))
@@ -344,16 +323,6 @@ print_monitor <- function(mon, print) {
 print_observation <- function(stanfit,
                               posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
                               diagnostics = TRUE, print = TRUE) {
-  # strFixed <- format_fixed_parameters(extract_spec(stanfit)$observation$density)
-  # strFixed <- if (!is.null(strFixed)) {
-  #   sprintf("Fixed parameters: %s.\n", strFixed)
-  # } else {
-  #   ""
-  # }
-
-  # strTag   <-
-  #   "Summary of posterior samples for the observation model parameters.\n"
-
   strMon   <- if (is.empty(select_obs_parameters(stanfit))) {
     return("")
   } else {
@@ -373,16 +342,6 @@ print_observation <- function(stanfit,
 print_initial <- function(stanfit,
                           posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
                           diagnostics = TRUE, print = TRUE) {
-  # strFixed <- format_fixed_parameters(extract_spec(stanfit)$initial$density)
-  # strFixed <- if (!is.null(strFixed)) {
-  #   sprintf("Fixed parameters: %s.\n", strFixed)
-  # } else {
-  #   ""
-  # }
-
-  # strTag   <-
-  #   "Summary of posterior samples for the initial distribution model parameters.\n"
-
   strMon   <- if (is.empty(select_initial_parameters(stanfit))) {
     return("")
   } else {
@@ -402,16 +361,6 @@ print_initial <- function(stanfit,
 print_transition <- function(stanfit,
                              posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975),
                              diagnostics = TRUE, print = TRUE) {
-  # strFixed <- format_fixed_parameters(extract_spec(stanfit)$transition$density)
-  # strFixed <- if (!is.null(strFixed)) {
-  #   sprintf("Fixed parameters: %s.\n", strFixed)
-  # } else {
-  #   ""
-  # }
-
-  # strTag   <-
-  #   "Summary of posterior samples for the transition model parameters.\n"
-
   strMon   <- if (is.empty(select_transition_parameters(stanfit))) {
     return("")
   } else {

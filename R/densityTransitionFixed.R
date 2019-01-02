@@ -7,9 +7,9 @@
 #' TransitionFixed(
 #'   A = matrix(c(0.2, 0.9, 0.8, 0.1), 2, 2)
 #' )
-TransitionFixed   <- function(A = NULL, ordered = NULL, bounds = list(NULL, NULL),
+TransitionFixed   <- function(A = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                               trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  LinkDensity("TransitionFixed", ordered, bounds, trunc, k, r, param, A = A)
+  LinkDensity("TransitionFixed", ordered, equal, bounds, trunc, k, r, param, A = A)
 }
 
 #' @keywords internal

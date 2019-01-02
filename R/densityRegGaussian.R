@@ -11,9 +11,9 @@
 #'   xBeta = Gaussian(0, 10),
 #'   M     = 3
 #' )
-RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, ordered = NULL, bounds = list(NULL, NULL),
+RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("RegGaussian", ordered, bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
+  Density("RegGaussian", ordered, equal, bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
 }
 
 #' @keywords internal
@@ -36,7 +36,7 @@ freeParameters.RegGaussian <- function(x) {
       xBetaBoundsStr <- make_bounds(x, "xBeta")
       sprintf(
         "vector%s[M] xBeta%s%s;",
-        xBetaBoundsStr, x$k, x$r
+        xBetaBoundsStr, get_k(x, "xBeta"), get_r(x, "xBeta")
       )
     } else {
       ""
@@ -47,7 +47,7 @@ freeParameters.RegGaussian <- function(x) {
       sigmaBoundsStr <- make_bounds(x, "sigma")
       sprintf(
         "real%s sigma%s%s;",
-        sigmaBoundsStr, x$k, x$r
+        sigmaBoundsStr, get_k(x, "sigma"), get_r(x, "sigma")
       )
     } else {
       ""
@@ -69,7 +69,7 @@ fixedParameters.RegGaussian <- function(x) {
 
       sprintf(
         "vector[M] xBeta%s%s = %s;",
-        x$k, x$r, x$xBeta
+        get_k(x, "xBeta"), get_r(x, "xBeta"), x$xBeta
       )
     }
 
@@ -83,7 +83,7 @@ fixedParameters.RegGaussian <- function(x) {
 
       sprintf(
         "real sigma%s%s = %s;",
-        x$k, x$r, x$sigma
+        get_k(x, "sigma"), get_r(x, "sigma"), x$sigma
       )
     }
 
@@ -96,8 +96,8 @@ generated.RegGaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = normal_rng(x[t] * xBeta%s%s, sigma%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 
@@ -113,8 +113,8 @@ logLike.RegGaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = normal_lpdf(y[t] | x[t] * xBeta%s%s, sigma%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 

@@ -14,9 +14,9 @@
 #' NegativeBinomial(
 #'   Exponential(1), Exponential(1)
 #' )
-NegativeBinomial <- function(alpha = NULL, beta = NULL, ordered, bounds = list(NULL, NULL),
+NegativeBinomial <- function(alpha = NULL, beta = NULL, ordered, equal, bounds = list(NULL, NULL),
                              trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("NegativeBinomial", ordered = NULL, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  DiscreteDensity("NegativeBinomial", ordered = NULL, equal = NULL, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal
@@ -26,7 +26,7 @@ freeParameters.NegativeBinomial <- function(x) {
     alphaBoundsStr <- make_bounds(x, "alpha")
     sprintf(
       "real%s alpha%s%s;",
-      alphaBoundsStr, x$k, x$r
+      alphaBoundsStr, get_k(x, "alpha"), get_r(x, "alpha")
     )
   } else {
     ""
@@ -36,7 +36,7 @@ freeParameters.NegativeBinomial <- function(x) {
     betaBoundsStr <- make_bounds(x, "beta")
     sprintf(
       "real%s beta%s%s;",
-      betaBoundsStr, x$k, x$r
+      betaBoundsStr, get_k(x, "beta"), get_r(x, "beta")
     )
   } else {
     ""
@@ -58,7 +58,7 @@ fixedParameters.NegativeBinomial <- function(x) {
 
       sprintf(
         "real alpha%s%s = %s;",
-        x$k, x$r, x$alpha
+        get_k(x, "alpha"), get_r(x, "alpha"), x$alpha
       )
     }
 
@@ -72,7 +72,7 @@ fixedParameters.NegativeBinomial <- function(x) {
 
       sprintf(
         "real beta%s%s = %s;",
-        x$k, x$r, x$beta
+        get_k(x, "beta"), get_r(x, "beta"), x$beta
       )
     }
 
@@ -85,8 +85,8 @@ generated.NegativeBinomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = neg_binomial_rng(alpha%s%s, beta%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
   )
 }
 
@@ -102,8 +102,8 @@ logLike.NegativeBinomial <- function(x) {
   sprintf(
     "loglike[%s][t] = neg_binomial_lpmf(y[t] | alpha%s%s, beta%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
   )
 }
 

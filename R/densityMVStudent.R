@@ -21,9 +21,9 @@
 #'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   nu    = GammaDensity(2, 0.1)
 #' )
-MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL, bounds = list(NULL, NULL),
+MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVStudent", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
+  MultivariateDensity("MVStudent", ordered, equal, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 #' @keywords internal
@@ -34,7 +34,7 @@ freeParameters.MVStudent <- function(x) {
       sprintf(
         "%s[R] mu%s;",
         make_ordered(x$mu, "vector", "ordered"),
-        x$k
+        get_k(x, "mu")
       )
     } else {
       ""
@@ -44,7 +44,7 @@ freeParameters.MVStudent <- function(x) {
     if (is.Density(x$sigma)) {
       sprintf(
         "cov_matrix[R] sigma%s;",
-        x$k
+        get_k(x, "sigma")
       )
     } else {
       ""
@@ -55,7 +55,7 @@ freeParameters.MVStudent <- function(x) {
       nuBoundsStr <- make_bounds(x, "nu")
       sprintf(
         "real%s nu%s[1];", # Since the distribution is MV, we write all the parameters in matrix form.
-        nuBoundsStr, x$k   # nu, a scalar, thus become a row vector.
+        nuBoundsStr, get_k(x, "nu")   # nu, a scalar, thus become a row vector.
       )
     } else {
       ""
@@ -77,7 +77,7 @@ fixedParameters.MVStudent <- function(x) {
 
       sprintf(
         "vector[R] mu%s = %s';",
-        x$k, vector_to_stan(x$mu)
+        get_k(x, "mu"), vector_to_stan(x$mu)
       )
     }
 
@@ -91,7 +91,7 @@ fixedParameters.MVStudent <- function(x) {
 
       sprintf(
         "matrix[R, R] sigma%s = %s;",
-        x$k, matrix_to_stan(x$sigma)
+        get_k(x, "sigma"), matrix_to_stan(x$sigma)
       )
     }
 
@@ -107,7 +107,7 @@ fixedParameters.MVStudent <- function(x) {
         # If you wonder why we cast nu to float and make it a 1-d array,
         # see comment in freeParameters.MVStudent
         "real nu%s[1] = {%s};",
-        x$k, sprintf("%f", x$nu)
+        get_k(x, "nu"), sprintf("%f", x$nu)
       )
     }
 
@@ -120,7 +120,7 @@ generated.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
     "if(zpred[t] == %s) ypred[t] = multi_student_t_rng(nu%s[1], mu%s, sigma%s)';",
-    x$k, x$k, x$k, x$k
+    x$k, get_k(x, "nu"), get_k(x, "mu"), get_k(x, "sigma")
   )
 }
 
@@ -136,7 +136,7 @@ logLike.MVStudent <- function(x) {
   # If you wonder why we cast nu to real, see comment in freeParameters.MVStudent
   sprintf(
     "loglike[%s][t] = multi_student_t_lpdf(y[t] | nu%s[1], mu%s, sigma%s);",
-    x$k, x$k, x$k, x$k
+    x$k, get_k(x, "nu"), get_k(x, "mu"), get_k(x, "sigma")
   )
 }
 

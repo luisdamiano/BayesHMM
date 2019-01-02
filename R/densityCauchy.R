@@ -15,9 +15,9 @@
 #'   mu    = Cauchy(mu = 0, sigma = 10),
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL))
 #' )
-Cauchy <- function(mu = NULL, sigma  = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Cauchy <- function(mu = NULL, sigma  = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                    trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Cauchy", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  Density("Cauchy", ordered, equal, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal
@@ -27,7 +27,7 @@ freeParameters.Cauchy <- function(x) {
     muBoundsStr <- make_bounds(x, "mu")
     sprintf(
       "real%s mu%s%s;",
-      muBoundsStr, x$k, x$r
+      muBoundsStr, get_k(x, "mu"), get_r(x, "mu")
     )
   } else {
     ""
@@ -37,7 +37,7 @@ freeParameters.Cauchy <- function(x) {
     sigmaBoundsStr <- make_bounds(x, "sigma")
     sprintf(
       "real%s sigma%s%s;",
-      sigmaBoundsStr, x$k, x$r
+      sigmaBoundsStr, get_k(x, "sigma"), get_r(x, "sigma")
     )
   } else {
     ""
@@ -59,7 +59,7 @@ fixedParameters.Cauchy <- function(x) {
 
       sprintf(
         "real mu%s%s = %s;",
-        x$k, x$r, x$mu
+        get_k(x, "mu"), get_r(x, "mu"), x$mu
       )
     }
 
@@ -73,7 +73,7 @@ fixedParameters.Cauchy <- function(x) {
 
       sprintf(
         "real sigma%s%s = %s;",
-        x$k, x$r, x$sigma
+        get_k(x, "sigma"), get_r(x, "sigma"), x$sigma
       )
     }
 
@@ -86,8 +86,8 @@ generated.Cauchy <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = cauchy_rng(mu%s%s, sigma%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 
@@ -103,8 +103,8 @@ logLike.Cauchy <- function(x) {
   sprintf(
     "loglike[%s][t] = cauchy_lpdf(y[t] | mu%s%s, sigma%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 

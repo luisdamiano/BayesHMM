@@ -5,7 +5,7 @@
 \title{Specify a Hidden Markov Model.}
 \usage{
 hmm(K, R, observation = NULL, initial = NULL, transition = NULL,
-  name = "")
+  name = "Hidden Markov Model")
 }
 \arguments{
 \item{K}{An integer with the number of hidden states.}

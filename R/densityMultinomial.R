@@ -14,9 +14,9 @@
 #' Multinomial(
 #'   Dirichlet(c(1, 1, 1)), 10
 #' )
-Multinomial <- function(theta = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Multinomial <- function(theta = NULL, N = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDiscreteDensity("Multinomial", ordered, bounds, trunc, k, r, param, theta = theta, N = N)
+  MultivariateDiscreteDensity("Multinomial", ordered, equal, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal
@@ -35,7 +35,7 @@ freeParameters.Multinomial <- function(x) {
     if (is.Density(x$theta)) {
       sprintf(
         "simplex[R] theta%s%s;",
-        x$k, x$r
+        get_k(x, "theta"), get_r(x, "theta")
       )
     } else {
       ""
@@ -57,7 +57,7 @@ fixedParameters.Multinomial <- function(x) {
 
       sprintf(
         "simplex[R] theta%s%s = %s';",
-        x$k, x$r, vector_to_stan(x$theta)
+        get_k(x, "theta"), get_r(x, "theta"), vector_to_stan(x$theta)
       )
     }
 
@@ -70,7 +70,7 @@ generated.Multinomial <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = to_row_vector(multinomial_rng(theta%s%s, N));",
     x$k,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 
@@ -86,7 +86,7 @@ logLike.Multinomial <- function(x) {
   sprintf(
     "loglike[%s][t] = multinomial_lpmf(y[t] | theta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 

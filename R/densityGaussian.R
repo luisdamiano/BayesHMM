@@ -15,9 +15,9 @@
 #'   mu    = Gaussian(mu = 0, sigma = 10),
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL))
 #' )
-Gaussian <- function(mu, sigma, ordered = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
+Gaussian <- function(mu, sigma, ordered = NULL, equal = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                      k = NULL, r = NULL, param = NULL, ...) {
-  Density("Gaussian", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  Density("Gaussian", ordered, equal, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal
@@ -28,7 +28,7 @@ freeParameters.Gaussian <- function(x) {
       muBoundsStr <- make_bounds(x, "mu")
       sprintf(
         "real%s mu%s%s;",
-        muBoundsStr, x$k, x$r
+        muBoundsStr, get_k(x, "mu"), get_r(x, "mu")
       )
     } else {
       ""
@@ -39,7 +39,7 @@ freeParameters.Gaussian <- function(x) {
       sigmaBoundsStr <- make_bounds(x, "sigma")
       sprintf(
         "real%s sigma%s%s;",
-        sigmaBoundsStr, x$k, x$r
+        sigmaBoundsStr, get_k(x, "sigma"), get_r(x, "sigma")
       )
     } else {
       ""
@@ -61,7 +61,7 @@ fixedParameters.Gaussian <- function(x) {
 
       sprintf(
         "real mu%s%s = %s;",
-        x$k, x$r, x$mu
+        get_k(x, "mu"), get_r(x, "mu"), x$mu
       )
     }
 
@@ -75,7 +75,7 @@ fixedParameters.Gaussian <- function(x) {
 
       sprintf(
         "real sigma%s%s = %s;",
-        x$k, x$r, x$sigma
+        get_k(x, "sigma"), get_r(x, "sigma"), x$sigma
       )
     }
 
@@ -88,8 +88,8 @@ generated.Gaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = normal_rng(mu%s%s, sigma%s%s);",
     x$k, x$r,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 
@@ -105,8 +105,8 @@ logLike.Gaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = normal_lpdf(y[t] | mu%s%s, sigma%s%s);",
     x$k,
-    x$k, x$r,
-    x$k, x$r
+    get_k(x, "mu"), get_r(x, "mu"),
+    get_k(x, "sigma"), get_r(x, "sigma")
   )
 }
 

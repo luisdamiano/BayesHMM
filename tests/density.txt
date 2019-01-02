@@ -25,6 +25,15 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 1,
+  observation = Bernoulli(
+    theta = Beta(alpha = 0.5, beta = 0.5, equal = TRUE, bounds = list(0, 1))
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # Beta
 
 hmm(
@@ -49,6 +58,16 @@ hmm(
   observation = Beta(
     alpha   = ImproperUniform(bounds = list(0, NULL)),
     beta    = ImproperUniform(bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Beta(
+    alpha   = ImproperUniform(bounds = list(0, NULL), equal = TRUE),
+    beta    = ImproperUniform(bounds = list(0, NULL), equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
@@ -83,6 +102,16 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 1,
+  observation = Binomial(
+    theta = Beta(alpha = 0.5, beta = 0.5, equal = TRUE, bounds = list(0, 1)),
+    N     = 100
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # Categorical
 
 hmm(
@@ -96,6 +125,16 @@ hmm(
   K = 3, R = 1,
   observation = Categorical(
     theta = Dirichlet(alpha = c(0.5, 0.5, 0.5, 0.5)),
+    N = 4
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Categorical(
+    theta = Dirichlet(alpha = c(0.5, 0.5, 0.5, 0.5), equal = TRUE),
     N = 4
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
@@ -131,6 +170,16 @@ hmm(
   transition  = Dirichlet(alpha = c(0.1, 0.5, 1))
 )
 
+
+hmm(
+  K = 3, R = 1,
+  observation = Cauchy(
+    mu    = Gaussian(0, 10, ordered = TRUE),
+    sigma = Student(mu = 0, sigma = 10, nu = 2, bounds = list(0, NULL), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  transition  = Dirichlet(alpha = c(0.1, 0.5, 1))
+)
 # Cholesky LKJ Correlation
 
 hmm(
@@ -176,6 +225,26 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10, ordered = TRUE),
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Gaussian(
+    mu    = Gaussian(0, 10, equal = TRUE),
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # Initial Fixed
 
 hmm(
@@ -208,7 +277,7 @@ hmm(
   K = 3, R = 2,
   observation = MVGaussian(
     mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2)),
-    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
+    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2), equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
@@ -226,6 +295,13 @@ hmm(
 hmm(
   K = 3, R = 4,
   observation = Multinomial(theta = ImproperUniform(), N = 10),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 4,
+  observation = Multinomial(theta = ImproperUniform(), N = 10, equal = TRUE),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
@@ -262,12 +338,32 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 2,
+  observation = MVGaussian(
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2), ordered = TRUE),
+    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 2,
+  observation = MVGaussian(
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2), ordered = TRUE, equal = TRUE),
+    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # MVGaussianCholeskyCor
 
 hmm(
   K = 3, R = 2,
   MVGaussianCholeskyCor(
-    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(10, 0, 0, 10), 2, 2)),
     L     = CholeskyLKJCor(1)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
@@ -276,9 +372,9 @@ hmm(
 
 hmm(
   K = 3, R = 2,
-  observation = MVGaussianCholeskyCor(
-    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2)),
-    L     = CholeskyLKJCor(1)
+  MVGaussianCholeskyCor(
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(10, 0, 0, 10), 2, 2)),
+    L     = CholeskyLKJCor(1, equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
@@ -319,6 +415,28 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 2,
+  observation = MVStudent(
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2), ordered = TRUE),
+    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2), equal = TRUE),
+    nu    = GammaDensity(2, 0.1)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 2,
+  observation = MVStudent(
+    mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2), ordered = TRUE, equal = TRUE),
+    sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2), equal = TRUE),
+    nu    = GammaDensity(2, 0.1)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # NegativeBinomial
 
 hmm(
@@ -333,6 +451,16 @@ hmm(
   observation = NegativeBinomial(
     alpha  = ImproperUniform(bounds = list(0, NULL)),
     beta   = ImproperUniform(bounds = list(0, NULL))
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = NegativeBinomial(
+    alpha  = ImproperUniform(bounds = list(0, NULL), equal = TRUE),
+    beta   = ImproperUniform(bounds = list(0, NULL), equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
@@ -367,6 +495,16 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
 )
 
+hmm(
+  K = 3, R = 1,
+  observation = NegativeBinomialLocation(
+    mu  = GammaDensity(1, 1, ordered = TRUE),
+    phi = GammaDensity(1, 1, equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
 # Poisson
 
 hmm(
@@ -389,6 +527,15 @@ hmm(
   K = 3, R = 1,
   observation = Poisson(
     lambda = GammaDensity(1, 1, ordered = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Poisson(
+    lambda = GammaDensity(1, 1, ordered = TRUE, equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
   transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
@@ -432,6 +579,17 @@ hmm(
   transition  = Dirichlet(alpha = c(0.5, 0.5))
 )
 
+hmm(
+  K = 2, R = 1,
+  observation = RegBinomialProbit(
+    xBeta = Gaussian(mu = 0, sigma = 10, equal = TRUE),
+    M     = 3,
+    N     = 10
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5))
+)
+
 # RegCategoricalSoftmax
 
 
@@ -454,6 +612,17 @@ hmm(
   observation = RegGaussian(
     xBeta = Gaussian(mu = 0, sigma = 10),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL), ordered = TRUE),
+    M     = 3
+  ),
+  initial     = Dirichlet(alpha = c(0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(0.5, 0.5))
+)
+
+hmm(
+  K = 2, R = 1,
+  observation = RegGaussian(
+    xBeta = Gaussian(mu = 0, sigma = 10),
+    sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL), equal = TRUE),
     M     = 3
   ),
   initial     = Dirichlet(alpha = c(0.5, 0.5)),
@@ -508,6 +677,28 @@ hmm(
     mu    = Gaussian(0, 10),
     sigma = Student(mu = 0, sigma = 10, nu = 2, bounds = list(0, NULL)),
     nu    = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL), ordered = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  transition  = Dirichlet(alpha = c(0.1, 0.5, 1))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Student(
+    mu    = Gaussian(0, 10),
+    sigma = Student(mu = 0, sigma = 10, nu = 2, bounds = list(0, NULL)),
+    nu    = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL), equal = TRUE)
+  ),
+  initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
+  transition  = Dirichlet(alpha = c(0.1, 0.5, 1))
+)
+
+hmm(
+  K = 3, R = 1,
+  observation = Student(
+    mu    = Gaussian(0, 10, ordered = TRUE),
+    sigma = Student(mu = 0, sigma = 10, nu = 2, bounds = list(0, NULL)),
+    nu    = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL), equal = TRUE)
   ),
   initial     = Dirichlet(alpha = c(0.1, 0.5, 1)),
   transition  = Dirichlet(alpha = c(0.1, 0.5, 1))

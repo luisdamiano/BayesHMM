@@ -7,9 +7,9 @@
 #' InitialFixed(
 #'   pi = c(0.5, 0.2, 0.3)
 #' )
-InitialFixed   <- function(pi = NULL, ordered = NULL, bounds = list(NULL, NULL),
+InitialFixed   <- function(pi = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                               trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  LinkDensity("InitialFixed", ordered, bounds, trunc, k, r, param, pi = pi)
+  LinkDensity("InitialFixed", ordered, equal, bounds, trunc, k, r, param, pi = pi)
 }
 
 #' @keywords internal

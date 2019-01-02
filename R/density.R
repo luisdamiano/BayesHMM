@@ -74,6 +74,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #'
 #' @param name A character string with the name of the density.
 #' @param ordered (optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.
+#' @param equal (optional) A logical setting whether the parameter takes the same value in every hidden state, i.e. the parameter is shared across states. It defaults to unequal parameters.
 #' @param bounds (optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.
 #' @param trunc (optional) A list with two elements specifying the lower and upper bound for the domain of the density function. Use either a fixed value for a finite bound or NULL for no truncation. It defaults to an unbounded domain.
 #' @param k (optional) The number of the hidden state for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
@@ -85,8 +86,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 #' @family Density
 #' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
-Density <- function(name, ordered = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
-                    k = NULL, r = NULL, param = NULL, ...) {
+Density <- function(name, ordered = NULL, equal = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL, ...) {
   # Evaluate nested expressions (Densities)
   dots <- list(...)
   for (i in seq_along(dots)) {
@@ -95,7 +95,7 @@ Density <- function(name, ordered = NULL, bounds = list(NULL, NULL), trunc  = li
     }
   }
 
-  densityParams <- c(dots, list(ordered = ordered, bounds = bounds, trunc = trunc, k = k, r = r, param = param))
+  densityParams <- c(dots, list(ordered = ordered, equal = equal, bounds = bounds, trunc = trunc, k = k, r = r, param = param))
 
   # # Check for generic parameters
   # check_list(dots[["bounds"]], 2, "bounds")
@@ -127,15 +127,14 @@ explain_density.Density <- function(x, print = TRUE) {
       return(rep("", length(getFreeParameters(x))))
     }
 
-    freeStr  <- freeParameters(x)
-    splitStr <- if (grepl("\n", freeStr)) {
-      strsplit(freeStr, "\n")[[1]]
-    } else {
-      freeStr
-    }
-
     trimws(
-      gsub("(.+);(.+)", "\\1", splitStr)
+      gsub(
+        "(.+);(.+)",
+        "\\1",
+        split_return_line(
+          freeParameters(x)
+        )
+      )
     )
   }
 
@@ -359,6 +358,17 @@ is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 #' @keywords internal
 #' @inherit is.multivariate
 is.multivariate.Density             <- function(x) { FALSE }
+
+#' Check if it is a Density object for a parameter with equal value across hidden states.
+#'
+#' @keywords internal
+#' @param x A \code{\link{Density}} object.
+#' @return TRUE if the object is meant to represent a parameter shared across states, FALSE otherwise.
+is.equal    <- function(x) { UseMethod("is.equal", x) }
+
+#' @keywords internal
+#' @inherit is.equal
+is.equal.Density             <- function(x) { !is.null(x$equal) && x$equal }
 
 #' Check if it is a Density object for an ordered set of parameters.
 #'

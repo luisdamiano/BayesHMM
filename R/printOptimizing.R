@@ -126,7 +126,7 @@ print_observation.Optimization <- function(x, print = TRUE) {
   strMon   <- if (is.empty(select_obs_parameters(x))) {
     return("")
   } else {
-    monitor.Optimization(x, select_obs_parameters(x), FALSE)
+    monitor.Optimization(x, sort(select_obs_parameters(x)), FALSE)
   }
 
   strOut   <- collapse(strMon)
@@ -140,7 +140,7 @@ print_initial.Optimization <- function(x, diagnostics = TRUE, print = TRUE) {
   strMon   <- if (is.empty(select_initial_parameters(x))) {
     return("")
   } else {
-    monitor.Optimization(x, select_initial_parameters(x), FALSE)
+    monitor.Optimization(x, sort(select_initial_parameters(x)), FALSE)
   }
 
   strOut   <- clean(collapse(strMon))
@@ -154,7 +154,7 @@ print_transition.Optimization <- function(x, diagnostics = TRUE, print = TRUE) {
   strMon   <- if (is.empty(select_transition_parameters(x))) {
     return("")
   } else {
-    monitor.Optimization(x, select_transition_parameters(x), FALSE)
+    monitor.Optimization(x, sort(select_transition_parameters(x)), FALSE)
   }
 
   strOut   <- collapse(strMon)

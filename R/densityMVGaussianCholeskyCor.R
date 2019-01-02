@@ -12,9 +12,9 @@
 #'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   L     = CholeskyLKJCor(1)
 #' )
-MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, ordered = NULL, bounds = list(NULL, NULL),
+MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                                   trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVGaussianCholeskyCor", ordered, bounds, trunc, k, r, param, mu = mu, L = L)
+  MultivariateDensity("MVGaussianCholeskyCor", ordered, equal, bounds, trunc, k, r, param, mu = mu, L = L)
 }
 
 #' @keywords internal
@@ -24,7 +24,7 @@ freeParameters.MVGaussianCholeskyCor <- function(x) {
     if (is.Density(x$mu)) {
       sprintf(
         "vector[R] mu%s;",
-        x$k
+        get_k(x, "mu")
       )
     } else {
       ""
@@ -34,7 +34,7 @@ freeParameters.MVGaussianCholeskyCor <- function(x) {
     if (is.Density(x$L)) {
       sprintf(
         "cholesky_factor_corr[R] L%s;",
-        x$k
+        get_k(x, "L")
       )
     } else {
       ""
@@ -56,7 +56,7 @@ fixedParameters.MVGaussianCholeskyCor <- function(x) {
 
       sprintf(
         "vector[R] mu%s = %s';",
-        x$k, vector_to_stan(x$mu)
+        get_k(x, "mu"), vector_to_stan(x$mu)
       )
     }
 
@@ -70,7 +70,7 @@ fixedParameters.MVGaussianCholeskyCor <- function(x) {
 
       sprintf(
         "cholesky_factor_corr[R] L%s = %s;",
-        x$k, matrix_to_stan(x$L)
+        get_k(x, "L"), matrix_to_stan(x$L)
       )
     }
 
@@ -82,7 +82,7 @@ fixedParameters.MVGaussianCholeskyCor <- function(x) {
 generated.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = multi_normal_cholesky_rng(mu%s, L%s)';",
-    x$k, x$k, x$k
+    x$k, get_k(x, "mu"), get_k(x, "L")
   )
 }
 
@@ -97,7 +97,7 @@ getParameterNames.MVGaussianCholeskyCor <- function(x) {
 logLike.MVGaussianCholeskyCor <- function(x) {
   sprintf(
     "loglike[%s][t] = multi_normal_cholesky_lpdf(y[t] | mu%s, L%s);",
-    x$k, x$k, x$k
+    x$k, get_k(x, "mu"), get_k(x, "L")
   )
 }
 

@@ -9,9 +9,9 @@
 #' @examples
 #' # As a prior
 #' Beta(ImproperUniform(), ImproperUniform())
-ImproperUniform <- function(ordered = NULL, bounds = list(NULL, NULL),
+ImproperUniform <- function(ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  PriorOnlyDensity("ImproperUniform", ordered, bounds, trunc, k, r, param)
+  PriorOnlyDensity("ImproperUniform", ordered, equal, bounds, trunc, k, r, param)
 }
 
 #' @keywords internal

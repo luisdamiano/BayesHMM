@@ -195,6 +195,14 @@ collapse <- function(...) {
   paste(..., sep = "\n", collapse = "\n")
 }
 
+split_return_line <- function(x) {
+  if (grepl("\n", x)) {
+    strsplit(x, "\n")[[1]]
+  } else {
+    x
+  }
+}
+
 densityApply <- function(X, FUN, ..., simplify = TRUE) {
   if (is.Density(X)) {
     FUN(X)
@@ -211,6 +219,20 @@ densityApply <- function(X, FUN, ..., simplify = TRUE) {
 
 densityCollect <- function(X, FUN, ..., simplify = TRUE) {
   collapse(unique(densityApply(X, FUN, ..., simplify = TRUE)))
+}
+
+get_k <- function(x, paramName) {
+  if (!is.Density(x[[paramName]]) || is.null(x[[paramName]]$k))
+    return(x$k)
+
+  x[[paramName]]$k
+}
+
+get_r <- function(x, paramName) {
+  if (!is.Density(x[[paramName]]) || is.null(x[[paramName]]$r))
+    return(x$r)
+
+  x[[paramName]]$r
 }
 
 make_names <- function(s) {

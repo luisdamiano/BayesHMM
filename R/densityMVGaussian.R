@@ -26,9 +26,9 @@
 #'   ),
 #'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
 #' )
-MVGaussian <- function(mu = NULL, sigma  = NULL, ordered = NULL, bounds = list(NULL, NULL),
+MVGaussian <- function(mu = NULL, sigma  = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                        trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVGaussian", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  MultivariateDensity("MVGaussian", ordered, equal, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal
@@ -39,7 +39,7 @@ freeParameters.MVGaussian <- function(x) {
       sprintf(
         "%s[R] mu%s;",
         make_ordered(x$mu, "vector", "ordered"),
-        x$k
+        get_k(x, "mu")
       )
     } else {
       ""
@@ -49,7 +49,7 @@ freeParameters.MVGaussian <- function(x) {
     if (is.Density(x$sigma)) {
       sprintf(
         "cov_matrix[R] sigma%s;",
-        x$k
+        get_k(x, "sigma")
       )
     } else {
       ""
@@ -71,7 +71,7 @@ fixedParameters.MVGaussian <- function(x) {
 
       sprintf(
         "vector[R] mu%s = %s';",
-        x$k, vector_to_stan(x$mu)
+        get_k(x, "mu"), vector_to_stan(x$mu)
       )
     }
 
@@ -85,7 +85,7 @@ fixedParameters.MVGaussian <- function(x) {
 
       sprintf(
         "matrix[R, R] sigma%s = %s;",
-        x$k, matrix_to_stan(x$sigma)
+        get_k(x, "sigma"), matrix_to_stan(x$sigma)
       )
     }
 
@@ -97,7 +97,7 @@ fixedParameters.MVGaussian <- function(x) {
 generated.MVGaussian <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t] = multi_normal_rng(mu%s, sigma%s)';",
-    x$k, x$k, x$k
+    x$k, get_k(x, "mu"), get_k(x, "sigma")
   )
 }
 
@@ -112,7 +112,7 @@ getParameterNames.MVGaussian <- function(x) {
 logLike.MVGaussian <- function(x) {
   sprintf(
     "loglike[%s][t] = multi_normal_lpdf(y[t] | mu%s, sigma%s);",
-    x$k, x$k, x$k
+    x$k, get_k(x, "mu"), get_k(x, "sigma")
   )
 }
 

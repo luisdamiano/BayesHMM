@@ -16,9 +16,9 @@
 #'   theta = Dirichlet(alpha = c(1, 1, 1, 1)),
 #'   N = 4
 #' )
-Categorical <- function(theta = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Categorical <- function(theta = NULL, N = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Categorical", ordered, bounds, trunc, k, r, param, theta = theta, N = N)
+  DiscreteDensity("Categorical", ordered, equal, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal
@@ -37,7 +37,7 @@ freeParameters.Categorical <- function(x) {
     if (is.Density(x$theta)) {
       sprintf(
         "simplex[N] theta%s%s;",
-        x$k, x$r
+        get_k(x, "theta"), get_r(x, "theta")
       )
     } else {
       ""
@@ -60,7 +60,7 @@ fixedParameters.Categorical <- function(x) {
       sprintf(
         # "real<lower = 0, upper = 1> theta%s%s = %s;",
         "simplex[N] theta%s%s = %s';",
-        x$k, x$r, vector_to_stan(x$theta)
+        get_k(x, "theta"), get_r(x, "theta"), vector_to_stan(x$theta)
       )
     }
 
@@ -73,7 +73,7 @@ generated.Categorical <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = categorical_rng(theta%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 
@@ -89,7 +89,7 @@ logLike.Categorical <- function(x) {
   sprintf(
     "loglike[%s][t] = categorical_lpmf(y[t] | theta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "theta"), get_r(x, "theta")
   )
 }
 

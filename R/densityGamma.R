@@ -14,9 +14,9 @@
 #' GammaDensity(
 #'   alpha = Exponential(1), beta = Exponential(1)
 #' )
-GammaDensity <- function(alpha = NULL, beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
+GammaDensity <- function(alpha = NULL, beta = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("GammaDensity", ordered, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  Density("GammaDensity", ordered, equal, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal
@@ -27,7 +27,7 @@ freeParameters.GammaDensity <- function(x) {
       alphaBoundsStr <- make_bounds(x, "alpha")
       sprintf(
         "real%s alpha%s%s;",
-        alphaBoundsStr, x$k, x$r
+        alphaBoundsStr, get_k(x, "alpha"), get_r(x, "alpha")
       )
     } else {
       ""
@@ -38,7 +38,7 @@ freeParameters.GammaDensity <- function(x) {
       betaBoundsStr <- make_bounds(x, "beta")
       sprintf(
         "real%s beta%s%s;",
-        betaBoundsStr, x$k, x$r
+        betaBoundsStr, get_k(x, "beta"), get_r(x, "beta")
       )
     } else {
       ""
@@ -60,7 +60,7 @@ fixedParameters.GammaDensity <- function(x) {
 
       sprintf(
         "real alpha%s%s = %s;",
-        x$k, x$r, x$alpha
+        get_k(x, "alpha"), get_r(x, "alpha"), x$alpha
       )
     }
 
@@ -74,7 +74,7 @@ fixedParameters.GammaDensity <- function(x) {
 
       sprintf(
         "real beta%s%s = %s;",
-        x$k, x$r, x$beta
+        get_k(x, "beta"), get_r(x, "beta"), x$beta
       )
     }
 
@@ -84,7 +84,12 @@ fixedParameters.GammaDensity <- function(x) {
 #' @keywords internal
 #' @inherit generated
 generated.GammaDensity <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t][%s] = gamma_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
+  sprintf(
+    "if(zpred[t] == %s) ypred[t][%s] = gamma_rng(alpha%s%s, beta%s%s);",
+    x$k, x$r,
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
+  )
 }
 
 #' @keywords internal
@@ -96,7 +101,11 @@ getParameterNames.GammaDensity <- function(x) {
 #' @keywords internal
 #' @inherit logLike
 logLike.GammaDensity <- function(x) {
-  sprintf("loglike[%s][t] = gamma_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
+  sprintf(
+    "loglike[%s][t] = gamma_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k,
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
+  )
 }
 
 #' @keywords internal

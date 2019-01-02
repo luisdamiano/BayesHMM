@@ -13,9 +13,9 @@
 #' Beta(
 #'   alpha = Exponential(1), beta = Exponential(1)
 #' )
-Beta <- function(alpha = NULL, beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
+Beta <- function(alpha = NULL, beta = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Beta", ordered, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  Density("Beta", ordered, equal, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal
@@ -26,7 +26,7 @@ freeParameters.Beta <- function(x) {
       alphaBoundsStr <- make_bounds(x, "alpha")
       sprintf(
         "real%s alpha%s%s;",
-        alphaBoundsStr, x$k, x$r
+        alphaBoundsStr, get_k(x, "alpha"), get_r(x, "alpha")
       )
     } else {
       ""
@@ -37,7 +37,7 @@ freeParameters.Beta <- function(x) {
       betaBoundsStr <- make_bounds(x, "beta")
       sprintf(
         "real%s beta%s%s;",
-        betaBoundsStr, x$k, x$r
+        betaBoundsStr, get_k(x, "beta"), get_r(x, "beta")
       )
     } else {
       ""
@@ -59,7 +59,7 @@ fixedParameters.Beta <- function(x) {
 
       sprintf(
         "real alpha%s%s = %s;",
-        x$k, x$r, x$alpha
+        get_k(x, "alpha"), get_r(x, "alpha"), x$alpha
       )
     }
 
@@ -73,7 +73,7 @@ fixedParameters.Beta <- function(x) {
 
       sprintf(
         "real beta%s%s = %s;",
-        x$k, x$r, x$beta
+        get_k(x, "beta"), get_r(x, "beta"), x$beta
       )
     }
 
@@ -83,7 +83,12 @@ fixedParameters.Beta <- function(x) {
 #' @keywords internal
 #' @inherit generated
 generated.Beta <- function(x) {
-  sprintf("if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);", x$k, x$r, x$k, x$r, x$k, x$r)
+  sprintf(
+    "if(zpred[t] == %s) ypred[t][%s] = beta_rng(alpha%s%s, beta%s%s);",
+    x$k, x$r,
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
+  )
 }
 
 #' @keywords internal
@@ -95,7 +100,12 @@ getParameterNames.Beta <- function(x) {
 #' @keywords internal
 #' @inherit logLike
 logLike.Beta <- function(x) {
-  sprintf("loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);", x$k, x$k, x$r, x$k, x$r)
+  sprintf(
+    "loglike[%s][t] = beta_lpdf(y[t] | alpha%s%s, beta%s%s);",
+    x$k,
+    get_k(x, "alpha"), get_r(x, "alpha"),
+    get_k(x, "beta"), get_r(x, "beta")
+  )
 }
 
 #' @keywords internal

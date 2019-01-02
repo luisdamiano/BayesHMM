@@ -4,13 +4,16 @@
 \alias{Bernoulli}
 \title{Bernoulli mass (univariate, discrete, bounded space)}
 \usage{
-Bernoulli(theta = NULL, ordered = NULL, bounds = list(NULL, NULL),
-  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL)
+Bernoulli(theta = NULL, ordered = NULL, equal = NULL,
+  bounds = list(NULL, NULL), trunc = list(NULL, NULL), k = NULL,
+  r = NULL, param = NULL)
 }
 \arguments{
 \item{theta}{Either a fixed value or a prior density for the success proportion parameter.}
 
 \item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
+
+\item{equal}{(optional) A logical setting whether the parameter takes the same value in every hidden state, i.e. the parameter is shared across states. It defaults to unequal parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 

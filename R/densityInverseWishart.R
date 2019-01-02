@@ -9,9 +9,9 @@
 #' @examples
 #' # As a prior for the covariance matrix
 #' InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
-InverseWishart <- function(nu = NULL, sigma = NULL, ordered = NULL, bounds = list(NULL, NULL),
+InverseWishart <- function(nu = NULL, sigma = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  PriorOnlyMultivariateDensity("InverseWishart", ordered, bounds, trunc, k, r, param, nu = nu, sigma = sigma)
+  PriorOnlyMultivariateDensity("InverseWishart", ordered, equal, bounds, trunc, k, r, param, nu = nu, sigma = sigma)
 }
 
 #' @keywords internal

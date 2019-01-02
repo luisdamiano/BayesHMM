@@ -16,7 +16,7 @@
 #'   name = "Univariate Gaussian Hidden Markov Model"
 #' )
 hmm <- function(K, R, observation = NULL, initial = NULL,
-                transition = NULL, name = "") {
+                transition = NULL, name = "Hidden Markov Model") {
   x <- specify(K, R, observation, initial, transition, name)
   class(x) <- append(class(x), "HMMSpecification", 0)
   x

@@ -9,9 +9,9 @@
 #'   xBeta = Gaussian(0, 10),
 #'   M     = 3
 #' )
-RegBernoulliLogit <- function(xBeta = NULL, M = NULL, ordered = NULL, bounds = list(NULL, NULL),
+RegBernoulliLogit <- function(xBeta = NULL, M = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("RegBernoulliLogit", ordered, bounds, trunc, k, r, param, xBeta = xBeta, M = M)
+  DiscreteDensity("RegBernoulliLogit", ordered, equal, bounds, trunc, k, r, param, xBeta = xBeta, M = M)
 }
 
 #' @keywords internal
@@ -32,7 +32,7 @@ freeParameters.RegBernoulliLogit <- function(x) {
       xBetaBoundsStr <- make_bounds(x, "xBeta")
       sprintf(
         "vector%s[M] xBeta%s%s;",
-        xBetaBoundsStr, x$k, x$r
+        xBetaBoundsStr, get_k(x, "xBeta"), get_r(x, "xBeta")
       )
     } else {
       ""
@@ -54,7 +54,7 @@ fixedParameters.RegBernoulliLogit <- function(x) {
 
       sprintf(
         "vector[M] xBeta%s%s = %s;",
-        x$k, x$r, x$xBeta
+        get_k(x, "xBeta"), get_r(x, "xBeta"), x$xBeta
       )
     }
 
@@ -67,7 +67,7 @@ generated.RegBernoulliLogit <- function(x) {
   sprintf(
     "if(zpred[t] == %s) ypred[t][%s] = bernoulli_logit_rng(x[t] * xBeta%s%s);",
     x$k, x$r,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta")
   )
 }
 
@@ -83,7 +83,7 @@ logLike.RegBernoulliLogit <- function(x) {
   sprintf(
     "loglike[%s][t] = bernoulli_logit_lpmf(y[t] | x[t] * xBeta%s%s);",
     x$k,
-    x$k, x$r
+    get_k(x, "xBeta"), get_r(x, "xBeta")
   )
 }
 
