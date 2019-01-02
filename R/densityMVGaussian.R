@@ -18,9 +18,17 @@
 #'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
 #' )
-MVGaussian <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
+#'
+#' # With ordered parameters
+#' MVGaussian(
+#'   mu    = MVGaussian(
+#'     mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2), ordered = TRUE
+#'   ),
+#'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2))
+#' )
+MVGaussian <- function(mu = NULL, sigma  = NULL, ordered = NULL, bounds = list(NULL, NULL),
                        trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVGaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  MultivariateDensity("MVGaussian", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal
@@ -29,7 +37,8 @@ freeParameters.MVGaussian <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
       sprintf(
-        "vector[R] mu%s;",
+        "%s[R] mu%s;",
+        make_ordered(x$mu, "vector", "ordered"),
         x$k
       )
     } else {

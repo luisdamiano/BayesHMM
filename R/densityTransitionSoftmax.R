@@ -9,9 +9,9 @@
 #'   uBeta = Gaussian(0, 10),
 #'   P     = 3
 #' )
-TransitionSoftmax <- function(uBeta = NULL, P = NULL, bounds = list(NULL, NULL),
+TransitionSoftmax <- function(uBeta = NULL, P = NULL, ordered = NULL, bounds = list(NULL, NULL),
                            trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  LinkDensity("TransitionSoftmax", bounds, trunc, k, r, param, uBeta = uBeta, P = P)
+  LinkDensity("TransitionSoftmax", ordered, bounds, trunc, k, r, param, uBeta = uBeta, P = P)
 }
 
 #' @keywords internal
@@ -46,7 +46,7 @@ freeParameters.TransitionSoftmax <- function(x) {
 #' @keywords internal
 #' @inherit fixedParameters
 fixedParameters.TransitionSoftmax <- function(x) {
-  warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
+  # warning("fixedParameters.Softmax: TO BE IMPLEMENTED.")
   ""
 }
 

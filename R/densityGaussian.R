@@ -15,9 +15,9 @@
 #'   mu    = Gaussian(mu = 0, sigma = 10),
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL))
 #' )
-Gaussian <- function(mu, sigma, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
+Gaussian <- function(mu, sigma, ordered = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                      k = NULL, r = NULL, param = NULL, ...) {
-  Density("Gaussian", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  Density("Gaussian", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal

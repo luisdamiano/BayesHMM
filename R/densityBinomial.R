@@ -12,9 +12,9 @@
 #' Binomial(
 #'   Beta(1, 1), 10
 #' )
-Binomial <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
+Binomial <- function(theta = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Binomial", bounds, trunc, k, r, param, theta = theta, N = N)
+  DiscreteDensity("Binomial", ordered, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal

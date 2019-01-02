@@ -11,9 +11,9 @@
 #'
 #' # With priors for the parameters
 #' Poisson(GammaDensity(1, 1))
-Poisson <- function(lambda = NULL, bounds = list(NULL, NULL),
+Poisson <- function(lambda = NULL, ordered = NULL, bounds = list(NULL, NULL),
                     trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Poisson", bounds, trunc, k, r, param, lambda = lambda)
+  DiscreteDensity("Poisson", ordered, bounds, trunc, k, r, param, lambda = lambda)
 }
 
 #' @keywords internal

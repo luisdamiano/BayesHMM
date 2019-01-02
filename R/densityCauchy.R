@@ -15,9 +15,9 @@
 #'   mu    = Cauchy(mu = 0, sigma = 10),
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL))
 #' )
-Cauchy <- function(mu = NULL, sigma  = NULL, bounds = list(NULL, NULL),
+Cauchy <- function(mu = NULL, sigma  = NULL, ordered = NULL, bounds = list(NULL, NULL),
                    trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Cauchy", bounds, trunc, k, r, param, mu = mu, sigma = sigma)
+  Density("Cauchy", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma)
 }
 
 #' @keywords internal

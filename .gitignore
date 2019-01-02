@@ -1,5 +1,32 @@
-.Rproj.user
+# devtools::build_vignette
+Meta
+doc
+# History files
 .Rhistory
+.Rapp.history
+# Session Data files
 .RData
-.Ruserdata
-/out
+# Example code in package build process
+*-Ex.R
+# Output files from R CMD build
+/*.tar.gz
+# Output files from R CMD check
+/*.Rcheck/
+# RStudio files
+*.Rproj
+.Rproj.user/
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
+vignettes/*_cache/
+vignettes/cache/
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+.Rproj.user
+# Force tracking these files
+!/.gitignore
+!/.Rbuildignore

@@ -7,6 +7,7 @@ parse_observation_build_priors <- function(observation, K, R) {
   # We're sure to get a KxR list here.
   # i.e. obsList[[k]][[r]] is always valid
   obsList <- observation
+
   for (k in 1:K) {
     for (r in 1:length(obsList[[k]])) { # not 1:R!
       lDensity <- obsList[[k]][[r]]
@@ -15,7 +16,17 @@ parse_observation_build_priors <- function(observation, K, R) {
         for (p in 1:length(lParam)) {
           nameParam <- names(lParam)[p]
 
-          # Move down elements from observation density to parameters
+          # Adjust lower bounds if parameter is ordered
+          if (is.ordered(lParam[[p]]) && lDensity$k > 1) {
+            obsList[[k]][[r]][[nameParam]]$bounds[[1]] <- sprintf(
+              "%s%s%s",
+              obsList[[k - 1]][[r]][[nameParam]]$param,
+              obsList[[k - 1]][[r]][[nameParam]]$k,
+              make_rsubindex(obsList[[k - 1]][[r]][[nameParam]])
+            )
+          }
+
+          # Move down elements from observation density to parameter density
           obsList[[k]][[r]][[nameParam]][["K"]]     <- K
           obsList[[k]][[r]][[nameParam]][["R"]]     <- R
           obsList[[k]][[r]][[nameParam]][["k"]]     <- lDensity$k
@@ -23,9 +34,10 @@ parse_observation_build_priors <- function(observation, K, R) {
           obsList[[k]][[r]][[nameParam]][["param"]] <- nameParam
           obsList[[k]][[r]][[nameParam]][["multivariate"]] <- is.multivariate(lDensity)
 
-          # Move up elements from parameters to observation density
+          # Move up elements from parameter density to observation density
           if ("bounds" %in% names(obsList[[k]][[r]][[nameParam]])) {
-            obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <- obsList[[k]][[r]][[nameParam]][["bounds"]]
+            obsList[[k]][[r]][[paste0(nameParam, "Bounds")]] <-
+              obsList[[k]][[r]][[nameParam]][["bounds"]]
           }
         }
       }

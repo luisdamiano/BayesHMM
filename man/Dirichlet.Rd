@@ -4,11 +4,13 @@
 \alias{Dirichlet}
 \title{Dirichlet density (multivariate, continuous, unbounded space)}
 \usage{
-Dirichlet(alpha = NULL, bounds = list(NULL, NULL), trunc = list(NULL,
-  NULL), k = NULL, r = NULL, param = NULL)
+Dirichlet(alpha = NULL, ordered = NULL, bounds = list(NULL, NULL),
+  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL)
 }
 \arguments{
 \item{alpha}{Either a fixed value or a prior density for the vector parameter.}
+
+\item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -34,6 +36,9 @@ Dirichlet(alpha = c(0.5, 0.5, 0.5))
 
 # With priors for the parameters
 Dirichlet(alpha = Beta(1, 1))
+}
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},

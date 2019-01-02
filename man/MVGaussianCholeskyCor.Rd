@@ -4,13 +4,16 @@
 \alias{MVGaussianCholeskyCor}
 \title{Multivariate Gaussian density with Cholesky decomposition of the correlation matrix (Multivariate, continuous, unbounded space)}
 \usage{
-MVGaussianCholeskyCor(mu = NULL, L = NULL, bounds = list(NULL, NULL),
-  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL)
+MVGaussianCholeskyCor(mu = NULL, L = NULL, ordered = NULL,
+  bounds = list(NULL, NULL), trunc = list(NULL, NULL), k = NULL,
+  r = NULL, param = NULL)
 }
 \arguments{
 \item{mu}{Either a fixed value or a prior density for the mean vector.}
 
 \item{L}{Either a fixed value or a prior density for the Cholesky factor of the correlation matrix.}
+
+\item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -36,6 +39,9 @@ MVGaussianCholeskyCor(
   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
   L     = CholeskyLKJCor(1)
 )
+}
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},

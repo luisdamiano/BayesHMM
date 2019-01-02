@@ -14,9 +14,9 @@
 #' NegativeBinomialLocation(
 #'   Beta(0, 1), Exponential(1)
 #' )
-NegativeBinomialLocation <- function(mu = NULL, phi = NULL, bounds = list(NULL, NULL),
+NegativeBinomialLocation <- function(mu = NULL, phi = NULL, ordered = NULL, bounds = list(NULL, NULL),
                                      trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("NegativeBinomialLocation", bounds, trunc, k, r, param, mu = mu, phi = phi)
+  DiscreteDensity("NegativeBinomialLocation", ordered, bounds, trunc, k, r, param, mu = mu, phi = phi)
 }
 
 #' @keywords internal

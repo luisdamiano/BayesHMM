@@ -4,7 +4,7 @@
 \alias{RegGaussian}
 \title{Regression with Gaussian link density (univariate, continuous, unbounded space)}
 \usage{
-RegGaussian(sigma = NULL, xBeta = NULL, M = NULL,
+RegGaussian(sigma = NULL, xBeta = NULL, M = NULL, ordered = NULL,
   bounds = list(NULL, NULL), trunc = list(NULL, NULL), k = NULL,
   r = NULL, param = NULL)
 }
@@ -14,6 +14,8 @@ RegGaussian(sigma = NULL, xBeta = NULL, M = NULL,
 \item{xBeta}{Either a fixed value or a prior density for the parameter of the regression.}
 
 \item{M}{An integer with the number of covariates in the observation regression model.}
+
+\item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -39,6 +41,9 @@ RegGaussian(
   xBeta = Gaussian(0, 10),
   M     = 3
 )
+}
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},

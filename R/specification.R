@@ -325,7 +325,7 @@ explain_observation.Specification <- function(spec) {
       r <- sub("k[[:digit:]]\\.k[[:digit:]]r([[:digit:]]?)", "\\1", names(l))
       r <- ifelse(r == "", "1", r)
       sprintf(
-        "\nObservation model for Variable %s in State %s\n%s",
+        "Observation model for Variable %s in State %s\n%s\n",
         r, k, l
      )
     }

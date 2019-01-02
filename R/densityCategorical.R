@@ -16,9 +16,9 @@
 #'   theta = Dirichlet(alpha = c(1, 1, 1, 1)),
 #'   N = 4
 #' )
-Categorical <- function(theta = NULL, N = NULL, bounds = list(NULL, NULL),
+Categorical <- function(theta = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Categorical", bounds, trunc, k, r, param, theta = theta, N = N)
+  DiscreteDensity("Categorical", ordered, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal

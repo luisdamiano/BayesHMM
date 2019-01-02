@@ -12,9 +12,9 @@
 #'   mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   L     = CholeskyLKJCor(1)
 #' )
-MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, bounds = list(NULL, NULL),
+MVGaussianCholeskyCor <- function(mu = NULL, L  = NULL, ordered = NULL, bounds = list(NULL, NULL),
                                   trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVGaussianCholeskyCor", bounds, trunc, k, r, param, mu = mu, L = L)
+  MultivariateDensity("MVGaussianCholeskyCor", ordered, bounds, trunc, k, r, param, mu = mu, L = L)
 }
 
 #' @keywords internal

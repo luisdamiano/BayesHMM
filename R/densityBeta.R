@@ -13,9 +13,9 @@
 #' Beta(
 #'   alpha = Exponential(1), beta = Exponential(1)
 #' )
-Beta <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
+Beta <- function(alpha = NULL, beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Beta", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  Density("Beta", ordered, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal

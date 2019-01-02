@@ -1,3 +1,8 @@
+^Meta$
+^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-/out
+^\.travis\.yml$
+^cran-comments\.md$
+^docs$              # Github pages
+^LICENSE\.md$

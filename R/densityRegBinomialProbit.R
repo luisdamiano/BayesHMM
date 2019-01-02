@@ -11,9 +11,9 @@
 #'   M     = 3,
 #'   N     = 10
 #' )
-RegBinomialProbit <- function(xBeta = NULL, M = NULL, N = NULL, bounds = list(NULL, NULL),
+RegBinomialProbit <- function(xBeta = NULL, M = NULL, N = NULL, ordered = NULL, bounds = list(NULL, NULL),
                              trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("RegBinomialProbit", bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
+  DiscreteDensity("RegBinomialProbit", ordered, bounds, trunc, k, r, param, xBeta = xBeta, M = M, N = N)
 }
 
 #' @keywords internal

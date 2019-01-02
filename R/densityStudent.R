@@ -17,10 +17,10 @@
 #'   sigma = Cauchy(mu = 0, sigma = 10, bounds = list(0, NULL)),
 #'   nu    = GammaDensity(2, 0.1)
 #' )
-Student <- function(mu = NULL, sigma  = NULL, nu = NULL,
+Student <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL,
                     bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                     k = NULL, r = NULL, param = NULL) {
-  Density("Student", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
+  Density("Student", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 #' @keywords internal

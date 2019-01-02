@@ -13,9 +13,9 @@
 #' Bernoulli(
 #'   Beta(1, 1)
 #' )
-Bernoulli <- function(theta = NULL, bounds = list(NULL, NULL),
+Bernoulli <- function(theta = NULL, ordered = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("Bernoulli", bounds, trunc, k, r, param, theta = theta)
+  DiscreteDensity("Bernoulli", ordered, bounds, trunc, k, r, param, theta = theta)
 }
 
 #' @keywords internal

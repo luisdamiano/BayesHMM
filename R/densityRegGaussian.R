@@ -11,9 +11,9 @@
 #'   xBeta = Gaussian(0, 10),
 #'   M     = 3
 #' )
-RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, bounds = list(NULL, NULL),
+RegGaussian <- function(sigma = NULL, xBeta = NULL, M = NULL, ordered = NULL, bounds = list(NULL, NULL),
                      trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("RegGaussian", bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
+  Density("RegGaussian", ordered, bounds, trunc, k, r, param, sigma = sigma, xBeta = xBeta, M = M)
 }
 
 #' @keywords internal

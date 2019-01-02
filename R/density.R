@@ -73,6 +73,7 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' observation model.
 #'
 #' @param name A character string with the name of the density.
+#' @param ordered (optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.
 #' @param bounds (optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.
 #' @param trunc (optional) A list with two elements specifying the lower and upper bound for the domain of the density function. Use either a fixed value for a finite bound or NULL for no truncation. It defaults to an unbounded domain.
 #' @param k (optional) The number of the hidden state for which this density should be used. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
@@ -80,9 +81,11 @@ prior              <- function(x) { UseMethod("prior", x) }
 #' @param param (optional) The name of the parameter. This argument is mostly for internal use: you should not use it unless you are acquainted with the internals of this software.
 #' @param ...  Other arguments for the density.
 #' @return A \code{\link{Density}} object.
+#' @references
+#' Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 #' @family Density
-#' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
-Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
+#' @note The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
+Density <- function(name, ordered = NULL, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
                     k = NULL, r = NULL, param = NULL, ...) {
   # Evaluate nested expressions (Densities)
   dots <- list(...)
@@ -92,7 +95,7 @@ Density <- function(name, bounds = list(NULL, NULL), trunc  = list(NULL, NULL),
     }
   }
 
-  densityParams <- c(dots, list(bounds = bounds, trunc = trunc, k = k, r = r, param = param))
+  densityParams <- c(dots, list(ordered = ordered, bounds = bounds, trunc = trunc, k = k, r = r, param = param))
 
   # # Check for generic parameters
   # check_list(dots[["bounds"]], 2, "bounds")
@@ -118,6 +121,24 @@ explain_density.Density <- function(x, print = TRUE) {
   freeParam  <- getFreeParameters(x)
   fixedParam <- getFixedParameters(x)
 
+  free_parameter_declaration <- function(x) {
+    # Early stop if the density is not part of a model (no Stan Code available)
+    if (is.null(x$k) | is.null(x$r)) {
+      return(rep("", length(getFreeParameters(x))))
+    }
+
+    freeStr  <- freeParameters(x)
+    splitStr <- if (grepl("\n", freeStr)) {
+      strsplit(freeStr, "\n")[[1]]
+    } else {
+      freeStr
+    }
+
+    trimws(
+      gsub("(.+);(.+)", "\\1", splitStr)
+    )
+  }
+
   strBounds <- paste(
     if (is.null(x$bounds[[1]])) { "(-infty" } else { sprintf("[%s", x$bounds[[1]]) },
     if (is.null(x$bounds[[2]])) { "infty)"  } else { sprintf("%s]", x$bounds[[2]]) },
@@ -134,13 +155,9 @@ explain_density.Density <- function(x, print = TRUE) {
     if (is.null(freeParam) || length(freeParam) == 0 || unique(freeParam) == "") {
       NULL
     } else {
-      l <- lapply(names(freeParam), function(paramName) {
-        # e <- sprintf(
-        #   "\n\t\t%-5s = %s",
-        #   paramName, explain_density(freeParam[[paramName]])
-        # )
-
-        strStructure <- trimws(gsub("(.+);(.+)", "\\1", freeParameters(x)))
+      l <- lapply(1:length(freeParam), function(p) {
+        paramName    <- names(freeParam)[p]
+        strStructure <- free_parameter_declaration(x)[p]
         strExplain   <- explain_density(freeParam[[paramName]], print = FALSE)
 
         e <- sprintf(
@@ -342,6 +359,17 @@ is.multivariate    <- function(x) { UseMethod("is.multivariate", x) }
 #' @keywords internal
 #' @inherit is.multivariate
 is.multivariate.Density             <- function(x) { FALSE }
+
+#' Check if it is a Density object for an ordered set of parameters.
+#'
+#' @keywords internal
+#' @param x A \code{\link{Density}} object.
+#' @return TRUE if the object is meant to represent an ordered set of parameters, FALSE otherwise.
+is.ordered    <- function(x) { UseMethod("is.ordered", x) }
+
+#' @keywords internal
+#' @inherit is.ordered
+is.ordered.Density             <- function(x) { !is.null(x$ordered) && x$ordered }
 
 #' Check if it is a \code{\link{Density}} object.
 #'

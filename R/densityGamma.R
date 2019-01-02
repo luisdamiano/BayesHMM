@@ -14,9 +14,9 @@
 #' GammaDensity(
 #'   alpha = Exponential(1), beta = Exponential(1)
 #' )
-GammaDensity <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
+GammaDensity <- function(alpha = NULL, beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
                  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("GammaDensity", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  Density("GammaDensity", ordered, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal

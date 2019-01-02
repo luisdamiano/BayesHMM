@@ -271,6 +271,10 @@ make_fixed_parameters <- function(density, string, check = NULL, errorStr = "") 
   make_parameters(density, string, stringNot = "", isDensity = FALSE, check, errorStr)
 }
 
+make_ordered <- function(density, unordered, ordered) {
+  if ( is.ordered.Density(density) ) { ordered } else { unordered }
+}
+
 is.empty <- function(x) {
   is.null(x) | length(x) == 0
 }

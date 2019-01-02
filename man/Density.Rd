@@ -5,11 +5,13 @@
 \title{Create a representation of a probability mass or density function for a
 continuous univariate random variable.}
 \usage{
-Density(name, bounds = list(NULL, NULL), trunc = list(NULL, NULL),
-  k = NULL, r = NULL, param = NULL, ...)
+Density(name, ordered = NULL, bounds = list(NULL, NULL),
+  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL, ...)
 }
 \arguments{
 \item{name}{A character string with the name of the density.}
+
+\item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -32,7 +34,10 @@ prior distribution for a model parameter or a likelihood function for an
 observation model.
 }
 \note{
-The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{ https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
+The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with \href{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{Stan's Prior Choice Recommendation}.
+}
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}}, \code{\link{Beta}},

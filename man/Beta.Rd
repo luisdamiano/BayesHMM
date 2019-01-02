@@ -4,13 +4,16 @@
 \alias{Beta}
 \title{Beta density (univariate, continuous, bounded space)}
 \usage{
-Beta(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
-  trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL)
+Beta(alpha = NULL, beta = NULL, ordered = NULL, bounds = list(NULL,
+  NULL), trunc = list(NULL, NULL), k = NULL, r = NULL,
+  param = NULL)
 }
 \arguments{
 \item{alpha}{Either a fixed value or a prior density for the first shape parameter.}
 
 \item{beta}{Either a fixed value or a prior density for the second shape parameter.}
+
+\item{ordered}{(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. \code{\link{Categorical}}, \code{\link{Multinomial}}, \code{\link{Dirichlet}}) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.}
 
 \item{bounds}{(optional) A list with two elements specifying the lower and upper bound for the parameter space. Use either a fixed value for a finite bound or NULL for no bounds. It defaults to an unbounded parameter space.}
 
@@ -38,6 +41,9 @@ Beta(1, 1)
 Beta(
   alpha = Exponential(1), beta = Exponential(1)
 )
+}
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
 }
 \seealso{
 Other Density: \code{\link{Bernoulli}},

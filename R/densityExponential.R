@@ -11,9 +11,9 @@
 #'
 #' # With priors for the parameters
 #' Exponential(Exponential(1))
-Exponential <- function(beta = NULL, bounds = list(NULL, NULL),
+Exponential <- function(beta = NULL, ordered = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  Density("Exponential", bounds, trunc, k, r, param, beta = beta)
+  Density("Exponential", ordered, bounds, trunc, k, r, param, beta = beta)
 }
 
 #' @keywords internal

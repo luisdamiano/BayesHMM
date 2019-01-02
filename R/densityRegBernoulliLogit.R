@@ -9,9 +9,9 @@
 #'   xBeta = Gaussian(0, 10),
 #'   M     = 3
 #' )
-RegBernoulliLogit <- function(xBeta = NULL, M = NULL, bounds = list(NULL, NULL),
+RegBernoulliLogit <- function(xBeta = NULL, M = NULL, ordered = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("RegBernoulliLogit", bounds, trunc, k, r, param, xBeta = xBeta, M = M)
+  DiscreteDensity("RegBernoulliLogit", ordered, bounds, trunc, k, r, param, xBeta = xBeta, M = M)
 }
 
 #' @keywords internal

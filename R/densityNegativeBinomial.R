@@ -14,9 +14,9 @@
 #' NegativeBinomial(
 #'   Exponential(1), Exponential(1)
 #' )
-NegativeBinomial <- function(alpha = NULL, beta = NULL, bounds = list(NULL, NULL),
+NegativeBinomial <- function(alpha = NULL, beta = NULL, ordered, bounds = list(NULL, NULL),
                              trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  DiscreteDensity("NegativeBinomial", bounds, trunc, k, r, param, alpha = alpha, beta = beta)
+  DiscreteDensity("NegativeBinomial", ordered = NULL, bounds, trunc, k, r, param, alpha = alpha, beta = beta)
 }
 
 #' @keywords internal

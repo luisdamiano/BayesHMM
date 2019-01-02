@@ -21,9 +21,9 @@
 #'   sigma = InverseWishart(nu = 5, sigma = matrix(c(1, 0, 0, 1), 2, 2)),
 #'   nu    = GammaDensity(2, 0.1)
 #' )
-MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, bounds = list(NULL, NULL),
+MVStudent <- function(mu = NULL, sigma  = NULL, nu = NULL, ordered = NULL, bounds = list(NULL, NULL),
                       trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDensity("MVStudent", bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
+  MultivariateDensity("MVStudent", ordered, bounds, trunc, k, r, param, mu = mu, sigma = sigma, nu = nu)
 }
 
 #' @keywords internal
@@ -32,7 +32,8 @@ freeParameters.MVStudent <- function(x) {
   muStr <-
     if (is.Density(x$mu)) {
       sprintf(
-        "vector[R] mu%s;",
+        "%s[R] mu%s;",
+        make_ordered(x$mu, "vector", "ordered"),
         x$k
       )
     } else {

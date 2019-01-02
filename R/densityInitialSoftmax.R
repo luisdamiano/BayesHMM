@@ -9,9 +9,9 @@
 #'   vBeta = Gaussian(0, 10),
 #'   Q     = 3
 #' )
-InitialSoftmax <- function(vBeta = NULL, Q = NULL, bounds = list(NULL, NULL),
+InitialSoftmax <- function(vBeta = NULL, Q = NULL, ordered = NULL, bounds = list(NULL, NULL),
                     trunc = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  LinkDensity("InitialSoftmax", bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
+  LinkDensity("InitialSoftmax", ordered, bounds, trunc, k, r, param, vBeta = vBeta, Q = Q)
 }
 
 #' @keywords internal

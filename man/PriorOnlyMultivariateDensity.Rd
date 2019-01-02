@@ -21,6 +21,9 @@ It can be used to specify either a
 prior distribution for a model parameter or a likelihood function for an
 observation model.
 }
+\references{
+Betancourt, Michael (2017) Identifying Bayesian Mixture Models \emph{Stan Case Studies} \bold{Volume 4}. \href{https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html}{Link}.
+}
 \seealso{
 Other PriorOnlyDensity: \code{\link{PriorOnlyDensity}}
 }
