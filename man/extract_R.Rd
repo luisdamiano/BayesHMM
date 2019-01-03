@@ -4,10 +4,10 @@
 \alias{extract_R}
 \title{Extract the dimension of the observation vector \emph{R}.}
 \usage{
-extract_R(fit)
+extract_R(object)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 }
 \value{
 An integer with the dimension of the observation vector \emph{R}.

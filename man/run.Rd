@@ -7,8 +7,6 @@
 run(spec, data = NULL, writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
-
 \item{data}{A named list with the dataset.}
 
 \item{writeDir}{An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
@@ -40,10 +38,10 @@ mySpec   <- hmm(
 
 myModel <- compile(mySpec)
 
-myFit   <- draw_samples(mySpec, myModel, y = y, chains = 2, iter = 500)
+myFit   <- draw_samples(myModel, y = y, chains = 2, iter = 500)
 }
 }
 \seealso{
-See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
+See rstan's \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }
 \keyword{internal}

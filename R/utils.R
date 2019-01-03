@@ -411,9 +411,7 @@ prank <- function(x, y, ...) {
 #' Return a function that computes the posterior intervals.
 #'
 #' @param ... Arguments to be passed to \code{\link{quantile}}.
-#'
 #' @return A scalar with same type as `x`.
-#'
 #' @examples
 #' f <- posterior_intervals(probs = c(0.05, 0.95))
 #' print(f(1:100))
@@ -426,9 +424,7 @@ posterior_intervals <- function(...) {
 #' Return the posterior mode of a vector.
 #'
 #' @param x A vector
-#'
 #' @return A scalar with same type as `x`.
-#'
 #' @examples posterior_mode(sample(1:3, 20, replace = TRUE))
 posterior_mode <- function(x) {
   ux <- unique(x)
@@ -441,6 +437,7 @@ posterior_mode <- function(x) {
 #'
 #' @param string A character string, or a vector of character strings
 #' @return A character string, or a vector of character strings.
+#' @keywords internal
 string_simplify <- function(string) {
   gsub("[^A-Za-z0-9]", "", tolower(string))
 }
@@ -468,14 +465,6 @@ get_R_info <- function() {
 
   sprintf("%s", strR)
 }
-
-# get_session_info <- function() {
-#   session     <- utils::sessionInfo()
-#   strPlatform <- sprintf("%s %s", session$running, session$platform)
-#   strR        <- session$R.version$version.string
-#
-#   sprintf("%s\n - %s", strPlatform, strR)
-# }
 
 get_other_packages_info <- function() {
   # Based on utils:::print.sessionInfo

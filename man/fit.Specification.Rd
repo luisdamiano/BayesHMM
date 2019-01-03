@@ -4,11 +4,11 @@
 \alias{fit.Specification}
 \title{Fit a model by MCMC}
 \usage{
-\method{fit}{Specification}(spec, y, x = NULL, u = NULL, v = NULL,
-  ...)
+\method{fit}{Specification}(object, y, x = NULL, u = NULL, v = NULL,
+  writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 
 \item{y}{A numeric matrix with the observation sample. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the observation vector \emph{R}. If not a matrix, the function tries to cast the object to a \eqn{T\times R} matrix.}
 
@@ -18,7 +18,9 @@
 
 \item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
 
-\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{stan}}.}
+\item{writeDir}{An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
+
+\item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 }
 \value{
 An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
@@ -49,6 +51,6 @@ myFit   <- fit(mySpec, y = y, chains = 2, iter = 500)
 }
 }
 \seealso{
-See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
+See rstan's \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 }
 \keyword{internal}

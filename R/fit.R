@@ -108,7 +108,9 @@ setMethod("extract_quantity", "stanfit", extract_quantity.stanfit)
 #' @return A character vector with the selected model parameter names.
 #' @seealso See \code{\link{select_parameters}} for extracting the names of part of the model.
 #' @keywords internal
-extract_parameter_names <- function(fit) { UseMethod("extract_parameter_names", fit) }
+extract_parameter_names <- function(fit) {
+  UseMethod("extract_parameter_names", fit)
+}
 
 #' @usage
 #' ## S3 method for signature 'Optimization'
@@ -133,7 +135,9 @@ setMethod("extract_parameter_names", "stanfit", extract_parameter_names.stanfit)
 #'
 #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return An integer with the date used to fit the model.
-extract_date     <- function(fit) { UseMethod("extract_date", fit) }
+extract_date <- function(fit) {
+  UseMethod("extract_date", fit)
+}
 
 #' @usage
 #' ## S3 method for signature 'Optimization'
@@ -158,7 +162,9 @@ setMethod("extract_date", "stanfit", extract_date.stanfit)
 #'
 #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return For objects fit via \code{\link{draw_samples}}, a named numeric matrix with two columns (warm-up and sample time) and one row per chain. For objects fit via \code{\link{optimizing}}, the system time elapsed.
-extract_time     <- function(fit) { UseMethod("extract_time", fit) }
+extract_time <- function(fit) {
+  UseMethod("extract_time", fit)
+}
 
 #' @usage
 #' ## S3 method for signature 'Optimization'
@@ -183,7 +189,9 @@ setMethod("extract_time", "stanfit", extract_time.stanfit)
 #'
 #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return An integer with the seed used to fit the model.
-extract_seed     <- function(fit) { UseMethod("extract_seed", fit) }
+extract_seed     <- function(fit) {
+  UseMethod("extract_seed", fit)
+}
 
 #' @usage
 #' ## S3 method for signature 'Optimization'
@@ -202,6 +210,39 @@ extract_seed.stanfit <- function(fit) {
 #' extract_seed(fit)
 #' @rdname extract_seed
 setMethod("extract_seed", "stanfit", extract_seed.stanfit)
+
+# extract_stanmodel -------------------------------------------------------
+#' Extract the time elapsed when fitting the model.
+#'
+#' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
+#' @return An integer with the stanmodel used to fit the model.
+extract_stanmodel     <- function(fit) {
+  UseMethod("extract_stanmodel", fit)
+}
+
+#' @usage
+#' ## S3 method for signature 'Optimization'
+#' extract_stanmodel(fit)
+#' @rdname extract_stanmodel
+extract_stanmodel.Optimization <- function(fit) {
+  attr(fit, "stanmodel")
+}
+
+extract_stanmodel.stanfit <- function(fit) {
+  rstan::get_stanmodel(fit)
+}
+
+#' @keywords internal
+#' @inherit browse_model
+extract_stanmodel.stanmodel <- function(fit) {
+  fit
+}
+
+#' @usage
+#' ## S4 method for signature 'stanfit'
+#' extract_stanmodel(fit)
+#' @rdname extract_stanmodel
+setMethod("extract_stanmodel", "stanfit", extract_stanmodel.stanfit)
 
 # classify_quantity -------------------------------------------------------
 #' Classify observations based on latent state probabilities.
@@ -313,32 +354,3 @@ classify_zstar.stanfit <- function(fit, reduce = posterior_mode, chain = "all") 
 #' classify_zstar(fit, reduce = posterior_mode, chain = "all")
 #' @rdname classify_zstar
 setMethod("classify_zstar", "stanfit", classify_zstar.stanfit)
-
-#' # browse_model ------------------------------------------------------------
-#' #' Load the underlying Stan code into an IDE or browser.
-#' #'
-#' #' The behavior is platform dependent.
-#' #'
-#' #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
-#' #' @param ... (optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).
-#' #' @return No return value.
-#' #' @seealso \code{\link{browseURL}}.
-#' browse_model <- function(fit, ...) { UseMethod("browse_model", fit) }
-#'
-#' #' @usage
-#' #' ## S3 method for signature 'Optimization'
-#' #' browse_model(fit, ...)
-#' #' @rdname browse_model
-#' browse_model.Optimization <- function(fit, ...) {
-#'   browseURL(extract_filename(fit, ...))
-#' }
-#'
-#' browse_model.stanfit <- function(fit, ...) {
-#'   browseURL(extract_filename(fit, ...))
-#' }
-#'
-#' #' @usage
-#' #' ## S4 method for signature 'stanfit'
-#' #' browse_model(fit, ...)
-#' #' @rdname browse_model
-#' setMethod("browse_model", "stanfit", browse_model.stanfit)

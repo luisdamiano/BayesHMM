@@ -4,11 +4,11 @@
 \alias{sim}
 \title{Simulate data from the prior predictive density.}
 \usage{
-sim(spec, T = 1000, x = NULL, u = NULL, v = NULL,
-  nSimulations = 500, ...)
+sim(object, T = 1000, x = NULL, u = NULL, v = NULL,
+  nSimulations = 500, writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 
 \item{T}{An optional integer with the length of the time series. It defaults to 1000 observations.}
 
@@ -19,6 +19,8 @@ sim(spec, T = 1000, x = NULL, u = NULL, v = NULL,
 \item{v}{An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states \emph{K} and as many columns as the dimension of the initial covariate vector \emph{Q}. If not a matrix, the function tries to cast the object to a \eqn{K\times Q} matrix.}
 
 \item{nSimulations}{An optional integer with the number of simulations. It defaults to 500 time series.}
+
+\item{writeDir}{An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.}
 
 \item{...}{Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.}
 }

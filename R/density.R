@@ -387,7 +387,7 @@ is.ordered.Density             <- function(x) { !is.null(x$ordered) && x$ordered
 #' @param x An object.
 #' @return TRUE if the object is a Density object, FALSE otherwise.
 is.Density <- function(x) {
-  "Density" %in% class(x)
+  inherits(x, "Density")
 }
 
 #' @keywords internal

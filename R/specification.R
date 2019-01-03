@@ -240,6 +240,15 @@ specify <- function(K, R, observation = NULL, initial = NULL,
   structure(l, class = "Specification")
 }
 
+#' Check if it is a \code{\link{Specification}} object.
+#'
+#' @keywords internal
+#' @param x An object.
+#' @return TRUE if the object is a Specification object, FALSE otherwise.
+is.Specification <- function(x) {
+  inherits(x, "Specification")
+}
+
 #' Create a user-friendly text describing the model.
 #'
 #' The function creates a user-friendly text describing any of the three elements of the model. It includes the hidden states, variables, densities, bounds, priors, and fixed parameters. It also records environment details for easier reproducibility (package version, R version, time, OS).
@@ -452,8 +461,7 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 
 #' Draw samples from a specification.
 #'
-#' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
-#' @param stanModel An optional instance of S4 class stanmodel returned by \code{\link{compile}}. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.
+#' @param object An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.
 #' @param y A numeric matrix with the observation sample. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the observation vector \emph{R}. If not a matrix, the function tries to cast the object to a \eqn{T\times R} matrix.
 #' @param x An optional numeric matrix with the covariates for the observation model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the covariate vector \emph{M}. If not a matrix, the function tries to cast the object to a \eqn{T\times M} matrix. Useful for Hidden Markov Regression Model (also known as Markov-switching regressions).
 #' @param u An optional numeric matrix with the covariates for the transition model. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the transition covariate vector \emph{P}. If not a matrix, the function tries to cast the object to a \eqn{T\times P} matrix. Useful for Hidden Markov Models with time-varying transition probabilities.
@@ -461,7 +469,7 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #' @param writeDir An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.
 #' @param ... Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.
 #' @return An object of S4 class stanfit with some additional attributes (the dataset \emph{data}, the name of the Stan code file \emph{filename}, and the \code{\link{Specification}} object \emph{spec}). This object is completely compatible with all other functions.
-#' @seealso See rstan's \code{\link[rstan]{stan}} and \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
+#' @seealso See rstan's \code{\link[rstan]{sampling}} for further details on tunning the MCMC algorithm.
 #' @examples
 #' \dontrun{
 #' y <- rnorm(1000) # Assume this is your dataset
@@ -481,32 +489,51 @@ compile.Specification <- function(spec, priorPredictive = FALSE,
 #'
 #' myModel <- compile(mySpec)
 #'
-#' myFit   <- draw_samples(mySpec, myModel, y = y, chains = 2, iter = 500)
+#' myFit   <- draw_samples(myModel, y = y, chains = 2, iter = 500)
 #' }
-draw_samples          <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+draw_samples          <- function(object, y, x = NULL, u = NULL,
                                  v = NULL, writeDir = tempdir(), ...) {
-  UseMethod("draw_samples", spec)
+  UseMethod("draw_samples", object)
 }
 
 #' @keywords internal
 #' @inherit draw_samples
-draw_samples.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+draw_samples.Specification <- function(object, y, x = NULL, u = NULL,
                                       v = NULL, writeDir = tempdir(), ...) {
 
-  if (is.null(stanModel)) {
-    stanModel <- compile(spec, priorPredictive = FALSE, writeDir)
-  }
+  stanModel <- compile(object, priorPredictive = FALSE, writeDir)
+  draw_samples(stanModel, y, x, u, v, writeDir, ...)
+}
 
-  stanData <- make_data(spec, y, x, u, v)
-  stanDots <- c(list(...), list(object = stanModel, data = stanData))
+#' @keywords internal
+#' @inherit draw_samples
+draw_samples.stanmodel     <- function(object, y, x = NULL, u = NULL,
+                                   v = NULL, writeDir = tempdir(), ...) {
+  spec      <- extract_spec(object)
+  stanData  <- make_data(spec, y, x, u, v)
+  stanDots  <- c(list(...), list(object = object, data = stanData))
 
   stanSampling <- do.call(rstan::sampling, stanDots)
   attr(stanSampling, "data")     <- stanData
-  attr(stanSampling, "filename") <- attr(stanModel, "filename")
-  attr(stanSampling, "stanCode") <- stanModel@model_code
+  attr(stanSampling, "filename") <- extract_filename(object)
+  attr(stanSampling, "stanCode") <- object@model_code
   attr(stanSampling, "spec")     <- spec
 
   return(stanSampling)
+}
+
+#' @keywords internal
+#' @inherit draw_samples
+draw_samples.stanfit <- function(object, y, x = NULL, u = NULL,
+                                       v = NULL, writeDir = tempdir(), ...) {
+  draw_samples(extract_stanmodel(object), y, x, u, v, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit draw_samples
+draw_samples.Optimization <- function(object, y, x = NULL, u = NULL,
+                                 v = NULL, writeDir = tempdir(), ...) {
+  draw_samples(extract_stanmodel(object), y, x, u, v, writeDir, ...)
 }
 
 #' Run a Markov-chain Monte Carlo algorithm to sample from the log posterior density.
@@ -547,7 +574,7 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 #' Fit a model by MCMC
 #'
 #' @inherit draw_samples
-#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{stan}}.
+#' @param ... Arguments to be passed to rstan's \code{\link[rstan]{sampling}}.
 #' @examples
 #' \dontrun{
 #' y <- rnorm(1000) # Assume this is your dataset
@@ -569,14 +596,38 @@ run.Specification <- function(spec, data = NULL, writeDir = tempdir(), ...) {
 #' # will be run more than once (see ?compile)
 #' myFit   <- fit(mySpec, y = y, chains = 2, iter = 500)
 #' }
-fit               <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
-  UseMethod("fit", spec)
+fit          <- function(object, y, x = NULL, u = NULL,
+                         v = NULL, writeDir = tempdir(), ...) {
+  UseMethod("fit", object)
 }
 
 #' @keywords internal
 #' @inherit fit
-fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
-  run(spec, data = make_data(spec, y, x, u, v), ...)
+fit.Specification <- function(object, y, x = NULL, u = NULL,
+                              v = NULL, writeDir = tempdir(), ...) {
+  stanModel <- compile(object, priorPredictive = FALSE, writeDir)
+  fit(stanModel, y, x, u, v, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit fit
+fit.stanmodel     <- function(object, y, x = NULL, u = NULL,
+                              v = NULL, writeDir = tempdir(), ...) {
+  draw_samples(object, y, x, u, v, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit fit
+fit.stanfit <- function(object, y, x = NULL, u = NULL,
+                        v = NULL, writeDir = tempdir(), ...) {
+  fit(extract_stanmodel(object), y, x, u, v, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit fit
+fit.Optimization <- function(object, y, x = NULL, u = NULL,
+                             v = NULL, writeDir = tempdir(), ...) {
+  fit(extract_stanmodel(object), y, x, u, v, writeDir, ...)
 }
 
 # Maximum a posteriori estimation -----------------------------------------
@@ -616,34 +667,61 @@ fit.Specification <- function(spec, y, x = NULL, u = NULL, v = NULL, ...) {
 #'   mySpec, myModel, y = y, nRuns = 50, nCores = 10, keep = "best"
 #' )
 #' }
-optimizing        <- function(spec, stanModel = NULL, y, x = NULL, u = NULL,
+optimizing        <- function(object, y, x = NULL, u = NULL,
                               v = NULL, nRuns = 1, keep = "best", nCores = 1,
                               writeDir = tempdir(), ...) {
-  UseMethod("optimizing", spec)
+  UseMethod("optimizing", object)
 }
 
 #' @keywords internal
 #' @inherit optimizing
-optimizing.Specification <- function(spec, stanModel = NULL, y, x = NULL, u = NULL, v = NULL,
+optimizing.stanmodel <- function(object, y, x = NULL, u = NULL, v = NULL,
                                      nRuns = 1, keep = "best", nCores = 1,
                                      writeDir = tempdir(), ...) {
 
   if (!(keep %in% c("best", "all")))
     stop("keep must be either \"best\" or \"all\". See ?optimizing.")
 
-  if (is.null(stanModel))
-    stanModel <- compile(spec, priorPredictive = FALSE, writeDir, ...)
-
-  fun <- sprintf("optimizing_%s", keep)
+  spec <- extract_spec(object)
+  fun  <- sprintf("optimizing_%s", keep)
   stanData <- make_data(spec, y, x, u, v)
-  stanDots <- c(list(object = stanModel, data = stanData), list(...))
+  stanDots <- c(list(object = object, data = stanData), list(...))
   stanOptimizing <- do.call(fun, list(stanDots = stanDots, nRuns = nRuns, nCores = nCores))
   attr(stanOptimizing, "data")     <- stanData
-  attr(stanOptimizing, "filename") <- attr(stanModel, "filename")
-  attr(stanOptimizing, "stanCode") <- stanModel@model_code
+  attr(stanOptimizing, "filename") <- attr(object, "filename")
+  attr(stanOptimizing, "stanCode") <- object@model_code
   attr(stanOptimizing, "spec")     <- spec
 
   return(stanOptimizing)
+}
+
+#' @keywords internal
+#' @inherit optimizing
+optimizing.Specification <- function(object, y, x = NULL, u = NULL, v = NULL,
+                                     nRuns = 1, keep = "best", nCores = 1,
+                                     writeDir = tempdir(), ...) {
+  stanModel <- compile(object, priorPredictive = FALSE, writeDir, ...)
+  optimizing(stanModel, y, x, u, v, nRuns, keep, nCores, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit optimizing
+optimizing.stanfit <- function(object, y, x = NULL, u = NULL, v = NULL,
+                                     nRuns = 1, keep = "best", nCores = 1,
+                                     writeDir = tempdir(), ...) {
+  optimizing(
+    extract_stanmodel(object), y, x, u, v, nRuns, keep, nCores, writeDir, ...
+  )
+}
+
+#' @keywords internal
+#' @inherit optimizing
+optimizing.Optimization <- function(object, y, x = NULL, u = NULL, v = NULL,
+                               nRuns = 1, keep = "best", nCores = 1,
+                               writeDir = tempdir(), ...) {
+  optimizing(
+    extract_stanmodel(object), y, x, u, v, nRuns, keep, nCores, writeDir, ...
+  )
 }
 
 #' Run one instance of the
@@ -681,6 +759,7 @@ optimizing_run  <- function(stanDots, n) {
   attr(stanoptim, "date")       <- strptime(date(), "%a %b %d %H:%M:%S %Y")
   attr(stanoptim, "seed")       <- stanDots[["seed"]]
   attr(stanoptim, "systemTime") <- t(as.matrix(sysTime)) / 60 # Now in minutes
+  attr(stanoptim, "stanmodel")  <- stanDots[["object"]]
   structure(stanoptim, class = c("Optimization", "list"))
 
   # sink()
@@ -740,6 +819,7 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 }
 
 # Other methods -----------------------------------------------------------
+
 #' Simulate data from the prior predictive density.
 #'
 #' @inheritParams draw_samples
@@ -763,14 +843,29 @@ optimizing_best <- function(stanDots, nRuns, nCores) {
 #'
 #' mySims <- sim(mySpec, T = 500, nSimulations = 200, seed = 9000)
 #' }
-sim               <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL,
-                              nSimulations = 500, ...) {
-  UseMethod("sim", spec)
+sim <- function(object, T = 1000, x = NULL, u = NULL, v = NULL,
+                nSimulations = 500, writeDir = tempdir(), ...) {
+  UseMethod("sim", object)
 }
 
 #' @keywords internal
 #' @inherit sim
-sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSimulations = 500, ...) {
+sim.Specification <- function(object, T = 1000, x = NULL, u = NULL, v = NULL,
+                              nSimulations = 500, writeDir = tempdir(), ...) {
+  stanModel <- compile(object, priorPredictive = FALSE, tempdir())
+  sim(stanModel, T, x, u, v, nSimulations, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit sim
+sim.stanmodel <- function(object, T = 1000, x = NULL, u = NULL, v = NULL,
+                          nSimulations = 500, writeDir = tempdir(), ...) {
+  # draw_samples(
+  #   object, data = make_data(object, y = NULL, x, u, v, T),
+  #   nSimulations = nSimulations, writeDir, ...
+  # )
+
+  spec <- extract_spec(object)
   dots <- list(...)
   dots[["spec"]] <- spec
   dots[["data"]] <- make_data(spec, y = NULL, x, u, v, T)
@@ -778,13 +873,16 @@ sim.Specification <- function(spec, T = 1000, x = NULL, u = NULL, v = NULL, nSim
   do.call(run, dots)
 }
 
-#' Load the underlying Stan code into an IDE or browser.
-#'
-#' The behavior is platform dependent.
-#'
-#' @param spec An object returned by either \code{\link{specify}} or \code{\link{hmm}}.
-#' @return No return value.
-#' @seealso \code{\link{browseURL}}.
-browse_model.Specification <- function(spec) {
-  browseURL(write_model(spec, noLogLike = FALSE, writeDir = tempdir()))
+#' @keywords internal
+#' @inherit sim
+sim.stanfit <- function(object, T = 1000, x = NULL, u = NULL, v = NULL,
+                        nSimulations = 500, writeDir = tempdir(), ...) {
+  sim(extract_stanmodel(object), T, x, u, v, nSimulations, writeDir, ...)
+}
+
+#' @keywords internal
+#' @inherit sim
+sim.Optimization <- function(object, T = 1000, x = NULL, u = NULL, v = NULL,
+                             nSimulations = 500, writeDir = tempdir(), ...) {
+  sim(extract_stanmodel(object), T, x, u, v, nSimulations, writeDir, ...)
 }

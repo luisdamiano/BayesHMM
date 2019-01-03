@@ -23,7 +23,7 @@ plot_ppredictive.stanfit(stanfit, type = "", r = NULL, subset = NULL,
 \arguments{
 \item{stanfit}{An object returned by either \code{\link{fit}} or \code{\link{draw_samples}}.}
 
-\item{type}{An optional vector of character strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.}
+\item{type}{An optional vector of character strings with the names of the analysis to include in the plot. These may be \emph{density} (kernel density curves of the observation variable), \emph{cumulative} (kernel cumulative density curves of the observation variable), \emph{boxplot} (boxplots of the observation variable), \emph{histogram} (histogram of the values returned by \emph{fun}), \emph{scatterplot} (scatterplot of the values returned by \emph{fun1} and \emph{fun2}), \emph{kl} (histogram of the empirical Kullback-Leibler divergence), \emph{ks} (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.}
 
 \item{r}{An optional numeric vector with the numbers of the dimensions of the observation vector to be plotted. It defaults to plotting all variables.}
 
@@ -51,7 +51,7 @@ plot_ppredictive.stanfit(stanfit, type = "", r = NULL, subset = NULL,
 
 \item{ksControl}{Arguments to be passed to \code{\link{ks.test}} if the argument \emph{type} includes "ks".}
 
-\item{klControl}{Arguments to compute the Kullback-Leibler divergence if the argument \emph{type} includes "kl". It may include two-sized vectors with the lower and bound of the discretization range (`yRange` and `yPredRange`) and the number of bins (`yNBins` and `yPredNBins`).}
+\item{klControl}{Arguments to compute the empirical Kullback-Leibler divergence if the argument \emph{type} includes "kl". It may include two-sized vectors with the lower and upper bounds of the discretization range (`yRange` and `yPredRange`) and the number of bins (`yNBins` and `yPredNBins`).}
 
 \item{main}{An optional character string with the overall title for the plot.}
 }

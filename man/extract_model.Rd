@@ -4,10 +4,10 @@
 \alias{extract_model}
 \title{Extract the underlying Stan code.}
 \usage{
-extract_model(fit)
+extract_model(object)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 }
 \value{
 A character string with the underlying Stan code.

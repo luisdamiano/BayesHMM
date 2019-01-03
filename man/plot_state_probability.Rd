@@ -13,7 +13,7 @@ plot_state_probability(fit, stateProbability = "smoothed",
 \arguments{
 \item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 
-\item{stateProbability}{An optional character string with the name of the quantity used to classify the observations (either filtered, smoothed, or viterbi). It allows for partial matching. It defaults to the smoothed probability.}
+\item{stateProbability}{An optional character string with the name of the quantity used to classify the observations (either filtered or smoothed). It allows for partial matching. It defaults to the smoothed probability.}
 
 \item{features}{An optional vector of character strings with the names of the features to include in the plot. These may be \emph{stateShade} (shaded background), \emph{probabilityColoredLine} (colored probability line), \emph{probabilityColoredDots} (colored probability dots), \emph{probabilityFan} (shaded probability fan for posterior intervals), \emph{bottomColoredMarks} (colored marks on the lower axis), \emph{topColoredMarks} (colored marks on the top axis). All colors are based on the hidden state assigned to each time step using the \emph{stateProbability} quantity. Note that more than one feature may be plotted at the same time. It allows for partial matching. It defaults to none.}
 

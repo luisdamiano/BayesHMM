@@ -15,3 +15,4 @@ A character string, or a vector of character strings.
 \description{
 Remove non-alphabetic characters and modify to lowercase.
 }
+\keyword{internal}

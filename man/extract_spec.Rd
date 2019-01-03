@@ -2,12 +2,12 @@
 % Please edit documentation in R/extract.R
 \name{extract_spec}
 \alias{extract_spec}
-\title{Extract the \code{\link{Specification}} object used to fit the model.}
+\title{Extract the \code{\link{Specification}} object used to object the model.}
 \usage{
-extract_spec(fit)
+extract_spec(object)
 }
 \arguments{
-\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 }
 \value{
 A \code{\link{Specification}} object.

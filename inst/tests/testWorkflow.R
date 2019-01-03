@@ -7,7 +7,7 @@ test_sim <- function() {
   invisible()
 }
 
-test_fit <- function() {
+test_stanfit <- function() {
   myFit <- load_safe("draw_samples.RDS")
 
   no_error_in_expr({ print(myFit) })

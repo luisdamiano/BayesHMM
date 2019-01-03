@@ -4,14 +4,12 @@
 \alias{optimizing.Specification}
 \title{Fit a model by MAP.}
 \usage{
-\method{optimizing}{Specification}(spec, stanModel = NULL, y, x = NULL,
-  u = NULL, v = NULL, nRuns = 1, keep = "best", nCores = 1,
+\method{optimizing}{Specification}(object, y, x = NULL, u = NULL,
+  v = NULL, nRuns = 1, keep = "best", nCores = 1,
   writeDir = tempdir(), ...)
 }
 \arguments{
-\item{spec}{An object returned by either \code{\link{specify}} or \code{\link{hmm}}.}
-
-\item{stanModel}{An optional instance of S4 class stanmodel returned by \code{\link{compile}}. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.}
+\item{object}{An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.}
 
 \item{y}{A numeric matrix with the observation sample. It must have as many rows as the time series length \emph{T} and as many columns as the dimension of the observation vector \emph{R}. If not a matrix, the function tries to cast the object to a \eqn{T\times R} matrix.}
 

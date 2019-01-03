@@ -69,7 +69,7 @@ setMethod("extract_sample_size", "stanfit", function(stanfit) {
 #' @param x An object.
 #' @return TRUE if it is an object created by \code{\link{draw_samples}}.
 is.stanfit <- function(x) {
-  class(x) == "stanfit"
+  inherits(x, "stanfit")
 }
 
 # extract_diagnostics ---------------------------------------------------------

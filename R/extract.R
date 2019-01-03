@@ -1,3 +1,5 @@
+# Following methods work with fit objects only ----------------------------
+
 #' Return the name of the model parameters.
 #'
 #' @keywords internal
@@ -252,55 +254,75 @@ extract_T <- function(fit) {
   extract_data(fit)$T
 }
 
+# Following methods work with any object ----------------------------------
+
 #' Extract the number of hidden states \emph{K}.
+#' @param object An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.
 #' @inherit extract
 #' @return An integer with the number of hidden states \emph{K}.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-extract_K <- function(fit) {
-  extract_data(fit)$K
+extract_K <- function(object) {
+  dataK <- extract_data(object)$K
+
+  if (is.null(dataK))
+    return(extract_spec(object)$K)
+
+  dataK
 }
 
 #' Extract the dimension of the observation vector \emph{R}.
 #'
 #' @inherit extract
+#' @inherit extract_K
 #' @return An integer with the dimension of the observation vector \emph{R}.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-extract_R <- function(fit) {
-  extract_data(fit)$R
+extract_R <- function(object) {
+  dataR <- extract_data(object)$R
+
+  if (is.null(dataR))
+    return(extract_spec(object)$observation$R)
+
+  dataR
 }
 
-#' Extract the \code{\link{Specification}} object used to fit the model.
+#' Extract the \code{\link{Specification}} object used to object the model.
 #'
 #' @inherit extract
+#' @inherit extract_K
 #' @return A \code{\link{Specification}} object.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @family extract
-extract_spec <- function(fit) {
-  attr(fit, "spec")
+extract_spec <- function(object) {
+  if (is.Specification(object))
+    return(object)
+
+  attr(object, "spec")
 }
 
 #' Extract the path to file with the underlying Stan code.
 #'
 #' @inherit extract
+#' @inherit extract_K
 #' @return A character string with the path to file with the underlying Stan code.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @seealso \code{\link{browse_model}} for viewing the code using your IDE.
 #' @family extract
-extract_filename <- function(fit) {
-  attr(fit, "filename")
+extract_filename <- function(object) {
+  attr(object, "filename")
 }
 
 #' Extract the underlying Stan code.
 #'
 #' @inherit extract
+#' @inherit extract_K
 #' @return A character string with the underlying Stan code.
 #' @note This function does not allow the arguments \emph{combine}, \emph{reduce}, and \emph{chain}.
 #' @seealso \code{\link{browse_model}} for viewing the code using your IDE.
 #' @family extract
-extract_model <- function(fit) {
-  attr(fit, "stanCode")
+extract_model <- function(object) {
+  attr(object, "stanCode")
 }
 
 # browse_model ------------------------------------------------------------
@@ -308,19 +330,40 @@ extract_model <- function(fit) {
 #'
 #' The behavior is platform dependent.
 #'
-#' @param fit An object returned by \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.
+#' @param object An object returned by \code{\link{specify}}, \code{\link{hmm}}, \code{\link{compile}}, \code{\link{draw_samples}}, \code{\link{fit}} or \code{\link{optimizing}}.
 #' @param ... (optional) Arguments to be passed to \code{\link{browseURL}} (namely \emph{browser} and \emph{encodeIfNeeded}).
 #' @return No return value.
 #' @seealso \code{\link{browseURL}}.
-browse_model <- function(fit, ...) {
-  filename <- extract_filename(fit)
+browse_model <- function(object, ...) {
+  UseMethod("browse_model", object)
+}
+
+#' @keywords internal
+#' @inherit browse_model
+browse_model.Specification <- function(object, ...) {
+  filename <- write_model(
+    spec      = object,
+    noLogLike = FALSE,
+    writeDir  = tempdir()
+  )
+
+  browseURL(filename)
+}
+
+#' @keywords internal
+#' @inherit browse_model
+browse_model.stanmodel     <- function(object, ...) {
+  filename <- extract_filename(object)
+
   if (!file.exists(filename)) {
-    filename <- tempfile()
-    string   <- extract_model(fit)
+    string    <- extract_model(object)
 
     if (is.null(string))
-      stop("There's no Stan code associated with this model.")
+      return(
+        browse_model(extract_spec(object), ...)
+      )
 
+    filename <- tempfile()
     fileConn <- file(filename)
     writeLines(string, con = fileConn)
     close(fileConn)
@@ -328,3 +371,11 @@ browse_model <- function(fit, ...) {
 
   browseURL(filename)
 }
+
+#' @keywords internal
+#' @inherit browse_model
+browse_model.stanfit      <- browse_model.stanmodel
+
+#' @keywords internal
+#' @inherit browse_model
+browse_model.Optimization <- browse_model.stanmodel
