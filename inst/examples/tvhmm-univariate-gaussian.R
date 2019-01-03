@@ -4,7 +4,7 @@ mySpec <- hmm(
     mu    = Gaussian(0, 10),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1)),
   transition  = TransitionSoftmax(
     uBeta = Gaussian(0, 10), P = 2
   ),

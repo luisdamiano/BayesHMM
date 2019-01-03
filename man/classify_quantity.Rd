@@ -21,3 +21,4 @@ A numeric vector with size equal to the time series length \emph{T} with values 
 \description{
 Assign the hidden states at each time step \emph{t} to the hidden state \emph{k} with largest quantity of interest.
 }
+\keyword{internal}

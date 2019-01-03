@@ -2,17 +2,17 @@
 % Please edit documentation in R/fit.R
 \name{extract_stanmodel.stanmodel}
 \alias{extract_stanmodel.stanmodel}
-\title{Load the underlying Stan code into an IDE or browser.}
+\title{Extract the stanmodel object of the fitted object.}
 \usage{
-extract_stanmodel.stanmodel(fit)
+\method{extract_stanmodel}{stanmodel}(fit)
+}
+\arguments{
+\item{fit}{An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.}
 }
 \value{
-No return value.
+An integer with the stanmodel used to fit the model.
 }
 \description{
-The behavior is platform dependent.
-}
-\seealso{
-\code{\link{browseURL}}.
+Extract the stanmodel object of the fitted object.
 }
 \keyword{internal}

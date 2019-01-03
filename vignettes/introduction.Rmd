@@ -575,7 +575,7 @@ In the following example, we specify a HMM and validate its calibration.
       Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
       Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
       Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
-    initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+    initial     = Dirichlet(alpha = c(1, 1, 1)),
     transition  =
       Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
       Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
@@ -635,8 +635,8 @@ mySpec <- hmm(
     Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Univariate Gaussian"
 )
 
@@ -681,8 +681,8 @@ mySpec <- hmm(
     Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Univariate Gaussian"
 )
 
@@ -774,7 +774,7 @@ mySpec <- hmm(
     Gaussian(mu = Gaussian(mu = -10, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =   0, sigma = 1), sigma = 1) +
     Gaussian(mu = Gaussian(mu =  10, sigma = 1), sigma = 1),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
     Dirichlet(alpha = c(0.2, 1.0, 0.2)) +
@@ -1158,7 +1158,7 @@ exCase13 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Gaussian(mu = 0, sigma = 1),
   name = "Same univariate density for every transition"
@@ -1175,10 +1175,10 @@ exCase14 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(
-      alpha = c(0.5, 0.5, 0.7)
+      alpha = c(1, 1, 1)
     ),
   name = "Same multivariate density for every transition row"
 )
@@ -1194,7 +1194,7 @@ exCase15 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Beta(alpha = 0.1, beta = 0.1) +
     Beta(alpha = 0.5, beta = 0.5) +
@@ -1213,10 +1213,10 @@ exCase16 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(alpha = c(0.1, 0.1, 0.1)) +
-    Dirichlet(alpha = c(0.5, 0.5, 0.5)) +
+    Dirichlet(alpha = c(1, 1, 1)) +
     Dirichlet(alpha = c(0.9, 0.9, 0.9)),
   name = "A different multivariate density for each transition row"
 )
@@ -1232,7 +1232,7 @@ exCase17 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Beta(alpha = 0.1, beta = 0.1) +
     Beta(alpha = 0.2, beta = 0.2) +
@@ -1257,7 +1257,7 @@ exCase18 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     TransitionSoftmax(
       uBeta = Gaussian(mu = 0, sigma = 1)

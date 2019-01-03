@@ -292,7 +292,7 @@ exCase13 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Gaussian(mu = 0, sigma = 1),
   name = "Same univariate density for every transition"
@@ -311,10 +311,10 @@ exCase14 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(
-      alpha = c(0.5, 0.5, 0.7)
+      alpha = c(1, 1, 1)
     ),
   name = "Same multivariate density for every transition row"
 )
@@ -332,7 +332,7 @@ exCase15 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Beta(alpha = 0.1, beta = 0.1) +
     Beta(alpha = 0.5, beta = 0.5) +
@@ -353,10 +353,10 @@ exCase16 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(alpha = c(0.1, 0.1, 0.1)) +
-    Dirichlet(alpha = c(0.5, 0.5, 0.5)) +
+    Dirichlet(alpha = c(1, 1, 1)) +
     Dirichlet(alpha = c(0.9, 0.9, 0.9)),
   name = "A different multivariate density for each transition row"
 )
@@ -374,7 +374,7 @@ exCase17 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Beta(alpha = 0.1, beta = 0.1) +
     Beta(alpha = 0.2, beta = 0.2) +
@@ -401,7 +401,7 @@ exCase18 <- hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     TransitionSoftmax(
       uBeta = Gaussian(mu = 0, sigma = 1)

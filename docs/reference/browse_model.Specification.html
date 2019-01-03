@@ -113,7 +113,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Load the underlying Stan code into an IDE or browser.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/luisdamiano/BayesHMM//blob/master/R/specification.R'><code>R/specification.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/luisdamiano/BayesHMM//blob/master/R/extract.R'><code>R/extract.R</code></a></small>
     <div class="hidden name"><code>browse_model.Specification.Rd</code></div>
     </div>
 
@@ -123,14 +123,19 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>browse_model.Specification</span>(<span class='no'>spec</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for Specification</span>
+<span class='fu'><a href='browse_model.html'>browse_model</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>spec</th>
-      <td><p>An object returned by either <code><a href='specify.html'>specify</a></code> or <code><a href='hmm.html'>hmm</a></code>.</p></td>
+      <th>object</th>
+      <td><p>An object returned by <code><a href='specify.html'>specify</a></code>, <code><a href='hmm.html'>hmm</a></code>, <code><a href='compile.html'>compile</a></code>, <code><a href='draw_samples.html'>draw_samples</a></code>, <code><a href='fit.html'>fit</a></code> or <code><a href='optimizing.html'>optimizing</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>(optional) Arguments to be passed to <code>browseURL</code> (namely <em>browser</em> and <em>encodeIfNeeded</em>).</p></td>
     </tr>
     </table>
     

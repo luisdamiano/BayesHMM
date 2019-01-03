@@ -5,8 +5,8 @@ mySpec <- hmm(
     M     = 3,
     N     = 10
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
   name = "Univariate Binomial Probit Regression"
 )
 

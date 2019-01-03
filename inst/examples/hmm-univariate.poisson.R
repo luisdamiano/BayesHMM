@@ -3,8 +3,8 @@ mySpec <- hmm(
   observation = Poisson(
     lambda = ImproperUniform(bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Univariate Poisson Model"
 )
 

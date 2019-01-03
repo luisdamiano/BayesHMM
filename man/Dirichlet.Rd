@@ -35,7 +35,7 @@ observation model.
 }
 \examples{
 # With fixed values for the parameters
-Dirichlet(alpha = c(0.5, 0.5, 0.5))
+Dirichlet(alpha = c(1, 1, 1))
 
 # With priors for the parameters
 Dirichlet(alpha = Beta(1, 1))

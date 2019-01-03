@@ -140,7 +140,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The extract_family is the safest way to access the generated samples (filtered probability <em>alpha</em>, smoothed probability <em>gamma</em>, most likely hidden path <em>zstar</em>, observation samples from the posterior predictive density <em>ypred</em>, hidden path samples from the posterior predictive density <em>zpred</em>, simulated observations <em>ysim</em>), the fixed pre-specified quantities (observations <em>y</em>, time series length <em>T</em>, number of hidden states <em>K</em>, dimension of the observation vector <em>R</em>), and other internal elements stored in a fit object (dataset in list format <em>data</em>, <code><a href='specify.html'>Specification</a></code> object <em>spec</em>, path to the underlying Stan file <em>filename</em>). Note that these functions work transparently with both Markov-chain Monte Carlo samples returned by <code><a href='draw_samples.html'>draw_samples</a></code> and maximum a posteriori estimates returned by <code><a href='optimizing.html'>optimizing</a></code>.</p>
+    <p>The extract_* family is the safest way to access the generated samples (filtered probability <em>alpha</em>, smoothed probability <em>gamma</em>, most likely hidden path <em>zstar</em>, observation samples from the posterior predictive density <em>ypred</em>, hidden path samples from the posterior predictive density <em>zpred</em>, simulated observations <em>ysim</em>), the fixed pre-specified quantities (observations <em>y</em>, time series length <em>T</em>, number of hidden states <em>K</em>, dimension of the observation vector <em>R</em>), Markov-chain Monte Carlo specific information (convergence and posterior predictive diagnostics <em>diagnostics</em>, number of chains <em>n_chains</em>, total iterations <em>n_iterations</em>, warm-up iterations <em>n_warmup</em>, thinning <em>n_thin</em>, sample size <em>sample_size</em>), and other internal elements stored in a fit object (<code><a href='specify.html'>Specification</a></code> object <em>spec</em>, dataset in list format <em>data</em>, date <em>date</em>, time elapsed for fitting <em>time</em>, seed <em>seed</em>, path to the underlying Stan file <em>filename</em>). Except for MCMC-specific functions, these all work interchangeably with both Markov-chain Monte Carlo samples returned by <code><a href='draw_samples.html'>draw_samples</a></code> and maximum a posteriori estimates returned by <code><a href='optimizing.html'>optimizing</a></code>.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -152,7 +152,7 @@
   <code><a href='extract_R.html'>extract_R</a></code>, <code><a href='extract_T.html'>extract_T</a></code>,
   <code><a href='extract_alpha.html'>extract_alpha</a></code>, <code><a href='extract_data.html'>extract_data</a></code>,
   <code><a href='extract_filename.html'>extract_filename</a></code>,
-  <code><a href='extract_gamma.html'>extract_gamma</a></code>,
+  <code><a href='extract_gamma.html'>extract_gamma</a></code>, <code><a href='extract_model.html'>extract_model</a></code>,
   <code><a href='extract_obs_parameters.html'>extract_obs_parameters</a></code>,
   <code><a href='extract_parameters.html'>extract_parameters</a></code>,
   <code><a href='extract_spec.html'>extract_spec</a></code>, <code><a href='extract_ypred.html'>extract_ypred</a></code>,

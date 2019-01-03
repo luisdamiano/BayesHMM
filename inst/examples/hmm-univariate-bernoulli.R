@@ -3,8 +3,8 @@ mySpec <- hmm(
   observation = Bernoulli(
     theta = Beta(alpha = 0.5, beta = 0.5, bounds = list(0, 1))
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Bernoulli Model"
 )
 

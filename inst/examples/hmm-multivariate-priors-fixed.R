@@ -4,8 +4,8 @@ mySpec <- hmm(
     mu    = MVGaussian(mu = c(0, 0), sigma = matrix(c(100, 0, 0, 100), 2, 2)),
     sigma = matrix(c(1, 0, 0, 1), 2, 2)
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Multivariate Gaussian"
 )
 

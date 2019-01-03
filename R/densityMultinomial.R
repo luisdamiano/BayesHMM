@@ -16,7 +16,7 @@
 #' )
 Multinomial <- function(theta = NULL, N = NULL, ordered = NULL, equal = NULL, bounds = list(NULL, NULL),
                         trunc  = list(NULL, NULL), k = NULL, r = NULL, param = NULL) {
-  MultivariateDiscreteDensity("Multinomial", ordered, equal, bounds, trunc, k, r, param, theta = theta, N = N)
+  DiscreteDensity("Multinomial", ordered, equal, bounds, trunc, k, r, param, theta = theta, N = N)
 }
 
 #' @keywords internal
@@ -34,7 +34,7 @@ freeParameters.Multinomial <- function(x) {
   thetaStr <-
     if (is.Density(x$theta)) {
       sprintf(
-        "simplex[R] theta%s%s;",
+        "simplex[N] theta%s%s;",
         get_k(x, "theta"), get_r(x, "theta")
       )
     } else {
@@ -56,7 +56,7 @@ fixedParameters.Multinomial <- function(x) {
       }
 
       sprintf(
-        "simplex[R] theta%s%s = %s';",
+        "simplex[N] theta%s%s = %s';",
         get_k(x, "theta"), get_r(x, "theta"), vector_to_stan(x$theta)
       )
     }

@@ -7,8 +7,8 @@ hmm(
     Gaussian(mu = -5, sigma = 1)
   + Gaussian(mu =  0, sigma = 1)
   + Gaussian(mu =  5, sigma = 1),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5))
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1))
 )
 
 # Tests for complex models ------------------------------------------------
@@ -255,7 +255,7 @@ hmm(
     mu    = Gaussian(0, 10),
     sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1)),
   transition  = TransitionSoftmax(
     uBeta = Gaussian(0, 10), P = 2
   )
@@ -273,7 +273,7 @@ hmm(
 #       mu    = Gaussian(0, 10),
 #       sigma = Gaussian(0, 10, bounds = list(0, NULL))
 #     ),
-#   initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+#   initial     = Dirichlet(alpha = c(1, 1, 1)),
 #   transition  = Beta(alpha = 0.1, beta = 0.1)
 # )
 
@@ -288,10 +288,10 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(
-      alpha = c(0.5, 0.5, 0.7)
+      alpha = c(1, 1, 1)
     )
 )
 
@@ -306,7 +306,7 @@ hmm(
 #       mu    = Gaussian(0, 10),
 #       sigma = Gaussian(0, 10, bounds = list(0, NULL))
 #     ),
-#   initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+#   initial = Dirichlet(alpha = c(1, 1, 1)),
 #   transition  =
 #     Beta(alpha = 0.1, beta = 0.1) +
 #     Beta(alpha = 0.5, beta = 0.5) +
@@ -324,10 +324,10 @@ hmm(
       mu    = Gaussian(0, 10),
       sigma = Gaussian(0, 10, bounds = list(0, NULL))
     ),
-  initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(alpha = c(0.1, 0.1, 0.1)) +
-    Dirichlet(alpha = c(0.5, 0.5, 0.5)) +
+    Dirichlet(alpha = c(1, 1, 1)) +
     Dirichlet(alpha = c(0.9, 0.9, 0.9))
 )
 
@@ -342,7 +342,7 @@ hmm(
 #       mu    = Gaussian(0, 10),
 #       sigma = Gaussian(0, 10, bounds = list(0, NULL))
 #     ),
-#   initial = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+#   initial = Dirichlet(alpha = c(1, 1, 1)),
 #   transition  =
 #     Beta(alpha = 0.1, beta = 0.1) +
 #     Beta(alpha = 0.2, beta = 0.2) +

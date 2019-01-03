@@ -23,16 +23,15 @@
 #' \dontrun{
 #'   extract_quantity(myFit, c("z*"), reduce = mean, chain = 1, combine = cbind))
 #' }
-extract_quantity <- function(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...) {
+extract_quantity <- function(fit, pars, reduce = NULL,
+                             combine = NULL, chain = "all", ...) {
   UseMethod("extract_quantity", fit)
 }
 
-# Should DROP as much as possible
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_quantity(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...)
-#' @rdname extract_quantity
-extract_quantity.Optimization <- function(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...) {
+#' @keywords internal
+#' @inherit extract_quantity
+extract_quantity.Optimization <- function(fit, pars, reduce = NULL,
+                                          combine = NULL, chain = "all", ...) {
   reduce <- NULL # Can't reduce in-chain cause there are not iterations
   ind <- do.call(c, lapply(unique(pars), function(par) {
     grep(
@@ -50,7 +49,10 @@ extract_quantity.Optimization <- function(fit, pars, reduce = NULL, combine = NU
   if (is.null(combine)) { l } else { drop(do.call(combine, l)) }
 }
 
-extract_quantity.stanfit <- function(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...) {
+#' @keywords internal
+#' @inherit extract_quantity
+extract_quantity.stanfit <- function(fit, pars, reduce = NULL,
+                                     combine = NULL, chain = "all", ...) {
   ext <- function(p) {
     # extract and set dimensions: x[iteration, chain, parDims ...]
     x           <- rstan::extract(fit, pars = p, permuted = FALSE, ...)
@@ -94,12 +96,6 @@ extract_quantity.stanfit <- function(fit, pars, reduce = NULL, combine = NULL, c
   drop(do.call(combine, l))
 }
 
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_quantity(fit, pars, reduce = NULL, combine = NULL, chain = "all", ...)
-#' @rdname extract_quantity
-setMethod("extract_quantity", "stanfit", extract_quantity.stanfit)
-
 # extract_parameter_names -------------------------------------------------
 
 #' Extract the names of all the model parameters in the fit object.
@@ -112,23 +108,17 @@ extract_parameter_names <- function(fit) {
   UseMethod("extract_parameter_names", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_parameter_names(fit)
-#' @rdname extract_parameter_names
+#' @keywords internal
+#' @inherit extract_parameter_names
 extract_parameter_names.Optimization <- function(fit) {
   names(fit$par)
 }
 
+#' @keywords internal
+#' @inherit extract_parameter_names
 extract_parameter_names.stanfit <- function(fit) {
   fit@model_pars
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_parameter_names(fit)
-#' @rdname extract_parameter_names
-setMethod("extract_parameter_names", "stanfit", extract_parameter_names.stanfit)
 
 # extract_date ------------------------------------------------------------
 #' Extract the date when the model was run.
@@ -139,23 +129,17 @@ extract_date <- function(fit) {
   UseMethod("extract_date", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_date(fit)
-#' @rdname extract_date
+#' @keywords internal
+#' @inherit extract_date
 extract_date.Optimization <- function(fit) {
   attr(fit, "date")
 }
 
+#' @keywords internal
+#' @inherit extract_date
 extract_date.stanfit <- function(fit) {
   strptime(fit@date, "%a %b %d %H:%M:%S %Y")
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_date(fit)
-#' @rdname extract_date
-setMethod("extract_date", "stanfit", extract_date.stanfit)
 
 # extract_time ------------------------------------------------------------
 #' Extract the time elapsed when fitting the model.
@@ -166,26 +150,20 @@ extract_time <- function(fit) {
   UseMethod("extract_time", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_time(fit)
-#' @rdname extract_time
+#' @keywords internal
+#' @inherit extract_time
 extract_time.Optimization <- function(fit) {
   attr(fit, "systemTime")
 }
 
+#' @keywords internal
+#' @inherit extract_time
 extract_time.stanfit <- function(fit) {
   rstan::get_elapsed_time(fit)
 }
 
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_time(fit)
-#' @rdname extract_time
-setMethod("extract_time", "stanfit", extract_time.stanfit)
-
 # extract_seed ------------------------------------------------------------
-#' Extract the time elapsed when fitting the model.
+#' Extract the seed used to fit the model.
 #'
 #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return An integer with the seed used to fit the model.
@@ -193,26 +171,20 @@ extract_seed     <- function(fit) {
   UseMethod("extract_seed", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_seed(fit)
-#' @rdname extract_seed
+#' @keywords internal
+#' @inherit extract_seed
 extract_seed.Optimization <- function(fit) {
   attr(fit, "seed")
 }
 
+#' @keywords internal
+#' @inherit extract_seed
 extract_seed.stanfit <- function(fit) {
   rstan::get_seed(fit)
 }
 
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_seed(fit)
-#' @rdname extract_seed
-setMethod("extract_seed", "stanfit", extract_seed.stanfit)
-
 # extract_stanmodel -------------------------------------------------------
-#' Extract the time elapsed when fitting the model.
+#' Extract the stanmodel object of the fitted object.
 #'
 #' @param fit An object returned by either \code{\link{draw_samples}} or \code{\link{optimizing}}.
 #' @return An integer with the stanmodel used to fit the model.
@@ -220,29 +192,23 @@ extract_stanmodel     <- function(fit) {
   UseMethod("extract_stanmodel", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' extract_stanmodel(fit)
-#' @rdname extract_stanmodel
+#' @keywords internal
+#' @inherit extract_stanmodel
 extract_stanmodel.Optimization <- function(fit) {
   attr(fit, "stanmodel")
 }
 
+#' @keywords internal
+#' @inherit extract_stanmodel
 extract_stanmodel.stanfit <- function(fit) {
   rstan::get_stanmodel(fit)
 }
 
 #' @keywords internal
-#' @inherit browse_model
+#' @inherit extract_stanmodel
 extract_stanmodel.stanmodel <- function(fit) {
   fit
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' extract_stanmodel(fit)
-#' @rdname extract_stanmodel
-setMethod("extract_stanmodel", "stanfit", extract_stanmodel.stanfit)
 
 # classify_quantity -------------------------------------------------------
 #' Classify observations based on latent state probabilities.
@@ -255,6 +221,7 @@ setMethod("extract_stanmodel", "stanfit", extract_stanmodel.stanfit)
 #' @param chain Either "all" or any integer number between 1 and the number of chains M. In the latter case, only the samples generated by the selected chain are considered. This argument is not used for maximum a posteriori estimates returned by \code{\link{optimizing}} since there is only one result. It defaults to "all".
 #' @param quantity A character string with the name of the parameter to be classified (most likely a probability such as "alpha" or "gamma"). Note that no every estimated parameter has the structure needed for classification.
 #' @return A numeric vector with size equal to the time series length \emph{T} with values from 1 to the number of hidden states \emph{K}.
+#' @keywords internal
 classify_quantity <- function(fit, reduce, chain, quantity) {
   f <- match.fun(paste0("extract_", quantity))
   q <- f(fit, reduce = reduce, chain = chain)
@@ -282,23 +249,17 @@ classify_alpha   <- function(fit, reduce = mean, chain = "all") {
   UseMethod("classify_alpha", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' classify_alpha(fit, reduce = mean, chain = "all")
-#' @rdname classify_alpha
+#' @keywords internal
+#' @inherit classify_alpha
 classify_alpha.Optimization <- function(fit, reduce = mean, chain = "all") {
   apply(extract_alpha(fit), 2, which.max)
 }
 
+#' @keywords internal
+#' @inherit classify_alpha
 classify_alpha.stanfit <- function(fit, reduce = mean, chain = "all") {
   classify_quantity(fit, reduce, chain, "alpha")
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' classify_alpha(fit, reduce = mean, chain = "all")
-#' @rdname classify_alpha
-setMethod("classify_alpha", "stanfit", classify_alpha.stanfit)
 
 # classify_gamma ----------------------------------------------------------
 #' Classify observations based on smoothed probabilities.
@@ -309,23 +270,17 @@ classify_gamma   <- function(fit, reduce = mean, chain = "all") {
   UseMethod("classify_gamma", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' classify_gamma(fit, reduce = mean, chain = "all")
-#' @rdname classify_gamma
+#' @keywords internal
+#' @inherit classify_gamma
 classify_gamma.Optimization <- function(fit, reduce = mean, chain = "all") {
   apply(extract_gamma(fit), 2, which.max)
 }
 
+#' @keywords internal
+#' @inherit classify_gamma
 classify_gamma.stanfit <- function(fit, reduce = mean, chain = "all") {
   classify_quantity(fit, reduce, chain, "gamma")
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' classify_gamma(fit, reduce = mean, chain = "all")
-#' @rdname classify_gamma
-setMethod("classify_gamma", "stanfit", classify_gamma.stanfit)
 
 # classify_zstar ----------------------------------------------------------
 #' Assign the hidden states to the most likely path (\emph{zstar}).
@@ -337,20 +292,14 @@ classify_zstar   <- function(fit, reduce = posterior_mode, chain = "all") {
   UseMethod("classify_zstar", fit)
 }
 
-#' @usage
-#' ## S3 method for signature 'Optimization'
-#' classify_zstar(fit, reduce = posterior_mode, chain = "all")
-#' @rdname classify_zstar
+#' @keywords internal
+#' @inherit classify_zstar
 classify_zstar.Optimization <- function(fit, reduce = posterior_mode, chain = "all") {
   extract_zstar(fit)
 }
 
+#' @keywords internal
+#' @inherit classify_zstar
 classify_zstar.stanfit <- function(fit, reduce = posterior_mode, chain = "all") {
   extract_zstar(fit, reduce = reduce, chain = chain)
 }
-
-#' @usage
-#' ## S4 method for signature 'stanfit'
-#' classify_zstar(fit, reduce = posterior_mode, chain = "all")
-#' @rdname classify_zstar
-setMethod("classify_zstar", "stanfit", classify_zstar.stanfit)

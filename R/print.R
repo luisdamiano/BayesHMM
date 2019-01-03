@@ -76,14 +76,18 @@ print.stanfit <- function(x, posteriorInterval = c(0.025, 0.25, 0.5, 0.75, 0.975
     make_text_line()
   )
 
-  strConvergence <- if (diagnostics & !is.null(extract_y(x))) {
-    collapse(
-      print_convergence(x, print = FALSE),
-      make_text_line()
-    )
-  } else {
+  strConvergence <- tryCatch({
+    if (diagnostics & !is.null(extract_y(x))) {
+      collapse(
+        print_convergence(x, print = FALSE),
+        make_text_line()
+      )
+    } else {
+      ""
+    }
+  }, error = function(e) {
     ""
-  }
+  })
 
   strFooter      <- collapse(
     print_reproducibility(print = FALSE)

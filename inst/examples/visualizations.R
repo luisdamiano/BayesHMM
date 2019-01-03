@@ -4,7 +4,7 @@ mySpec <- hmm(
     Gaussian(mu = -10, sigma = 1) +
     Gaussian(mu =   0, sigma = 1) +
     Gaussian(mu =  10, sigma = 1),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
   transition  =
     Dirichlet(alpha = c(1.0, 0.2, 0.2)) +
     Dirichlet(alpha = c(0.2, 1.0, 0.2)) +

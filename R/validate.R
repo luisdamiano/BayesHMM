@@ -70,7 +70,7 @@ validate_calibration <- function(spec, N, T = 1000, x = NULL, seed = 9000, nCore
     paramTrue  <- paramSim[n, ]
     myFit      <- do.call(
       draw_samples,
-      c(list(spec, stanModel = myModel, y = y, x = x, seed = seed + n), dots)
+      c(list(myModel, y = y, x = x, seed = seed + n), dots)
     )
 
     myFit      <- stan_sort_chain(

@@ -331,26 +331,40 @@ Note that fixed parameters may be specified following this example:</p>
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"Univariate Gaussian Hidden Markov Model"</span>
 )
 
-<span class='fu'><a href='explain.html'>explain</a></span>(<span class='no'>mySpec</span>)</div><div class='output co'>#&gt; UNIVARIATE GAUSSIAN HIDDEN MARKOV MODEL                                         
+<span class='fu'><a href='explain.html'>explain</a></span>(<span class='no'>mySpec</span>)</div><div class='output co'>#&gt; ________________________________________________________________________________
+#&gt; UNIVARIATE GAUSSIAN HIDDEN MARKOV MODEL                                         
 #&gt; ________________________________________________________________________________
 #&gt; 
-#&gt; Univariate observations (R = 1): Variable names.
-#&gt; 
-#&gt; Observation model for all states
+#&gt; Univariate observations (R = 1).
+#&gt; Observation model for Variable 1 in State 1
 #&gt; Variable Density: Gaussian (-infty, infty)
 #&gt;   Free parameters: 2 (mu, sigma)
-#&gt;     mu    = Prior Density: Gaussian (-infty, infty)
-#&gt;       Fixed parameters: 2 (mu = 0, sigma = 10), 
-#&gt;     sigma = Prior Density: Student [0, infty)
-#&gt;       Fixed parameters: 3 (mu = 0, sigma = 10, nu = 1)
+#&gt;     mu    : real mu11;
+#&gt;             Prior Density: Gaussian (-infty, infty)
+#&gt;                   Fixed parameters: 2 (mu = 0, sigma = 10), 
+#&gt;     sigma : real&lt;lower = 0&gt; sigma11;
+#&gt;             Prior Density: Student [0, infty)
+#&gt;                   Fixed parameters: 3 (mu = 0, sigma = 10, nu = 1)
+#&gt; 
+#&gt; Observation model for Variable 1 in State 2
+#&gt; Variable Density: Gaussian (-infty, infty)
+#&gt;   Free parameters: 2 (mu, sigma)
+#&gt;     mu    : real mu21;
+#&gt;             Prior Density: Gaussian (-infty, infty)
+#&gt;                   Fixed parameters: 2 (mu = 0, sigma = 10), 
+#&gt;     sigma : real&lt;lower = 0&gt; sigma21;
+#&gt;             Prior Density: Student [0, infty)
+#&gt;                   Fixed parameters: 3 (mu = 0, sigma = 10, nu = 1)
+#&gt; 
 #&gt; 
 #&gt; Initial distribution model
 #&gt; Prior Density: Dirichlet (-infty, infty)
-#&gt;   Fixed parameters: 1 (alpha = 11)
+#&gt;       Fixed parameters: 1 (alpha = [1, 1])
 #&gt; 
 #&gt; Transition model
 #&gt; Prior Density: Dirichlet (-infty, infty)
-#&gt;   Fixed parameters: 1 (alpha = 11)
+#&gt;       Fixed parameters: 1 (alpha = [1, 1])
+#&gt; 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -130,8 +130,9 @@ observation model.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>Density</span>(<span class='no'>name</span>, <span class='kw'>bounds</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>), <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>),
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Density</span>(<span class='no'>name</span>, <span class='kw'>ordered</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>equal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>bounds</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>,
+  <span class='kw'>NULL</span>), <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +140,14 @@ observation model.</p>
     <tr>
       <th>name</th>
       <td><p>A character string with the name of the density.</p></td>
+    </tr>
+    <tr>
+      <th>ordered</th>
+      <td><p>(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. <code><a href='Categorical.html'>Categorical</a></code>, <code><a href='Multinomial.html'>Multinomial</a></code>, <code><a href='Dirichlet.html'>Dirichlet</a></code>) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.</p></td>
+    </tr>
+    <tr>
+      <th>equal</th>
+      <td><p>(optional) A logical setting whether the parameter takes the same value in every hidden state, i.e. the parameter is shared across states. It defaults to unequal parameters.</p></td>
     </tr>
     <tr>
       <th>bounds</th>
@@ -172,7 +181,11 @@ observation model.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with <a href=' https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations'>Stan's Prior Choice Recommendation</a>.</p>
+    <p>The examples are merely illustrative and should not be taken for prior choice recommendations. If you are looking for some, you may start with <a href='https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations'>Stan's Prior Choice Recommendation</a>.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Betancourt, Michael (2017) Identifying Bayesian Mixture Models <em>Stan Case Studies</em> <b>Volume 4</b>. <a href='https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html'>Link</a>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -182,7 +195,7 @@ observation model.</p>
   <code><a href='Dirichlet.html'>Dirichlet</a></code>, <code><a href='Exponential.html'>Exponential</a></code>,
   <code><a href='GammaDensity.html'>GammaDensity</a></code>, <code><a href='Gaussian.html'>Gaussian</a></code>,
   <code><a href='ImproperUniform.html'>ImproperUniform</a></code>,
-  <code><a href='InitialSoftmax.html'>InitialSoftmax</a></code>,
+  <code><a href='InitialFixed.html'>InitialFixed</a></code>, <code><a href='InitialSoftmax.html'>InitialSoftmax</a></code>,
   <code><a href='InverseWishart.html'>InverseWishart</a></code>,
   <code><a href='MVGaussianCholeskyCor.html'>MVGaussianCholeskyCor</a></code>,
   <code><a href='MVGaussian.html'>MVGaussian</a></code>, <code><a href='MVStudent.html'>MVStudent</a></code>,
@@ -207,6 +220,8 @@ observation model.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#note">Note</a></li>
+
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

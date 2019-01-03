@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Prints the result of the model in a human friendly format. — print.stanfit • BayesHMM</title>
+<title>Print the result of the model in a human friendly format. — print.stanfit • BayesHMM</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Prints the result of the model in a human friendly format. — print.stanfit" />
+<meta property="og:title" content="Print the result of the model in a human friendly format. — print.stanfit" />
 
-<meta property="og:description" content="Prints the result of the model in a human friendly format." />
+<meta property="og:description" content="Print the result of the model in a human friendly format." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,21 +112,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Prints the result of the model in a human friendly format.</h1>
+    <h1>Print the result of the model in a human friendly format.</h1>
     <small class="dont-index">Source: <a href='https://github.com/luisdamiano/BayesHMM//blob/master/R/print.R'><code>R/print.R</code></a></small>
     <div class="hidden name"><code>print.stanfit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Prints the result of the model in a human friendly format.</p>
+    <p>Print the result of the model in a human friendly format.</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanfit</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>posteriorInterval</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>,
   <span class='fl'>0.975</span>), <span class='kw'>observation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>initial</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>transition</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>diagnostics</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +156,12 @@
       <td><p>An optional logical indicating whether the fixed parameters should be included in the description. It defaults to TRUE.</p></td>
     </tr>
     <tr>
+      <th>diagnostics</th>
+      <td><p>An optional logical indicating whether convergence diagnostics should be included in the description. It defaults to TRUE.</p></td>
+    </tr>
+    <tr>
       <th>print</th>
-      <td><p>An optional logical indicating whether the description should be printing out.</p></td>
+      <td><p>An optional logical indicating whether the description should be printed out.</p></td>
     </tr>
     <tr>
       <th>...</th>

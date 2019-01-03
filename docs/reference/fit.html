@@ -123,14 +123,15 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>fit</span>(<span class='no'>spec</span>, <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>u</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>v</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>fit</span>(<span class='no'>object</span>, <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>u</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>v</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>writeDir</span> <span class='kw'>=</span> <span class='fu'>tempdir</span>(),
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>spec</th>
-      <td><p>An object returned by either <code><a href='specify.html'>specify</a></code> or <code><a href='hmm.html'>hmm</a></code>.</p></td>
+      <th>object</th>
+      <td><p>An object returned by <code><a href='specify.html'>specify</a></code>, <code><a href='hmm.html'>hmm</a></code>, <code><a href='compile.html'>compile</a></code>, <code><a href='draw_samples.html'>draw_samples</a></code>, <code>fit</code> or <code><a href='optimizing.html'>optimizing</a></code>.</p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -149,8 +150,12 @@
       <td><p>An optional numeric matrix with the covariates for the initial distribution model. It must have as many rows as the number of hidden states <em>K</em> and as many columns as the dimension of the initial covariate vector <em>Q</em>. If not a matrix, the function tries to cast the object to a \(K\times Q\) matrix.</p></td>
     </tr>
     <tr>
+      <th>writeDir</th>
+      <td><p>An optional character string with the path where the Stan file should be written. Useful to inspect and modify the Stan code manually. It defaults to a temporary directory.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>Arguments to be passed to rstan's <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stan'>stan</a></code>.</p></td>
+      <td><p>Arguments to be passed to rstan's <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></td>
     </tr>
     </table>
     
@@ -160,7 +165,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See rstan's <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stan'>stan</a></code> and <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code> for further details on tunning the MCMC algorithm.</p></div>
+    <div class='dont-index'><p>See rstan's <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code> for further details on tunning the MCMC algorithm.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

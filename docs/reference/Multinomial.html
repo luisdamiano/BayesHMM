@@ -127,8 +127,9 @@ observation model.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>Multinomial</span>(<span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>N</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>bounds</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>),
-  <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>Multinomial</span>(<span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>N</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ordered</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>equal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>bounds</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>), <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +141,14 @@ observation model.</p>
     <tr>
       <th>N</th>
       <td><p>An integer with the number of trials (fixed quantity).</p></td>
+    </tr>
+    <tr>
+      <th>ordered</th>
+      <td><p>(optional) A logical setting an increasing ordering constraint on any univariate parameter and any unconstrained parameter vector. Ordered simplices (e.g. <code><a href='Categorical.html'>Categorical</a></code>, <code>Multinomial</code>, <code><a href='Dirichlet.html'>Dirichlet</a></code>) are currently not implemented. Most useful for location parameters to break symmetries and fix label switching as shown in Betancourt (2017). It defaults to unordered parameters.</p></td>
+    </tr>
+    <tr>
+      <th>equal</th>
+      <td><p>(optional) A logical setting whether the parameter takes the same value in every hidden state, i.e. the parameter is shared across states. It defaults to unequal parameters.</p></td>
     </tr>
     <tr>
       <th>bounds</th>
@@ -167,6 +176,10 @@ observation model.</p>
 
     <p>A <code><a href='Density.html'>Density</a></code> object.</p>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Betancourt, Michael (2017) Identifying Bayesian Mixture Models <em>Stan Case Studies</em> <b>Volume 4</b>. <a href='https://mc-stan.org/users/documentation/case-studies/identifying_mixture_models.html'>Link</a>.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other Density: <code><a href='Bernoulli.html'>Bernoulli</a></code>, <code><a href='Beta.html'>Beta</a></code>,
@@ -175,7 +188,7 @@ observation model.</p>
   <code><a href='Density.html'>Density</a></code>, <code><a href='Dirichlet.html'>Dirichlet</a></code>,
   <code><a href='Exponential.html'>Exponential</a></code>, <code><a href='GammaDensity.html'>GammaDensity</a></code>,
   <code><a href='Gaussian.html'>Gaussian</a></code>, <code><a href='ImproperUniform.html'>ImproperUniform</a></code>,
-  <code><a href='InitialSoftmax.html'>InitialSoftmax</a></code>,
+  <code><a href='InitialFixed.html'>InitialFixed</a></code>, <code><a href='InitialSoftmax.html'>InitialSoftmax</a></code>,
   <code><a href='InverseWishart.html'>InverseWishart</a></code>,
   <code><a href='MVGaussianCholeskyCor.html'>MVGaussianCholeskyCor</a></code>,
   <code><a href='MVGaussian.html'>MVGaussian</a></code>, <code><a href='MVStudent.html'>MVStudent</a></code>,
@@ -192,115 +205,16 @@ observation model.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># With fixed values for the parameters</span>
-<span class='fu'>Multinomial</span>(<span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.3</span>, <span class='fl'>0.6</span>), <span class='fl'>10</span>)</div><div class='output co'>#&gt; $name
-#&gt; [1] "Multinomial"
-#&gt; 
-#&gt; $theta
-#&gt; [1] 0.1 0.3 0.6
-#&gt; 
-#&gt; $N
-#&gt; [1] 10
-#&gt; 
-#&gt; $bounds
-#&gt; $bounds[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $bounds[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $trunc
-#&gt; $trunc[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $trunc[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $k
-#&gt; NULL
-#&gt; 
-#&gt; $r
-#&gt; NULL
-#&gt; 
-#&gt; $param
-#&gt; NULL
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "Multinomial"         "MultivariateDensity" "DiscreteDensity"    
-#&gt; [4] "Density"            </div><div class='input'>
+<span class='fu'>Multinomial</span>(<span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.3</span>, <span class='fl'>0.6</span>), <span class='fl'>10</span>)</div><div class='output co'>#&gt; Variable Density: Multinomial (-infty, infty)
+#&gt; 			Fixed parameters: 1 (theta = [0.1, 0.3, 0.6])</div><div class='input'>
 <span class='co'># With priors for the parameters</span>
 <span class='fu'>Multinomial</span>(
   <span class='fu'><a href='Dirichlet.html'>Dirichlet</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)), <span class='fl'>10</span>
-)</div><div class='output co'>#&gt; $name
-#&gt; [1] "Multinomial"
-#&gt; 
-#&gt; $theta
-#&gt; $name
-#&gt; [1] "Dirichlet"
-#&gt; 
-#&gt; $alpha
-#&gt; [1] 1 1 1
-#&gt; 
-#&gt; $bounds
-#&gt; $bounds[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $bounds[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $trunc
-#&gt; $trunc[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $trunc[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $k
-#&gt; NULL
-#&gt; 
-#&gt; $r
-#&gt; NULL
-#&gt; 
-#&gt; $param
-#&gt; NULL
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "Dirichlet"           "MultivariateDensity" "Density"            
-#&gt; 
-#&gt; $N
-#&gt; [1] 10
-#&gt; 
-#&gt; $bounds
-#&gt; $bounds[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $bounds[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $trunc
-#&gt; $trunc[[1]]
-#&gt; NULL
-#&gt; 
-#&gt; $trunc[[2]]
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $k
-#&gt; NULL
-#&gt; 
-#&gt; $r
-#&gt; NULL
-#&gt; 
-#&gt; $param
-#&gt; NULL
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "Multinomial"         "MultivariateDensity" "DiscreteDensity"    
-#&gt; [4] "Density"            </div></pre>
+)</div><div class='output co'>#&gt; Variable Density: Multinomial (-infty, infty)
+#&gt; 	Free parameters: 1 (theta)
+#&gt; 		theta : 
+#&gt; 						Variable Density: Dirichlet (-infty, infty)
+#&gt; 									Fixed parameters: 1 (alpha = [1, 1, 1])</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -308,6 +222,8 @@ observation model.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

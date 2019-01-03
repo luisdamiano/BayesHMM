@@ -270,6 +270,7 @@ make_trunc <- function(x, name) {
 
 make_rsubindex <- function(x) {
   sprintf(if (x$multivariate) { "[%s]" } else { "%s" }, x$r)
+  # sprintf(if (is.multivariate(x)) { "[%s]" } else { "%s" }, x$r)
 }
 
 make_parameters <- function(density, string, stringNot = "",

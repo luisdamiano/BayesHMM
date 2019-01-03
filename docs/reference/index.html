@@ -203,6 +203,12 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="InitialFixed.html">InitialFixed()</a></code> </p>
+        </td>
+        <td><p>Fixed initial probability vector</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="InitialSoftmax.html">InitialSoftmax()</a></code> </p>
         </td>
         <td><p>Softmax initial probability density</p></td>
@@ -295,7 +301,7 @@ continuous univariate random variable.</p></td>
         <td>
           <p><code><a href="TransitionFixed.html">TransitionFixed()</a></code> </p>
         </td>
-        <td><p>Fixed transition matrix</p></td>
+        <td><p>Fixed transition probability matrix</p></td>
       </tr><tr>
         
         <td>
@@ -311,25 +317,19 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="browse_model.html">browse_model()</a></code> <code><a href="browse_model.html">browse_model()</a></code> <code><a href="browse_model.html">browse_model()</a></code> </p>
+          <p><code><a href="browse_model.html">browse_model()</a></code> </p>
         </td>
         <td><p>Load the underlying Stan code into an IDE or browser.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="browse_model.Specification.html">browse_model.Specification()</a></code> </p>
-        </td>
-        <td><p>Load the underlying Stan code into an IDE or browser.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="classify_alpha.html">classify_alpha()</a></code> <code><a href="classify_alpha.html">classify_alpha()</a></code> <code><a href="classify_alpha.html">classify_alpha()</a></code> </p>
+          <p><code><a href="classify_alpha.html">classify_alpha()</a></code> </p>
         </td>
         <td><p>Classify observations based on filtered probabilities.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="classify_gamma.html">classify_gamma()</a></code> <code><a href="classify_gamma.html">classify_gamma()</a></code> <code><a href="classify_gamma.html">classify_gamma()</a></code> </p>
+          <p><code><a href="classify_gamma.html">classify_gamma()</a></code> </p>
         </td>
         <td><p>Classify observations based on smoothed probabilities.</p></td>
       </tr><tr>
@@ -341,7 +341,7 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="classify_zstar.html">classify_zstar()</a></code> <code><a href="classify_zstar.html">classify_zstar()</a></code> <code><a href="classify_zstar.html">classify_zstar()</a></code> </p>
+          <p><code><a href="classify_zstar.html">classify_zstar()</a></code> </p>
         </td>
         <td><p>Assign the hidden states to the most likely path (<em>zstar</em>).</p></td>
       </tr><tr>
@@ -407,6 +407,12 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="extract_date.html">extract_date()</a></code> </p>
+        </td>
+        <td><p>Extract the date when the model was run.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="extract_diagnostics.html">extract_diagnostics()</a></code> </p>
         </td>
         <td><p>Extract MCMC convergence and posterior predictive diagnostics.</p></td>
@@ -425,9 +431,33 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="extract_model.html">extract_model()</a></code> </p>
+        </td>
+        <td><p>Extract the underlying Stan code.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="extract_n_chains.html">extract_n_chains()</a></code> </p>
         </td>
         <td><p>Extract the number of chains <em>M</em>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_n_iterations.html">extract_n_iterations()</a></code> </p>
+        </td>
+        <td><p>Extract the number of total iterations.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_n_thin.html">extract_n_thin()</a></code> </p>
+        </td>
+        <td><p>Extract the thinning periodicity.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_n_warmup.html">extract_n_warmup()</a></code> </p>
+        </td>
+        <td><p>Extract the number of warmup iterations.</p></td>
       </tr><tr>
         
         <td>
@@ -443,25 +473,37 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="extract_quantity.html">extract_quantity()</a></code> <code><a href="extract_quantity.html">extract_quantity()</a></code> <code><a href="extract_quantity.html">extract_quantity()</a></code> </p>
+          <p><code><a href="extract_quantity.html">extract_quantity()</a></code> </p>
         </td>
         <td><p>Extract estimated quantities from fit objects.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="extract_seed.html">extract_seed()</a></code> <code><a href="extract_seed.html">extract_seed()</a></code> <code><a href="extract_seed.html">extract_seed()</a></code> </p>
+          <p><code><a href="extract_sample_size.html">extract_sample_size()</a></code> </p>
         </td>
-        <td><p>Extract the time elapsed when fitting the model.</p></td>
+        <td><p>Extract the number of iterations kept after warmup.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_seed.html">extract_seed()</a></code> </p>
+        </td>
+        <td><p>Extract the seed used to fit the model.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="extract_spec.html">extract_spec()</a></code> </p>
         </td>
-        <td><p>Extract the <code>Specification</code> object used to fit the model.</p></td>
+        <td><p>Extract the <code>Specification</code> object used to object the model.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="extract_time.html">extract_time()</a></code> <code><a href="extract_time.html">extract_time()</a></code> <code><a href="extract_time.html">extract_time()</a></code> </p>
+          <p><code><a href="extract_stanmodel.html">extract_stanmodel()</a></code> </p>
+        </td>
+        <td><p>Extract the stanmodel object of the fitted object.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="extract_time.html">extract_time()</a></code> </p>
         </td>
         <td><p>Extract the time elapsed when fitting the model.</p></td>
       </tr><tr>
@@ -527,13 +569,19 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="modify_theme_entry.html">modify_theme_entry()</a></code> </p>
+        </td>
+        <td><p>Modifies an entry in the current theme.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="optimizing.html">optimizing()</a></code> </p>
         </td>
         <td><p>Fit a model by MAP.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_ppredictive.html">plot_ppredictive()</a></code> <code><a href="plot_ppredictive.html">plot_ppredictive.stanfit()</a></code> </p>
+          <p><code><a href="plot_ppredictive.html">plot_ppredictive()</a></code> </p>
         </td>
         <td><p>Plot samples drawn from the posterior predictive density.</p></td>
       </tr><tr>
@@ -569,9 +617,27 @@ continuous univariate random variable.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="print.stanfit.html">print(<i>&lt;stanfit&gt;</i>)</a></code> </p>
+          <p><code><a href="print.Density.html">print(<i>&lt;Density&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print a description of a Density object in a human friendly format.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.Optimization.html">print(<i>&lt;Optimization&gt;</i>)</a></code> </p>
         </td>
         <td><p>Prints the result of the model in a human friendly format.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.Specification.html">print(<i>&lt;Specification&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print a description of a Specification in a human friendly format.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.stanfit.html">print(<i>&lt;stanfit&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print the result of the model in a human friendly format.</p></td>
       </tr><tr>
         
         <td>

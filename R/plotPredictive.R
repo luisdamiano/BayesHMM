@@ -36,20 +36,16 @@
 #'   klControl = list(yNBins = 20, yPredNBins = 20)
 #' )
 #' }
-setGeneric(
-  "plot_ppredictive",
-  function(stanfit, type = "", r = NULL, subset = NULL, chain = 1,
+plot_ppredictive <- function(stanfit, type = "", r = NULL, subset = NULL, chain = 1,
            fun = NULL, fun1 = NULL, fun2 = NULL,
            boxplotControl = NULL, cumulativeControl = NULL, densityControl = NULL,
            funControl = NULL, fun1Control = NULL, fun2Control = NULL, ksControl = NULL,
-           klControl = NULL, main = NULL)
-  {
-    standardGeneric("plot_ppredictive")
-  }
-)
+           klControl = NULL, main = NULL) {
+  UseMethod("plot_ppredictive", stanfit)
+}
 
-#' @rdname plot_ppredictive
-#' @aliases plot_ppredictive,stanfit-method
+#' @keywords internal
+#' @inherit plot_ppredictive
 plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL, chain = 1,
                              fun = NULL, fun1 = NULL, fun2 = NULL,
                              boxplotControl = NULL, cumulativeControl = NULL, densityControl = NULL,
@@ -145,8 +141,6 @@ plot_ppredictive.stanfit <- function(stanfit, type = "", r = NULL, subset = NULL
 }
 
 # Internal undocumented methods -------------------------------------------
-
-setMethod("plot_ppredictive", "stanfit", plot_ppredictive.stanfit)
 
 plot_ppredictive_scatter <- function(y, yPred, fun1 = NULL, fun2 = NULL,
                                      control1 = NULL, control2 = NULL,

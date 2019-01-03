@@ -127,13 +127,8 @@
   <span class='kw'>chain</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boxplotControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cumulativeControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>densityControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>funControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun1Control</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fun2Control</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ksControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>plot_ppredictive.stanfit</span>(<span class='no'>stanfit</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>subset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>chain</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>boxplotControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cumulativeControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>densityControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>funControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fun1Control</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fun2Control</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ksControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>fun2Control</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ksControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>klControl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,7 +139,7 @@
     </tr>
     <tr>
       <th>type</th>
-      <td><p>An optional vector of character strings with the names of the analysis to include in the plot. These may be <em>density</em> (kernel density curves of the observation variable), <em>cumulative</em> (kernel cumulative density curves of the observation variable), <em>boxplot</em> (boxplots of the observation variable), <em>histogram</em> (histogram of the values returned by <em>fun</em>), <em>scatterplot</em> (scatterplot of the values returned by <em>fun1</em> and <em>fun2</em>), <em>ks</em> (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.</p></td>
+      <td><p>An optional vector of character strings with the names of the analysis to include in the plot. These may be <em>density</em> (kernel density curves of the observation variable), <em>cumulative</em> (kernel cumulative density curves of the observation variable), <em>boxplot</em> (boxplots of the observation variable), <em>histogram</em> (histogram of the values returned by <em>fun</em>), <em>scatterplot</em> (scatterplot of the values returned by <em>fun1</em> and <em>fun2</em>), <em>kl</em> (histogram of the empirical Kullback-Leibler divergence), <em>ks</em> (histogram of the Kolmogorov-Smirnov statistic). All plots show the actual sample and many draws from the posterior predictive density. Note that more than one type may be plotted at the same time. It allows for partial matching. It defaults to none.</p></td>
     </tr>
     <tr>
       <th>r</th>
@@ -199,6 +194,10 @@
       <td><p>Arguments to be passed to <code>ks.test</code> if the argument <em>type</em> includes "ks".</p></td>
     </tr>
     <tr>
+      <th>klControl</th>
+      <td><p>Arguments to compute the empirical Kullback-Leibler divergence if the argument <em>type</em> includes "kl". It may include two-sized vectors with the lower and upper bounds of the discretization range (`yRange` and `yPredRange`) and the number of bins (`yNBins` and `yPredNBins`).</p></td>
+    </tr>
+    <tr>
       <th>main</th>
       <td><p>An optional character string with the overall title for the plot.</p></td>
     </tr>
@@ -212,6 +211,7 @@
 
     <div class='dont-index'><p>Other visualization functions: <code><a href='get_current_theme.html'>get_current_theme</a></code>,
   <code><a href='get_default_theme.html'>get_default_theme</a></code>,
+  <code><a href='modify_theme_entry.html'>modify_theme_entry</a></code>,
   <code><a href='plot_series.html'>plot_series</a></code>,
   <code><a href='plot_state_probability.html'>plot_state_probability</a></code>, <code><a href='theme.html'>theme</a></code></p></div>
     
@@ -223,6 +223,12 @@
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"density"</span>, <span class='st'>"cumulative"</span>, <span class='st'>"boxplot"</span>,
            <span class='st'>"histogram"</span>, <span class='st'>"scatterplot"</span>, <span class='st'>"ks"</span>),
   <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>fun1</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>fun2</span> <span class='kw'>=</span> <span class='no'>sd</span>
+)
+
+<span class='fu'>plot_ppredictive</span>(
+  <span class='no'>myFit</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"density"</span>, <span class='st'>"cumulative"</span>, <span class='st'>"ks"</span>, <span class='st'>"kl"</span>),
+  <span class='kw'>klControl</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>yNBins</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>yPredNBins</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 )
 <span class='co'># }</span></pre>
   </div>

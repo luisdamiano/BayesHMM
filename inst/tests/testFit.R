@@ -43,3 +43,25 @@ test_fit <- function() {
     myOpt4  <- optimizing(mySpec, y, nRuns = 1)
   })
 }
+
+test_validate_calibration <- function() {
+  seed   <- 9000
+  mySpec <- hmm(
+    K = 2, R = 1,
+    observation = Gaussian(
+      mu    = Gaussian(0, 10),
+      sigma = Student(mu = 0, sigma = 10, nu = 1, bounds = list(0, NULL))
+    ),
+    initial     = Dirichlet(alpha = c(1, 1)),
+    transition  = Dirichlet(alpha = c(1, 1)),
+    name = "Univariate Gaussian Hidden Markov Model for unit tests"
+  )
+
+  DEACTIVATED("Temporarily deactivated (too slow).")
+
+  no_error_in_expr({
+    myVal <- validate_calibration(
+      mySpec, N = 1, T = 20, seed = seed, nCores = 12, iter = 200, chain = 1
+    )
+  })
+}

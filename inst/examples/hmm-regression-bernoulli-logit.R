@@ -4,8 +4,8 @@ mySpec <- hmm(
     xBeta = Gaussian(mu = 0, sigma = 10),
     M     = 3
   ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1)),
   name = "Univariate Bernoulli Logistic Regression"
 )
 

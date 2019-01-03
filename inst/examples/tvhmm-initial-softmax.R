@@ -7,7 +7,7 @@ mySpec  <- hmm(
   initial     = InitialSoftmax(
     vBeta = Gaussian(0, 10), Q = 2
   ),
-  transition  = Dirichlet(alpha = c(0.5, 0.5)),
+  transition  = Dirichlet(alpha = c(1, 1)),
   name = "TVHMM Univariate Gaussian"
 )
 

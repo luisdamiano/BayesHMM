@@ -124,20 +124,16 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for Specification</span>
-<span class='fu'><a href='optimizing.html'>optimizing</a></span>(<span class='no'>spec</span>, <span class='kw'>stanModel</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>u</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>v</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nRuns</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='st'>"best"</span>, <span class='kw'>nCores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='fu'><a href='optimizing.html'>optimizing</a></span>(<span class='no'>object</span>, <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>u</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>v</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nRuns</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='st'>"best"</span>, <span class='kw'>nCores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>writeDir</span> <span class='kw'>=</span> <span class='fu'>tempdir</span>(), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>spec</th>
-      <td><p>An object returned by either <code><a href='specify.html'>specify</a></code> or <code><a href='hmm.html'>hmm</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>stanModel</th>
-      <td><p>An optional instance of S4 class stanmodel returned by <code><a href='compile.html'>compile</a></code>. If not given, the model is automatically compiled but the object is not returned to the user and cannot be reutilized in future sampling.</p></td>
+      <th>object</th>
+      <td><p>An object returned by <code><a href='specify.html'>specify</a></code>, <code><a href='hmm.html'>hmm</a></code>, <code><a href='compile.html'>compile</a></code>, <code><a href='draw_samples.html'>draw_samples</a></code>, <code><a href='fit.html'>fit</a></code> or <code><a href='optimizing.html'>optimizing</a></code>.</p></td>
     </tr>
     <tr>
       <th>y</th>

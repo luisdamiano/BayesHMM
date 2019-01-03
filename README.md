@@ -13,11 +13,11 @@ devtools::install_github("luisdamiano/BayesHMM")
 ```
 
 ### Prerequisites
-  * R >= 3.0
+  * R (>= 3.4.0)
   
 ### Examples
 
-See the [vignette](inst/doc/introduction.pdf). Note that you may also find examples in [inst/examples](inst/examples), but these may not work with the last version in the repository.
+See the [vignette](https://luisdamiano.github.io/BayesHMM/articles/introduction.html), which may not reflect the latest changes in the current version. Note that you may also find examples in [inst/examples](inst/examples), but these may not work with the last version in the repository.
   
 ## Contributing
 

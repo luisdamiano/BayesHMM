@@ -13,8 +13,8 @@ mySpec <- hmm(
       mu    = c( 5,  5),
       sigma = matrix(c(1, 0, 0, 1), 2, 2)
     ),
-  initial     = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
-  transition  = Dirichlet(alpha = c(0.5, 0.5, 0.5)),
+  initial     = Dirichlet(alpha = c(1, 1, 1)),
+  transition  = Dirichlet(alpha = c(1, 1, 1)),
   name = "Multivariate Gaussian"
 )
 
